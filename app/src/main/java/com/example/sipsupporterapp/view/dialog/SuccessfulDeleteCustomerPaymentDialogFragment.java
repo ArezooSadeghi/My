@@ -14,12 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentSuccessDialogBinding;
-import com.example.sipsupporterapp.viewmodel.DepositAmountsViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 
 
 public class SuccessfulDeleteCustomerPaymentDialogFragment extends DialogFragment {
     private FragmentSuccessDialogBinding binding;
-    private DepositAmountsViewModel viewModel;
+    private CustomerPaymentViewModel viewModel;
 
     private static final String ARGS_MESSAGE = "message";
 
@@ -64,7 +64,7 @@ public class SuccessfulDeleteCustomerPaymentDialogFragment extends DialogFragmen
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(DepositAmountsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
     }
 
     private void initViews() {

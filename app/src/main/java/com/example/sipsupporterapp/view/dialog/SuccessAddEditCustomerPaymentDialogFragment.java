@@ -10,22 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentSuccessDialogBinding;
-import com.example.sipsupporterapp.viewmodel.DepositAmountsViewModel;
 
-public class SuccessfulAddCustomerPaymentDialogFragment extends DialogFragment {
+public class SuccessAddEditCustomerPaymentDialogFragment extends DialogFragment {
     private FragmentSuccessDialogBinding binding;
-    private DepositAmountsViewModel viewModel;
 
     private static final String ARGS_MESSAGE = "message";
 
-    public static final String TAG = SuccessfulAddCustomerPaymentDialogFragment.class.getSimpleName();
+    public static final String TAG = SuccessAddEditCustomerPaymentDialogFragment.class.getSimpleName();
 
-    public static SuccessfulAddCustomerPaymentDialogFragment newInstance(String message) {
-        SuccessfulAddCustomerPaymentDialogFragment fragment = new SuccessfulAddCustomerPaymentDialogFragment();
+    public static SuccessAddEditCustomerPaymentDialogFragment newInstance(String message) {
+        SuccessAddEditCustomerPaymentDialogFragment fragment = new SuccessAddEditCustomerPaymentDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_MESSAGE, message);
         fragment.setArguments(args);
@@ -35,8 +32,6 @@ public class SuccessfulAddCustomerPaymentDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        createViewModel();
     }
 
     @NonNull
@@ -62,10 +57,6 @@ public class SuccessfulAddCustomerPaymentDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(DepositAmountsViewModel.class);
-    }
-
     private void initViews() {
         String message = getArguments().getString(ARGS_MESSAGE);
         binding.txtMessage.setText(message);
@@ -75,8 +66,6 @@ public class SuccessfulAddCustomerPaymentDialogFragment extends DialogFragment {
         binding.imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.getDismissSuccessfulAddCustomerPaymentsSingleLiveEvent().setValue(true);
-                viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
                 dismiss();
             }
         });

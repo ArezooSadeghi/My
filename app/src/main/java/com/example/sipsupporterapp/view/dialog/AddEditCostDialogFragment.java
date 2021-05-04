@@ -36,8 +36,8 @@ import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 public class AddEditCostDialogFragment extends DialogFragment {
     private FragmentAddEditCostsDialogBinding binding;
@@ -353,8 +353,7 @@ public class AddEditCostDialogFragment extends DialogFragment {
                         text = text.replaceAll(",", "");
                     }
                     textToLong = Long.parseLong(text);
-                    NumberFormat numberFormat = new DecimalFormat("#,###");
-                    String currencyFormat = numberFormat.format(textToLong);
+                    String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(textToLong);
                     binding.edTextInvoicePrice.setText(currencyFormat);
                     binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().length());
                 } catch (NumberFormatException exception) {

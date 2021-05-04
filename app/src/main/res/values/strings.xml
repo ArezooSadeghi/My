@@ -11,7 +11,8 @@
     <string name="ok">تایید</string>
     <string name="cancel">انصراف</string>
     <string name="timeout_exception_happen_message">اتصال به اینترنت با خطا مواجه شد</string>
-    <string name="success_register_cost_message">ثبت پرداختی موفقیت آمیز بود</string>
-    <string name="success_delete_cost_message">حذف پرداختی موفقیت آمیز بود</string>
-    <string name="question_delete_cost_message">آیا می خواهید پرداختی موردنظر را حذف کنید؟</string>
+    <string name="success_register_cost_message">ثبت برداشتی موفقیت آمیز بود</string>
+    <string name="success_delete_cost_message">حذف برداشتی موفقیت آمیز بود</string>
+    <string name="question_delete_cost_message">آیا می خواهید برداشتی موردنظر را حذف کنید؟</string>
+    <string name="success_register_customer_payment_message">ثبت پرداختی موفقیت آمیز بود</string>
 </resources>

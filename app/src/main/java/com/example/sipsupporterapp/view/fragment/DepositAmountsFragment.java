@@ -23,25 +23,24 @@ import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.ImageListContainerActivity;
+import com.example.sipsupporterapp.view.activity.ImageGalleyContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCustomerPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.DeleteQuestionCustomerPaymentsDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessfulDeleteCustomerPaymentDialogFragment;
-import com.example.sipsupporterapp.viewmodel.DepositAmountsViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DepositAmountsFragment extends Fragment {
     private FragmentDepositAmountsBinding binding;
-    private DepositAmountsViewModel viewModel;
+    private CustomerPaymentViewModel viewModel;
 
     private int customerID, customerPaymentID;
 
     private static final String ARGS_CUSTOMER_ID = "customerID";
-
 
     public static DepositAmountsFragment newInstance(int customerID) {
         DepositAmountsFragment fragment = new DepositAmountsFragment();
@@ -58,7 +57,7 @@ public class DepositAmountsFragment extends Fragment {
 
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(DepositAmountsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
 
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupportServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
@@ -113,8 +112,7 @@ public class DepositAmountsFragment extends Fragment {
                                 0,
                                 0,
                                 customerID,
-                                true,
-                                0);
+                                0, 0);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });
@@ -176,13 +174,13 @@ public class DepositAmountsFragment extends Fragment {
         viewModel.getSeeDocumentsClickedSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
-                Intent intent = ImageListContainerActivity.newIntent(
+                Intent starter = ImageGalleyContainerActivity.start(
                         getContext(),
                         customerPaymentInfo.getCustomerID(),
                         0,
                         0,
                         customerPaymentInfo.getCustomerPaymentID());
-                startActivity(intent);
+                startActivity(starter);
             }
         });
 
@@ -230,8 +228,7 @@ public class DepositAmountsFragment extends Fragment {
                                 customerPaymentInfo.getPrice(),
                                 customerPaymentInfo.getDatePayment(),
                                 customerID,
-                                false,
-                                customerPaymentInfo.getCustomerPaymentID());
+                                customerPaymentInfo.getCustomerPaymentID(), customerPaymentInfo.getBankAccountID());
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });

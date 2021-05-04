@@ -15,7 +15,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerPaymentInfoAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.utils.Converter;
-import com.example.sipsupporterapp.viewmodel.DepositAmountsViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
@@ -25,9 +25,9 @@ import java.util.List;
 public class CustomerPaymentInfoAdapter extends RecyclerView.Adapter<CustomerPaymentInfoAdapter.CustomerPaymentInfoHolder> {
     private Context context;
     private List<CustomerPaymentInfo> customerPaymentInfoList;
-    private DepositAmountsViewModel viewModel;
+    private CustomerPaymentViewModel viewModel;
 
-    public CustomerPaymentInfoAdapter(Context context, List<CustomerPaymentInfo> customerPaymentInfoList, DepositAmountsViewModel viewModel) {
+    public CustomerPaymentInfoAdapter(Context context, List<CustomerPaymentInfo> customerPaymentInfoList, CustomerPaymentViewModel viewModel) {
         this.context = context;
         this.customerPaymentInfoList = customerPaymentInfoList;
         this.viewModel = viewModel;
@@ -60,20 +60,20 @@ public class CustomerPaymentInfoAdapter extends RecyclerView.Adapter<CustomerPay
 
                 powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
                     @Override
-                    public void onItemClick(int position, PowerMenuItem item) {
-                        switch (position) {
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
                             case 0:
                                 viewModel.getEditCustomerPaymentsClickedSingleLiveEvent().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
-                                return;
+                                break;
                             case 1:
                                 viewModel.getDeleteCustomerPaymentsClickedSingleLiveEvent().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
-                                return;
+                                break;
                             case 2:
                                 viewModel.getSeeDocumentsClickedSingleLiveEvent().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
-                                return;
+                                break;
                         }
                     }
                 });

@@ -30,7 +30,6 @@
                     android:fontFamily="@font/regular"
                     android:text="بابت:"
                     android:textColor="@color/black"
-                    android:textDirection="rtl"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/btn_what"
                     app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,6 @@
                     android:layout_marginRight="8dp"
                     android:fontFamily="@font/yekan"
                     android:textColor="@color/black"
-                    android:textDirection="rtl"
                     app:layout_constraintEnd_toStartOf="@id/btn_show_subject_payment"
                     app:layout_constraintStart_toEndOf="@id/txt_what"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -71,7 +69,6 @@
                     android:fontFamily="@font/regular"
                     android:text="نام بانک:"
                     android:textColor="@color/black"
-                    android:textDirection="rtl"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/spinner_bank_account_names"
                     app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +83,6 @@
                     android:layout_marginRight="8dp"
                     android:fontFamily="@font/iranyekanwebbold"
                     android:textColor="@color/black"
-                    android:textDirection="rtl"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/txt_bank_name_text"
@@ -103,7 +99,6 @@
                     android:fontFamily="@font/regular"
                     android:text="تاریخ واریز:"
                     android:textColor="@color/black"
-                    android:textDirection="rtl"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/btn_date_payment"
                     app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +114,6 @@
                     android:layout_marginRight="8dp"
                     android:fontFamily="@font/yekan"
                     android:textColor="@color/black"
-                    android:textDirection="rtl"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/txt_date_payment_text"
                     app:layout_constraintTop_toBottomOf="@id/spinner_bank_account_names" />
@@ -143,11 +137,11 @@
                         android:id="@+id/ed_text_invoice_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/yekan"
                         android:inputType="number"
                         android:maxLines="1"
                         android:textColor="@color/black"
-                        android:textCursorDrawable="@drawable/custom_cursor"
-                        android:textDirection="rtl" />
+                        android:textCursorDrawable="@drawable/custom_cursor" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,8 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textCursorDrawable="@drawable/custom_cursor"
-                        android:textDirection="rtl" />
+                        android:textCursorDrawable="@drawable/custom_cursor" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

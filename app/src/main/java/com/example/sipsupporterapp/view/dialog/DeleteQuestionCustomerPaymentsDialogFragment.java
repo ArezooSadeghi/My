@@ -14,10 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentDeleteQuestionCustomerPaymentsDialogBinding;
-import com.example.sipsupporterapp.viewmodel.DepositAmountsViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 
 public class DeleteQuestionCustomerPaymentsDialogFragment extends DialogFragment {
-    private DepositAmountsViewModel viewModel;
+    private CustomerPaymentViewModel viewModel;
     private FragmentDeleteQuestionCustomerPaymentsDialogBinding binding;
     private int customerPaymentID;
 
@@ -39,7 +39,7 @@ public class DeleteQuestionCustomerPaymentsDialogFragment extends DialogFragment
 
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(DepositAmountsViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
     }
 
     @NonNull

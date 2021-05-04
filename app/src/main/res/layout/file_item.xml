@@ -13,6 +13,7 @@
         android:drawableRight="@drawable/ic_folder"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
+        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@string/app_name" />

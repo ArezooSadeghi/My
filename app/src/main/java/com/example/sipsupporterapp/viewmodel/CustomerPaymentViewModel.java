@@ -13,7 +13,7 @@ import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupportRepository;
 
-public class DepositAmountsViewModel extends AndroidViewModel {
+public class CustomerPaymentViewModel extends AndroidViewModel {
     private SipSupportRepository repository;
 
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentResultSingleLiveEvent;
@@ -68,7 +68,7 @@ public class DepositAmountsViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
 
-    public DepositAmountsViewModel(@NonNull Application application) {
+    public CustomerPaymentViewModel(@NonNull Application application) {
         super(application);
         repository = SipSupportRepository.getInstance(getApplication());
 
@@ -195,11 +195,11 @@ public class DepositAmountsViewModel extends AndroidViewModel {
         return errorBankAccountsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentsSingleLiveEvent() {
+    public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentResultSingleLiveEvent() {
         return addCustomerPaymentsSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddCustomerPaymentSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorAddCustomerPaymentResultSingleLiveEvent() {
         return errorAddCustomerPaymentSingleLiveEvent;
     }
 
@@ -219,11 +219,11 @@ public class DepositAmountsViewModel extends AndroidViewModel {
         return updateListDeleteCustomerPaymentSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentsSingleLiveEvent() {
+    public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentResultSingleLiveEvent() {
         return editCustomerPaymentsSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditCustomerPaymentSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorEditCustomerPaymentResultSingleLiveEvent() {
         return errorEditCustomerPaymentSingleLiveEvent;
     }
 

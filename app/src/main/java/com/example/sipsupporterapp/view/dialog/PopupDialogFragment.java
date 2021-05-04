@@ -15,8 +15,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentPopupDialogBinding;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.CostContainerActivity;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 
 
 public class PopupDialogFragment extends DialogFragment {
@@ -35,6 +35,7 @@ public class PopupDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
     }
 
     @NonNull
@@ -96,7 +97,7 @@ public class PopupDialogFragment extends DialogFragment {
         binding.btnRegisterUnknownDepositAmounts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", "", 0, 0, 0, true, 0);
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", "", 0, 0, 0, 0, 0);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
                 dismiss();
             }
