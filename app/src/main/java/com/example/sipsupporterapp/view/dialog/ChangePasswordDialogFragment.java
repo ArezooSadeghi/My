@@ -20,11 +20,11 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.viewmodel.ChangePasswordDialogViewModel;
+import com.example.sipsupporterapp.viewmodel.ChangePasswordViewModel;
 
 public class ChangePasswordDialogFragment extends DialogFragment {
     private FragmentChangePasswordDialogBinding binding;
-    private ChangePasswordDialogViewModel viewModel;
+    private ChangePasswordViewModel viewModel;
 
     public static final String TAG = ChangePasswordDialogFragment.class.getSimpleName();
 
@@ -39,7 +39,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ChangePasswordDialogViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChangePasswordViewModel.class);
         setObserver();
     }
 
@@ -93,8 +93,8 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             @Override
             public void onChanged(UserResult userResult) {
                 SipSupportSharedPreferences.setUserLoginKey(getContext(), userResult.getUsers()[0].getUserLoginKey());
-                SuccessChangePasswordDialogFragment fragment = SuccessChangePasswordDialogFragment.newInstance("رمز عبور با موفقیت تغییر کرد");
-                fragment.show(getParentFragmentManager(), SuccessChangePasswordDialogFragment.TAG);
+                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_change_password));
+                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                 dismiss();
             }
         });
@@ -116,7 +116,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
                 SipSupportSharedPreferences.setCustomerName(getContext(), null);
                 SipSupportSharedPreferences.setCustomerTel(getContext(), null);
                 SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.newIntent(getContext());
+                Intent intent = LoginContainerActivity.start(getContext());
                 startActivity(intent);
                 getActivity().finish();
             }

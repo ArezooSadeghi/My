@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutDirection="ltr"
         tools:context=".view.dialog.AttachmentDialogFragment">
 
         <ImageView
@@ -17,8 +18,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/more"
             app:layout_constraintStart_toStartOf="@id/card_view"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,12 +51,13 @@
             android:id="@+id/img_send"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginRight="12dp"
             android:layout_marginBottom="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="12dp" />
+            app:tint="@color/black" />
 
         <EditText
             android:id="@+id/ed_text_description"
@@ -64,7 +66,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:gravity="center"
             android:hint="توضیحات"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/img_send"
@@ -76,8 +77,8 @@
             android:id="@+id/img_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,8 +107,8 @@
             android:id="@+id/img_rotate"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/retry"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/retry"
             app:layout_constraintBottom_toBottomOf="@id/img_more"
             app:layout_constraintEnd_toStartOf="@id/img_camera"
             app:layout_constraintStart_toEndOf="@id/img_more"

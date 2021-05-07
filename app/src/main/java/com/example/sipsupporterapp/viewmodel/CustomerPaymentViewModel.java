@@ -99,11 +99,11 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentResultSingleLiveEvent() {
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsResultSingleLiveEvent() {
         return customerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerPaymentResultSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorCustomerPaymentsResultSingleLiveEvent() {
         return errorCustomerPaymentResultSingleLiveEvent;
     }
 
@@ -155,7 +155,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return seeDocumentsClickedSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getYesDeleteCustomerPaymentsSingleLiveEvent() {
+    public SingleLiveEvent<Boolean> getYesDeleteCustomerPayment() {
         return yesDeleteCustomerPaymentsSingleLiveEvent;
     }
 
@@ -171,7 +171,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getDeleteCustomerPaymentsClickedSingleLiveEvent() {
+    public SingleLiveEvent<CustomerPaymentInfo> getDeleteCustomerPaymentClicked() {
         return DeleteCustomerPaymentsClickedSingleLiveEvent;
     }
 
@@ -183,7 +183,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return errorAddEditDeleteCustomerResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getEditCustomerPaymentsClickedSingleLiveEvent() {
+    public SingleLiveEvent<CustomerPaymentInfo> getEditCustomerPaymentClicked() {
         return editCustomerPaymentsClickedSingleLiveEvent;
     }
 
@@ -207,11 +207,11 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return updateListAddCustomerPaymentSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentsSingleLiveEvent() {
+    public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentResultSingleLiveEvent() {
         return deleteCustomerPaymentsSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentResultSingleLiveEvent() {
         return errorDeleteCustomerPaymentSingleLiveEvent;
     }
 

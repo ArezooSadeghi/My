@@ -10,6 +10,7 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_sip_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -17,27 +18,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SipSupporterApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activity.PaymentSubjectContainerActivity"></activity>
-        <activity android:name=".view.activity.FullScreenImageContainerActivity" />
-        <activity android:name=".view.activity.ImageGalleyContainerActivity" />
         <activity
-            android:name=".view.activity.CostContainerActivity"
+            android:name=".view.activity.PhotoGalleryContainerActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.activity.PaymentSubjectContainerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.FullScreenPhotoContainerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PaymentContainerActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.ImageListContainerActivity"
+            android:name=".view.activity.CustomerPaymentContainerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.DepositAmountsContainerActivity"
+            android:name=".view.activity.CustomerProductContainerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.ProductsContainerActivity"
+            android:name=".view.activity.UserContainerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.CustomerUsersContainerActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.activity.SupportHistoryContainerActivity"
+            android:name=".view.activity.CustomerSupportContainerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.ItemClickedContainerActivity"

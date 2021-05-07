@@ -15,4 +15,17 @@
     <string name="success_delete_cost_message">حذف برداشتی موفقیت آمیز بود</string>
     <string name="question_delete_cost_message">آیا می خواهید برداشتی موردنظر را حذف کنید؟</string>
     <string name="success_register_customer_payment_message">ثبت پرداختی موفقیت آمیز بود</string>
+    <string name="question_delete_customer_payment_message">آیا می خواهید پرداختی موردنظر را حذف کنید؟</string>
+    <string name="success_delete_customer_payment_message">حذف پرداختی موفقیت آمیز بود</string>
+    <string name="question_delete_customer_product_message">آیا می خواهید محصول موردنظر را حذف کنید؟</string>
+    <string name="success_register_customer_product_message">ثبت محصول موفقیت آمیز بود</string>
+    <string name="fill_required_fields">لطفا موارد خواسته شده را پر کنید</string>
+    <string name="no_access_camera_permission_message">اجازه دسترسی به دوربین داده نشد</string>
+    <string name="no_access_storage_permission_message">اجازه دسترسی به حافظه داده نشد</string>
+    <string name="select_photo_title">انتخاب تصویر</string>
+    <string name="no_choose_any_file">هنوز فایلی انتخاب نشده است</string>
+    <string name="success_attach_message">فایل با موفقیت ثبت شد</string>
+    <string name="question_attach_again">آیا می خواهید فایل دیگری را اضافه کنید؟</string>
+    <string name="success_delete_customer_product">حذف محصول موفقیت آمیز بود</string>
+    <string name="success_change_password">رمز عبور با موفقیت تغییر کرد</string>
 </resources>

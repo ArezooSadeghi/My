@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,10 +26,10 @@ import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.CustomerContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.view.dialog.EnterIPAddressDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.IPAddressListDialogFragment;
-import com.example.sipsupporterapp.viewmodel.SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel;
+import com.example.sipsupporterapp.view.dialog.RequireIPAddressDialogFragment;
+import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.List;
 
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
-    private SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel viewModel;
+    private LoginViewModel viewModel;
 
     private String spinnerValue;
     private IPAddressListDialogFragment fragment;
@@ -55,11 +56,11 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity())
-                .get(SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel.class);
+                .get(LoginViewModel.class);
 
         if (viewModel.getServerDataList().size() == 0) {
-            EnterIPAddressDialogFragment fragment = EnterIPAddressDialogFragment.newInstance();
-            fragment.show(getParentFragmentManager(), EnterIPAddressDialogFragment.TAG);
+            RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
+            fragment.show(getParentFragmentManager(), RequireIPAddressDialogFragment.TAG);
         }
     }
 
@@ -117,7 +118,7 @@ public class LoginFragment extends Fragment {
                             SipSupportSharedPreferences
                                     .setUserFullName(getContext(), userInfoArray[0].getUserFullName());
 
-                            Intent intent = CustomerContainerActivity.newIntent(getContext());
+                            Intent intent = CustomerContainerActivity.start(getContext());
                             startActivity(intent);
                             getActivity().finish();
                         }
@@ -193,7 +194,7 @@ public class LoginFragment extends Fragment {
                         SipSupportSharedPreferences.setCustomerName(getContext(), null);
                         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
                         SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                        Intent intent = LoginContainerActivity.newIntent(getContext());
+                        Intent intent = LoginContainerActivity.start(getContext());
                         startActivity(intent);
                         getActivity().finish();
                     }
@@ -207,25 +208,6 @@ public class LoginFragment extends Fragment {
                     }
                 });
 
-        /*viewModel.getDeleteSpinnerSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<ServerData>() {
-                    @Override
-                    public void onChanged(ServerData serverData) {
-                        if (viewModel.getServerDataList().size() == 0) {
-                            SipSupportSharedPreferences.setLastValueSpinner(getContext(), null);
-                            setupSpinner();
-                            fragment.dismiss();
-                            binding.edTextPassword.setText("");
-                            binding.edTextUserName.setText("");
-                            EnterIPAddressDialogFragment fragment = EnterIPAddressDialogFragment.newInstance();
-                            fragment.show(getChildFragmentManager(), EnterIPAddressDialogFragment.TAG);
-                        } else {
-                            SipSupportSharedPreferences.setLastValueSpinner(getContext(), null);
-                            setupSpinner();
-                        }
-                    }
-                });
-        */
         viewModel.getYesDeleteSpinner().observe(getViewLifecycleOwner(), new Observer<ServerData>() {
             @Override
             public void onChanged(ServerData serverData) {
@@ -235,8 +217,8 @@ public class LoginFragment extends Fragment {
                     fragment.dismiss();
                     binding.edTextPassword.setText("");
                     binding.edTextUserName.setText("");
-                    EnterIPAddressDialogFragment fragment = EnterIPAddressDialogFragment.newInstance();
-                    fragment.show(getChildFragmentManager(), EnterIPAddressDialogFragment.TAG);
+                    RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
+                    fragment.show(getChildFragmentManager(), RequireIPAddressDialogFragment.TAG);
                 } else {
                     SipSupportSharedPreferences.setLastValueSpinner(getContext(), null);
                     setupSpinner();
@@ -244,7 +226,6 @@ public class LoginFragment extends Fragment {
             }
         });
     }
-
 
     private void setupSpinner() {
         String lastValueSpinner = SipSupportSharedPreferences.getCenterName(getContext());
@@ -278,27 +259,31 @@ public class LoginFragment extends Fragment {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (viewModel.getServerDataList() != null & viewModel.getServerDataList().size() == 0) {
-                    EnterIPAddressDialogFragment fragment = EnterIPAddressDialogFragment.newInstance();
-                    fragment.show(getParentFragmentManager(), EnterIPAddressDialogFragment.TAG);
-                } else {
-                    binding.edTextPassword.setEnabled(false);
-                    binding.edTextUserName.setEnabled(false);
-                    binding.btnLogin.setEnabled(false);
-                    binding.imgBtnMore.setEnabled(false);
+                try {
+                    if (viewModel.getServerDataList() != null & viewModel.getServerDataList().size() == 0) {
+                        RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
+                        fragment.show(getParentFragmentManager(), RequireIPAddressDialogFragment.TAG);
+                    } else {
+                        binding.edTextPassword.setEnabled(false);
+                        binding.edTextUserName.setEnabled(false);
+                        binding.btnLogin.setEnabled(false);
+                        binding.imgBtnMore.setEnabled(false);
 
-                    String userName = binding.edTextUserName.getText().toString();
-                    String password = binding.edTextPassword.getText().toString();
+                        String userName = binding.edTextUserName.getText().toString();
+                        String password = binding.edTextPassword.getText().toString();
 
-                    UserLoginParameter userLoginParameter = new UserLoginParameter(userName, password);
+                        UserLoginParameter userLoginParameter = new UserLoginParameter(userName, password);
 
-                    if (spinnerValue != null) {
-                        ServerData serverData = viewModel.getServerData(spinnerValue);
-                        viewModel.getSipSupportServicePostUserLoginParameter(
-                                serverData.getIpAddress() + ":" + serverData.getPort());
-                        viewModel.fetchUserResult(userLoginParameter);
-                        binding.loadingLayout.setVisibility(View.VISIBLE);
+                        if (spinnerValue != null) {
+                            ServerData serverData = viewModel.getServerData(spinnerValue);
+                            viewModel.getSipSupportServicePostUserLoginParameter(
+                                    serverData.getIpAddress() + ":" + serverData.getPort());
+                            viewModel.fetchUserResult(userLoginParameter);
+                            binding.loadingLayout.setVisibility(View.VISIBLE);
+                        }
                     }
+                } catch (Exception exception) {
+                    Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

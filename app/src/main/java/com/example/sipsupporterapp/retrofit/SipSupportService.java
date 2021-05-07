@@ -130,4 +130,7 @@ public interface SipSupportService {
 
     @DELETE(".")
     Call<AttachResult> deleteAttach(@Header("userLoginKey") String userLoginKey, @Query("attachID") int attachID);
+
+    @GET(".")
+    Call<AttachResult> getAttachmentListByPaymentID(@Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
 }

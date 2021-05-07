@@ -28,14 +28,14 @@ import com.example.sipsupporterapp.view.activity.ItemClickedContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.PopupDialogFragment;
-import com.example.sipsupporterapp.viewmodel.SharedCenterNameDialogAndCustomerViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerFragment extends Fragment {
     private FragmentCustomerBinding binding;
-    private SharedCenterNameDialogAndCustomerViewModel viewModel;
+    private CustomerViewModel viewModel;
 
 
     public static CustomerFragment newInstance() {
@@ -53,7 +53,7 @@ public class CustomerFragment extends Fragment {
         setHasOptionsMenu(true);
 
         viewModel = new ViewModelProvider(requireActivity())
-                .get(SharedCenterNameDialogAndCustomerViewModel.class);
+                .get(CustomerViewModel.class);
 
         ServerData serverData = viewModel
                 .getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
@@ -163,7 +163,7 @@ public class CustomerFragment extends Fragment {
                         SipSupportSharedPreferences.setCustomerName(getContext(), null);
                         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
                         SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                        Intent intent = LoginContainerActivity.newIntent(getContext());
+                        Intent intent = LoginContainerActivity.start(getContext());
                         startActivity(intent);
                         getActivity().finish();
                     }
@@ -173,7 +173,7 @@ public class CustomerFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
                     public void onChanged(Integer customerID) {
-                        Intent intent = ItemClickedContainerActivity.newIntent(getContext(), customerID);
+                        Intent intent = ItemClickedContainerActivity.start(getContext(), customerID);
                         startActivity(intent);
                     }
                 });

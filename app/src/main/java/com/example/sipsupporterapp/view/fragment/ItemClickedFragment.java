@@ -16,16 +16,16 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentItemClickedBinding;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.CustomerUsersContainerActivity;
-import com.example.sipsupporterapp.view.activity.DepositAmountsContainerActivity;
-import com.example.sipsupporterapp.view.activity.ProductsContainerActivity;
-import com.example.sipsupporterapp.view.activity.SupportHistoryContainerActivity;
+import com.example.sipsupporterapp.view.activity.UserContainerActivity;
+import com.example.sipsupporterapp.view.activity.CustomerPaymentContainerActivity;
+import com.example.sipsupporterapp.view.activity.CustomerProductContainerActivity;
+import com.example.sipsupporterapp.view.activity.CustomerSupportContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ShowInformationCallDialogFragment;
-import com.example.sipsupporterapp.viewmodel.CustomerUsersViewModel;
+import com.example.sipsupporterapp.viewmodel.UserViewModel;
 
 public class ItemClickedFragment extends Fragment {
     private FragmentItemClickedBinding binding;
-    private CustomerUsersViewModel viewModel;
+    private UserViewModel viewModel;
 
     private int customerID;
 
@@ -45,7 +45,7 @@ public class ItemClickedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(CustomerUsersViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
 
@@ -80,7 +80,7 @@ public class ItemClickedFragment extends Fragment {
         binding.btnHistorySupport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = SupportHistoryContainerActivity.newIntent(getContext(), customerID);
+                Intent intent = CustomerSupportContainerActivity.start(getContext(), customerID);
                 startActivity(intent);
             }
         });
@@ -88,7 +88,7 @@ public class ItemClickedFragment extends Fragment {
         binding.btnRegisterSupport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = CustomerUsersContainerActivity.newIntent(getContext(), customerID);
+                Intent intent = UserContainerActivity.start(getContext(), customerID);
                 startActivity(intent);
             }
         });
@@ -96,7 +96,7 @@ public class ItemClickedFragment extends Fragment {
         binding.btnProductList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = ProductsContainerActivity.newIntent(getContext(), customerID);
+                Intent intent = CustomerProductContainerActivity.start(getContext(), customerID);
                 startActivity(intent);
             }
         });
@@ -112,7 +112,7 @@ public class ItemClickedFragment extends Fragment {
         binding.btnDepositAmounts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = DepositAmountsContainerActivity.newIntent(getContext(), customerID);
+                Intent intent = CustomerPaymentContainerActivity.start(getContext(), customerID);
                 startActivity(intent);
             }
         });

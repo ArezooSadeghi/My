@@ -13,18 +13,24 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
-import com.example.sipsupporterapp.databinding.FragmentAttachAgainDialogBinding;
-import com.example.sipsupporterapp.viewmodel.RegisterProductViewModel;
+import com.example.sipsupporterapp.databinding.FragmentQuestionDialogBinding;
+import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
 public class AttachAgainDialogFragment extends DialogFragment {
-    public static final String TAG = AttachAgainDialogFragment.class.getSimpleName();
-    private RegisterProductViewModel viewModel;
-    private FragmentAttachAgainDialogBinding binding;
+    private FragmentQuestionDialogBinding binding;
+    private AttachmentViewModel viewModel;
 
-    public static AttachAgainDialogFragment newInstance() {
+    private static final String ARGS_MESSAGE = "message";
+
+    public static final String TAG = AttachAgainDialogFragment.class.getSimpleName();
+
+    public static AttachAgainDialogFragment newInstance(String message) {
         AttachAgainDialogFragment fragment = new AttachAgainDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
+        args.putString(ARGS_MESSAGE, message);
+
         return fragment;
     }
 
@@ -32,39 +38,54 @@ public class AttachAgainDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(RegisterProductViewModel.class);
-
+        createViewModel();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_attach_again_dialog, null, false);
+        binding = DataBindingUtil.inflate(
+                LayoutInflater.from(getContext()),
+                R.layout.fragment_question_dialog, null, false);
 
-        binding.btnYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewModel.getYesAttachAgainSuccessfulDialogSingleLiveEvent().setValue(true);
-                viewModel.getYesAttachAgainProductFragmentSingleLiveEvent().setValue(true);
-                dismiss();
+        initViews();
+        handleEvents();
 
-            }
-        });
-
-        binding.btnNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewModel.getNoAttachAgainProductFragmentSingleLiveEvent().setValue(true);
-                viewModel.getNoAttachAgainSuccessfulDialogSingleLiveEvent().setValue(true);
-                dismiss();
-            }
-        });
-
-        AlertDialog dialog = new AlertDialog.Builder(getActivity()).setView(binding.getRoot()).create();
+        AlertDialog dialog = new AlertDialog
+                .Builder(getContext())
+                .setView(binding.getRoot())
+                .create();
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;
+    }
+
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(AttachmentViewModel.class);
+    }
+
+    private void initViews() {
+        String message = getArguments().getString(ARGS_MESSAGE);
+        binding.txtMessage.setText(message);
+    }
+
+    private void handleEvents() {
+        binding.btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.getNoAttachAgain().setValue(true);
+                dismiss();
+            }
+        });
+
+        binding.btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.getYesAgain().setValue(true);
+                dismiss();
+            }
+        });
     }
 }

@@ -17,9 +17,9 @@ public class ItemClickedContainerActivity extends SingleFragmentActivity {
         return ItemClickedFragment.newInstance(customerID);
     }
 
-    public static Intent newIntent(Context context, int customerID) {
-        Intent intent = new Intent(context, ItemClickedContainerActivity.class);
-        intent.putExtra(EXTRA_CUSTOMER_ID, customerID);
-        return intent;
+    public static Intent start(Context context, int customerID) {
+        Intent starter = new Intent(context, ItemClickedContainerActivity.class);
+        starter.putExtra(EXTRA_CUSTOMER_ID, customerID);
+        return starter;
     }
 }

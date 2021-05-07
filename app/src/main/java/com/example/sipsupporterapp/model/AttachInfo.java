@@ -13,6 +13,7 @@ public class AttachInfo {
     private int userID;
     private String userFullName;
     private long addTime;
+    private String fileBase64;
 
     public int getAttachID() {
         return attachID;
@@ -108,5 +109,13 @@ public class AttachInfo {
 
     public void setAddTime(long addTime) {
         this.addTime = addTime;
+    }
+
+    public String getFileBase64() {
+        return fileBase64;
+    }
+
+    public void setFileBase64(String fileBase64) {
+        this.fileBase64 = fileBase64;
     }
 }

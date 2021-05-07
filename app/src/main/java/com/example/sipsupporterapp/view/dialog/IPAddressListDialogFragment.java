@@ -19,13 +19,13 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.IPAddressAdapter;
 import com.example.sipsupporterapp.databinding.FragmentIPAddressListDialogBinding;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.viewmodel.SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel;
+import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 
 import java.util.List;
 
 public class IPAddressListDialogFragment extends DialogFragment {
     private FragmentIPAddressListDialogBinding binding;
-    private SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel viewModel;
+    private LoginViewModel viewModel;
 
     public static final String TAG = IPAddressListDialogFragment.class.getSimpleName();
 
@@ -42,7 +42,7 @@ public class IPAddressListDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
         setObserver();
     }
 
@@ -100,8 +100,8 @@ public class IPAddressListDialogFragment extends DialogFragment {
         binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAndEditIPAddressDialogFragment fragment = AddAndEditIPAddressDialogFragment.newInstance("", "", "");
-                fragment.show(getParentFragmentManager(), AddAndEditIPAddressDialogFragment.TAG);
+                AddEditIPAddressDialogFragment fragment = AddEditIPAddressDialogFragment.newInstance("", "", "");
+                fragment.show(getParentFragmentManager(), AddEditIPAddressDialogFragment.TAG);
                 dismiss();
             }
         });
@@ -119,8 +119,8 @@ public class IPAddressListDialogFragment extends DialogFragment {
         viewModel.getDeleteIPAddressListSingleLiveEvent().observe(this, new Observer<ServerData>() {
             @Override
             public void onChanged(ServerData serverData) {
-                DeleteServerDataDialogFragment fragment = DeleteServerDataDialogFragment.newInstance("آیا می خواهید آدرس مربوطه را حذف کنید؟", serverData);
-                fragment.show(getParentFragmentManager(), DeleteServerDataDialogFragment.TAG);
+                QuestionDeleteServerDataDialogFragment fragment = QuestionDeleteServerDataDialogFragment.newInstance("آیا می خواهید آدرس مربوطه را حذف کنید؟", serverData);
+                fragment.show(getParentFragmentManager(), QuestionDeleteServerDataDialogFragment.TAG);
                 /*viewModel.deleteServerData(serverData);
                 setupAdapter();*/
             }
@@ -142,8 +142,8 @@ public class IPAddressListDialogFragment extends DialogFragment {
                 String ipAddress = serverData.getIpAddress();
                 String port = serverData.getPort();
 
-                AddAndEditIPAddressDialogFragment fragment = AddAndEditIPAddressDialogFragment.newInstance(centerName, ipAddress, port);
-                fragment.show(getParentFragmentManager(), AddAndEditIPAddressDialogFragment.TAG);
+                AddEditIPAddressDialogFragment fragment = AddEditIPAddressDialogFragment.newInstance(centerName, ipAddress, port);
+                fragment.show(getParentFragmentManager(), AddEditIPAddressDialogFragment.TAG);
 
                 viewModel.deleteServerData(serverData);
             }

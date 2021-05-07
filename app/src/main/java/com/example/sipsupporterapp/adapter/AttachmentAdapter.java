@@ -67,7 +67,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 }
                 Map<Uri, String> mapUri = new HashMap<>();
                 mapUri.put(uri, imageName);
-                viewModel.getShowFullScreenImage().setValue(mapUri);
+                viewModel.getShowFullScreenPhoto().setValue(mapUri);
             }
         });
     }
@@ -89,12 +89,11 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
 
         public AttachmentHolder(AttachmentAdapterItemBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
         public void bindBitmap(Bitmap bitmap) {
-            Glide.with(context).asBitmap().load(bitmap).into(binding.imgView);
+            Glide.with(context).load(bitmap).into(binding.imgView);
         }
     }
 }

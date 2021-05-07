@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAttachmentDialogBinding;
 import com.example.sipsupporterapp.model.AttachInfo;
@@ -48,11 +50,12 @@ public class AttachmentDialogFragment extends DialogFragment {
     private AttachmentViewModel viewModel;
 
     private File photoFile;
-    private Uri uri;
-    private Bitmap bitmap;
-    private int numberOfRotate = 0;
+    private Uri photoUri;
+    private Bitmap photoBitmap;
+    private int numberOfRotate;
+    private BitmapFactory.Options options;
 
-    private int customerID, customerSupportID, customerProductID, customerPaymentID;
+    private int customerID, customerSupportID, customerProductID, customerPaymentID, paymentID;
 
     private static final int REQUEST_CODE_PICK_PHOTO = 0;
     private static final int REQUEST_CODE_TAKE_PHOTO = 1;
@@ -61,18 +64,22 @@ public class AttachmentDialogFragment extends DialogFragment {
     private static final String ARGS_CUSTOMER_SUPPORT_ID = "customerSupportID";
     private static final String ARGS_CUSTOMER_PRODUCT_ID = "customerProductID";
     private static final String ARGS_CUSTOMER_PAYMENT_ID = "customerPaymentID";
+    private static final String ARGS_PAYMENT_ID = "paymentID";
 
     private static final String AUTHORITY = "com.example.sipsupporterapp.fileProvider";
 
     public static final String TAG = AttachmentDialogFragment.class.getSimpleName();
 
-    public static AttachmentDialogFragment newInstance(int customerID, int customerSupportID, int customerProductID, int customerPaymentID) {
+    public static AttachmentDialogFragment newInstance(int customerID, int customerSupportID, int customerProductID, int customerPaymentID, int paymentID) {
         AttachmentDialogFragment fragment = new AttachmentDialogFragment();
         Bundle args = new Bundle();
+
         args.putInt(ARGS_CUSTOMER_ID, customerID);
         args.putInt(ARGS_CUSTOMER_SUPPORT_ID, customerSupportID);
         args.putInt(ARGS_CUSTOMER_PRODUCT_ID, customerProductID);
         args.putInt(ARGS_CUSTOMER_PAYMENT_ID, customerPaymentID);
+        args.putInt(ARGS_PAYMENT_ID, paymentID);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,11 +92,10 @@ public class AttachmentDialogFragment extends DialogFragment {
         customerSupportID = getArguments().getInt(ARGS_CUSTOMER_SUPPORT_ID);
         customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
+        paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
 
         createViewModel();
-
-        setObserver();
-
+        setupObserver();
     }
 
     @NonNull
@@ -115,90 +121,81 @@ public class AttachmentDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_PICK_PHOTO) {
-                uri = data.getData();
-                if (uri != null) {
+                photoUri = intent.getData();
+                if (photoUri != null) {
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                        binding.img.setImageBitmap(bitmap);
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        if (photoBitmap != null) {
+                            photoBitmap.recycle();
+                            photoBitmap = null;
+                        }
+                        System.gc();
+                        photoBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+                        if (photoBitmap != null) {
+                            Glide.with(getContext()).load(photoBitmap).into(binding.img);
+                        }
+                    } catch (IOException exception) {
+                        Log.e(TAG, exception.getMessage());
                     }
                 }
             } else if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
-                uri = FileProvider.getUriForFile(
-                        getActivity(), AUTHORITY, photoFile);
-                if (uri != null) {
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                        if (bitmap != null) {
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inJustDecodeBounds = true;
-                            BitmapFactory.decodeFile(photoFile.getAbsolutePath(), options);
+                try {
+                    photoUri = FileProvider.getUriForFile(
+                            getActivity(), AUTHORITY, photoFile);
 
-                            int imageHeight = options.outHeight;
-                            int imageWidth = options.outWidth;
-
-                            options.inJustDecodeBounds = false;
-
-                            if (imageWidth > imageHeight) {
-                                Matrix matrix = new Matrix();
-                                matrix.postRotate(90);
-                                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                                binding.img.setImageBitmap(bitmap);
-                            } else {
-                                binding.img.setImageBitmap(bitmap);
+                    if (photoUri != null) {
+                        try {
+                            if (photoBitmap != null) {
+                                photoBitmap.recycle();
+                                photoBitmap = null;
                             }
+                            System.gc();
+                            photoBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+                            if (photoBitmap != null) {
+
+                                options = new BitmapFactory.Options();
+                                options.inJustDecodeBounds = true;
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        viewModel.getDecodeBitmap().postValue(BitmapFactory.decodeFile(photoFile.getAbsolutePath(), options));
+                                    }
+                                }).start();
+                            }
+                        } catch (IOException exception) {
+                            Log.e(TAG, exception.getMessage());
                         }
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    } finally {
-                        getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     }
+                } catch (Exception exception) {
+                    Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                } finally {
+                    getActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(AttachmentViewModel.class);
     }
 
-    private void setObserver() {
-        viewModel.getAllowPermissionSingleLiveEvent().observe(this, new Observer<Boolean>() {
+    private void setupObserver() {
+        viewModel.getAllowCameraPermissionSingleLiveEvent().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isAllowPermission) {
                 openCamera();
             }
         });
 
-      /*  viewModel.getBitmapAsStringSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String bitmapAsString) {
-                File file = new File(uri.getPath());
-                String fileName = file.getName();
-                AttachInfo attachInfo = new AttachInfo();
-                attachInfo.setCustomerID(customerID);
-                attachInfo.setCustomerSupportID(customerSupportID);
-                attachInfo.setCustomerProductID(customerProductID);
-                attachInfo.setCustomerPaymentID(customerPaymentID);
-                attachInfo.setFileData(bitmapAsString);
-                attachInfo.setFileName(fileName);
-                attachInfo.setDescription(binding.edTextDescription.getText().toString());
-
-                ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getLastValueSpinner(getContext()));
-                viewModel.getSipSupportServiceAttach(serverData.getIpAddress() + ":" + serverData.getPort());
-                viewModel.attach(SipSupportSharedPreferences.getUserLoginKey(getContext()), attachInfo);
-            }
-        });*/
-
         viewModel.getAttachResultSingleLiveEvent().observe(this, new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
                 viewModel.getUpdateImageListSingleLiveEvent().setValue(attachResult);
+
                 binding.progressBarLoading.setVisibility(View.GONE);
                 binding.imgClose.setEnabled(true);
                 binding.imgSend.setEnabled(true);
@@ -206,8 +203,9 @@ public class AttachmentDialogFragment extends DialogFragment {
                 binding.edTextDescription.setEnabled(true);
                 binding.imgRotate.setEnabled(true);
                 binding.imgMore.setEnabled(true);
-                SuccessAttachmentDialogFragment fragment = SuccessAttachmentDialogFragment.newInstance("ارسال فایل موفقیت آمیز بود");
-                fragment.show(getParentFragmentManager(), SuccessAttachmentDialogFragment.TAG);
+
+                SuccessAttachDialogFragment fragment = SuccessAttachDialogFragment.newInstance(getString(R.string.success_attach_message));
+                fragment.show(getParentFragmentManager(), SuccessAttachDialogFragment.TAG);
             }
         });
 
@@ -231,13 +229,13 @@ public class AttachmentDialogFragment extends DialogFragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                binding.progressBarLoading.setVisibility(View.GONE);
                 binding.imgClose.setEnabled(true);
                 binding.imgSend.setEnabled(true);
                 binding.imgCamera.setEnabled(true);
                 binding.edTextDescription.setEnabled(true);
                 binding.imgRotate.setEnabled(true);
                 binding.imgMore.setEnabled(true);
+
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
@@ -247,14 +245,14 @@ public class AttachmentDialogFragment extends DialogFragment {
             @Override
             public void onChanged(Boolean isTimeOutExceptionHappen) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                binding.progressBarLoading.setVisibility(View.GONE);
                 binding.imgClose.setEnabled(true);
                 binding.imgSend.setEnabled(true);
                 binding.imgCamera.setEnabled(true);
                 binding.edTextDescription.setEnabled(true);
                 binding.imgRotate.setEnabled(true);
                 binding.imgMore.setEnabled(true);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("اتصال به اینترنت با خطا مواجه شد");
+
+                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.timeout_exception_happen_message));
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
@@ -268,7 +266,7 @@ public class AttachmentDialogFragment extends DialogFragment {
                 SipSupportSharedPreferences.setCustomerName(getContext(), null);
                 SipSupportSharedPreferences.setCustomerTel(getContext(), null);
                 SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.newIntent(getContext());
+                Intent intent = LoginContainerActivity.start(getContext());
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -277,8 +275,8 @@ public class AttachmentDialogFragment extends DialogFragment {
         viewModel.getShowAttachAgainDialog().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean showAttachAgainDialog) {
-                AttachmentAgainDialogFragment fragment = AttachmentAgainDialogFragment.newInstance();
-                fragment.show(getParentFragmentManager(), AttachmentAgainDialogFragment.TAG);
+                AttachAgainDialogFragment fragment = AttachAgainDialogFragment.newInstance(getString(R.string.question_attach_again));
+                fragment.show(getParentFragmentManager(), AttachAgainDialogFragment.TAG);
             }
         });
 
@@ -292,9 +290,33 @@ public class AttachmentDialogFragment extends DialogFragment {
         viewModel.getYesAgain().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isYesAgain) {
-                uri = null;
+                photoUri = null;
+                if (photoBitmap != null) {
+                    photoBitmap.recycle();
+                    photoBitmap = null;
+                }
+                System.gc();
                 binding.img.setImageResource(0);
                 binding.edTextDescription.setText("");
+            }
+        });
+
+        viewModel.getDecodeBitmap().observe(this, new Observer<Bitmap>() {
+            @Override
+            public void onChanged(Bitmap bitmap) {
+                int imageHeight = options.outHeight;
+                int imageWidth = options.outWidth;
+
+                options.inJustDecodeBounds = false;
+
+                if (imageWidth > imageHeight) {
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(90);
+                    photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight(), matrix, true);
+                    Glide.with(getContext()).load(photoBitmap).into(binding.img);
+                } else {
+                    Glide.with(getContext()).load(photoBitmap).into(binding.img);
+                }
             }
         });
     }
@@ -306,7 +328,7 @@ public class AttachmentDialogFragment extends DialogFragment {
                 if (hasCameraPermission()) {
                     openCamera();
                 } else {
-                    viewModel.getRequestPermission().setValue(true);
+                    viewModel.getRequestCameraPermission().setValue(true);
                 }
             }
         });
@@ -314,42 +336,42 @@ public class AttachmentDialogFragment extends DialogFragment {
         binding.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "انتخاب تصویر"), REQUEST_CODE_PICK_PHOTO);
+                Intent starter = new Intent();
+                starter.setType("image/*");
+                starter.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(starter, getString(R.string.select_photo_title)), REQUEST_CODE_PICK_PHOTO);
             }
         });
 
         binding.imgRotate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (uri == null) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("هنوز فایلی انتخاب نشده است");
+                if (photoUri == null) {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.no_choose_any_file));
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
                     switch (numberOfRotate) {
                         case 0:
-                            Matrix matrix = new Matrix();
-                            matrix.postRotate(90);
-                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                            binding.img.setImageBitmap(bitmap);
+                            Matrix matrixOne = new Matrix();
+                            matrixOne.postRotate(90);
+                            photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight(), matrixOne, true);
+                            Glide.with(getContext()).load(photoBitmap).into(binding.img);
                             numberOfRotate++;
-                            return;
+                            break;
                         case 1:
-                            Matrix matrix1 = new Matrix();
-                            matrix1.postRotate(180);
-                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix1, true);
-                            binding.img.setImageBitmap(bitmap);
+                            Matrix matrixTwo = new Matrix();
+                            matrixTwo.postRotate(180);
+                            photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight(), matrixTwo, true);
+                            Glide.with(getContext()).load(photoBitmap).into(binding.img);
                             numberOfRotate++;
-                            return;
+                            break;
                         case 2:
-                            Matrix matrix2 = new Matrix();
-                            matrix2.postRotate(270);
-                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix2, true);
-                            binding.img.setImageBitmap(bitmap);
+                            Matrix matrixThree = new Matrix();
+                            matrixThree.postRotate(270);
+                            photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight(), matrixThree, true);
+                            Glide.with(getContext()).load(photoBitmap).into(binding.img);
                             numberOfRotate = 0;
-                            return;
+                            break;
                     }
                 }
             }
@@ -365,12 +387,12 @@ public class AttachmentDialogFragment extends DialogFragment {
         binding.imgSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (uri == null) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("هنوز فایلی انتخاب نشده است");
+                if (photoUri == null) {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.no_choose_any_file));
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
                     AttachmentAsyncTask attachmentAsyncTask = new AttachmentAsyncTask();
-                    attachmentAsyncTask.execute(bitmap);
+                    attachmentAsyncTask.execute(photoBitmap);
                 }
             }
         });
@@ -384,9 +406,10 @@ public class AttachmentDialogFragment extends DialogFragment {
     }
 
     private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent starter = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (starter.resolveActivity(getActivity().getPackageManager()) != null) {
+            Log.d("Arezoo", "hi dear");
             File filesDir = getActivity().getFilesDir();
             String fileName = "img_" + new Date().getTime() + ".jpg";
             photoFile = new File(filesDir, fileName);
@@ -399,7 +422,7 @@ public class AttachmentDialogFragment extends DialogFragment {
                 List<ResolveInfo> activities =
                         getActivity().getPackageManager()
                                 .queryIntentActivities(
-                                        intent,
+                                        starter,
                                         PackageManager.MATCH_DEFAULT_ONLY
                                 );
 
@@ -411,8 +434,8 @@ public class AttachmentDialogFragment extends DialogFragment {
                     );
                 }
 
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
+                starter.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(starter, REQUEST_CODE_TAKE_PHOTO);
             }
         }
     }
@@ -441,28 +464,37 @@ public class AttachmentDialogFragment extends DialogFragment {
 
         @Override
         protected String doInBackground(Bitmap... bitmaps) {
-            String stringBase64 = convertBitmapToStringBase64(bitmap);
+            String stringBase64 = convertBitmapToStringBase64(photoBitmap);
             return stringBase64;
         }
 
         @Override
-        protected void onPostExecute(String bitmapAsString) {
-            File file = new File(uri.getPath());
-            String fileName = file.getName();
+        protected void onPostExecute(String stringBase64) {
             AttachInfo attachInfo = new AttachInfo();
+
             attachInfo.setCustomerID(customerID);
             attachInfo.setCustomerSupportID(customerSupportID);
             attachInfo.setCustomerProductID(customerProductID);
             attachInfo.setCustomerPaymentID(customerPaymentID);
-            attachInfo.setFileData(bitmapAsString);
+            attachInfo.setPaymentID(paymentID);
+
+            attachInfo.setFileData(stringBase64);
+
+            File file = new File(photoUri.getPath());
+            String fileName = file.getName();
             attachInfo.setFileName(fileName);
+
             attachInfo.setDescription(binding.edTextDescription.getText().toString());
 
-            String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-            String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-            ServerData serverData = viewModel.getServerData(centerName);
-            viewModel.getSipSupportServiceAttach(serverData.getIpAddress() + ":" + serverData.getPort());
-            viewModel.attach(userLoginKey, attachInfo);
+            attach(attachInfo);
         }
+    }
+
+    private void attach(AttachInfo attachInfo) {
+        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        ServerData serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupportServiceAttach(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.attach(userLoginKey, attachInfo);
     }
 }

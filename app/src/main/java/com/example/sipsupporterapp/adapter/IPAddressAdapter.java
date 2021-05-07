@@ -13,17 +13,17 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.IpAddressAdapterItemBinding;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
-import com.example.sipsupporterapp.viewmodel.SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel;
+import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 
 import java.util.List;
 
 public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAddressHolder> {
     private Context context;
     private List<ServerData> serverDataList;
-    private SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel viewModel;
+    private LoginViewModel viewModel;
     private int lastSelectedPosition = -1;
 
-    public IPAddressAdapter(Context context, List<ServerData> serverDataList, SharedLoginAndAddAndEditIPAddressDialogAndIPAddressListDialogViewModel viewModel) {
+    public IPAddressAdapter(Context context, List<ServerData> serverDataList, LoginViewModel viewModel) {
         this.context = context;
         this.serverDataList = serverDataList;
         this.viewModel = viewModel;
@@ -56,7 +56,6 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
             @Override
             public void onClick(View v) {
                 viewModel.getDeleteIPAddressListSingleLiveEvent().setValue(serverData);
-                /*viewModel.getDeleteSpinnerSingleLiveEvent().setValue(serverData);*/
             }
         });
 

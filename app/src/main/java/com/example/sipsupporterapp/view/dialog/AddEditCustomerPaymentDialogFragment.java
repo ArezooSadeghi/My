@@ -38,12 +38,11 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private FragmentAddEditCustomerPaymentDialogBinding binding;
     private CustomerPaymentViewModel viewModel;
 
-    private String bankName, description, lastValueSpinner;
+    private String description, lastValueSpinner;
     private long price;
     private int datePayment, customerID, customerPaymentID, bankAccountID;
     private BankAccountInfo[] bankAccountInfoArray;
 
-    private static final String ARGS_BANK_NAME = "bankName";
     private static final String ARGS_DESCRIPTION = "description";
     private static final String ARGS_PRICE = "price";
     private static final String ARGS_DATE_PAYMENT = "datePayment";
@@ -53,10 +52,9 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
     public static final String TAG = AddEditCustomerPaymentDialogFragment.class.getSimpleName();
 
-    public static AddEditCustomerPaymentDialogFragment newInstance(String bankName, String description, long price, int datePayment, int customerID, int customerPaymentID, int bankAccountID) {
+    public static AddEditCustomerPaymentDialogFragment newInstance(String description, long price, int datePayment, int customerID, int customerPaymentID, int bankAccountID) {
         AddEditCustomerPaymentDialogFragment fragment = new AddEditCustomerPaymentDialogFragment();
         Bundle args = new Bundle();
-        args.putString(ARGS_BANK_NAME, bankName);
         args.putString(ARGS_DESCRIPTION, description);
         args.putLong(ARGS_PRICE, price);
         args.putInt(ARGS_DATE_PAYMENT, datePayment);
@@ -71,7 +69,6 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bankName = getArguments().getString(ARGS_BANK_NAME);
         description = getArguments().getString(ARGS_DESCRIPTION);
         price = getArguments().getLong(ARGS_PRICE);
         datePayment = getArguments().getInt(ARGS_DATE_PAYMENT);
@@ -173,7 +170,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
                 SipSupportSharedPreferences.setCustomerName(getContext(), null);
                 SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                Intent intent = LoginContainerActivity.newIntent(getContext());
+                Intent intent = LoginContainerActivity.start(getContext());
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -182,8 +179,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                SuccessAddEditCustomerPaymentDialogFragment fragment = SuccessAddEditCustomerPaymentDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
-                fragment.show(getParentFragmentManager(), SuccessAddEditCustomerPaymentDialogFragment.TAG);
+                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
+                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                 viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
                 dismiss();
             }
@@ -200,8 +197,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getEditCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                SuccessAddEditCustomerPaymentDialogFragment fragment = SuccessAddEditCustomerPaymentDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
-                fragment.show(getParentFragmentManager(), SuccessAddEditCustomerPaymentDialogFragment.TAG);
+                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
+                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                 viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
                 dismiss();
             }

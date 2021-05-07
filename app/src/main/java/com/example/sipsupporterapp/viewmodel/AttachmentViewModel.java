@@ -65,6 +65,11 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Map<Uri, String>> showFullScreenImage = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID;
+    private SingleLiveEvent<String> errorAttachmentListResultByPaymentID;
+
+    private SingleLiveEvent<Bitmap> decodeBitmap = new SingleLiveEvent<>();
+
     public AttachmentViewModel(@NonNull Application application) {
         super(application);
 
@@ -90,13 +95,16 @@ public class AttachmentViewModel extends AndroidViewModel {
 
         deleteAttachResultSingleLiveEvent = mRepository.getDeleteAttachResultSingleLiveEvent();
         errorDeleteAttachResultSingleLiveEvent = mRepository.getErrorDeleteAttachResultSingleLiveEvent();
+
+        attachmentListResultByPaymentID = mRepository.getAttachmentListResultByPaymentID();
+        errorAttachmentListResultByPaymentID = mRepository.getErrorAttachmentListResultByPaymentID();
     }
 
-    public SingleLiveEvent<Boolean> getRequestPermission() {
+    public SingleLiveEvent<Boolean> getRequestCameraPermission() {
         return mRequestPermissionSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getAllowPermissionSingleLiveEvent() {
+    public SingleLiveEvent<Boolean> getAllowCameraPermissionSingleLiveEvent() {
         return mAllowPermissionSingleLiveEvent;
     }
 
@@ -136,11 +144,11 @@ public class AttachmentViewModel extends AndroidViewModel {
         return mNoAgainSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaCustomerPaymentIDSingleLiveEvent() {
+    public SingleLiveEvent<AttachResult> getCustomerPaymentAttachmentsResultSingleLiveEvent() {
         return getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorCustomerPaymentAttachmentsResultSingleLiveEvent() {
         return getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
     }
 
@@ -152,19 +160,19 @@ public class AttachmentViewModel extends AndroidViewModel {
         return attachResultForImageListSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaCustomerProductIDSingleLiveEvent() {
+    public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsSingleLiveEvent() {
         return getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorCustomerProductAttachmentsSingleLiveEvent() {
         return getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaCustomerSupportIDSingleLiveEvent() {
+    public SingleLiveEvent<AttachResult> getCustomerSupportAttachmentsResultSingleLiveEvent() {
         return getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorCustomerSupportAttachmentsResultSingleLiveEvent() {
         return getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
     }
 
@@ -176,11 +184,11 @@ public class AttachmentViewModel extends AndroidViewModel {
         return showFullScreenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getAttachResultViaAttachIDSingleLiveEvent() {
+    public SingleLiveEvent<AttachResult> getAttachInfoResultSingleLiveEvent() {
         return attachResultViaAttachIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAttachResultViaAttachIDSingleLiveEvent() {
+    public SingleLiveEvent<String> getErrorAttachInfoResultSingleLiveEvent() {
         return errorAttachResultViaAttachIDSingleLiveEvent;
     }
 
@@ -208,8 +216,20 @@ public class AttachmentViewModel extends AndroidViewModel {
         return errorDeleteAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Map<Uri, String>> getShowFullScreenImage() {
+    public SingleLiveEvent<Map<Uri, String>> getShowFullScreenPhoto() {
         return showFullScreenImage;
+    }
+
+    public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
+        return attachmentListResultByPaymentID;
+    }
+
+    public SingleLiveEvent<String> getErrorPaymentAttachmentsResultSingleLiveEvent() {
+        return errorAttachmentListResultByPaymentID;
+    }
+
+    public SingleLiveEvent<Bitmap> getDecodeBitmap() {
+        return decodeBitmap;
     }
 
     public ServerData getServerData(String centerName) {
@@ -262,5 +282,13 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public void getSipSupportServiceDeleteAttach(String baseUrl) {
         mRepository.getSipSupportServiceDeleteAttach(baseUrl);
+    }
+
+    public void getSipSupportServiceGetAttachmentListByPaymentID(String baseUrl) {
+        mRepository.getSipSupportServiceGetAttachmentListByPaymentID(baseUrl);
+    }
+
+    public void fetchAttachmentsByPaymentID(String userLoginKey, int paymentID, boolean LoadFileData) {
+        mRepository.fetchAttachmentsByPaymentID(userLoginKey, paymentID, LoadFileData);
     }
 }

@@ -76,7 +76,7 @@ public class SipSupportRepository {
             sipSupporterServiceAddCustomerPayments, sipSupporterServiceDeleteCustomerPayments, sipSupporterServiceEditCustomerPayments, sipSupporterServiceGetBankAccountResult,
             sipSupportServiceGetAttachmentFilesViaCustomerProductID, sipSupportServiceGetAttachmentFilesViaCustomerSupportID, sipSupportServicePaymentsListAllBankAccount,
             sipSupportServicePaymentsListByBankAccount, sipSupportServicePaymentsEdit, sipSupportServicePaymentsDelete, sipSupportServicePaymentSubjectsList, sipSupportServicePaymentsAdd,
-            SipSupporterServiceDeleteAttach;
+            SipSupporterServiceDeleteAttach, SipSupporterServiceGetAttachmentListByPaymentID;
     private static final String TAG = SipSupportRepository.class.getSimpleName();
 
     private SingleLiveEvent<CustomerResult> customerResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -176,6 +176,9 @@ public class SipSupportRepository {
 
     private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorDeleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAttachmentListResultByPaymentID = new SingleLiveEvent<>();
 
     private SipSupportRepository(Context context) {
         this.context = context.getApplicationContext();
@@ -411,6 +414,13 @@ public class SipSupportRepository {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         SipSupporterServiceDeleteAttach = RetrofitInstance
                 .deleteAttachRetrofitInstance(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+    }
+
+    public void getSipSupportServiceGetAttachmentListByPaymentID(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        SipSupporterServiceGetAttachmentListByPaymentID = RetrofitInstance
+                .getAttachmentListByPaymentIDRI(new TypeToken<AttachResult>() {
                 }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
     }
 
@@ -708,6 +718,14 @@ public class SipSupportRepository {
 
     public SingleLiveEvent<String> getErrorDeleteAttachResultSingleLiveEvent() {
         return errorDeleteAttachResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AttachResult> getAttachmentListResultByPaymentID() {
+        return attachmentListResultByPaymentID;
+    }
+
+    public SingleLiveEvent<String> getErrorAttachmentListResultByPaymentID() {
+        return errorAttachmentListResultByPaymentID;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2113,6 +2131,46 @@ public class SipSupportRepository {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteAttachResultSingleLiveEvent.setValue(attachResult.getError());
+                        }
+
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AttachResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnection.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchAttachmentsByPaymentID(String userLoginKey, int paymentID, boolean LoadFileData) {
+        SipSupporterServiceGetAttachmentListByPaymentID.getAttachmentListByPaymentID(userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
+            @Override
+            public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
+                if (response.code() == 200) {
+                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
+                        dangerousUserSingleLiveEvent.setValue(true);
+                    } else {
+                        attachmentListResultByPaymentID.setValue(response.body());
+                    }
+                } else if (response.code() == 400) {
+                    Gson gson = new GsonBuilder().create();
+                    AttachResult attachResult = new AttachResult();
+                    try {
+                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
+                            dangerousUserSingleLiveEvent.setValue(true);
+                        } else {
+                            errorAttachmentListResultByPaymentID.setValue(attachResult.getError());
                         }
 
                     } catch (IOException e) {

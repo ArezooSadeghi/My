@@ -43,7 +43,7 @@
                 android:textColor="@color/black"
                 android:textDirection="rtl"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@id/outlinedTextField1"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/img_btn_more"
                 app:layout_constraintTop_toTopOf="parent"
                 app:ms_arrow_tint="@color/black"
@@ -52,8 +52,8 @@
 
             <ImageButton
                 android:id="@+id/img_btn_more"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_more"
                 app:layout_constraintBottom_toBottomOf="@id/spinner"

@@ -15,17 +15,17 @@ import com.example.sipsupporterapp.databinding.CustomerAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerInfo;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.viewmodel.SharedCenterNameDialogAndCustomerViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
 import java.util.List;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
     private Context context;
     private List<CustomerInfo> customerInfoList;
-    private SharedCenterNameDialogAndCustomerViewModel viewModel;
+    private CustomerViewModel viewModel;
     private String date;
 
-    public CustomerAdapter(Context context, List<CustomerInfo> customerInfoList, SharedCenterNameDialogAndCustomerViewModel viewModel, String date) {
+    public CustomerAdapter(Context context, List<CustomerInfo> customerInfoList, CustomerViewModel viewModel, String date) {
         this.context = context;
         this.customerInfoList = customerInfoList;
         this.viewModel = viewModel;
@@ -71,7 +71,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     public int getItemCount() {
         return customerInfoList == null ? 0 : customerInfoList.size();
     }
-
 
     public class CustomerHolder extends RecyclerView.ViewHolder {
         private CustomerAdapterItemBinding binding;

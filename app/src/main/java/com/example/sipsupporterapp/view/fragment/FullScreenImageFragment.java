@@ -18,14 +18,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.sipsupporterapp.R;
-import com.example.sipsupporterapp.databinding.FragmentFullScreenImageBinding;
+import com.example.sipsupporterapp.databinding.FragmentFullScreenPhotoBinding;
 import com.example.sipsupporterapp.eventbus.UpdateEvent;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
-import com.example.sipsupporterapp.view.dialog.SuccessDeleteFileDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDeletePhotoDialogFragment;
+import com.example.sipsupporterapp.view.dialog.SuccessDeletePhotoDialogFragment;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,7 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 
 public class FullScreenImageFragment extends Fragment {
-    private FragmentFullScreenImageBinding binding;
+    private FragmentFullScreenPhotoBinding binding;
     private AttachmentViewModel viewModel;
 
     private static final String ARGS_PHOTO = "photo";
@@ -63,7 +63,7 @@ public class FullScreenImageFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_full_screen_image,
+                R.layout.fragment_full_screen_photo,
                 null,
                 false);
 
@@ -98,8 +98,8 @@ public class FullScreenImageFragment extends Fragment {
         binding.imgViewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید فایل مربوطه را حذف کنید؟");
-                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
+                QuestionDeletePhotoDialogFragment fragment = QuestionDeletePhotoDialogFragment.newInstance("آیا می خواهید فایل مربوطه را حذف کنید؟");
+                fragment.show(getParentFragmentManager(), QuestionDeletePhotoDialogFragment.TAG);
             }
         });
     }
@@ -121,8 +121,8 @@ public class FullScreenImageFragment extends Fragment {
             @Override
             public void onChanged(AttachResult attachResult) {
                 EventBus.getDefault().postSticky(new UpdateEvent(attachResult.getAttachs()[0].getAttachID()));
-                SuccessDeleteFileDialogFragment fragment = SuccessDeleteFileDialogFragment.newInstance("فایل با موفقیت حذف شد");
-                fragment.show(getParentFragmentManager(), SuccessDeleteFileDialogFragment.TAG);
+                SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance("فایل با موفقیت حذف شد");
+                fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
             }
         });
 

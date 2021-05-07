@@ -15,7 +15,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.PaymentAdapterItemBinding;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.utils.Converter;
-import com.example.sipsupporterapp.viewmodel.CostViewModel;
+import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
@@ -25,9 +25,9 @@ import java.util.List;
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentHolder> {
     private Context context;
     private List<PaymentInfo> paymentInfoList;
-    private CostViewModel viewModel;
+    private PaymentViewModel viewModel;
 
-    public PaymentAdapter(Context context, List<PaymentInfo> paymentInfoList, CostViewModel viewModel) {
+    public PaymentAdapter(Context context, List<PaymentInfo> paymentInfoList, PaymentViewModel viewModel) {
         this.context = context;
         this.paymentInfoList = paymentInfoList;
         this.viewModel = viewModel;
@@ -92,7 +92,6 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
 
         public PaymentHolder(PaymentAdapterItemBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 

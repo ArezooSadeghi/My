@@ -21,13 +21,13 @@ public class LoginContainerActivity extends SingleFragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (SipSupportSharedPreferences.getUserLoginKey(this) != null) {
-            Intent intent = CustomerContainerActivity.newIntent(this);
-            startActivity(intent);
+            Intent starter = CustomerContainerActivity.start(this);
+            startActivity(starter);
             finish();
         }
     }
 
-    public static Intent newIntent(Context context) {
+    public static Intent start(Context context) {
         return new Intent(context, LoginContainerActivity.class);
     }
 }

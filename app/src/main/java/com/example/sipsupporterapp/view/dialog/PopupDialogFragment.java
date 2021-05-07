@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentPopupDialogBinding;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.CostContainerActivity;
+import com.example.sipsupporterapp.view.activity.PaymentContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 
 
@@ -88,7 +88,7 @@ public class PopupDialogFragment extends DialogFragment {
                 SipSupportSharedPreferences.setCustomerName(getContext(), null);
                 SipSupportSharedPreferences.setCustomerTel(getContext(), null);
                 SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.newIntent(getContext());
+                Intent intent = LoginContainerActivity.start(getContext());
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -97,7 +97,7 @@ public class PopupDialogFragment extends DialogFragment {
         binding.btnRegisterUnknownDepositAmounts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", "", 0, 0, 0, 0, 0);
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", 0, 0, 0, 0, 0);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
                 dismiss();
             }
@@ -106,7 +106,7 @@ public class PopupDialogFragment extends DialogFragment {
         binding.btnCosts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent starter = CostContainerActivity.start(getContext());
+                Intent starter = PaymentContainerActivity.start(getContext());
                 startActivity(starter);
                 dismiss();
             }
