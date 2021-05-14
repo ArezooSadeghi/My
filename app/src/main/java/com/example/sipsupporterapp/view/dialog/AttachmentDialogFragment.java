@@ -32,6 +32,7 @@ import com.example.sipsupporterapp.databinding.FragmentAttachmentDialogBinding;
 import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.ScaleBitmap;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
@@ -259,10 +260,20 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
     }
 
     private String convertBitmapToBase64() {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        System.gc();
-        return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+        if (SipSupportSharedPreferences.getFactor(getContext()) == null) {
+            Bitmap scaledBitmap = ScaleBitmap.getScaledDownBitmap(bitmap, 2245);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            System.gc();
+            return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+        } else {
+            String factor = SipSupportSharedPreferences.getFactor(getContext());
+            Bitmap scaledBitmap = ScaleBitmap.getScaledDownBitmap(bitmap, Math.round(Double.valueOf(factor) * 2245));
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            System.gc();
+            return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+        }
     }
 
     private void showErrorDialog(String message) {
