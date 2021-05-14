@@ -70,6 +70,12 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Bitmap> decodeBitmap = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<String> finishWriteToStorage = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<String> photoClicked = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Boolean> hideLoading = new SingleLiveEvent<>();
+
     public AttachmentViewModel(@NonNull Application application) {
         super(application);
 
@@ -120,11 +126,11 @@ public class AttachmentViewModel extends AndroidViewModel {
         return mErrorAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionSingleLiveEvent() {
+    public SingleLiveEvent<String> getNoConnectionExceptionSingleLiveEvent() {
         return mNoConnectionSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getTimeOutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<Boolean> getTimeOutExceptionSingleLiveEvent() {
         return mTimeOutExceptionHappenSingleLiveEvent;
     }
 
@@ -136,7 +142,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         return mIsAttachAgainSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getYesAgain() {
+    public SingleLiveEvent<Boolean> getYesAttachAgain() {
         return mYesAgainSingleLiveEvent;
     }
 
@@ -192,7 +198,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         return errorAttachResultViaAttachIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getUpdateImageListSingleLiveEvent() {
+    public SingleLiveEvent<AttachResult> getUpdatePhotoGallerySingleLiveEvent() {
         return updateImageListSingleLiveEvent;
     }
 
@@ -232,63 +238,75 @@ public class AttachmentViewModel extends AndroidViewModel {
         return decodeBitmap;
     }
 
+    public SingleLiveEvent<String> getFinishWriteToStorage() {
+        return finishWriteToStorage;
+    }
+
+    public SingleLiveEvent<String> getPhotoClicked() {
+        return photoClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getHideLoading() {
+        return hideLoading;
+    }
+
     public ServerData getServerData(String centerName) {
         return mRepository.getServerData(centerName);
     }
 
-    public void getSipSupportServiceAttach(String baseUrl) {
+    public void getSipSupporterServiceForAddAttachment(String baseUrl) {
         mRepository.getSipSupportServiceAttach(baseUrl);
     }
 
-    public void getSipSupportServiceGetAttachmentFilesViaCustomerPaymentID(String baseUrl) {
+    public void getSipSupporterServiceForCustomerPaymentAttachments(String baseUrl) {
         mRepository.getSipSupportServiceGetAttachmentFilesViaCustomerPaymentID(baseUrl);
     }
 
-    public void getSipSupportServiceGetAttachmentFilesViaCustomerProductID(String baseUrl) {
+    public void getSipSupporterServiceForCustomerProductAttachments(String baseUrl) {
         mRepository.getSipSupportServiceGetAttachmentFilesViaCustomerProductID(baseUrl);
     }
 
-    public void getSipSupportServiceGetAttachmentFilesViaCustomerSupportID(String baseUrl) {
+    public void getSipSupporterServiceForCustomerSupportAttachments(String baseUrl) {
         mRepository.getSipSupportServiceGetAttachmentFilesViaCustomerSupportID(baseUrl);
     }
 
-    public void getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(String baseUrl) {
+    public void getSipSupporterServiceForAttachInfo(String baseUrl) {
         mRepository.getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(baseUrl);
     }
 
-    public void attach(String userLoginKey, AttachInfo attachInfo) {
+    public void addAttachment(String userLoginKey, AttachInfo attachInfo) {
         mRepository.attach(userLoginKey, attachInfo);
     }
 
-    public void getAttachmentFilesViaCustomerPaymentID(String userLoginKey, int customerPaymentID, boolean LoadFileData) {
+    public void fetchCustomerPaymentAttachments(String userLoginKey, int customerPaymentID, boolean LoadFileData) {
         mRepository.getAttachmentFilesViaCustomerPaymentID(userLoginKey, customerPaymentID, LoadFileData);
     }
 
-    public void fetchFileWithCustomerProductID(String userLoginKey, int customerProductID, boolean LoadFileData) {
+    public void fetchCustomerProductAttachments(String userLoginKey, int customerProductID, boolean LoadFileData) {
         mRepository.fetchFileWithCustomerProductID(userLoginKey, customerProductID, LoadFileData);
     }
 
-    public void fetchFileWithCustomerSupportID(String userLoginKey, int customerSupportID, boolean LoadFileData) {
+    public void fetchCustomerSupportAttachments(String userLoginKey, int customerSupportID, boolean LoadFileData) {
         mRepository.fetchFileWithCustomerSupportID(userLoginKey, customerSupportID, LoadFileData);
     }
 
-    public void fetchWithAttachID(String userLoginKey, int attachID, boolean loadFileData) {
+    public void fetchAttachInfo(String userLoginKey, int attachID, boolean loadFileData) {
         mRepository.fetchWithAttachID(userLoginKey, attachID, loadFileData);
     }
 
-    public void deleteAttach(String userLoginKey, int attachID) {
+    public void deleteAttachment(String userLoginKey, int attachID) {
         mRepository.deleteAttach(userLoginKey, attachID);
     }
 
-    public void getSipSupportServiceDeleteAttach(String baseUrl) {
+    public void getSipSupporterServiceForDeleteAttachment(String baseUrl) {
         mRepository.getSipSupportServiceDeleteAttach(baseUrl);
     }
 
-    public void getSipSupportServiceGetAttachmentListByPaymentID(String baseUrl) {
+    public void getSipSupporterServiceForPaymentAttachments(String baseUrl) {
         mRepository.getSipSupportServiceGetAttachmentListByPaymentID(baseUrl);
     }
 
-    public void fetchAttachmentsByPaymentID(String userLoginKey, int paymentID, boolean LoadFileData) {
+    public void fetchPaymentAttachments(String userLoginKey, int paymentID, boolean LoadFileData) {
         mRepository.fetchAttachmentsByPaymentID(userLoginKey, paymentID, LoadFileData);
     }
 }

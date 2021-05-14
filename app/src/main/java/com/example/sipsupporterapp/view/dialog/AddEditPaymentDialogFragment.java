@@ -84,6 +84,8 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         paymentSubjectID = getArguments().getInt(ARGS_PAYMENT_SUBJECT_ID);
         paymentSubject = getArguments().getString(ARGS_PAYMENT_SUBJECT);
 
+        Log.d("Arezoo", bankAccountID + "");
+
         createViewModel();
         fetchBankAccounts();
         setupObserver();

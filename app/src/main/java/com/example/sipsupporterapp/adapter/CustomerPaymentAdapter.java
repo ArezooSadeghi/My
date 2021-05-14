@@ -20,7 +20,9 @@ import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPaymentAdapter.CustomerPaymentInfoHolder> {
     private Context context;
@@ -101,6 +103,18 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             binding.txtBankAccountNo.setText(customerPaymentInfo.getBankAccountNO());
             String bankName = Converter.convert(customerPaymentInfo.getBankName());
             binding.txtBankName.setText(bankName);
+
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
+            binding.txtPrice.setText(currencyFormat + "تومان");
+
+            if (customerPaymentInfo.getDatePayment() != 0) {
+                String date = String.valueOf(customerPaymentInfo.getDatePayment());
+                String year = date.substring(0, 4);
+                String month = date.substring(4, 6);
+                String day = date.substring(6);
+                String dateFormat = year + "/" + month + "/" + day;
+                binding.txtDatePayment.setText(dateFormat);
+            }
         }
     }
 }

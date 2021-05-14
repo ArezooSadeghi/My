@@ -1,9 +1,9 @@
 package com.example.sipsupporterapp.eventbus;
 
-public class UpdateEvent {
+public class DeleteEvent {
     private int attachID;
 
-    public UpdateEvent(int attachID) {
+    public DeleteEvent(int attachID) {
         this.attachID = attachID;
     }
 

@@ -169,7 +169,7 @@ public class CustomerSupportFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), new Observer<CustomerSupportInfo>() {
                     @Override
                     public void onChanged(CustomerSupportInfo customerSupportInfo) {
-                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), customerSupportInfo.getCustomerID(), customerSupportInfo.getCustomerSupportID(), 0, 0, 0);
+                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), customerSupportInfo.getCustomerSupportID(), 0, 0, 0);
                         startActivity(starter);
                     }
                 });

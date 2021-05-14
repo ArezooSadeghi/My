@@ -107,7 +107,7 @@ public class PaymentFragment extends Fragment {
         binding.fabAddCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(0, "", 0, 0, 0, 0, "");
+                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(0, "", 0, 0, bankAccountID, 0, "");
                 fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
             }
         });
@@ -244,7 +244,7 @@ public class PaymentFragment extends Fragment {
         viewModel.getSeeDocumentsClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
             @Override
             public void onChanged(PaymentInfo paymentInfo) {
-                Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, 0, 0, paymentInfo.getPaymentID());
+                Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, 0, paymentInfo.getPaymentID());
                 startActivity(starter);
             }
         });

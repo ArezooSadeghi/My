@@ -1,10 +1,8 @@
 package com.example.sipsupporterapp.view.fragment;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentFullScreenPhotoBinding;
-import com.example.sipsupporterapp.eventbus.UpdateEvent;
+import com.example.sipsupporterapp.eventbus.DeleteEvent;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -30,22 +28,20 @@ import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
-
-public class FullScreenImageFragment extends Fragment {
+public class FullScreenPhotoFragment extends Fragment {
     private FragmentFullScreenPhotoBinding binding;
     private AttachmentViewModel viewModel;
 
-    private static final String ARGS_PHOTO = "photo";
+    private static final String ARGS_FILE_PATH = "filePath";
     private static final String ARGS_ATTACH_ID = "attachID";
 
-    private static final String TAG = FullScreenImageFragment.class.getSimpleName();
-
-    public static FullScreenImageFragment newInstance(Uri photo, int attachID) {
-        FullScreenImageFragment fragment = new FullScreenImageFragment();
+    public static FullScreenPhotoFragment newInstance(String filePath, int attachID) {
+        FullScreenPhotoFragment fragment = new FullScreenPhotoFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARGS_PHOTO, photo);
+
+        args.putString(ARGS_FILE_PATH, filePath);
         args.putInt(ARGS_ATTACH_ID, attachID);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +60,7 @@ public class FullScreenImageFragment extends Fragment {
         binding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_full_screen_photo,
-                null,
+                container,
                 false);
 
         initViews();
@@ -84,53 +80,85 @@ public class FullScreenImageFragment extends Fragment {
     }
 
     private void initViews() {
-        Uri photo = getArguments().getParcelable(ARGS_PHOTO);
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photo);
-        } catch (IOException exception) {
-            Log.e(TAG, exception.getMessage());
+        String filePath = getArguments().getString(ARGS_FILE_PATH);
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        if (bitmap != null) {
+            binding.imgViewFullScreen.setImage(ImageSource.bitmap(bitmap));
         }
-        binding.imgViewFullScreen.setImage(ImageSource.bitmap(bitmap));
     }
 
     private void handleEvents() {
         binding.imgViewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuestionDeletePhotoDialogFragment fragment = QuestionDeletePhotoDialogFragment.newInstance("آیا می خواهید فایل مربوطه را حذف کنید؟");
+                QuestionDeletePhotoDialogFragment fragment = QuestionDeletePhotoDialogFragment.newInstance(getString(R.string.question_delete_photo_message));
                 fragment.show(getParentFragmentManager(), QuestionDeletePhotoDialogFragment.TAG);
             }
         });
+    }
+
+    private void showErrorDialog(String message) {
+        if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
+            binding.progressBarLoading.setVisibility(View.INVISIBLE);
+        }
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void deleteAttachment() {
+        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        int attachID = getArguments().getInt(ARGS_ATTACH_ID);
+        ServerData serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceForDeleteAttachment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.deleteAttachment(userLoginKey, attachID);
     }
 
     private void setupObserver() {
         viewModel.getYesDelete().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean yesDelete) {
-                String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-                String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-                int attachID = getArguments().getInt(ARGS_ATTACH_ID);
-                ServerData serverData = viewModel.getServerData(centerName);
-                viewModel.getSipSupportServiceDeleteAttach(serverData.getIpAddress() + ":" + serverData.getPort());
-                viewModel.deleteAttach(userLoginKey, attachID);
+                if (binding.progressBarLoading.getVisibility() == View.INVISIBLE) {
+                    binding.progressBarLoading.setVisibility(View.VISIBLE);
+                }
+                deleteAttachment();
             }
         });
 
         viewModel.getDeleteAttachResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                EventBus.getDefault().postSticky(new UpdateEvent(attachResult.getAttachs()[0].getAttachID()));
-                SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance("فایل با موفقیت حذف شد");
-                fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
+                if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
+                    binding.progressBarLoading.setVisibility(View.INVISIBLE);
+                }
+                if (attachResult.getAttachs().length != 0) {
+                    int attachID = attachResult.getAttachs()[0].getAttachID();
+                    EventBus.getDefault().postSticky(new DeleteEvent(attachID));
+
+                    SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance(getString(R.string.success_delete_photo_message));
+                    fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getErrorDeleteAttachResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                showErrorDialog(message);
+            }
+        });
+
+        viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                showErrorDialog(message);
+            }
+        });
+
+        viewModel.getTimeOutExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isTimeOutException) {
+                showErrorDialog(getString(R.string.timeout_exception_happen_message));
             }
         });
     }

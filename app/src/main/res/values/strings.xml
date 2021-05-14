@@ -28,4 +28,6 @@
     <string name="question_attach_again">آیا می خواهید فایل دیگری را اضافه کنید؟</string>
     <string name="success_delete_customer_product">حذف محصول موفقیت آمیز بود</string>
     <string name="success_change_password">رمز عبور با موفقیت تغییر کرد</string>
+    <string name="question_delete_photo_message">آیا می خواهید فایل مربوطه را حذف کنید؟</string>
+    <string name="success_delete_photo_message">فایل با موفقیت حذف شد</string>
 </resources>

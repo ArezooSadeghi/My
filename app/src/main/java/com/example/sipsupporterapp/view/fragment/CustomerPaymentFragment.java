@@ -176,12 +176,7 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getSeeDocumentsClickedSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
-                Intent starter = PhotoGalleryContainerActivity.start(
-                        getContext(),
-                        customerPaymentInfo.getCustomerID(),
-                        0,
-                        0,
-                        customerPaymentInfo.getCustomerPaymentID(), 0);
+                Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
                 startActivity(starter);
             }
         });

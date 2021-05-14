@@ -24,6 +24,7 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
@@ -216,9 +217,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private void initViews() {
         String customerName = SipSupportSharedPreferences.getCustomerName(getContext());
         if (customerName != null) {
-            binding.txtCustomerName.setText(customerName);
+            String customer_Name = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
+            binding.txtCustomerName.setText(customer_Name);
         } else {
-            binding.txtCustomerNameText.setVisibility(View.GONE);
+            binding.txtCustomerName.setVisibility(View.GONE);
         }
 
         binding.edTextDescription.setText(description);
@@ -257,7 +259,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 String description = binding.edTextDescription.getText().toString();
                 customerPaymentInfo.setDescription(description);
 
-                String price = binding.edTextcustomerPayment.getText().toString().replaceAll(",", "");
+                String price = binding.edTextCustomerPayment.getText().toString().replaceAll(",", "");
                 customerPaymentInfo.setPrice(Long.valueOf(price));
 
                 String date = binding.btnDepositDate.getText().toString().replaceAll("/", "");
@@ -304,7 +306,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.edTextcustomerPayment.addTextChangedListener(new TextWatcher() {
+        binding.edTextCustomerPayment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -317,7 +319,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                binding.edTextcustomerPayment.removeTextChangedListener(this);
+                binding.edTextCustomerPayment.removeTextChangedListener(this);
                 try {
                     String text = editable.toString();
                     Long textToLong;
@@ -326,18 +328,17 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     }
                     textToLong = Long.parseLong(text);
                     String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(textToLong);
-                    binding.edTextcustomerPayment.setText(currencyFormat);
-                    binding.edTextcustomerPayment.setText(currencyFormat);
-                    binding.edTextcustomerPayment.setSelection(binding.edTextcustomerPayment.getText().length());
+                    binding.edTextCustomerPayment.setText(currencyFormat);
+                    binding.edTextCustomerPayment.setSelection(binding.edTextCustomerPayment.getText().length());
                 } catch (NumberFormatException exception) {
                     Log.e(TAG, exception.getMessage());
                 }
-                binding.edTextcustomerPayment.addTextChangedListener(this);
+                binding.edTextCustomerPayment.addTextChangedListener(this);
             }
         });
 
-        binding.edTextcustomerPayment.setText(String.valueOf(price));
-        binding.edTextcustomerPayment.setSelection(binding.edTextcustomerPayment.getText().length());
+        binding.edTextCustomerPayment.setText(String.valueOf(price));
+        binding.edTextCustomerPayment.setSelection(binding.edTextCustomerPayment.getText().length());
 
         binding.spinnerBankAccountNames.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override

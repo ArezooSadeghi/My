@@ -249,7 +249,7 @@ public class CustomerProductFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), new Observer<CustomerProducts>() {
                     @Override
                     public void onChanged(CustomerProducts customerProducts) {
-                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), customerProducts.getCustomerID(), 0, customerProducts.getCustomerProductID(), 0, 0);
+                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, customerProducts.getCustomerProductID(), 0, 0);
                         startActivity(starter);
                     }
                 });

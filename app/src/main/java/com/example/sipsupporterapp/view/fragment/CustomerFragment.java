@@ -2,6 +2,8 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,16 +52,8 @@ public class CustomerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setHasOptionsMenu(true);
-
-        viewModel = new ViewModelProvider(requireActivity())
-                .get(CustomerViewModel.class);
-
-        ServerData serverData = viewModel
-                .getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-        viewModel.getSipSupportServiceGetDateResult(
-                serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchDateResult(SipSupportSharedPreferences.getUserLoginKey(getContext()));
+        createViewModel();
+        fetchDate();
 
     }
 
@@ -73,7 +67,6 @@ public class CustomerFragment extends Fragment {
                 R.layout.fragment_customer,
                 container,
                 false);
-
 
         initViews();
         handleEvents();
@@ -96,6 +89,20 @@ public class CustomerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setObserver();
+    }
+
+
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(CustomerViewModel.class);
+    }
+
+
+    private void fetchDate() {
+        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        ServerData serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupportServiceGetDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.fetchDateResult(userLoginKey);
     }
 
 
