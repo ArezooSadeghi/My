@@ -18,7 +18,6 @@ import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PaymentContainerActivity;
 import com.example.sipsupporterapp.view.activity.SettingContainerActivity;
-import com.example.sipsupporterapp.view.activity.UserTaskContainerActivity;
 
 
 public class PopupDialogFragment extends DialogFragment {
@@ -127,14 +126,6 @@ public class PopupDialogFragment extends DialogFragment {
                 Intent starter = SettingContainerActivity.start(getContext());
                 startActivity(starter);
                 dismiss();
-            }
-        });
-
-        binding.btnUserTasks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent starter = UserTaskContainerActivity.start(getContext());
-                startActivity(starter);
             }
         });
     }

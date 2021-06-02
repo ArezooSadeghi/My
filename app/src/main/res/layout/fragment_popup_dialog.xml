@@ -78,19 +78,6 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/btn_user_tasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:backgroundTint="#373738"
-            android:fontFamily="@font/regular"
-            android:text="لیست کارها"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <Button
             android:id="@+id/btn_close"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -31,9 +31,6 @@
             android:name=".view.activity.PhotoGalleryContainerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.UserTaskContainerActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".view.activity.SettingContainerActivity"
             android:screenOrientation="portrait" />
         <activity
