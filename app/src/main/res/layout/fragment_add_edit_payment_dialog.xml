@@ -126,7 +126,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="مبلغ برداشتی(به ریال)"
+                    android:hint="مبلغ پرداختی (به ریال)"
                     android:textColorHint="@color/black"
                     app:boxStrokeColor="#696969"
                     app:hintTextColor="@color/black"

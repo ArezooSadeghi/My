@@ -22,7 +22,6 @@ import com.example.sipsupporterapp.databinding.FragmentAddEditPaymentDialogBindi
 import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
 import com.example.sipsupporterapp.eventbus.PostSelectedPaymentSubjectEvent;
 import com.example.sipsupporterapp.model.BankAccountInfo;
-import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -253,31 +252,40 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PaymentInfo paymentInfo = new PaymentInfo();
-
-                String bankAccountName = lastValueSpinner;
-                paymentInfo.setBankAccountName(bankAccountName);
-
-                paymentInfo.setBankAccountID(bankAccountID);
-
-                String description = binding.edTextDescription.getText().toString();
-                paymentInfo.setDescription(description);
-
-                paymentInfo.setPaymentSubject(paymentSubject);
-
                 String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
-                paymentInfo.setPrice(Long.valueOf(price));
 
-                paymentInfo.setPaymentID(paymentID);
-                paymentInfo.setPaymentSubjectID(paymentSubjectID);
-
-                String date = binding.btnDatePayment.getText().toString().replaceAll("/", "");
-                paymentInfo.setDatePayment(Integer.valueOf(date));
-
-                if (paymentID == 0) {
-                    addCost(paymentInfo);
+                if (paymentSubjectID == 0) {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.not_exist_payment_subject));
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                } else if (Long.valueOf(price) == 0) {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.zero_price));
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
-                    editCost(paymentInfo);
+                    PaymentInfo paymentInfo = new PaymentInfo();
+
+                    String bankAccountName = lastValueSpinner;
+                    paymentInfo.setBankAccountName(bankAccountName);
+
+                    paymentInfo.setBankAccountID(bankAccountID);
+
+                    String description = binding.edTextDescription.getText().toString();
+                    paymentInfo.setDescription(description);
+
+                    paymentInfo.setPaymentSubject(paymentSubject);
+
+                    paymentInfo.setPrice(Long.valueOf(price));
+
+                    paymentInfo.setPaymentID(paymentID);
+                    paymentInfo.setPaymentSubjectID(paymentSubjectID);
+
+                    String date = binding.btnDatePayment.getText().toString().replaceAll("/", "");
+                    paymentInfo.setDatePayment(Integer.valueOf(date));
+
+                    if (paymentID == 0) {
+                        addCost(paymentInfo);
+                    } else {
+                        editCost(paymentInfo);
+                    }
                 }
             }
         });

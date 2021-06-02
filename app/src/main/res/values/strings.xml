@@ -30,4 +30,6 @@
     <string name="success_change_password">رمز عبور با موفقیت تغییر کرد</string>
     <string name="question_delete_photo_message">آیا می خواهید فایل مربوطه را حذف کنید؟</string>
     <string name="success_delete_photo_message">فایل با موفقیت حذف شد</string>
+    <string name="not_exist_payment_subject">لطفا مشخص کنید پرداخت در چه زمینه ای صورت گرفته است</string>
+    <string name="zero_price">مبلغ پرداختی نباید صفر باشد</string>
 </resources>
