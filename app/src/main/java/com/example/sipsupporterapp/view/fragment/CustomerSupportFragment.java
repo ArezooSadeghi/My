@@ -140,12 +140,12 @@ public class CustomerSupportFragment extends Fragment {
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                .observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
-                    public void onChanged(Boolean isTimeOutExceptionHappen) {
+                    public void onChanged(String message) {
                         binding.progressBar.setVisibility(View.GONE);
                         ErrorDialogFragment fragment = ErrorDialogFragment
-                                .newInstance(getString(R.string.timeout_exception_happen_message));
+                                .newInstance(message);
                         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     }
                 });

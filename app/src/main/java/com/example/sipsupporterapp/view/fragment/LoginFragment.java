@@ -155,9 +155,9 @@ public class LoginFragment extends Fragment {
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                .observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
-                    public void onChanged(Boolean isTimeOutExceptionHappen) {
+                    public void onChanged(String message) {
                         binding.loadingLayout.setVisibility(View.GONE);
                         binding.edTextPassword.setEnabled(true);
                         binding.edTextUserName.setEnabled(true);
@@ -165,7 +165,7 @@ public class LoginFragment extends Fragment {
                         binding.imgBtnMore.setEnabled(true);
 
                         ErrorDialogFragment fragment = ErrorDialogFragment
-                                .newInstance("اتصال به اینترنت با خطا مواجه شد");
+                                .newInstance(message);
                         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     }
                 });

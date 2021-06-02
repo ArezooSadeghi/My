@@ -26,7 +26,7 @@ public class LoginViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> errorUserResult;
     private SingleLiveEvent<String> noConnection;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
     private SingleLiveEvent<ServerData> yesDeleteSpinner = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> yesDeleteIPAddressList = new SingleLiveEvent<>();
@@ -39,7 +39,7 @@ public class LoginViewModel extends AndroidViewModel {
         errorUserResult = repository.getErrorUserResult();
         noConnection = repository.getNoConnection();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<Boolean> getInsertSpinnerSingleLiveEvent() {
@@ -78,7 +78,7 @@ public class LoginViewModel extends AndroidViewModel {
         return userResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 

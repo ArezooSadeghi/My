@@ -16,7 +16,7 @@ public class ChangePasswordViewModel extends AndroidViewModel {
     private SingleLiveEvent<UserResult> changedPassword;
     private SingleLiveEvent<String> errorChangedPassword;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnection;
 
 
@@ -26,7 +26,7 @@ public class ChangePasswordViewModel extends AndroidViewModel {
         changedPassword = repository.getChangedPassword();
         errorChangedPassword = repository.getErrorChangedPassword();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
 
         noConnection = repository.getNoConnection();
     }
@@ -59,7 +59,7 @@ public class ChangePasswordViewModel extends AndroidViewModel {
         return noConnection;
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 

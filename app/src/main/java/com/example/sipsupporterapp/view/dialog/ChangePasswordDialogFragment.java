@@ -123,10 +123,10 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<Boolean>() {
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("اتصال به اینترنت با خطا مواجه شد");
+            public void onChanged(String message) {
+                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });

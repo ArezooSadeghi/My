@@ -20,7 +20,7 @@ public class UserViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnection;
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> successfulRegisterItemClickedSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> successfulRegisterCustomerUsersSingleLiveEvent = new SingleLiveEvent<>();
 
@@ -32,7 +32,7 @@ public class UserViewModel extends AndroidViewModel {
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
         noConnection = repository.getNoConnection();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<CustomerUserResult> getUsersResultSingleLiveEvent() {
@@ -67,7 +67,7 @@ public class UserViewModel extends AndroidViewModel {
         repository.fetchCustomerUserResult(path, userLoginKey, customerID);
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 

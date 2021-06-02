@@ -398,10 +398,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<Boolean>() {
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
-            public void onChanged(Boolean isTimeOutExceptionHappen) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.timeout_exception_happen_message));
+            public void onChanged(String message) {
+                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });

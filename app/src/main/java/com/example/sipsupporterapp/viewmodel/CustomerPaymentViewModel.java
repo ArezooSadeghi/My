@@ -19,7 +19,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentResultSingleLiveEvent;
     private SingleLiveEvent<String> errorCustomerPaymentResultSingleLiveEvent;
 
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnection;
 
     private SingleLiveEvent<String> fileDataSingleLiveEvent = new SingleLiveEvent<>();
@@ -75,7 +75,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         customerPaymentResultSingleLiveEvent = repository.getCustomerPaymentResultSingleLiveEvent();
         errorCustomerPaymentResultSingleLiveEvent = repository.getErrorCustomerPaymentResultSingleLiveEvent();
 
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnection = repository.getNoConnection();
 
         attachResultSingleLiveEvent = repository.getAttachResultSingleLiveEvent();
@@ -107,7 +107,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return errorCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 

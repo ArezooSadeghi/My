@@ -29,7 +29,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<CustomerProductResult> customerProductResultSingleLiveEvent;
     private SingleLiveEvent<String> errorCustomerProductResultSingleLiveEvent;
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> dialogDismissSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> ProductsFragmentDialogDismissSingleLiveEvent = new SingleLiveEvent<>();
@@ -87,7 +87,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
         customerProductResultSingleLiveEvent = repository.getCustomerProductResultSingleLiveEvent();
         errorCustomerProductResultSingleLiveEvent = repository.getErrorCustomerProductResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
 
         deleteCustomerProductSingleLiveEvent = repository.getDeleteCustomerProductSingleLiveEvent();
         errorDeleteCustomerProductSingleLiveEvent = repository.getErrorDeleteCustomerProductSingleLiveEvent();
@@ -192,7 +192,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceGetCustomerProductResult(baseUrl);
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 

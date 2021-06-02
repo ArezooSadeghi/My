@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.database.SipSupporterDBHelper;
 import com.example.sipsupporterapp.database.SipSupporterSchema;
 import com.example.sipsupporterapp.model.AttachInfo;
@@ -51,7 +52,6 @@ import com.example.sipsupporterapp.retrofit.SupportEventResultDeserializer;
 import com.example.sipsupporterapp.retrofit.UserResultDeserializer;
 import com.example.sipsupporterapp.viewmodel.SingleLiveEvent;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class SipSupportRepository {
     private MutableLiveData<String> notValueUserLoginKeyMutableLiveData = new MutableLiveData<>();
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<UserResult> userResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> noConnectivityExceptionSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorUserResult = new SingleLiveEvent<>();
     private SingleLiveEvent<String> noConnection = new SingleLiveEvent<>();
@@ -433,7 +433,7 @@ public class SipSupportRepository {
         return userResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappen() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
@@ -825,34 +825,19 @@ public class SipSupportRepository {
                 .enqueue(new Callback<UserResult>() {
                     @Override
                     public void onResponse(Call<UserResult> call, Response<UserResult> response) {
-                        if (response.code() == 200) {
+                        if (response.isSuccessful()) {
+                            userResultSingleLiveEvent.setValue(response.body());
+                        } else {
                             try {
-                                if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
+                                Gson gson = new Gson();
+                                UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
+                                if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
                                     dangerousUserSingleLiveEvent.setValue(true);
                                 } else {
-                                    userResultSingleLiveEvent.setValue(response.body());
-                                }
-                            } catch (NumberFormatException e) {
-                                errorUserResult.setValue(response.body().getError());
-                            }
-
-                        } else if (response.code() == 400) {
-                            Gson gson = new GsonBuilder().create();
-                            UserResult userResult = new UserResult();
-                            try {
-                                userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
-                                try {
-                                    if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
-                                        dangerousUserSingleLiveEvent.setValue(true);
-                                    } else {
-                                        errorUserResult.setValue(userResult.getError());
-                                    }
-                                } catch (NumberFormatException e) {
                                     errorUserResult.setValue(userResult.getError());
                                 }
-
                             } catch (IOException e) {
-                                Log.e(TAG, e.getMessage(), e);
+                                Log.e(TAG, e.getMessage());
                             }
                         }
                     }
@@ -862,9 +847,9 @@ public class SipSupportRepository {
                         if (t instanceof NoConnectivityException) {
                             noConnection.setValue(t.getMessage());
                         } else if (t instanceof SocketTimeoutException) {
-                            timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                            timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                         } else {
-                            wrongIpAddressSingleLiveEvent.setValue("سرور موجود نمی باشد");
+                            wrongIpAddressSingleLiveEvent.setValue(context.getResources().getString(R.string.not_exist_server));
                         }
                     }
                 });
@@ -874,25 +859,19 @@ public class SipSupportRepository {
         sipSupporterService.getCustomers(path, userLoginKey, customerName).enqueue(new Callback<CustomerResult>() {
             @Override
             public void onResponse(Call<CustomerResult> call, Response<CustomerResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        customerResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerResult customerResult = new CustomerResult();
+                if (response.isSuccessful()) {
+                    customerResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
+                        Gson gson = new Gson();
+                        CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
                         if (Integer.valueOf(customerResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorSingleLiveEvent.setValue(customerResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -902,7 +881,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -914,25 +893,19 @@ public class SipSupportRepository {
         sipSupporterService.changePassword(path, userLoginKey, newPassword).enqueue(new Callback<UserResult>() {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        changedPassword.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    UserResult userResult = new UserResult();
+                if (response.isSuccessful()) {
+                    changedPassword.setValue(response.body());
+                } else {
                     try {
-                        userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
+                        Gson gson = new Gson();
+                        UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
                         if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorChangedPassword.setValue(userResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -942,7 +915,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -954,28 +927,20 @@ public class SipSupportRepository {
         sipSupporterService.getCustomerSupportResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        customerSupportResult.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerSupportResult customerSupportResult = new CustomerSupportResult();
+                if (response.isSuccessful()) {
+                    customerSupportResult.setValue(response.body());
+                } else {
                     try {
-                        customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
+                        Gson gson = new Gson();
+                        CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
                         if (Integer.valueOf(customerSupportResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerSupportResult.setValue(customerSupportResult.getError());
                         }
-
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
-
                 }
             }
 
@@ -984,7 +949,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -997,25 +962,19 @@ public class SipSupportRepository {
         sipSupporterService.getCustomerUserResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
             @Override
             public void onResponse(Call<CustomerUserResult> call, Response<CustomerUserResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        customerUserResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerUserResult customerUserResult = new CustomerUserResult();
+                if (response.isSuccessful()) {
+                    customerUserResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerUserResult = gson.fromJson(response.errorBody().string(), CustomerUserResult.class);
+                        Gson gson = new Gson();
+                        CustomerUserResult customerUserResult = gson.fromJson(response.errorBody().string(), CustomerUserResult.class);
                         if (Integer.valueOf(customerUserResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerUserResultSingleLiveEvent.setValue(customerUserResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1025,7 +984,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1038,27 +997,20 @@ public class SipSupportRepository {
         sipSupporterService.getSupportEventResult(path, userLoginKey).enqueue(new Callback<SupportEventResult>() {
             @Override
             public void onResponse(Call<SupportEventResult> call, Response<SupportEventResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        supportEventResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    SupportEventResult supportEventResult = new SupportEventResult();
+                if (response.isSuccessful()) {
+                    supportEventResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        supportEventResult = gson.fromJson(response.errorBody().string(), SupportEventResult.class);
+                        Gson gson = new Gson();
+                        SupportEventResult supportEventResult = gson.fromJson(response.errorBody().string(), SupportEventResult.class);
                         if (Integer.valueOf(supportEventResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorSupportEventResultSingleLiveEvent.setValue(supportEventResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
-
                 }
             }
 
@@ -1067,7 +1019,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1079,26 +1031,19 @@ public class SipSupportRepository {
         sipSupporterService.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        customerSupportResultSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerSupportResult customerSupportResult = new CustomerSupportResult();
+                if (response.isSuccessful()) {
+                    customerSupportResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
+                        Gson gson = new Gson();
+                        CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
                         if (Integer.valueOf(customerSupportResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1108,7 +1053,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1120,7 +1065,7 @@ public class SipSupportRepository {
         sipSupporterService.getDateResult(path, userLoginKey).enqueue(new Callback<DateResult>() {
             @Override
             public void onResponse(Call<DateResult> call, Response<DateResult> response) {
-                if (response.code() == 200) {
+                if (response.isSuccessful()) {
                     dateResultSingleLiveEvent.setValue(response.body());
                 }
             }
@@ -1130,7 +1075,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1142,26 +1087,19 @@ public class SipSupportRepository {
         sipSupporterService.getProductResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        customerProductResultSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerProductResult productResult = new CustomerProductResult();
+                if (response.isSuccessful()) {
+                    customerProductResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        productResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
+                        Gson gson = new Gson();
+                        CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
+                        if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorCustomerProductResultSingleLiveEvent.setValue(productResult.getError());
+                            errorCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1171,7 +1109,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1183,26 +1121,19 @@ public class SipSupportRepository {
         sipSupporterService.postProductInfo(path, userLoginKey, productInfo).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        productResultSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    ProductResult productResult = new ProductResult();
+                if (response.isSuccessful()) {
+                    productResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
+                        Gson gson = new Gson();
+                        ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
                         if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorProductResultSingleLiveEvent.setValue(productResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1212,7 +1143,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1224,26 +1155,19 @@ public class SipSupportRepository {
         sipSupporterService.getProductResult(path, userLoginKey).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        getProductResultSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    ProductResult productResult = new ProductResult();
+                if (response.isSuccessful()) {
+                    getProductResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
+                        Gson gson = new Gson();
+                        ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
                         if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             getErrorProductResultSingleLiveEvent.setValue(productResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1253,7 +1177,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1265,26 +1189,19 @@ public class SipSupportRepository {
         sipSupporterService.postCustomerProducts(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        PostCustomerProductsSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerProductResult customerProductResult = new CustomerProductResult();
+                if (response.isSuccessful()) {
+                    PostCustomerProductsSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
+                        Gson gson = new Gson();
+                        CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPostCustomerProductsSingleLiveEvent.setValue(customerProductResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1294,7 +1211,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1306,26 +1223,19 @@ public class SipSupportRepository {
         sipSupporterService.getProductInfo(path, userLoginKey, productID).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        productInfoSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    ProductResult productResult = new ProductResult();
+                if (response.isSuccessful()) {
+                    productInfoSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
+                        Gson gson = new Gson();
+                        ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
                         if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorProductInfoSingleLiveEvent.setValue(productResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1335,7 +1245,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1347,26 +1257,19 @@ public class SipSupportRepository {
         sipSupporterService.deleteCustomerProduct(path, userLoginKey, customerProductID).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        deleteCustomerProductSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerProductResult customerProductResult = new CustomerProductResult();
+                if (response.isSuccessful()) {
+                    deleteCustomerProductSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
+                        Gson gson = new Gson();
+                        CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteCustomerProductSingleLiveEvent.setValue(customerProductResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1376,7 +1279,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1388,26 +1291,19 @@ public class SipSupportRepository {
         sipSupporterService.editCustomerProduct(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        editCustomerProductSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerProductResult customerProductResult = new CustomerProductResult();
+                if (response.isSuccessful()) {
+                    editCustomerProductSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
+                        Gson gson = new Gson();
+                        CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorEditCustomerProductSingleLiveEvent.setValue(customerProductResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1417,7 +1313,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1429,27 +1325,19 @@ public class SipSupportRepository {
         sipSupporterService.attach(path, userLoginKey, attachInfo).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        attachResultSingleLiveEvent.setValue(response.body());
-                    }
-
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    attachResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAttachResultSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1459,7 +1347,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1471,26 +1359,19 @@ public class SipSupportRepository {
         sipSupporterService.getCustomerPaymentResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        customerPaymentResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    CustomerPaymentResult customerPaymentResult = new CustomerPaymentResult();
+                if (response.isSuccessful()) {
+                    customerPaymentResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
+                        Gson gson = new Gson();
+                        CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         if (Integer.valueOf(customerPaymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1500,7 +1381,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1512,25 +1393,19 @@ public class SipSupportRepository {
         sipSupporterService.getAttachmentFilesViaCustomerPaymentID(path, userLoginKey, customerPaymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1540,7 +1415,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1552,25 +1427,19 @@ public class SipSupportRepository {
         sipSupporterService.addCustomerPaymentsResult(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        addCustomerPaymentsSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    addCustomerPaymentsSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAddCustomerPaymentSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1580,7 +1449,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1592,25 +1461,19 @@ public class SipSupportRepository {
         sipSupporterService.editCustomerPaymentsResult(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        editCustomerPaymentsSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    editCustomerPaymentsSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorEditCustomerPaymentSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1620,7 +1483,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1632,25 +1495,19 @@ public class SipSupportRepository {
         sipSupporterService.deleteCustomerPayments(path, userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        deleteCustomerPaymentsSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    deleteCustomerPaymentsSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteCustomerPaymentSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1660,7 +1517,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1672,25 +1529,19 @@ public class SipSupportRepository {
         sipSupporterService.getBankAccountResult(path, userLoginKey).enqueue(new Callback<BankAccountResult>() {
             @Override
             public void onResponse(Call<BankAccountResult> call, Response<BankAccountResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        bankAccountsResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    BankAccountResult bankAccountResult = new BankAccountResult();
+                if (response.isSuccessful()) {
+                    bankAccountsResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
+                        Gson gson = new Gson();
+                        BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
                         if (Integer.valueOf(bankAccountResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorBankAccountsResultSingleLiveEvent.setValue(bankAccountResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1700,7 +1551,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1712,25 +1563,19 @@ public class SipSupportRepository {
         sipSupporterService.getAttachmentFilesViaCustomerProductID(path, userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        getAttachmentFilesViaCustomerProductIDSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    getAttachmentFilesViaCustomerProductIDSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1740,7 +1585,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1752,25 +1597,19 @@ public class SipSupportRepository {
         sipSupporterService.getAttachmentFilesViaCustomerSupportID(path, userLoginKey, customerSupportID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        getAttachmentFilesViaCustomerSupportIDSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    getAttachmentFilesViaCustomerSupportIDSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1780,7 +1619,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1792,25 +1631,19 @@ public class SipSupportRepository {
         sipSupporterService.getAttachmentFileViaAttachID(path, userLoginKey, attachID, loadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        attachResultViaAttachIDSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    attachResultViaAttachIDSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAttachResultViaAttachIDSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1820,7 +1653,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1832,25 +1665,19 @@ public class SipSupportRepository {
         sipSupporterService.paymentsListByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentResultPaymentsListByBankAccountSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    PaymentResult paymentResult = new PaymentResult();
+                if (response.isSuccessful()) {
+                    paymentResultPaymentsListByBankAccountSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
+                        Gson gson = new Gson();
+                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentResultPaymentsListByBankAccountSingleLiveEvent.setValue(paymentResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1860,7 +1687,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1872,25 +1699,19 @@ public class SipSupportRepository {
         sipSupporterService.paymentsEdit(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentResultPaymentsEditSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    PaymentResult paymentResult = new PaymentResult();
+                if (response.isSuccessful()) {
+                    paymentResultPaymentsEditSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
+                        Gson gson = new Gson();
+                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentResultPaymentsEditSingleLiveEvent.setValue(paymentResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1900,7 +1721,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1912,25 +1733,19 @@ public class SipSupportRepository {
         sipSupporterService.paymentsDelete(path, userLoginKey, paymentID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentResultPaymentsDeleteSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    PaymentResult paymentResult = new PaymentResult();
+                if (response.isSuccessful()) {
+                    paymentResultPaymentsDeleteSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
+                        Gson gson = new Gson();
+                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentResultPaymentsDeleteSingleLiveEvent.setValue(paymentResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1940,7 +1755,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1952,25 +1767,19 @@ public class SipSupportRepository {
         sipSupporterService.paymentSubjectsList(path, userLoginKey).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentSubjectResultPaymentSubjectsListSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    PaymentSubjectResult paymentSubjectResult = new PaymentSubjectResult();
+                if (response.isSuccessful()) {
+                    paymentSubjectResultPaymentSubjectsListSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
+                        Gson gson = new Gson();
+                        PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
                         if (Integer.valueOf(paymentSubjectResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent.setValue(paymentSubjectResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -1980,7 +1789,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -1992,25 +1801,19 @@ public class SipSupportRepository {
         sipSupporterService.paymentsAdd(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentResultPaymentsAddSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    PaymentSubjectResult paymentSubjectResult = new PaymentSubjectResult();
+                if (response.isSuccessful()) {
+                    paymentResultPaymentsAddSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
+                        Gson gson = new Gson();
+                        PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
                         if (Integer.valueOf(paymentSubjectResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentResultPaymentsAddSingleLiveEvent.setValue(paymentSubjectResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -2020,7 +1823,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -2032,25 +1835,19 @@ public class SipSupportRepository {
         sipSupporterService.deleteAttach(path, userLoginKey, attachID).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        deleteAttachResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    deleteAttachResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteAttachResultSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -2060,7 +1857,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -2072,25 +1869,19 @@ public class SipSupportRepository {
         sipSupporterService.getAttachmentListByPaymentID(path, userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        attachmentListResultByPaymentID.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    attachmentListResultByPaymentID.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAttachmentListResultByPaymentID.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -2100,7 +1891,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }
@@ -2112,25 +1903,19 @@ public class SipSupportRepository {
         sipSupporterService.paymentInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentSubjectInfoResultSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
+                if (response.isSuccessful()) {
+                    paymentSubjectInfoResultSingleLiveEvent.setValue(response.body());
+                } else {
                     try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
+                        Gson gson = new Gson();
+                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentSubjectInfoResultSingleLiveEvent.setValue(attachResult.getError());
                         }
-
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
@@ -2140,7 +1925,7 @@ public class SipSupportRepository {
                 if (t instanceof NoConnectivityException) {
                     noConnection.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
                     Log.e(TAG, t.getMessage(), t);
                 }

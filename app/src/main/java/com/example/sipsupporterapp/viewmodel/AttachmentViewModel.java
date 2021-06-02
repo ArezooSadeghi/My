@@ -24,7 +24,7 @@ public class AttachmentViewModel extends AndroidViewModel {
     private SingleLiveEvent<AttachResult> mAttachResultSingleLiveEvent;
     private SingleLiveEvent<String> mErrorAttachResultSingleLiveEvent;
     private SingleLiveEvent<String> mNoConnectionSingleLiveEvent;
-    private SingleLiveEvent<Boolean> mTimeOutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> mTimeOutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> mDangerousUserSingleLiveEvent;
 
     private SingleLiveEvent<String> mBitmapAsStringSingleLiveEvent = new SingleLiveEvent<>();
@@ -84,7 +84,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         mAttachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
         mErrorAttachResultSingleLiveEvent = mRepository.getErrorAttachResultSingleLiveEvent();
         mNoConnectionSingleLiveEvent = mRepository.getNoConnection();
-        mTimeOutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappen();
+        mTimeOutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
         mDangerousUserSingleLiveEvent = mRepository.getDangerousUserSingleLiveEvent();
 
         getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getGetAttachmentFilesViaCustomerPaymentIDSingleLiveEvent();
@@ -130,7 +130,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         return mNoConnectionSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getTimeOutExceptionSingleLiveEvent() {
+    public SingleLiveEvent<String> getmTimeOutExceptionHappenSingleLiveEvent() {
         return mTimeOutExceptionHappenSingleLiveEvent;
     }
 

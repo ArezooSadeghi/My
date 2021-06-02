@@ -21,7 +21,7 @@ public class CustomerViewModel extends AndroidViewModel {
     private LiveData<String> notValueUserLoginKeyLiveData;
     private SingleLiveEvent<Boolean> showProgressBarSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> itemClickedSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> noConnectivityExceptionSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
     private SingleLiveEvent<String> errorSingleLiveEvent;
@@ -35,7 +35,7 @@ public class CustomerViewModel extends AndroidViewModel {
         customerResultSingleLiveEvent = repository.getCustomerResultSingleLiveEvent();
         wrongUserLoginKeyLiveData = repository.getWrongUserLoginKeyMutableLiveData();
         notValueUserLoginKeyLiveData = repository.getNotValueUserLoginKeyMutableLiveData();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectivityExceptionSingleLiveEvent = repository.getNoConnectivityExceptionSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         errorSingleLiveEvent = repository.getErrorSingleLiveEvent();
@@ -71,7 +71,7 @@ public class CustomerViewModel extends AndroidViewModel {
         return itemClickedSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 

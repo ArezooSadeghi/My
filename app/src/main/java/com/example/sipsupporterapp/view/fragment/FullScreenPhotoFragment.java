@@ -156,10 +156,10 @@ public class FullScreenPhotoFragment extends Fragment {
             }
         });
 
-        viewModel.getTimeOutExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getmTimeOutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(Boolean isTimeOutException) {
-                showErrorDialog(getString(R.string.timeout_exception_happen_message));
+            public void onChanged(String message) {
+                showErrorDialog(message);
             }
         });
     }

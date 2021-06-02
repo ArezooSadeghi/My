@@ -151,12 +151,12 @@ public class CustomerFragment extends Fragment {
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                .observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
-                    public void onChanged(Boolean isTimeOutExceptionHappen) {
+                    public void onChanged(String message) {
                         binding.progressBarLoading.setVisibility(View.GONE);
                         ErrorDialogFragment fragment = ErrorDialogFragment
-                                .newInstance("اتصال به اینترنت با خطا مواجه شد");
+                                .newInstance(message);
                         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     }
                 });

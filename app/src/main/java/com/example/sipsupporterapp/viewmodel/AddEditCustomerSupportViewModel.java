@@ -21,7 +21,7 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> errorCustomerSupportResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnection;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
-    private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
     public AddEditCustomerSupportViewModel(@NonNull Application application) {
         super(application);
@@ -32,7 +32,7 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         errorCustomerSupportResultSingleLiveEvent = repository.getErrorCustomerSupportResultSingleLiveEvent();
         noConnection = repository.getNoConnection();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
@@ -55,7 +55,7 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         repository.getSipSupportServiceSupportEventResult(baseUrl);
     }
 
-    public SingleLiveEvent<Boolean> getTimeoutExceptionHappenSingleLiveEvent() {
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
