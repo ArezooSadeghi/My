@@ -24,6 +24,7 @@ import com.example.sipsupporterapp.eventbus.PostSelectedPaymentSubjectEvent;
 import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
+import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
@@ -61,6 +62,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     public static AddEditPaymentDialogFragment newInstance(int paymentID, String description, int datePayment, long price, int bankAccountID, int paymentSubjectID, String paymentSubject) {
         AddEditPaymentDialogFragment fragment = new AddEditPaymentDialogFragment();
         Bundle args = new Bundle();
+
         args.putInt(ARGS_PAYMENT_ID, paymentID);
         args.putString(ARGS_DESCRIPTION, description);
         args.putInt(ARGS_DATE_PAYMENT, datePayment);
@@ -68,6 +70,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         args.putInt(ARGS_BANK_ACCOUNT_ID, bankAccountID);
         args.putInt(ARGS_PAYMENT_SUBJECT_ID, paymentSubjectID);
         args.putString(ARGS_PAYMENT_SUBJECT, paymentSubject);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -192,6 +195,14 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 Intent intent = LoginContainerActivity.start(getContext());
                 startActivity(intent);
                 getActivity().finish();
+            }
+        });
+
+        viewModel.getPaymentSubjectInfoResultSingleLiveEvent().observe(this, new Observer<PaymentSubjectResult>() {
+            @Override
+            public void onChanged(PaymentSubjectResult paymentSubjectResult) {
+                paymentSubject = paymentSubjectResult.getPaymentSubjects()[0].getParentPaymentSubject() + " " + paymentSubjectResult.getPaymentSubjects()[0].getPaymentSubject();
+                binding.btnWhat.setText(paymentSubject);
             }
         });
     }
@@ -383,11 +394,18 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.paymentsAdd(userLoginKey, paymentInfo);
     }
 
+    private void fetchPaymentSubjectInfo(int paymentSubjectID) {
+        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        ServerData serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServicePaymentInfo(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.fetchPaymentSubjectInfo(userLoginKey, paymentSubjectID);
+    }
+
     @Subscribe(sticky = true)
     public void getSelectedPaymentSubjectEvent(PostSelectedPaymentSubjectEvent event) {
         paymentSubjectID = event.getPaymentSubjectID();
-        String paymentSubject = event.getPaymentSubject();
-        binding.btnWhat.setText(paymentSubject);
+        fetchPaymentSubjectInfo(paymentSubjectID);
         EventBus.getDefault().removeStickyEvent(event);
     }
 

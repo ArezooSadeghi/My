@@ -133,4 +133,7 @@ public interface SipSupportService {
 
     @GET(".")
     Call<AttachResult> getAttachmentListByPaymentID(@Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
+
+    @GET(".")
+    Call<PaymentSubjectResult> paymentInfo(@Header("userLoginKey") String userLoginKey, @Query("paymentSubjectID") int paymentSubjectID);
 }

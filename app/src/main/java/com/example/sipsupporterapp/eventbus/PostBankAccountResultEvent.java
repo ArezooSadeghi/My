@@ -3,6 +3,7 @@ package com.example.sipsupporterapp.eventbus;
 import com.example.sipsupporterapp.model.BankAccountResult;
 
 public class PostBankAccountResultEvent {
+
     private BankAccountResult bankAccountResult;
 
     public PostBankAccountResultEvent(BankAccountResult bankAccountResult) {

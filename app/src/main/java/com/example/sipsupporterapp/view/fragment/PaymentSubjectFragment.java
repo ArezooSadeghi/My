@@ -170,7 +170,7 @@ public class PaymentSubjectFragment extends Fragment {
                     Dir dirNode = (Dir) node.getContent();
                     String paymentSubject = dirNode.getDirName();
                     int paymentSubjectID = getPaymentSubjectID(paymentSubject);
-                    PostSelectedPaymentSubjectEvent event = new PostSelectedPaymentSubjectEvent(paymentSubject, paymentSubjectID);
+                    PostSelectedPaymentSubjectEvent event = new PostSelectedPaymentSubjectEvent(paymentSubjectID);
                     EventBus.getDefault().postSticky(event);
                     getActivity().finish();
                 }

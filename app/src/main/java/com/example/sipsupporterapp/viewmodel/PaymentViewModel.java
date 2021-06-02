@@ -51,6 +51,9 @@ public class PaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
+    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorPaymentSubjectInfoResultSingleLiveEvent;
+
     public PaymentViewModel(@NonNull Application application) {
         super(application);
 
@@ -77,6 +80,9 @@ public class PaymentViewModel extends AndroidViewModel {
         noConnection = repository.getNoConnection();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappen();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
+
+        paymentSubjectInfoResultSingleLiveEvent = repository.getPaymentSubjectInfoResultSingleLiveEvent();
+        errorPaymentSubjectInfoResultSingleLiveEvent = repository.getErrorPaymentSubjectInfoResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<PaymentResult> getPaymentsByBankAccountIDResultSingleLiveEvent() {
@@ -163,6 +169,14 @@ public class PaymentViewModel extends AndroidViewModel {
         return subjectSingleLiveEvent;
     }
 
+    public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectInfoResultSingleLiveEvent() {
+        return paymentSubjectInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorPaymentSubjectInfoResultSingleLiveEvent() {
+        return errorPaymentSubjectInfoResultSingleLiveEvent;
+    }
+
     public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
         repository.getSipSupportServiceGetBankAccountResult(baseUrl);
     }
@@ -213,5 +227,13 @@ public class PaymentViewModel extends AndroidViewModel {
 
     public void paymentsAdd(String userLoginKey, PaymentInfo paymentInfo) {
         repository.paymentsAdd(userLoginKey, paymentInfo);
+    }
+
+    public void getSipSupporterServicePaymentInfo(String baseUrl) {
+        repository.getSipSupporterServicePaymentInfo(baseUrl);
+    }
+
+    public void fetchPaymentSubjectInfo(String userLoginKey, int paymentSubjectID) {
+        repository.fetchPaymentSubjectInfo(userLoginKey, paymentSubjectID);
     }
 }
