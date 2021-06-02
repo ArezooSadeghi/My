@@ -19,7 +19,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.DirectoryNodeBinder;
 import com.example.sipsupporterapp.adapter.FileNodeBinder;
 import com.example.sipsupporterapp.databinding.FragmentPaymentSubjectBinding;
-import com.example.sipsupporterapp.eventbus.PostSelectedPaymentSubjectEvent;
+import com.example.sipsupporterapp.eventbus.PostPaymentSubjectIDEvent;
 import com.example.sipsupporterapp.model.Dir;
 import com.example.sipsupporterapp.model.PaymentSubjectInfo;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
@@ -170,7 +170,7 @@ public class PaymentSubjectFragment extends Fragment {
                     Dir dirNode = (Dir) node.getContent();
                     String paymentSubject = dirNode.getDirName();
                     int paymentSubjectID = getPaymentSubjectID(paymentSubject);
-                    PostSelectedPaymentSubjectEvent event = new PostSelectedPaymentSubjectEvent(paymentSubjectID);
+                    PostPaymentSubjectIDEvent event = new PostPaymentSubjectIDEvent(paymentSubjectID);
                     EventBus.getDefault().postSticky(event);
                     getActivity().finish();
                 }

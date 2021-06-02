@@ -1,10 +1,10 @@
 package com.example.sipsupporterapp.eventbus;
 
-public class PostSelectedPaymentSubjectEvent {
+public class PostPaymentSubjectIDEvent {
 
     private int paymentSubjectID;
 
-    public PostSelectedPaymentSubjectEvent(int paymentSubjectID) {
+    public PostPaymentSubjectIDEvent(int paymentSubjectID) {
         this.paymentSubjectID = paymentSubjectID;
     }
 

@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditPaymentDialogBinding;
 import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
-import com.example.sipsupporterapp.eventbus.PostSelectedPaymentSubjectEvent;
+import com.example.sipsupporterapp.eventbus.PostPaymentSubjectIDEvent;
 import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
@@ -403,7 +403,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     }
 
     @Subscribe(sticky = true)
-    public void getSelectedPaymentSubjectEvent(PostSelectedPaymentSubjectEvent event) {
+    public void getPaymentSubjectIDEvent(PostPaymentSubjectIDEvent event) {
         paymentSubjectID = event.getPaymentSubjectID();
         fetchPaymentSubjectInfo(paymentSubjectID);
         EventBus.getDefault().removeStickyEvent(event);
