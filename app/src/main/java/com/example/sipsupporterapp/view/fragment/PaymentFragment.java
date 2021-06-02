@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.PaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPaymentBinding;
+import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
 import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
@@ -33,6 +35,8 @@ import com.example.sipsupporterapp.view.dialog.QuestionDeletePaymentDialogFragme
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -126,7 +130,7 @@ public class PaymentFragment extends Fragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                viewModel.getNotifyAddEditCost().setValue(bankAccountResult);
+                EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
                 bankAccountInfoArray = bankAccountResult.getBankAccounts();
                 setupSpinner(bankAccountResult.getBankAccounts());
                 fetchCostsByBankAccountID();

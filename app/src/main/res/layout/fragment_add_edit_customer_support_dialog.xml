@@ -18,19 +18,35 @@
             android:orientation="vertical"
             tools:context=".view.dialog.AddEditCustomerSupportDialogFragment">
 
+            <TextView
+                android:id="@+id/txt_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:maxLines="1"
+                android:text="آرزو صادقی"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/iranyekanwebbold"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:ms_arrow_tint="@color/white"
-                app:ms_background_color="#838996"
+                app:ms_background_color="#ba55d3"
                 app:ms_padding_right="16dp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -90,20 +106,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
+                    android:backgroundTint="#ff0800"
                     android:foreground="?attr/selectableItemBackground"
-                    android:backgroundTint="#838996"
                     android:text="@string/cancel"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btn_ok"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
                     android:layout_marginLeft="8dp"
-                    android:backgroundTint="#838996"
+                    android:backgroundTint="#2e8b57"
+                    android:foreground="?attr/selectableItemBackground"
                     android:text="ضبط"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

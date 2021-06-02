@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditPaymentDialogBinding;
+import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
 import com.example.sipsupporterapp.eventbus.PostSelectedPaymentSubjectEvent;
 import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.BankAccountResult;
@@ -84,10 +85,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         paymentSubjectID = getArguments().getInt(ARGS_PAYMENT_SUBJECT_ID);
         paymentSubject = getArguments().getString(ARGS_PAYMENT_SUBJECT);
 
-        Log.d("Arezoo", bankAccountID + "");
-
         createViewModel();
-        fetchBankAccounts();
         setupObserver();
     }
 
@@ -130,23 +128,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
     }
 
-    private void fetchBankAccounts() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceGetBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchBankAccounts(userLoginKey);
-    }
-
     private void setupObserver() {
-        viewModel.getNotifyAddEditCost().observe(this, new Observer<BankAccountResult>() {
-            @Override
-            public void onChanged(BankAccountResult bankAccountResult) {
-                bankAccountInfoArray = bankAccountResult.getBankAccounts();
-                setupSpinner(bankAccountResult.getBankAccounts());
-            }
-        });
-
         viewModel.getAddPaymentResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
@@ -398,6 +380,13 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         paymentSubjectID = event.getPaymentSubjectID();
         String paymentSubject = event.getPaymentSubject();
         binding.btnWhat.setText(paymentSubject);
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true)
+    public void getBankAccountResultEvent(PostBankAccountResultEvent event) {
+        bankAccountInfoArray = event.getBankAccountResult().getBankAccounts();
+        setupSpinner(bankAccountInfoArray);
         EventBus.getDefault().removeStickyEvent(event);
     }
 }

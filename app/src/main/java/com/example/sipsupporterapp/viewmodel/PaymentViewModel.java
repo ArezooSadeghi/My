@@ -20,8 +20,6 @@ public class PaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
     private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent;
 
-    private SingleLiveEvent<BankAccountResult> notifyAddEditCost = new SingleLiveEvent<>();
-
     private SingleLiveEvent<PaymentResult> paymentResultPaymentsListByBankAccountSingleLiveEvent;
     private SingleLiveEvent<String> errorPaymentResultPaymentsListByBankAccountSingleLiveEvent;
 
@@ -123,10 +121,6 @@ public class PaymentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectResultPaymentSubjectsListSingleLiveEvent() {
         return paymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<BankAccountResult> getNotifyAddEditCost() {
-        return notifyAddEditCost;
     }
 
     public SingleLiveEvent<String> getErrorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent() {
