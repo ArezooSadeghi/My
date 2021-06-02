@@ -10,13 +10,13 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.List;
 import java.util.Map;
 
 public class AttachmentViewModel extends AndroidViewModel {
-    private SipSupportRepository mRepository;
+    private SipSupporterRepository mRepository;
 
     private SingleLiveEvent<Boolean> mRequestPermissionSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mAllowPermissionSingleLiveEvent = new SingleLiveEvent<>();
@@ -79,7 +79,7 @@ public class AttachmentViewModel extends AndroidViewModel {
     public AttachmentViewModel(@NonNull Application application) {
         super(application);
 
-        mRepository = SipSupportRepository.getInstance(getApplication());
+        mRepository = SipSupporterRepository.getInstance(getApplication());
 
         mAttachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
         mErrorAttachResultSingleLiveEvent = mRepository.getErrorAttachResultSingleLiveEvent();

@@ -8,12 +8,12 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.List;
 
 public class LoginViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
 
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> insertSpinnerSingleLiveEvent = new SingleLiveEvent<>();
@@ -33,7 +33,7 @@ public class LoginViewModel extends AndroidViewModel {
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
         wrongIpAddressSingleLiveEvent = repository.getWrongIpAddressSingleLiveEvent();
         userResultSingleLiveEvent = repository.getUserResultSingleLiveEvent();
         errorUserResult = repository.getErrorUserResult();

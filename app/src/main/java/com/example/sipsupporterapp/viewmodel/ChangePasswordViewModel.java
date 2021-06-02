@@ -7,12 +7,12 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.UserResult;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.List;
 
 public class ChangePasswordViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
     private SingleLiveEvent<UserResult> changedPassword;
     private SingleLiveEvent<String> errorChangedPassword;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
@@ -22,7 +22,7 @@ public class ChangePasswordViewModel extends AndroidViewModel {
 
     public ChangePasswordViewModel(@NonNull Application application) {
         super(application);
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
         changedPassword = repository.getChangedPassword();
         errorChangedPassword = repository.getErrorChangedPassword();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();

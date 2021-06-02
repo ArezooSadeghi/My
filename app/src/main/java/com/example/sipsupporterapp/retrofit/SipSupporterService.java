@@ -33,102 +33,102 @@ import retrofit2.http.Query;
 
 public interface SipSupporterService {
 
-    @POST("{path}")
-    Call<UserResult> postUserLoginParameter(@Path("path") String path, @Body UserLoginParameter userLoginParameter);
-
     @GET("{path}")
-    Call<CustomerResult> getCustomers(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerName") String customerName);
+    Call<DateResult> fetchDate(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @POST("{path}")
+    Call<UserResult> login(@Path("path") String path, @Body UserLoginParameter userLoginParameter);
 
     @POST("{path}")
     Call<UserResult> changePassword(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body String newPassword);
 
     @GET("{path}")
-    Call<CustomerSupportResult> getCustomerSupportResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
+    Call<CustomerResult> fetchCustomers(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerName") String customerName);
 
     @GET("{path}")
-    Call<CustomerUserResult> getCustomerUserResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
-
-    @GET("{path}")
-    Call<SupportEventResult> getSupportEventResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+    Call<CustomerSupportResult> fetchCustomerSupports(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
 
     @POST("{path}")
-    Call<CustomerSupportResult> postCustomerSupportInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerSupportInfo customerSupportInfo);
+    Call<CustomerSupportResult> addCustomerSupport(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerSupportInfo customerSupportInfo);
 
     @GET("{path}")
-    Call<DateResult> getDateResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+    Call<SupportEventResult> fetchSupportEvents(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
 
     @GET("{path}")
-    Call<CustomerProductResult> getProductResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
+    Call<CustomerUserResult> fetchCustomerUsers(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
+
+    @GET("{path}")
+    Call<CustomerProductResult> fetchCustomerProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
 
     @POST("{path}")
-    Call<ProductResult> postProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body ProductInfo productInfo);
+    Call<ProductResult> addProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body ProductInfo productInfo);
 
     @GET("{path}")
-    Call<ProductResult> getProductResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+    Call<ProductResult> fetchProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @GET("{path}")
+    Call<ProductResult> fetchProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("productID") int productID);
 
     @POST("{path}")
-    Call<CustomerProductResult> postCustomerProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProducts customerProducts);
-
-    @GET("{path}")
-    Call<ProductResult> getProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("productID") int productID);
-
-    @DELETE("{path}")
-    Call<CustomerProductResult> deleteCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID);
+    Call<CustomerProductResult> addCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProducts customerProducts);
 
     @PUT("{path}")
     Call<CustomerProductResult> editCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProducts customerProducts);
 
+    @DELETE("{path}")
+    Call<CustomerProductResult> deleteCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID);
+
+    @GET("{path}")
+    Call<CustomerPaymentResult> fetchCustomerPayments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
+
+    @POST("{path}")
+    Call<CustomerPaymentResult> addCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentInfo customerPaymentInfo);
+
+    @PUT("{path}")
+    Call<CustomerPaymentResult> editCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentInfo customerPaymentInfo);
+
+    @DELETE("{path}")
+    Call<CustomerPaymentResult> deleteCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int customerPaymentID);
+
+    @GET("{path}")
+    Call<AttachResult> fetchCustomerPaymentAttachments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
+
+    @GET("{path}")
+    Call<AttachResult> fetchCustomerProductAttachments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID, @Query("LoadFileData") boolean LoadFileData);
+
+    @GET("{path}")
+    Call<AttachResult> fetchCustomerSupportAttachments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerSupportID") int customerSupportID, @Query("LoadFileData") boolean LoadFileData);
+
+    @GET("{path}")
+    Call<AttachResult> fetchPaymentAttachments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
+
     @POST("{path}")
     Call<AttachResult> attach(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AttachInfo attachInfo);
-
-    @GET("{path}")
-    Call<CustomerPaymentResult> getCustomerPaymentResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
-
-    @GET("{path}")
-    Call<AttachResult> getAttachmentFilesViaCustomerPaymentID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
-
-    @GET("{path}")
-    Call<AttachResult> getAttachmentFilesViaCustomerProductID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID, @Query("LoadFileData") boolean LoadFileData);
-
-    @GET("{path}")
-    Call<AttachResult> getAttachmentFilesViaCustomerSupportID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerSupportID") int customerSupportID, @Query("LoadFileData") boolean LoadFileData);
-
-    @GET("{path}")
-    Call<AttachResult> getAttachmentFileViaAttachID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("attachID") int attachID, @Query("LoadFileData") boolean LoadFileData);
-
-    @PUT("{path}")
-    Call<CustomerPaymentResult> editCustomerPaymentsResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentInfo customerPaymentInfo);
-
-    @POST("{path}")
-    Call<CustomerPaymentResult> addCustomerPaymentsResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentInfo customerPaymentInfo);
-
-    @DELETE("{path}")
-    Call<CustomerPaymentResult> deleteCustomerPayments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int customerPaymentID);
-
-    @GET("{path}")
-    Call<BankAccountResult> getBankAccountResult(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
-
-    @GET("{path}")
-    Call<PaymentResult> paymentsListByBankAccount(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
-
-    @PUT("{path}")
-    Call<PaymentResult> paymentsEdit(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentInfo paymentInfo);
-
-    @DELETE("{path}")
-    Call<PaymentResult> paymentsDelete(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID);
-
-    @GET("{path}")
-    Call<PaymentSubjectResult> paymentSubjectsList(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
-
-    @POST("{path}")
-    Call<PaymentResult> paymentsAdd(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentInfo paymentInfo);
 
     @DELETE("{path}")
     Call<AttachResult> deleteAttach(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("attachID") int attachID);
 
     @GET("{path}")
-    Call<AttachResult> getAttachmentListByPaymentID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
+    Call<AttachResult> fetchAttachInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("attachID") int attachID, @Query("LoadFileData") boolean LoadFileData);
 
     @GET("{path}")
-    Call<PaymentSubjectResult> paymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentSubjectID") int paymentSubjectID);
+    Call<PaymentSubjectResult> fetchPaymentSubjects(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @GET("{path}")
+    Call<PaymentResult> fetchPayments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
+
+    @GET("{path}")
+    Call<PaymentSubjectResult> fetchPaymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentSubjectID") int paymentSubjectID);
+
+    @POST("{path}")
+    Call<PaymentResult> addPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentInfo paymentInfo);
+
+    @PUT("{path}")
+    Call<PaymentResult> editPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentInfo paymentInfo);
+
+    @DELETE("{path}")
+    Call<PaymentResult> deletePayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID);
+
+    @GET("{path}")
+    Call<BankAccountResult> fetchBankAccounts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
 }

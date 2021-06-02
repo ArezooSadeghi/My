@@ -9,13 +9,13 @@ import androidx.lifecycle.LiveData;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.List;
 
 public class CustomerViewModel extends AndroidViewModel {
 
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerResult> customerResultSingleLiveEvent;
     private LiveData<String> wrongUserLoginKeyLiveData;
     private LiveData<String> notValueUserLoginKeyLiveData;
@@ -31,7 +31,7 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
         customerResultSingleLiveEvent = repository.getCustomerResultSingleLiveEvent();
         wrongUserLoginKeyLiveData = repository.getWrongUserLoginKeyMutableLiveData();
         notValueUserLoginKeyLiveData = repository.getNotValueUserLoginKeyMutableLiveData();

@@ -7,10 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class PaymentSubjectViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent;
     private SingleLiveEvent<String> errorPaymentSubjectsResultSingleLiveEvent;
@@ -21,7 +21,7 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
     public PaymentSubjectViewModel(@NonNull Application application) {
         super(application);
 
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
 
         paymentSubjectsResultSingleLiveEvent = repository.getPaymentSubjectsResultSingleLiveEvent();
         errorPaymentSubjectsResultSingleLiveEvent = repository.getErrorPaymentSubjectsResultSingleLiveEvent();

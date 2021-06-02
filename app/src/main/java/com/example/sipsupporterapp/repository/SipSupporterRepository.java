@@ -63,14 +63,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SipSupportRepository {
+public class SipSupporterRepository {
 
-    public static SipSupportRepository instance;
+    public static SipSupporterRepository instance;
     private SQLiteDatabase database;
     private Context context;
     private SipSupporterService sipSupporterService;
 
-    private static final String TAG = SipSupportRepository.class.getSimpleName();
+    private static final String TAG = SipSupporterRepository.class.getSimpleName();
 
     private SingleLiveEvent<CustomerResult> customerResultSingleLiveEvent = new SingleLiveEvent<>();
     private MutableLiveData<String> wrongUserLoginKeyMutableLiveData = new MutableLiveData<>();
@@ -176,15 +176,15 @@ public class SipSupportRepository {
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorPaymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SipSupportRepository(Context context) {
+    private SipSupporterRepository(Context context) {
         this.context = context.getApplicationContext();
         SipSupporterDBHelper helper = new SipSupporterDBHelper(context);
         database = helper.getWritableDatabase();
     }
 
-    public static SipSupportRepository getInstance(Context context) {
+    public static SipSupporterRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new SipSupportRepository(context.getApplicationContext());
+            instance = new SipSupporterRepository(context.getApplicationContext());
         }
         return instance;
     }
@@ -821,7 +821,7 @@ public class SipSupportRepository {
     }
 
     public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
-        sipSupporterService.postUserLoginParameter(path, userLoginParameter)
+        sipSupporterService.login(path, userLoginParameter)
                 .enqueue(new Callback<UserResult>() {
                     @Override
                     public void onResponse(Call<UserResult> call, Response<UserResult> response) {
@@ -856,7 +856,7 @@ public class SipSupportRepository {
     }
 
     public void fetchCustomerResult(String path, String userLoginKey, String customerName) {
-        sipSupporterService.getCustomers(path, userLoginKey, customerName).enqueue(new Callback<CustomerResult>() {
+        sipSupporterService.fetchCustomers(path, userLoginKey, customerName).enqueue(new Callback<CustomerResult>() {
             @Override
             public void onResponse(Call<CustomerResult> call, Response<CustomerResult> response) {
                 if (response.isSuccessful()) {
@@ -924,7 +924,7 @@ public class SipSupportRepository {
     }
 
     public void getCustomerSupportResult(String path, String userLoginKey, int customerID) {
-        sipSupporterService.getCustomerSupportResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerSupportResult>() {
+        sipSupporterService.fetchCustomerSupports(path, userLoginKey, customerID).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
                 if (response.isSuccessful()) {
@@ -959,7 +959,7 @@ public class SipSupportRepository {
 
 
     public void fetchCustomerUserResult(String path, String userLoginKey, int customerID) {
-        sipSupporterService.getCustomerUserResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
+        sipSupporterService.fetchCustomerUsers(path, userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
             @Override
             public void onResponse(Call<CustomerUserResult> call, Response<CustomerUserResult> response) {
                 if (response.isSuccessful()) {
@@ -994,7 +994,7 @@ public class SipSupportRepository {
 
 
     public void fetchSupportEventResult(String path, String userLoginKey) {
-        sipSupporterService.getSupportEventResult(path, userLoginKey).enqueue(new Callback<SupportEventResult>() {
+        sipSupporterService.fetchSupportEvents(path, userLoginKey).enqueue(new Callback<SupportEventResult>() {
             @Override
             public void onResponse(Call<SupportEventResult> call, Response<SupportEventResult> response) {
                 if (response.isSuccessful()) {
@@ -1028,7 +1028,7 @@ public class SipSupportRepository {
     }
 
     public void postCustomerSupportInfo(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
-        sipSupporterService.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo).enqueue(new Callback<CustomerSupportResult>() {
+        sipSupporterService.addCustomerSupport(path, userLoginKey, customerSupportInfo).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
                 if (response.isSuccessful()) {
@@ -1062,7 +1062,7 @@ public class SipSupportRepository {
     }
 
     public void fetchDateResult(String path, String userLoginKey) {
-        sipSupporterService.getDateResult(path, userLoginKey).enqueue(new Callback<DateResult>() {
+        sipSupporterService.fetchDate(path, userLoginKey).enqueue(new Callback<DateResult>() {
             @Override
             public void onResponse(Call<DateResult> call, Response<DateResult> response) {
                 if (response.isSuccessful()) {
@@ -1084,7 +1084,7 @@ public class SipSupportRepository {
     }
 
     public void fetchProductResult(String path, String userLoginKey, int customerID) {
-        sipSupporterService.getProductResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerProductResult>() {
+        sipSupporterService.fetchCustomerProducts(path, userLoginKey, customerID).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
@@ -1118,7 +1118,7 @@ public class SipSupportRepository {
     }
 
     public void postProductInfo(String path, String userLoginKey, ProductInfo productInfo) {
-        sipSupporterService.postProductInfo(path, userLoginKey, productInfo).enqueue(new Callback<ProductResult>() {
+        sipSupporterService.addProduct(path, userLoginKey, productInfo).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.isSuccessful()) {
@@ -1152,7 +1152,7 @@ public class SipSupportRepository {
     }
 
     public void fetchProductResult(String path, String userLoginKey) {
-        sipSupporterService.getProductResult(path, userLoginKey).enqueue(new Callback<ProductResult>() {
+        sipSupporterService.fetchProducts(path, userLoginKey).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.isSuccessful()) {
@@ -1186,7 +1186,7 @@ public class SipSupportRepository {
     }
 
     public void postCustomerProducts(String path, String userLoginKey, CustomerProducts customerProducts) {
-        sipSupporterService.postCustomerProducts(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
+        sipSupporterService.addCustomerProduct(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
@@ -1220,7 +1220,7 @@ public class SipSupportRepository {
     }
 
     public void fetchProductInfo(String path, String userLoginKey, int productID) {
-        sipSupporterService.getProductInfo(path, userLoginKey, productID).enqueue(new Callback<ProductResult>() {
+        sipSupporterService.fetchProductInfo(path, userLoginKey, productID).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.isSuccessful()) {
@@ -1356,7 +1356,7 @@ public class SipSupportRepository {
     }
 
     public void fetchCustomerPaymentResult(String path, String userLoginKey, int customerID) {
-        sipSupporterService.getCustomerPaymentResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
+        sipSupporterService.fetchCustomerPayments(path, userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1390,7 +1390,7 @@ public class SipSupportRepository {
     }
 
     public void getAttachmentFilesViaCustomerPaymentID(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
-        sipSupporterService.getAttachmentFilesViaCustomerPaymentID(path, userLoginKey, customerPaymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
+        sipSupporterService.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
@@ -1424,7 +1424,7 @@ public class SipSupportRepository {
     }
 
     public void addCustomerPayments(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        sipSupporterService.addCustomerPaymentsResult(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
+        sipSupporterService.addCustomerPayment(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1458,7 +1458,7 @@ public class SipSupportRepository {
     }
 
     public void editCustomerPayments(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        sipSupporterService.editCustomerPaymentsResult(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
+        sipSupporterService.editCustomerPayment(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1492,7 +1492,7 @@ public class SipSupportRepository {
     }
 
     public void deleteCustomerPayments(String path, String userLoginKey, int customerPaymentID) {
-        sipSupporterService.deleteCustomerPayments(path, userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
+        sipSupporterService.deleteCustomerPayment(path, userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1526,7 +1526,7 @@ public class SipSupportRepository {
     }
 
     public void fetchBankAccounts(String path, String userLoginKey) {
-        sipSupporterService.getBankAccountResult(path, userLoginKey).enqueue(new Callback<BankAccountResult>() {
+        sipSupporterService.fetchBankAccounts(path, userLoginKey).enqueue(new Callback<BankAccountResult>() {
             @Override
             public void onResponse(Call<BankAccountResult> call, Response<BankAccountResult> response) {
                 if (response.isSuccessful()) {
@@ -1560,7 +1560,7 @@ public class SipSupportRepository {
     }
 
     public void fetchFileWithCustomerProductID(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
-        sipSupporterService.getAttachmentFilesViaCustomerProductID(path, userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
+        sipSupporterService.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
@@ -1594,7 +1594,7 @@ public class SipSupportRepository {
     }
 
     public void fetchFileWithCustomerSupportID(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
-        sipSupporterService.getAttachmentFilesViaCustomerSupportID(path, userLoginKey, customerSupportID, LoadFileData).enqueue(new Callback<AttachResult>() {
+        sipSupporterService.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
@@ -1628,7 +1628,7 @@ public class SipSupportRepository {
     }
 
     public void fetchWithAttachID(String path, String userLoginKey, int attachID, boolean loadFileData) {
-        sipSupporterService.getAttachmentFileViaAttachID(path, userLoginKey, attachID, loadFileData).enqueue(new Callback<AttachResult>() {
+        sipSupporterService.fetchAttachInfo(path, userLoginKey, attachID, loadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
@@ -1662,7 +1662,7 @@ public class SipSupportRepository {
     }
 
     public void fetchPaymentsListByBankAccounts(String path, String userLoginKey, int bankAccountID) {
-        sipSupporterService.paymentsListByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
+        sipSupporterService.fetchPayments(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1696,7 +1696,7 @@ public class SipSupportRepository {
     }
 
     public void paymentsEdit(String path, String userLoginKey, PaymentInfo paymentInfo) {
-        sipSupporterService.paymentsEdit(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
+        sipSupporterService.editPayment(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1730,7 +1730,7 @@ public class SipSupportRepository {
     }
 
     public void paymentsDelete(String path, String userLoginKey, int paymentID) {
-        sipSupporterService.paymentsDelete(path, userLoginKey, paymentID).enqueue(new Callback<PaymentResult>() {
+        sipSupporterService.deletePayment(path, userLoginKey, paymentID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1764,7 +1764,7 @@ public class SipSupportRepository {
     }
 
     public void fetchPaymentSubjects(String path, String userLoginKey) {
-        sipSupporterService.paymentSubjectsList(path, userLoginKey).enqueue(new Callback<PaymentSubjectResult>() {
+        sipSupporterService.fetchPaymentSubjects(path, userLoginKey).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
                 if (response.isSuccessful()) {
@@ -1798,7 +1798,7 @@ public class SipSupportRepository {
     }
 
     public void paymentsAdd(String path, String userLoginKey, PaymentInfo paymentInfo) {
-        sipSupporterService.paymentsAdd(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
+        sipSupporterService.addPayment(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1866,7 +1866,7 @@ public class SipSupportRepository {
     }
 
     public void fetchAttachmentsByPaymentID(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
-        sipSupporterService.getAttachmentListByPaymentID(path, userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
+        sipSupporterService.fetchPaymentAttachments(path, userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
@@ -1900,7 +1900,7 @@ public class SipSupportRepository {
     }
 
     public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
-        sipSupporterService.paymentInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
+        sipSupporterService.fetchPaymentInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
                 if (response.isSuccessful()) {

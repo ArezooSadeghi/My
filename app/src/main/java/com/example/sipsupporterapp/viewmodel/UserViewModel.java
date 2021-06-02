@@ -8,12 +8,12 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.List;
 
 public class UserViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerUserResult> customerUserResultSingleLiveEvent;
     private SingleLiveEvent<String> errorCustomerUserResultSingleLiveEvent;
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
@@ -26,7 +26,7 @@ public class UserViewModel extends AndroidViewModel {
 
     public UserViewModel(@NonNull Application application) {
         super(application);
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
         customerUserResultSingleLiveEvent = repository.getCustomerUserResultSingleLiveEvent();
         errorCustomerUserResultSingleLiveEvent = repository.getErrorCustomerUserResultSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();

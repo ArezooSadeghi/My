@@ -10,12 +10,12 @@ import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.List;
 
 public class CustomerSupportViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerSupportResult> customerSupportResult;
     private SingleLiveEvent<String> errorCustomerSupportResult;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
@@ -41,7 +41,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
 
     public CustomerSupportViewModel(@NonNull Application application) {
         super(application);
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
         customerSupportResult = repository.getCustomerSupportResult();
         errorCustomerSupportResult = repository.getErrorCustomerSupportResult();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();

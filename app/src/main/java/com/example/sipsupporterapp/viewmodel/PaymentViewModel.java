@@ -10,12 +10,12 @@ import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 import java.util.HashMap;
 
 public class PaymentViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
 
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
     private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent;
@@ -57,7 +57,7 @@ public class PaymentViewModel extends AndroidViewModel {
     public PaymentViewModel(@NonNull Application application) {
         super(application);
 
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
 
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
         errorBankAccountsResultSingleLiveEvent = repository.getErrorBankAccountsResultSingleLiveEvent();

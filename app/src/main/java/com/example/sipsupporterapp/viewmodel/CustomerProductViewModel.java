@@ -12,10 +12,10 @@ import com.example.sipsupporterapp.model.CustomerProducts;
 import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.repository.SipSupportRepository;
+import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class CustomerProductViewModel extends AndroidViewModel {
-    private SipSupportRepository repository;
+    private SipSupporterRepository repository;
     private SingleLiveEvent<ProductResult> productResultSingleLiveEvent;
     private SingleLiveEvent<String> errorProductResultSingleLiveEvent;
     private SingleLiveEvent<ProductResult> getProductResultSingleLiveEvent;
@@ -75,7 +75,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public CustomerProductViewModel(@NonNull Application application) {
         super(application);
-        repository = SipSupportRepository.getInstance(getApplication());
+        repository = SipSupporterRepository.getInstance(getApplication());
         productResultSingleLiveEvent = repository.getProductResultSingleLiveEvent();
         errorProductResultSingleLiveEvent = repository.getErrorProductResultSingleLiveEvent();
         getProductResultSingleLiveEvent = repository.getGetProductResultSingleLiveEvent();
