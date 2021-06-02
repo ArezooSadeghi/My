@@ -43,8 +43,8 @@ public class ChangePasswordViewModel extends AndroidViewModel {
         return dangerousUserSingleLiveEvent;
     }
 
-    public void changePassword(String userLoginKey, String newPassword) {
-        repository.changePassword(userLoginKey, newPassword);
+    public void changePassword(String path, String userLoginKey, String newPassword) {
+        repository.changePassword(path, userLoginKey, newPassword);
     }
 
     public ServerData getServerData(String centerName) {

@@ -51,8 +51,8 @@ public class CustomerViewModel extends AndroidViewModel {
         return showProgressBarSingleLiveEvent;
     }
 
-    public void fetchCustomerResult(String userLoginKey, String customerName) {
-        repository.fetchCustomerResult(userLoginKey, customerName);
+    public void fetchCustomerResult(String path, String userLoginKey, String customerName) {
+        repository.fetchCustomerResult(path, userLoginKey, customerName);
     }
 
     public ServerData getServerData(String centerName) {
@@ -103,8 +103,8 @@ public class CustomerViewModel extends AndroidViewModel {
         repository.getSipSupportServiceGetDateResult(baseUrl);
     }
 
-    public void fetchDateResult(String userLoginKey) {
-        repository.fetchDateResult(userLoginKey);
+    public void fetchDateResult(String path, String userLoginKey) {
+        repository.fetchDateResult(path, userLoginKey);
     }
 
     public void deleteServerData(ServerData serverData) {

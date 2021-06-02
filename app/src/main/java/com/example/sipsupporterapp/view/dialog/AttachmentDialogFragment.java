@@ -256,7 +256,8 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceForAddAttachment(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.addAttachment(userLoginKey, attachInfo);
+        String path = "/api/v1/attach/Add/";
+        viewModel.addAttachment(path, userLoginKey, attachInfo);
     }
 
     private String convertBitmapToBase64() {

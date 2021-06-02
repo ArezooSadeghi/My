@@ -274,28 +274,28 @@ public class AttachmentViewModel extends AndroidViewModel {
         mRepository.getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(baseUrl);
     }
 
-    public void addAttachment(String userLoginKey, AttachInfo attachInfo) {
-        mRepository.attach(userLoginKey, attachInfo);
+    public void addAttachment(String path, String userLoginKey, AttachInfo attachInfo) {
+        mRepository.attach(path, userLoginKey, attachInfo);
     }
 
-    public void fetchCustomerPaymentAttachments(String userLoginKey, int customerPaymentID, boolean LoadFileData) {
-        mRepository.getAttachmentFilesViaCustomerPaymentID(userLoginKey, customerPaymentID, LoadFileData);
+    public void fetchCustomerPaymentAttachments(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
+        mRepository.getAttachmentFilesViaCustomerPaymentID(path, userLoginKey, customerPaymentID, LoadFileData);
     }
 
-    public void fetchCustomerProductAttachments(String userLoginKey, int customerProductID, boolean LoadFileData) {
-        mRepository.fetchFileWithCustomerProductID(userLoginKey, customerProductID, LoadFileData);
+    public void fetchCustomerProductAttachments(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
+        mRepository.fetchFileWithCustomerProductID(path, userLoginKey, customerProductID, LoadFileData);
     }
 
-    public void fetchCustomerSupportAttachments(String userLoginKey, int customerSupportID, boolean LoadFileData) {
-        mRepository.fetchFileWithCustomerSupportID(userLoginKey, customerSupportID, LoadFileData);
+    public void fetchCustomerSupportAttachments(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
+        mRepository.fetchFileWithCustomerSupportID(path, userLoginKey, customerSupportID, LoadFileData);
     }
 
-    public void fetchAttachInfo(String userLoginKey, int attachID, boolean loadFileData) {
-        mRepository.fetchWithAttachID(userLoginKey, attachID, loadFileData);
+    public void fetchAttachInfo(String path, String userLoginKey, int attachID, boolean loadFileData) {
+        mRepository.fetchWithAttachID(path, userLoginKey, attachID, loadFileData);
     }
 
-    public void deleteAttachment(String userLoginKey, int attachID) {
-        mRepository.deleteAttach(userLoginKey, attachID);
+    public void deleteAttachment(String path, String userLoginKey, int attachID) {
+        mRepository.deleteAttach(path, userLoginKey, attachID);
     }
 
     public void getSipSupporterServiceForDeleteAttachment(String baseUrl) {
@@ -306,7 +306,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         mRepository.getSipSupportServiceGetAttachmentListByPaymentID(baseUrl);
     }
 
-    public void fetchPaymentAttachments(String userLoginKey, int paymentID, boolean LoadFileData) {
-        mRepository.fetchAttachmentsByPaymentID(userLoginKey, paymentID, LoadFileData);
+    public void fetchPaymentAttachments(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
+        mRepository.fetchAttachmentsByPaymentID(path, userLoginKey, paymentID, LoadFileData);
     }
 }

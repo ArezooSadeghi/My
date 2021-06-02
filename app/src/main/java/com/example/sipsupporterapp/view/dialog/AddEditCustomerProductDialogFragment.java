@@ -252,7 +252,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceForGetCustomerProductInfo(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchProductInfo(userLoginKey, productID);
+        String path = "/api/v1/products/Info/";
+        viewModel.fetchProductInfo(path, userLoginKey, productID);
     }
 
     private void editProduct(CustomerProducts customerProducts) {
@@ -260,7 +261,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceForEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.editCustomerProduct(userLoginKey, customerProducts);
+        String path = "/api/v1/customerProducts/Edit/";
+        viewModel.editCustomerProduct(path, userLoginKey, customerProducts);
     }
 
     private void addProduct(CustomerProducts customerProducts) {
@@ -268,7 +270,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePostCustomerProducts(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.postCustomerProducts(userLoginKey, customerProducts);
+        String path = "/api/v1/customerProducts/Add/";
+        viewModel.postCustomerProducts(path, userLoginKey, customerProducts);
     }
 
     private void initViews() {
@@ -310,7 +313,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceGetProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchProductResult(userLoginKey);
+        String path = "/api/v1/products/List/";
+        viewModel.fetchProductResult(path, userLoginKey);
     }
 
     private void setupObserver() {

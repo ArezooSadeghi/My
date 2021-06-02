@@ -102,7 +102,8 @@ public class CustomerPaymentFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchCustomerPaymentResult(userLoginKey, customerID);
+        String path = "/api/v1/customerPayments/ListByCustomer/";
+        viewModel.fetchCustomerPaymentResult(path, userLoginKey, customerID);
     }
 
     private void handleEvents() {
@@ -239,7 +240,8 @@ public class CustomerPaymentFragment extends Fragment {
     private void deleteCustomerPayment() {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupportServiceDeleteCustomerPayments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.deleteCustomerPayments(SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentID);
+        String path = "/api/v1/customerPayments/Delete/";
+        viewModel.deleteCustomerPayments(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentID);
     }
 
     private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {

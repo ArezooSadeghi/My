@@ -46,7 +46,7 @@ import com.example.sipsupporterapp.retrofit.PaymentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.PaymentSubjectResultDeserializer;
 import com.example.sipsupporterapp.retrofit.ProductResultDeserializer;
 import com.example.sipsupporterapp.retrofit.RetrofitInstance;
-import com.example.sipsupporterapp.retrofit.SipSupportService;
+import com.example.sipsupporterapp.retrofit.SipSupporterService;
 import com.example.sipsupporterapp.retrofit.SupportEventResultDeserializer;
 import com.example.sipsupporterapp.retrofit.UserResultDeserializer;
 import com.example.sipsupporterapp.viewmodel.SingleLiveEvent;
@@ -68,15 +68,8 @@ public class SipSupportRepository {
     public static SipSupportRepository instance;
     private SQLiteDatabase database;
     private Context context;
-    private SipSupportService sipSupportServicePostUserLoginParameter, sipSupportServicePostCustomerParameter, sipSupportServiceChangePassword,
-            sipSupportServiceCustomerSupportResult, sipSupportServiceCustomerUserResult, sipSupportServiceSupportEventResult, sipSupportServicePostCustomerSupportInfo,
-            sipSupportServiceGetDateResult, sipSupportServiceGetCustomerProductResult, sipSupportServicePostProductInfo, sipSupportServiceGetProductResult,
-            sipSupportServicePostCustomerProducts, sipSupportServiceForGetProductInfo, sipSupportServiceForDeleteCustomerProduct, sipSupportServiceForEditCustomerProduct,
-            sipSupportServiceAttach, sipSupportServiceCustomerPaymentResult, sipSupportServiceGetAttachmentFilesViaCustomerPaymentID, sipSupportServiceGetAttachmentFileViaAttachID,
-            sipSupporterServiceAddCustomerPayments, sipSupporterServiceDeleteCustomerPayments, sipSupporterServiceEditCustomerPayments, sipSupporterServiceGetBankAccountResult,
-            sipSupportServiceGetAttachmentFilesViaCustomerProductID, sipSupportServiceGetAttachmentFilesViaCustomerSupportID, sipSupportServicePaymentsListAllBankAccount,
-            sipSupportServicePaymentsListByBankAccount, sipSupportServicePaymentsEdit, sipSupportServicePaymentsDelete, sipSupportServicePaymentSubjectsList, sipSupportServicePaymentsAdd,
-            SipSupporterServiceDeleteAttach, SipSupporterServiceGetAttachmentListByPaymentID, sipSupporterServicePaymentInfo;
+    private SipSupporterService sipSupporterService;
+
     private static final String TAG = SipSupportRepository.class.getSimpleName();
 
     private SingleLiveEvent<CustomerResult> customerResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -198,240 +191,226 @@ public class SipSupportRepository {
 
     public void getSipSupportServicePostUserLoginParameter(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePostUserLoginParameter = RetrofitInstance
-                .getRetrofitInstanceForPostUserLoginParameter(new TypeToken<UserResult>() {
-                }.getType(), new UserResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<UserResult>() {
+                }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSupportServicePostCustomerParameter(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePostCustomerParameter = RetrofitInstance
-                .getRetrofitInstanceForPostCustomerParameter(new TypeToken<CustomerResult>() {
-                }.getType(), new CustomerResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerResult>() {
+                }.getType(), new CustomerResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceChangePassword(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceChangePassword = RetrofitInstance
-                .getRetrofitInstanceChangePassword(new TypeToken<UserResult>() {
-                }.getType(), new UserResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<UserResult>() {
+                }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceCustomerSupportResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceCustomerSupportResult = RetrofitInstance
-                .getRetrofitInstanceCustomerSupportResult(new TypeToken<CustomerSupportResult>() {
-                }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerSupportResult>() {
+                }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceCustomerUserResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceCustomerUserResult = RetrofitInstance
-                .getRetrofitInstanceCustomerUserResult(new TypeToken<CustomerUserResult>() {
-                }.getType(), new CustomerUserResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerUserResult>() {
+                }.getType(), new CustomerUserResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceSupportEventResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceSupportEventResult = RetrofitInstance
-                .getRetrofitInstanceSupportEventResult(new TypeToken<SupportEventResult>() {
-                }.getType(), new SupportEventResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<SupportEventResult>() {
+                }.getType(), new SupportEventResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePostCustomerSupportResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceCustomerSupportResult = RetrofitInstance
-                .getRetrofitInstancePostCustomerSupportInfo(new TypeToken<CustomerSupportResult>() {
-                }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerSupportResult>() {
+                }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetDateResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetDateResult = RetrofitInstance
-                .getRetrofitInstanceGetDateResult(new TypeToken<DateResult>() {
-                }.getType(), new DateResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<DateResult>() {
+                }.getType(), new DateResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetCustomerProductResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetCustomerProductResult = RetrofitInstance
-                .getRetrofitInstanceGetCustomerProductResult(new TypeToken<CustomerProductResult>() {
-                }.getType(), new ProductResultDeserializer(), context).create(SipSupportService.class);
-    }
-
-    public void getSipSupportServicePostProductInfo(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePostProductInfo = RetrofitInstance
-                .getRetrofitInstancePostProductInfo(new TypeToken<ProductResult>() {
-                }.getType(), new AddProductResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerProductResult>() {
+                }.getType(), new ProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetProductResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetProductResult = RetrofitInstance
-                .getRetrofitInstanceGetProductResult(new TypeToken<ProductResult>() {
-                }.getType(), new AddProductResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<ProductResult>() {
+                }.getType(), new AddProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePostCustomerProducts(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePostCustomerProducts = RetrofitInstance
-                .getRetrofitInstancePostCustomerProducts(new TypeToken<CustomerProductResult>() {
-                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerProductResult>() {
+                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceForGetProductInfo(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceForGetProductInfo = RetrofitInstance
-                .getRetrofitInstanceForGetProductInfo(new TypeToken<ProductResult>() {
-                }.getType(), new NewProductResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<ProductResult>() {
+                }.getType(), new NewProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceForDeleteCustomerProduct(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceForDeleteCustomerProduct = RetrofitInstance
-                .getRetrofitInstanceForDeleteCustomerProduct(new TypeToken<CustomerProductResult>() {
-                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerProductResult>() {
+                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceForEditCustomerProduct(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceForEditCustomerProduct = RetrofitInstance
-                .getRetrofitInstanceForEditCustomerProduct(new TypeToken<CustomerProductResult>() {
-                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerProductResult>() {
+                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceAttach(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceAttach = RetrofitInstance
-                .getRetrofitInstanceForAttach(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceCustomerPaymentResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceCustomerPaymentResult = RetrofitInstance
-                .getCustomerPaymentResultRetrofitInstance(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetAttachmentFilesViaCustomerPaymentID(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetAttachmentFilesViaCustomerPaymentID = RetrofitInstance
-                .getAttachmentFilesViaCustomerPaymentIDRetrofitInstance(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetAttachmentFileViaAttachID = RetrofitInstance
-                .getAttachmentFileViaAttachIDRetrofitInstance(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceAddCustomerPayments(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterServiceAddCustomerPayments = RetrofitInstance
-                .addCustomerPaymentsRetrofitInstance(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceEditCustomerPayments(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterServiceEditCustomerPayments = RetrofitInstance
-                .editCustomerPaymentsRetrofitInstance(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceDeleteCustomerPayments(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterServiceDeleteCustomerPayments = RetrofitInstance
-                .deleteCustomerPaymentsRetrofitInstance(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterServiceGetBankAccountResult = RetrofitInstance
-                .getBankAccountResultRetrofitInstance(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new BankAccountResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new BankAccountResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetAttachmentFilesViaCustomerProductID(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetAttachmentFilesViaCustomerProductID = RetrofitInstance
-                .getAttachmentFilesViaCustomerProductIDRetrofitInstance(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetAttachmentFilesViaCustomerSupportID(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServiceGetAttachmentFilesViaCustomerSupportID = RetrofitInstance
-                .getAttachmentFilesViaCustomerSupportIDRetrofitInstance(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
-    }
-
-    public void getSipSupportServicePaymentsListAllBankAccount(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePaymentsListAllBankAccount = RetrofitInstance
-                .deleteAttachRetrofitInstance(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePaymentsListByBankAccount(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePaymentsListByBankAccount = RetrofitInstance
-                .paymentsListByBankAccountRetrofitInstance(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentResult>() {
+                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePaymentsEdit(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePaymentsEdit = RetrofitInstance
-                .paymentsEditRetrofitInstance(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentResult>() {
+                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePaymentsDelete(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePaymentsDelete = RetrofitInstance
-                .paymentsDeleteRetrofitInstance(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentResult>() {
+                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePaymentsAdd(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePaymentsAdd = RetrofitInstance
-                .paymentsAddRetrofitInstance(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentResult>() {
+                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupporterServicePaymentSubjects(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupportServicePaymentSubjectsList = RetrofitInstance
-                .paymentSubjectsListRetrofitInstance(new TypeToken<PaymentSubjectResult>() {
-                }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentSubjectResult>() {
+                }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceDeleteAttach(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        SipSupporterServiceDeleteAttach = RetrofitInstance
-                .deleteAttachRetrofitInstance(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetAttachmentListByPaymentID(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        SipSupporterServiceGetAttachmentListByPaymentID = RetrofitInstance
-                .getAttachmentListByPaymentIDRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AttachResult>() {
+                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupporterServicePaymentInfo(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterServicePaymentInfo = RetrofitInstance
-                .paymentInfoRI(new TypeToken<PaymentSubjectResult>() {
-                }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupportService.class);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentSubjectResult>() {
+                }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public SingleLiveEvent<CustomerResult> getCustomerResultSingleLiveEvent() {
@@ -841,8 +820,8 @@ public class SipSupportRepository {
         database.delete(SipSupporterSchema.ServerDataTable.NAME, whereClause, whereArgs);
     }
 
-    public void fetchUserResult(UserLoginParameter userLoginParameter) {
-        sipSupportServicePostUserLoginParameter.postUserLoginParameter(userLoginParameter)
+    public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
+        sipSupporterService.postUserLoginParameter(path, userLoginParameter)
                 .enqueue(new Callback<UserResult>() {
                     @Override
                     public void onResponse(Call<UserResult> call, Response<UserResult> response) {
@@ -891,8 +870,8 @@ public class SipSupportRepository {
                 });
     }
 
-    public void fetchCustomerResult(String userLoginKey, String customerName) {
-        sipSupportServicePostCustomerParameter.getCustomers(userLoginKey, customerName).enqueue(new Callback<CustomerResult>() {
+    public void fetchCustomerResult(String path, String userLoginKey, String customerName) {
+        sipSupporterService.getCustomers(path, userLoginKey, customerName).enqueue(new Callback<CustomerResult>() {
             @Override
             public void onResponse(Call<CustomerResult> call, Response<CustomerResult> response) {
                 if (response.code() == 200) {
@@ -931,8 +910,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void changePassword(String userLoginKey, String newPassword) {
-        sipSupportServiceChangePassword.changePassword(userLoginKey, newPassword).enqueue(new Callback<UserResult>() {
+    public void changePassword(String path, String userLoginKey, String newPassword) {
+        sipSupporterService.changePassword(path, userLoginKey, newPassword).enqueue(new Callback<UserResult>() {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 if (response.code() == 200) {
@@ -971,8 +950,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void getCustomerSupportResult(String userLoginKey, int customerID) {
-        sipSupportServiceCustomerSupportResult.getCustomerSupportResult(userLoginKey, customerID).enqueue(new Callback<CustomerSupportResult>() {
+    public void getCustomerSupportResult(String path, String userLoginKey, int customerID) {
+        sipSupporterService.getCustomerSupportResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
                 if (response.code() == 200) {
@@ -1014,8 +993,8 @@ public class SipSupportRepository {
     }
 
 
-    public void fetchCustomerUserResult(String userLoginKey, int customerID) {
-        sipSupportServiceCustomerUserResult.getCustomerUserResult(userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
+    public void fetchCustomerUserResult(String path, String userLoginKey, int customerID) {
+        sipSupporterService.getCustomerUserResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
             @Override
             public void onResponse(Call<CustomerUserResult> call, Response<CustomerUserResult> response) {
                 if (response.code() == 200) {
@@ -1055,8 +1034,8 @@ public class SipSupportRepository {
     }
 
 
-    public void fetchSupportEventResult(String userLoginKey) {
-        sipSupportServiceSupportEventResult.getSupportEventResult(userLoginKey).enqueue(new Callback<SupportEventResult>() {
+    public void fetchSupportEventResult(String path, String userLoginKey) {
+        sipSupporterService.getSupportEventResult(path, userLoginKey).enqueue(new Callback<SupportEventResult>() {
             @Override
             public void onResponse(Call<SupportEventResult> call, Response<SupportEventResult> response) {
                 if (response.code() == 200) {
@@ -1096,8 +1075,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void postCustomerSupportInfo(String userLoginKey, CustomerSupportInfo customerSupportInfo) {
-        sipSupportServiceCustomerSupportResult.postCustomerSupportInfo(userLoginKey, customerSupportInfo).enqueue(new Callback<CustomerSupportResult>() {
+    public void postCustomerSupportInfo(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
+        sipSupporterService.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
                 if (response.code() == 200) {
@@ -1137,8 +1116,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchDateResult(String userLoginKey) {
-        sipSupportServiceGetDateResult.getDateResult(userLoginKey).enqueue(new Callback<DateResult>() {
+    public void fetchDateResult(String path, String userLoginKey) {
+        sipSupporterService.getDateResult(path, userLoginKey).enqueue(new Callback<DateResult>() {
             @Override
             public void onResponse(Call<DateResult> call, Response<DateResult> response) {
                 if (response.code() == 200) {
@@ -1159,8 +1138,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchProductResult(String userLoginKey, int customerID) {
-        sipSupportServiceGetCustomerProductResult.getProductResult(userLoginKey, customerID).enqueue(new Callback<CustomerProductResult>() {
+    public void fetchProductResult(String path, String userLoginKey, int customerID) {
+        sipSupporterService.getProductResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.code() == 200) {
@@ -1200,8 +1179,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void postProductInfo(String userLoginKey, ProductInfo productInfo) {
-        sipSupportServicePostProductInfo.postProductInfo(userLoginKey, productInfo).enqueue(new Callback<ProductResult>() {
+    public void postProductInfo(String path, String userLoginKey, ProductInfo productInfo) {
+        sipSupporterService.postProductInfo(path, userLoginKey, productInfo).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.code() == 200) {
@@ -1241,8 +1220,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchProductResult(String userLoginKey) {
-        sipSupportServiceGetProductResult.getProductResult(userLoginKey).enqueue(new Callback<ProductResult>() {
+    public void fetchProductResult(String path, String userLoginKey) {
+        sipSupporterService.getProductResult(path, userLoginKey).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.code() == 200) {
@@ -1282,8 +1261,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void postCustomerProducts(String userLoginKey, CustomerProducts customerProducts) {
-        sipSupportServicePostCustomerProducts.postCustomerProducts(userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
+    public void postCustomerProducts(String path, String userLoginKey, CustomerProducts customerProducts) {
+        sipSupporterService.postCustomerProducts(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.code() == 200) {
@@ -1294,7 +1273,6 @@ public class SipSupportRepository {
                     }
 
                 } else if (response.code() == 400) {
-                    Log.d("Arezoo", "400");
                     Gson gson = new GsonBuilder().create();
                     CustomerProductResult customerProductResult = new CustomerProductResult();
                     try {
@@ -1324,8 +1302,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchProductInfo(String userLoginKey, int productID) {
-        sipSupportServiceForGetProductInfo.getProductInfo(userLoginKey, productID).enqueue(new Callback<ProductResult>() {
+    public void fetchProductInfo(String path, String userLoginKey, int productID) {
+        sipSupporterService.getProductInfo(path, userLoginKey, productID).enqueue(new Callback<ProductResult>() {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.code() == 200) {
@@ -1365,8 +1343,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void deleteCustomerProduct(String userLoginKey, int customerProductID) {
-        sipSupportServiceForDeleteCustomerProduct.deleteCustomerProduct(userLoginKey, customerProductID).enqueue(new Callback<CustomerProductResult>() {
+    public void deleteCustomerProduct(String path, String userLoginKey, int customerProductID) {
+        sipSupporterService.deleteCustomerProduct(path, userLoginKey, customerProductID).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.code() == 200) {
@@ -1406,8 +1384,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void editCustomerProduct(String userLoginKey, CustomerProducts customerProducts) {
-        sipSupportServiceForEditCustomerProduct.editCustomerProduct(userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
+    public void editCustomerProduct(String path, String userLoginKey, CustomerProducts customerProducts) {
+        sipSupporterService.editCustomerProduct(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.code() == 200) {
@@ -1447,8 +1425,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void attach(String userLoginKey, AttachInfo attachInfo) {
-        sipSupportServiceAttach.attach(userLoginKey, attachInfo).enqueue(new Callback<AttachResult>() {
+    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
+        sipSupporterService.attach(path, userLoginKey, attachInfo).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -1489,8 +1467,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchCustomerPaymentResult(String userLoginKey, int customerID) {
-        sipSupportServiceCustomerPaymentResult.getCustomerPaymentResult(userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
+    public void fetchCustomerPaymentResult(String path, String userLoginKey, int customerID) {
+        sipSupporterService.getCustomerPaymentResult(path, userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.code() == 200) {
@@ -1530,8 +1508,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void getAttachmentFilesViaCustomerPaymentID(String userLoginKey, int customerPaymentID, boolean LoadFileData) {
-        sipSupportServiceGetAttachmentFilesViaCustomerPaymentID.getAttachmentFilesViaCustomerPaymentID(userLoginKey, customerPaymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
+    public void getAttachmentFilesViaCustomerPaymentID(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
+        sipSupporterService.getAttachmentFilesViaCustomerPaymentID(path, userLoginKey, customerPaymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -1570,48 +1548,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void getAttachmentFileViaAttachID(String userLoginKey, int attachID, boolean LoadFileData) {
-        sipSupportServiceGetAttachmentFileViaAttachID.getAttachmentFileViaAttachID(userLoginKey, attachID, LoadFileData).enqueue(new Callback<AttachResult>() {
-            @Override
-            public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        getAttachmentFilesViaAttachIDSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    AttachResult attachResult = new AttachResult();
-                    try {
-                        attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            getErrorAttachmentFilesViaAttachIDSingleLiveEvent.setValue(attachResult.getError());
-                        }
-
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
-    public void addCustomerPayments(String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        sipSupporterServiceAddCustomerPayments.addCustomerPaymentsResult(userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
+    public void addCustomerPayments(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+        sipSupporterService.addCustomerPaymentsResult(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.code() == 200) {
@@ -1650,8 +1588,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void editCustomerPayments(String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        sipSupporterServiceEditCustomerPayments.editCustomerPaymentsResult(userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
+    public void editCustomerPayments(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+        sipSupporterService.editCustomerPaymentsResult(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.code() == 200) {
@@ -1690,8 +1628,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void deleteCustomerPayments(String userLoginKey, int customerPaymentID) {
-        sipSupporterServiceDeleteCustomerPayments.deleteCustomerPayments(userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
+    public void deleteCustomerPayments(String path, String userLoginKey, int customerPaymentID) {
+        sipSupporterService.deleteCustomerPayments(path, userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.code() == 200) {
@@ -1730,8 +1668,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchBankAccounts(String userLoginKey) {
-        sipSupporterServiceGetBankAccountResult.getBankAccountResult(userLoginKey).enqueue(new Callback<BankAccountResult>() {
+    public void fetchBankAccounts(String path, String userLoginKey) {
+        sipSupporterService.getBankAccountResult(path, userLoginKey).enqueue(new Callback<BankAccountResult>() {
             @Override
             public void onResponse(Call<BankAccountResult> call, Response<BankAccountResult> response) {
                 if (response.code() == 200) {
@@ -1770,8 +1708,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchFileWithCustomerProductID(String userLoginKey, int customerProductID, boolean LoadFileData) {
-        sipSupportServiceGetAttachmentFilesViaCustomerProductID.getAttachmentFilesViaCustomerProductID(userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
+    public void fetchFileWithCustomerProductID(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
+        sipSupporterService.getAttachmentFilesViaCustomerProductID(path, userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -1810,8 +1748,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchFileWithCustomerSupportID(String userLoginKey, int customerSupportID, boolean LoadFileData) {
-        sipSupportServiceGetAttachmentFilesViaCustomerSupportID.getAttachmentFilesViaCustomerSupportID(userLoginKey, customerSupportID, LoadFileData).enqueue(new Callback<AttachResult>() {
+    public void fetchFileWithCustomerSupportID(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
+        sipSupporterService.getAttachmentFilesViaCustomerSupportID(path, userLoginKey, customerSupportID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -1850,8 +1788,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchWithAttachID(String userLoginKey, int attachID, boolean loadFileData) {
-        sipSupportServiceGetAttachmentFileViaAttachID.getAttachmentFileViaAttachID(userLoginKey, attachID, loadFileData).enqueue(new Callback<AttachResult>() {
+    public void fetchWithAttachID(String path, String userLoginKey, int attachID, boolean loadFileData) {
+        sipSupporterService.getAttachmentFileViaAttachID(path, userLoginKey, attachID, loadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -1890,48 +1828,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchPaymentsListAllBankAccount(String userLoginKey) {
-        sipSupportServicePaymentsListAllBankAccount.paymentsListAllBankAccount(userLoginKey).enqueue(new Callback<PaymentResult>() {
-            @Override
-            public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-                if (response.code() == 200) {
-                    if (Integer.valueOf(response.body().getErrorCode()) <= -9001) {
-                        dangerousUserSingleLiveEvent.setValue(true);
-                    } else {
-                        paymentResultPaymentsListAllBankAccountSingleLiveEvent.setValue(response.body());
-                    }
-                } else if (response.code() == 400) {
-                    Gson gson = new GsonBuilder().create();
-                    PaymentResult paymentResult = new PaymentResult();
-                    try {
-                        paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorPaymentResultPaymentsListAllBankAccountSingleLiveEvent.setValue(paymentResult.getError());
-                        }
-
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(true);
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
-    public void fetchPaymentsListByBankAccounts(String userLoginKey, int bankAccountID) {
-        sipSupportServicePaymentsListByBankAccount.paymentsListByBankAccount(userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
+    public void fetchPaymentsListByBankAccounts(String path, String userLoginKey, int bankAccountID) {
+        sipSupporterService.paymentsListByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.code() == 200) {
@@ -1970,8 +1868,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void paymentsEdit(String userLoginKey, PaymentInfo paymentInfo) {
-        sipSupportServicePaymentsEdit.paymentsEdit(userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
+    public void paymentsEdit(String path, String userLoginKey, PaymentInfo paymentInfo) {
+        sipSupporterService.paymentsEdit(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.code() == 200) {
@@ -2010,8 +1908,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void paymentsDelete(String userLoginKey, int paymentID) {
-        sipSupportServicePaymentsDelete.paymentsDelete(userLoginKey, paymentID).enqueue(new Callback<PaymentResult>() {
+    public void paymentsDelete(String path, String userLoginKey, int paymentID) {
+        sipSupporterService.paymentsDelete(path, userLoginKey, paymentID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.code() == 200) {
@@ -2050,8 +1948,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchPaymentSubjects(String userLoginKey) {
-        sipSupportServicePaymentSubjectsList.paymentSubjectsList(userLoginKey).enqueue(new Callback<PaymentSubjectResult>() {
+    public void fetchPaymentSubjects(String path, String userLoginKey) {
+        sipSupporterService.paymentSubjectsList(path, userLoginKey).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
                 if (response.code() == 200) {
@@ -2090,8 +1988,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void paymentsAdd(String userLoginKey, PaymentInfo paymentInfo) {
-        sipSupportServicePaymentsAdd.paymentsAdd(userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
+    public void paymentsAdd(String path, String userLoginKey, PaymentInfo paymentInfo) {
+        sipSupporterService.paymentsAdd(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.code() == 200) {
@@ -2130,8 +2028,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void deleteAttach(String userLoginKey, int attachID) {
-        SipSupporterServiceDeleteAttach.deleteAttach(userLoginKey, attachID).enqueue(new Callback<AttachResult>() {
+    public void deleteAttach(String path, String userLoginKey, int attachID) {
+        sipSupporterService.deleteAttach(path, userLoginKey, attachID).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -2170,8 +2068,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchAttachmentsByPaymentID(String userLoginKey, int paymentID, boolean LoadFileData) {
-        SipSupporterServiceGetAttachmentListByPaymentID.getAttachmentListByPaymentID(userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
+    public void fetchAttachmentsByPaymentID(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
+        sipSupporterService.getAttachmentListByPaymentID(path, userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.code() == 200) {
@@ -2210,8 +2108,8 @@ public class SipSupportRepository {
         });
     }
 
-    public void fetchPaymentSubjectInfo(String userLoginKey, int paymentSubjectID) {
-        sipSupporterServicePaymentInfo.paymentInfo(userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
+    public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
+        sipSupporterService.paymentInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
                 if (response.code() == 200) {

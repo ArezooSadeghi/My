@@ -88,7 +88,8 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceSupportEventResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchSupportEventResult(userLoginKey);
+        String path = "/api/v1/supportEvents/List/";
+        viewModel.fetchSupportEventResult(path, userLoginKey);
     }
 
     private void handleEvents() {
@@ -222,6 +223,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePostCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.postCustomerSupportInfo(userLoginKey, customerSupportInfo);
+        String path = "/api/v1/customerSupports/AddWithAnswer/";
+        viewModel.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo);
     }
 }

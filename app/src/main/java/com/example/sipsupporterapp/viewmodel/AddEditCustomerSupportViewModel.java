@@ -59,16 +59,16 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public void fetchSupportEventResult(String userLoginKey) {
-        repository.fetchSupportEventResult(userLoginKey);
+    public void fetchSupportEventResult(String path, String userLoginKey) {
+        repository.fetchSupportEventResult(path, userLoginKey);
     }
 
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
 
-    public void postCustomerSupportInfo(String userLoginKey, CustomerSupportInfo customerSupportInfo) {
-        repository.postCustomerSupportInfo(userLoginKey, customerSupportInfo);
+    public void postCustomerSupportInfo(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
+        repository.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo);
     }
 
     public void getSipSupportServicePostCustomerSupportResult(String baseUrl) {

@@ -59,8 +59,8 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return errorCustomerSupportResult;
     }
 
-    public void getCustomerSupportResult(String userLoginKey, int customerID) {
-        repository.getCustomerSupportResult(userLoginKey, customerID);
+    public void getCustomerSupportResult(String path, String userLoginKey, int customerID) {
+        repository.getCustomerSupportResult(path, userLoginKey, customerID);
     }
 
     public ServerData getServerData(String centerName) {
@@ -111,8 +111,8 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         repository.getSipSupportServiceAttach(baseUrl);
     }
 
-    public void attach(String userLoginKey, AttachInfo attachInfo) {
-        repository.attach(userLoginKey, attachInfo);
+    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
+        repository.attach(path, userLoginKey, attachInfo);
     }
 
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {

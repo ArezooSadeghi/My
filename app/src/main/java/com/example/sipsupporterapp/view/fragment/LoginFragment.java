@@ -279,7 +279,8 @@ public class LoginFragment extends Fragment {
                             ServerData serverData = viewModel.getServerData(spinnerValue);
                             viewModel.getSipSupportServicePostUserLoginParameter(
                                     serverData.getIpAddress() + ":" + serverData.getPort());
-                            viewModel.fetchUserResult(userLoginParameter);
+                            String path = "/api/v1/users/Login/";
+                            viewModel.fetchUserResult(path, userLoginParameter);
                             binding.loadingLayout.setVisibility(View.VISIBLE);
                         }
                     }

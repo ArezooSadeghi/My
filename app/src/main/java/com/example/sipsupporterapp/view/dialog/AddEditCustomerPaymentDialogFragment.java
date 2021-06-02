@@ -113,20 +113,23 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceGetBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchBankAccounts(userLoginKey);
+        String path = "/api/v1/bankAccounts/List/";
+        viewModel.fetchBankAccounts(path, userLoginKey);
     }
 
 
     private void editCustomerPayment(CustomerPaymentInfo customerPaymentInfo) {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupportServiceEditCustomerPayments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.editCustomerPaymentsResult(SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
+        String path = "/api/v1/customerPayments/Edit/";
+        viewModel.editCustomerPaymentsResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
     }
 
     private void addCustomerPayment(CustomerPaymentInfo customerPaymentInfo) {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupportServiceAddCustomerPayments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.addCustomerPaymentsResult(SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
+        String path = "/api/v1/customerPayments/Add/";
+        viewModel.addCustomerPaymentsResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
     }
 
     private void setObserver() {

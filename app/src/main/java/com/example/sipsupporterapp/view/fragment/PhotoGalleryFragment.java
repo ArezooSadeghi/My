@@ -249,27 +249,32 @@ public class PhotoGalleryFragment extends Fragment {
 
     private void fetchCustomerSupportAttachments() {
         viewModel.getSipSupporterServiceForCustomerSupportAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchCustomerSupportAttachments(userLoginKey, customerSupportID, false);
+        String path = "/api/v1/attach/List_ByCustomerSupport/";
+        viewModel.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, false);
     }
 
     private void fetchCustomerProductAttachments() {
         viewModel.getSipSupporterServiceForCustomerProductAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchCustomerProductAttachments(userLoginKey, customerProductID, false);
+        String path = "/api/v1/attach/List_ByCustomerProduct/";
+        viewModel.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, false);
     }
 
     private void fetchCustomerPaymentAttachments() {
         viewModel.getSipSupporterServiceForCustomerPaymentAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchCustomerPaymentAttachments(userLoginKey, customerPaymentID, false);
+        String path = "/api/v1/attach/List_ByCustomerPayment/";
+        viewModel.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, false);
     }
 
     private void fetchPaymentAttachments() {
         viewModel.getSipSupporterServiceForPaymentAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchPaymentAttachments(userLoginKey, paymentID, false);
+        String path = "/api/v1/attach/List_ByPayment/";
+        viewModel.fetchPaymentAttachments(path, userLoginKey, paymentID, false);
     }
 
     private void fetchAttachInfo(int attachID) {
         viewModel.getSipSupporterServiceForAttachInfo(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchAttachInfo(userLoginKey, attachID, true);
+        String path = "/api/v1/attach/Info/";
+        viewModel.fetchAttachInfo(path, userLoginKey, attachID, true);
     }
 
     private String readFromStorage(int attachID) {

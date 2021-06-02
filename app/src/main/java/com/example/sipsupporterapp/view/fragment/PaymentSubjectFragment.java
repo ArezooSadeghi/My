@@ -91,7 +91,8 @@ public class PaymentSubjectFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServicePaymentSubjects(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchPaymentSubjects(userLoginKey);
+        String path = "/api/v1/paymentSubjects/List/";
+        viewModel.fetchPaymentSubjects(path, userLoginKey);
     }
 
     private void initViews() {

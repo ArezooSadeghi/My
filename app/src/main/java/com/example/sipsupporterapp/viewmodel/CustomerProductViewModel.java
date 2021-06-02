@@ -132,16 +132,12 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void postProductInfo(String userLoginKey, ProductInfo productInfo) {
-        repository.postProductInfo(userLoginKey, productInfo);
+    public void postProductInfo(String path, String userLoginKey, ProductInfo productInfo) {
+        repository.postProductInfo(path, userLoginKey, productInfo);
     }
 
-    public void fetchProductResult(String userLoginKey) {
-        repository.fetchProductResult(userLoginKey);
-    }
-
-    public void getSipSupportServicePostProductInfo(String baseUrl) {
-        repository.getSipSupportServicePostProductInfo(baseUrl);
+    public void fetchProductResult(String path, String userLoginKey) {
+        repository.fetchProductResult(path, userLoginKey);
     }
 
     public void getSipSupportServiceGetProductResult(String baseUrl) {
@@ -176,12 +172,12 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceForGetProductInfo(baseUrl);
     }
 
-    public void postCustomerProducts(String userLoginKey, CustomerProducts customerProducts) {
-        repository.postCustomerProducts(userLoginKey, customerProducts);
+    public void postCustomerProducts(String path, String userLoginKey, CustomerProducts customerProducts) {
+        repository.postCustomerProducts(path, userLoginKey, customerProducts);
     }
 
-    public void fetchProductInfo(String userLoginKey, int productID) {
-        repository.fetchProductInfo(userLoginKey, productID);
+    public void fetchProductInfo(String path, String userLoginKey, int productID) {
+        repository.fetchProductInfo(path, userLoginKey, productID);
     }
 
     public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
@@ -200,8 +196,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public void fetchProductResult(String userLoginKey, int customerID) {
-        repository.fetchProductResult(userLoginKey, customerID);
+    public void fetchProductResult(String path, String userLoginKey, int customerID) {
+        repository.fetchProductResult(path, userLoginKey, customerID);
     }
 
     public SingleLiveEvent<Boolean> getProductsFragmentDialogDismissSingleLiveEvent() {
@@ -220,8 +216,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceForDeleteCustomerProduct(baseUrl);
     }
 
-    public void deleteCustomerProduct(String userLoginKey, int customerProductID) {
-        repository.deleteCustomerProduct(userLoginKey, customerProductID);
+    public void deleteCustomerProduct(String path, String userLoginKey, int customerProductID) {
+        repository.deleteCustomerProduct(path, userLoginKey, customerProductID);
     }
 
     public SingleLiveEvent<Integer> getDeleteClicked() {
@@ -256,8 +252,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceForEditCustomerProduct(baseUrl);
     }
 
-    public void editCustomerProduct(String userLoginKey, CustomerProducts customerProducts) {
-        repository.editCustomerProduct(userLoginKey, customerProducts);
+    public void editCustomerProduct(String path, String userLoginKey, CustomerProducts customerProducts) {
+        repository.editCustomerProduct(path, userLoginKey, customerProducts);
     }
 
     public SingleLiveEvent<Boolean> getYesDelete() {
@@ -280,8 +276,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceAttach(baseUrl);
     }
 
-    public void attach(String userLoginKey, AttachInfo attachInfo) {
-        repository.attach(userLoginKey, attachInfo);
+    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
+        repository.attach(path, userLoginKey, attachInfo);
     }
 
     public SingleLiveEvent<Boolean> getDismissAttachSuccessfulDialogSingleLiveEvent() {

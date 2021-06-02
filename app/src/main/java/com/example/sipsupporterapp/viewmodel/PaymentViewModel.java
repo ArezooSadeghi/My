@@ -205,35 +205,35 @@ public class PaymentViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void fetchBankAccounts(String userLoginKey) {
-        repository.fetchBankAccounts(userLoginKey);
+    public void fetchBankAccounts(String path, String userLoginKey) {
+        repository.fetchBankAccounts(path, userLoginKey);
     }
 
-    public void fetchPaymentsListByBankAccounts(String userLoginKey, int bankAccountID) {
-        repository.fetchPaymentsListByBankAccounts(userLoginKey, bankAccountID);
+    public void fetchPaymentsListByBankAccounts(String path, String userLoginKey, int bankAccountID) {
+        repository.fetchPaymentsListByBankAccounts(path, userLoginKey, bankAccountID);
     }
 
-    public void fetchPaymentSubjectsList(String baseUrl) {
-        repository.fetchPaymentSubjects(baseUrl);
+    public void fetchPaymentSubjectsList(String path, String baseUrl) {
+        repository.fetchPaymentSubjects(path, baseUrl);
     }
 
-    public void paymentsDelete(String userLoginKey, int paymentID) {
-        repository.paymentsDelete(userLoginKey, paymentID);
+    public void paymentsDelete(String path, String userLoginKey, int paymentID) {
+        repository.paymentsDelete(path, userLoginKey, paymentID);
     }
 
-    public void paymentEdit(String userLoginKey, PaymentInfo paymentInfo) {
-        repository.paymentsEdit(userLoginKey, paymentInfo);
+    public void paymentEdit(String path, String userLoginKey, PaymentInfo paymentInfo) {
+        repository.paymentsEdit(path, userLoginKey, paymentInfo);
     }
 
-    public void paymentsAdd(String userLoginKey, PaymentInfo paymentInfo) {
-        repository.paymentsAdd(userLoginKey, paymentInfo);
+    public void paymentsAdd(String path, String userLoginKey, PaymentInfo paymentInfo) {
+        repository.paymentsAdd(path, userLoginKey, paymentInfo);
     }
 
     public void getSipSupporterServicePaymentInfo(String baseUrl) {
         repository.getSipSupporterServicePaymentInfo(baseUrl);
     }
 
-    public void fetchPaymentSubjectInfo(String userLoginKey, int paymentSubjectID) {
-        repository.fetchPaymentSubjectInfo(userLoginKey, paymentSubjectID);
+    public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
+        repository.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
     }
 }

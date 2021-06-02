@@ -90,7 +90,8 @@ public class UserFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceGetDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchDateResult(userLoginKey);
+        String path = "/api/v1/common/getDate/";
+        viewModel.fetchDateResult(path, userLoginKey);
     }
 
     private void initViews() {
@@ -106,7 +107,8 @@ public class UserFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchCustomerUserResult(userLoginKey, customerID);
+        String path = "/api/v1/customerUsers/userList/";
+        viewModel.fetchCustomerUserResult(path, userLoginKey, customerID);
     }
 
     private void setupObserver() {

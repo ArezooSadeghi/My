@@ -94,7 +94,8 @@ public class PaymentFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceGetBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchBankAccounts(userLoginKey);
+        String path = "/api/v1/bankAccounts/List/";
+        viewModel.fetchBankAccounts(path, userLoginKey);
     }
 
     private void initViews() {
@@ -272,7 +273,8 @@ public class PaymentFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePaymentsDelete(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.paymentsDelete(userLoginKey, paymentID);
+        String path = "/api/v1/payments/Delete/";
+        viewModel.paymentsDelete(path, userLoginKey, paymentID);
     }
 
     private void fetchCostsByBankAccountID() {
@@ -280,7 +282,8 @@ public class PaymentFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePaymentsListByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchPaymentsListByBankAccounts(userLoginKey, bankAccountID);
+        String path = "/api/v1/payments/ListByBankAccount/";
+        viewModel.fetchPaymentsListByBankAccounts(path, userLoginKey, bankAccountID);
     }
 
     private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {

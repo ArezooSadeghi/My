@@ -98,8 +98,8 @@ public class LoginViewModel extends AndroidViewModel {
         return yesDeleteIPAddressList;
     }
 
-    public void fetchUserResult(UserLoginParameter userLoginParameter) {
-        repository.fetchUserResult(userLoginParameter);
+    public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
+        repository.fetchUserResult(path, userLoginParameter);
     }
 
     public List<ServerData> getServerDataList() {

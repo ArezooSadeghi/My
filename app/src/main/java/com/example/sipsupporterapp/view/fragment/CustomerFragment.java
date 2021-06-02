@@ -77,8 +77,8 @@ public class CustomerFragment extends Fragment {
                     .getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
             viewModel.getSupportServicePostCustomerParameter(
                     serverData.getIpAddress() + ":" + serverData.getPort());
-            viewModel.fetchCustomerResult(
-                    SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
+            String path = "/api/v1/customers/";
+            viewModel.fetchCustomerResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
         }
 
         return binding.getRoot();
@@ -102,7 +102,8 @@ public class CustomerFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceGetDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchDateResult(userLoginKey);
+        String path = "/api/v1/common/getDate/";
+        viewModel.fetchDateResult(path, userLoginKey);
     }
 
 
@@ -228,7 +229,8 @@ public class CustomerFragment extends Fragment {
                 String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
                 ServerData serverData = viewModel.getServerData(centerName);
                 viewModel.getSupportServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
-                viewModel.fetchCustomerResult(userLoginKey, binding.edTextSearch.getText().toString());
+                String path = "/api/v1/customers/";
+                viewModel.fetchCustomerResult(path, userLoginKey, binding.edTextSearch.getText().toString());
             }
         });
     }

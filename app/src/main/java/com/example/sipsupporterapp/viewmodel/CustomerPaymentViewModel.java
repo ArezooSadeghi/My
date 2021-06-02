@@ -231,8 +231,8 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         repository.getSipSupportServiceCustomerPaymentResult(baseUrl);
     }
 
-    public void fetchCustomerPaymentResult(String userLoginKey, int customerID) {
-        repository.fetchCustomerPaymentResult(userLoginKey, customerID);
+    public void fetchCustomerPaymentResult(String path, String userLoginKey, int customerID) {
+        repository.fetchCustomerPaymentResult(path, userLoginKey, customerID);
     }
 
     public void getSipSupportServiceAttach(String baseUrl) {
@@ -251,27 +251,27 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         repository.getSipSupportServiceDeleteCustomerPayments(baseUrl);
     }
 
-    public void attach(String userLoginKey, AttachInfo attachInfo) {
-        repository.attach(userLoginKey, attachInfo);
+    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
+        repository.attach(path, userLoginKey, attachInfo);
     }
 
-    public void addCustomerPaymentsResult(String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        repository.addCustomerPayments(userLoginKey, customerPaymentInfo);
+    public void addCustomerPaymentsResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+        repository.addCustomerPayments(path, userLoginKey, customerPaymentInfo);
     }
 
-    public void editCustomerPaymentsResult(String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        repository.editCustomerPayments(userLoginKey, customerPaymentInfo);
+    public void editCustomerPaymentsResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+        repository.editCustomerPayments(path, userLoginKey, customerPaymentInfo);
     }
 
-    public void deleteCustomerPayments(String userLoginKey, int customerPaymentID) {
-        repository.deleteCustomerPayments(userLoginKey, customerPaymentID);
+    public void deleteCustomerPayments(String path, String userLoginKey, int customerPaymentID) {
+        repository.deleteCustomerPayments(path, userLoginKey, customerPaymentID);
     }
 
     public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
         repository.getSipSupportServiceGetBankAccountResult(baseUrl);
     }
 
-    public void fetchBankAccounts(String userLoginKey) {
-        repository.fetchBankAccounts(userLoginKey);
+    public void fetchBankAccounts(String path, String userLoginKey) {
+        repository.fetchBankAccounts(path, userLoginKey);
     }
 }

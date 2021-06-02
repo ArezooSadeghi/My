@@ -87,7 +87,8 @@ public class CustomerProductFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceGetCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchProductResult(userLoginKey, customerID);
+        String path = "/api/v1/customerProducts/List/";
+        viewModel.fetchProductResult(path, userLoginKey, customerID);
     }
 
     private void createViewModel() {
@@ -258,7 +259,8 @@ public class CustomerProductFragment extends Fragment {
     private void deleteProduct() {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupportServiceForDeleteCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.deleteCustomerProduct(SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
+        String path = "/api/v1/customerProducts/Delete/";
+        viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
     }
 
     private void setupAdapter(CustomerProducts[] customerProductsArray) {

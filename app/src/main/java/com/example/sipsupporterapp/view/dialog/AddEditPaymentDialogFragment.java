@@ -383,7 +383,8 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePaymentsEdit(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.paymentEdit(userLoginKey, paymentInfo);
+        String path = "/api/v1/payments/Edit/";
+        viewModel.paymentEdit(path, userLoginKey, paymentInfo);
     }
 
     private void addCost(PaymentInfo paymentInfo) {
@@ -391,7 +392,8 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePaymentsAdd(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.paymentsAdd(userLoginKey, paymentInfo);
+        String path = "/api/v1/payments/Add/";
+        viewModel.paymentsAdd(path, userLoginKey, paymentInfo);
     }
 
     private void fetchPaymentSubjectInfo(int paymentSubjectID) {
@@ -399,7 +401,8 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServicePaymentInfo(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.fetchPaymentSubjectInfo(userLoginKey, paymentSubjectID);
+        String path = "/api/v1/paymentSubjects/Info/";
+        viewModel.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
     }
 
     @Subscribe(sticky = true)

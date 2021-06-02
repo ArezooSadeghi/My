@@ -54,7 +54,7 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         repository.getSipSupporterServicePaymentSubjects(userLoginKey);
     }
 
-    public void fetchPaymentSubjects(String baseUrl) {
-        repository.fetchPaymentSubjects(baseUrl);
+    public void fetchPaymentSubjects(String path, String baseUrl) {
+        repository.fetchPaymentSubjects(path, baseUrl);
     }
 }

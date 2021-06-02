@@ -87,7 +87,8 @@ public class CustomerSupportFragment extends Fragment {
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.getCustomerSupportResult(userLoginKey, customerID);
+        String path = "/api/v1/customerSupports/ListByCustomer/";
+        viewModel.getCustomerSupportResult(path, userLoginKey, customerID);
     }
 
     private void initView() {
