@@ -229,7 +229,7 @@ public class CustomerFragment extends Fragment {
                 String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
                 ServerData serverData = viewModel.getServerData(centerName);
                 viewModel.getSupportServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
-                String path = "/api/v1/customers/";
+                String path = "/api/v1/customers/search";
                 viewModel.fetchCustomerResult(path, userLoginKey, binding.edTextSearch.getText().toString());
             }
         });

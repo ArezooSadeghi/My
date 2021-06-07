@@ -865,10 +865,14 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
-                        if (Integer.valueOf(customerResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorSingleLiveEvent.setValue(customerResult.getError());
+                        try {
+                            if (Integer.valueOf(customerResult.getErrorCode()) <= -9001) {
+                                dangerousUserSingleLiveEvent.setValue(true);
+                            } else {
+                                errorSingleLiveEvent.setValue(customerResult.getError());
+                            }
+                        } catch (NumberFormatException e) {
+                            Log.e(TAG, e.getMessage());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
