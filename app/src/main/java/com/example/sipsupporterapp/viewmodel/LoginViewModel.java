@@ -15,7 +15,7 @@ import java.util.List;
 public class LoginViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
-    private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent;
     private SingleLiveEvent<Boolean> insertSpinnerSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> insertIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> deleteIPAddressListSingleLiveEvent = new SingleLiveEvent<>();

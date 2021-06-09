@@ -14,8 +14,8 @@ import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
-import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
+import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
@@ -24,7 +24,6 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
-import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
@@ -619,20 +618,12 @@ public class SipSupporterRepository {
         return productsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorProductsResultSingleLiveEvent() {
-        return errorProductsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<ProductResult> getProductInfoResultSingleLiveEvent() {
         return productInfoResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorProductInfoResultSingleLiveEvent() {
         return errorProductInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<ProductResult> getAddProductResultSingleLiveEvent() {
-        return addProductResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorAddProductResultSingleLiveEvent() {
@@ -649,10 +640,6 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectInfoResultSingleLiveEvent() {
         return paymentSubjectInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentSubjectInfoResultSingleLiveEvent() {
-        return errorPaymentSubjectInfoResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<PaymentResult> getPaymentsResultSingleLiveEvent() {
@@ -1072,40 +1059,6 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
-    public void postProductInfo(String path, String userLoginKey, ProductInfo productInfo) {
-        sipSupporterService.addProduct(path, userLoginKey, productInfo).enqueue(new Callback<ProductResult>() {
-            @Override
-            public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
-                if (response.isSuccessful()) {
-                    addProductResultSingleLiveEvent.setValue(response.body());
-                } else {
-                    try {
-                        Gson gson = new Gson();
-                        ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
-                        if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAddProductResultSingleLiveEvent.setValue(productResult.getError());
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
