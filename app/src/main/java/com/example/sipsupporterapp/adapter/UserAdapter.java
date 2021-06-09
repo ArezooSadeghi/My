@@ -21,13 +21,13 @@ import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersHolder> {
     private Context context;
-    private List<CustomerUserInfo> customerUsers;
+    private List<CustomerUserInfo> customerUserInfoList;
     private UserViewModel viewModel;
     private String date;
 
-    public UserAdapter(Context context, List<CustomerUserInfo> customerUsers, UserViewModel viewModel, String date) {
+    public UserAdapter(Context context, List<CustomerUserInfo> customerUserInfoList, UserViewModel viewModel, String date) {
         this.context = context;
-        this.customerUsers = customerUsers;
+        this.customerUserInfoList = customerUserInfoList;
         this.viewModel = viewModel;
         this.date = date;
     }
@@ -44,8 +44,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
 
     @Override
     public void onBindViewHolder(@NonNull CustomerUsersHolder holder, int position) {
-        holder.bindCustomerSupportInfo(customerUsers.get(position));
-        String date = customerUsers.get(position).getLastSeen().substring(0, 10);
+        holder.bindCustomerSupportInfo(customerUserInfoList.get(position));
+        String date = customerUserInfoList.get(position).getLastSeen().substring(0, 10);
         if (this.date != null) {
             if (this.date.equals(date)) {
                 holder.binding.imgUserStatus.setImageResource(R.drawable.user_online);
@@ -60,8 +60,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getItemClicked().setValue(customerUsers.get(position).getCustomerID());
-                SipSupportSharedPreferences.setCustomerUserId(context, customerUsers.get(position).getCustomerUserID());
+                viewModel.getItemClicked().setValue(customerUserInfoList.get(position).getCustomerID());
+                SipSupportSharedPreferences.setCustomerUserId(context, customerUserInfoList.get(position).getCustomerUserID());
             }
         });
 
@@ -76,7 +76,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
 
     @Override
     public int getItemCount() {
-        return customerUsers == null ? 0 : customerUsers.size();
+        return customerUserInfoList == null ? 0 : customerUserInfoList.size();
     }
 
     public class CustomerUsersHolder extends RecyclerView.ViewHolder {
