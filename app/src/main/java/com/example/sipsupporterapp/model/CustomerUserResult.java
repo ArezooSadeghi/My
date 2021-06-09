@@ -3,7 +3,7 @@ package com.example.sipsupporterapp.model;
 public class CustomerUserResult {
     private String error;
     private String errorCode;
-    private CustomerUsers[] customerUsers;
+    private CustomerUserInfo[] customerUsers;
 
     public String getError() {
         return error;
@@ -21,11 +21,11 @@ public class CustomerUserResult {
         this.errorCode = errorCode;
     }
 
-    public CustomerUsers[] getCustomerUsers() {
+    public CustomerUserInfo[] getCustomerUsers() {
         return customerUsers;
     }
 
-    public void setCustomerUsers(CustomerUsers[] customerUsers) {
+    public void setCustomerUsers(CustomerUserInfo[] customerUsers) {
         this.customerUsers = customerUsers;
     }
 }

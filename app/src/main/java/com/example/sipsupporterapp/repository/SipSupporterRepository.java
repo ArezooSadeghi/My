@@ -15,7 +15,7 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.CustomerProductResult;
-import com.example.sipsupporterapp.model.CustomerProducts;
+import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
@@ -1151,8 +1151,8 @@ public class SipSupporterRepository {
         });
     }
 
-    public void postCustomerProducts(String path, String userLoginKey, CustomerProducts customerProducts) {
-        sipSupporterService.addCustomerProduct(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
+    public void postCustomerProducts(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+        sipSupporterService.addCustomerProduct(path, userLoginKey, customerProductInfo).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
@@ -1253,8 +1253,8 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editCustomerProduct(String path, String userLoginKey, CustomerProducts customerProducts) {
-        sipSupporterService.editCustomerProduct(path, userLoginKey, customerProducts).enqueue(new Callback<CustomerProductResult>() {
+    public void editCustomerProduct(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+        sipSupporterService.editCustomerProduct(path, userLoginKey, customerProductInfo).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {

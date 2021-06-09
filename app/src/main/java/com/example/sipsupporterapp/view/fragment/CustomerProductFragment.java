@@ -19,7 +19,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerProductAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerProductBinding;
 import com.example.sipsupporterapp.model.CustomerProductResult;
-import com.example.sipsupporterapp.model.CustomerProducts;
+import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -224,17 +224,17 @@ public class CustomerProductFragment extends Fragment {
                 });
 
         viewModel.getEditClicked()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerProducts>() {
+                .observe(getViewLifecycleOwner(), new Observer<CustomerProductInfo>() {
                     @Override
-                    public void onChanged(CustomerProducts customerProducts) {
+                    public void onChanged(CustomerProductInfo customerProductInfo) {
                         AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
                                 customerID,
-                                customerProducts.getDescription(),
-                                customerProducts.getInvoicePrice(),
-                                customerProducts.isInvoicePayment(),
-                                customerProducts.isFinish(),
-                                customerProducts.getExpireDate(),
-                                customerProducts.getCustomerProductID(), customerProducts.getProductID());
+                                customerProductInfo.getDescription(),
+                                customerProductInfo.getInvoicePrice(),
+                                customerProductInfo.isInvoicePayment(),
+                                customerProductInfo.isFinish(),
+                                customerProductInfo.getExpireDate(),
+                                customerProductInfo.getCustomerProductID(), customerProductInfo.getProductID());
                         fragment.show(getActivity().getSupportFragmentManager(), AddEditCustomerProductDialogFragment.TAG);
                     }
                 });
@@ -247,10 +247,10 @@ public class CustomerProductFragment extends Fragment {
         });
 
         viewModel.getProductAdapterSeeDocumentsClickedSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerProducts>() {
+                .observe(getViewLifecycleOwner(), new Observer<CustomerProductInfo>() {
                     @Override
-                    public void onChanged(CustomerProducts customerProducts) {
-                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, customerProducts.getCustomerProductID(), 0, 0);
+                    public void onChanged(CustomerProductInfo customerProductInfo) {
+                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, customerProductInfo.getCustomerProductID(), 0, 0);
                         startActivity(starter);
                     }
                 });
@@ -263,9 +263,9 @@ public class CustomerProductFragment extends Fragment {
         viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
     }
 
-    private void setupAdapter(CustomerProducts[] customerProductsArray) {
-        List<CustomerProducts> customerProductsList = Arrays.asList(customerProductsArray);
-        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), customerProductsList, viewModel);
+    private void setupAdapter(CustomerProductInfo[] customerProductInfoArray) {
+        List<CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
+        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), customerProductInfoList, viewModel);
         binding.recyclerViewProducts.setAdapter(adapter);
     }
 }

@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerProductDialogBinding;
 import com.example.sipsupporterapp.model.CustomerProductResult;
-import com.example.sipsupporterapp.model.CustomerProducts;
+import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -156,18 +156,18 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomerProducts customerProducts = new CustomerProducts();
+                CustomerProductInfo customerProductInfo = new CustomerProductInfo();
 
                 String productName = lastValueSpinner;
-                customerProducts.setProductName(productName);
+                customerProductInfo.setProductName(productName);
 
-                customerProducts.setProductID(productID);
+                customerProductInfo.setProductID(productID);
 
                 String description = binding.edTextDescription.getText().toString();
-                customerProducts.setDescription(description);
+                customerProductInfo.setDescription(description);
 
                 String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
-                customerProducts.setInvoicePrice(Long.valueOf(price));
+                customerProductInfo.setInvoicePrice(Long.valueOf(price));
 
                 boolean paymentPrice;
                 if (binding.checkBoxInvoicePayment.isChecked()) {
@@ -183,18 +183,18 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     finish = false;
                 }
 
-                customerProducts.setCustomerID(customerID);
-                customerProducts.setCustomerProductID(customerProductID);
-                customerProducts.setInvoicePayment(paymentPrice);
-                customerProducts.setFinish(finish);
+                customerProductInfo.setCustomerID(customerID);
+                customerProductInfo.setCustomerProductID(customerProductID);
+                customerProductInfo.setInvoicePayment(paymentPrice);
+                customerProductInfo.setFinish(finish);
 
                 String date = binding.btnDateExpiration.getText().toString().replaceAll("/", "");
-                customerProducts.setExpireDate(Long.valueOf(date));
+                customerProductInfo.setExpireDate(Long.valueOf(date));
 
                 if (customerProductID == 0) {
-                    addProduct(customerProducts);
+                    addProduct(customerProductInfo);
                 } else {
-                    editProduct(customerProducts);
+                    editProduct(customerProductInfo);
                 }
             }
         });
@@ -256,22 +256,22 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.fetchProductInfo(path, userLoginKey, productID);
     }
 
-    private void editProduct(CustomerProducts customerProducts) {
+    private void editProduct(CustomerProductInfo customerProductInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceForEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Edit/";
-        viewModel.editCustomerProduct(path, userLoginKey, customerProducts);
+        viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
-    private void addProduct(CustomerProducts customerProducts) {
+    private void addProduct(CustomerProductInfo customerProductInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServicePostCustomerProducts(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Add/";
-        viewModel.postCustomerProducts(path, userLoginKey, customerProducts);
+        viewModel.postCustomerProducts(path, userLoginKey, customerProductInfo);
     }
 
     private void initViews() {

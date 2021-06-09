@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class ServerData implements Serializable {
 
-    private int primaryKey;
     private String centerName;
     private String ipAddress;
     private String port;
@@ -16,14 +15,6 @@ public class ServerData implements Serializable {
     }
 
     public ServerData() {
-    }
-
-    public int getPrimaryKey() {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(int primaryKey) {
-        this.primaryKey = primaryKey;
     }
 
     public String getCenterName() {

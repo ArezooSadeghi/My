@@ -19,7 +19,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.UserAdapter;
 import com.example.sipsupporterapp.databinding.FragmentUserBinding;
 import com.example.sipsupporterapp.model.CustomerUserResult;
-import com.example.sipsupporterapp.model.CustomerUsers;
+import com.example.sipsupporterapp.model.CustomerUserInfo;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -197,9 +197,9 @@ public class UserFragment extends Fragment {
         });
     }
 
-    private void setupAdapter(CustomerUsers[] customerUsersArray) {
-        List<CustomerUsers> customerUsersList = Arrays.asList(customerUsersArray);
-        UserAdapter adapter = new UserAdapter(getContext(), customerUsersList, viewModel, date);
+    private void setupAdapter(CustomerUserInfo[] customerUserInfoArray) {
+        List<CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
+        UserAdapter adapter = new UserAdapter(getContext(), customerUserInfoList, viewModel, date);
         binding.recyclerViewCustomerUsers.setAdapter(adapter);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.model;
 
 public class AttachResult {
+
     private String error;
     private String errorCode;
     private AttachInfo[] attachs;

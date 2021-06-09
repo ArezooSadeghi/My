@@ -5,9 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.CustomerProductResult;
-import com.example.sipsupporterapp.model.CustomerProducts;
+import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
@@ -37,13 +36,13 @@ public class CustomerProductViewModel extends AndroidViewModel {
     private SingleLiveEvent<CustomerProductResult> editCustomerProductSingleLiveEvent;
     private SingleLiveEvent<String> errorEditCustomerProductSingleLiveEvent;
 
-    private SingleLiveEvent<CustomerProducts> editClickedSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductInfo> editClickedSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> yesDeleteSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnection;
 
-    private SingleLiveEvent<CustomerProducts> mProductAdapterSeeDocumentsClickedSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductInfo> mProductAdapterSeeDocumentsClickedSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
@@ -84,7 +83,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return getProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProducts> getProductAdapterSeeDocumentsClickedSingleLiveEvent() {
+    public SingleLiveEvent<CustomerProductInfo> getProductAdapterSeeDocumentsClickedSingleLiveEvent() {
         return mProductAdapterSeeDocumentsClickedSingleLiveEvent;
     }
 
@@ -128,8 +127,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceForGetProductInfo(baseUrl);
     }
 
-    public void postCustomerProducts(String path, String userLoginKey, CustomerProducts customerProducts) {
-        repository.postCustomerProducts(path, userLoginKey, customerProducts);
+    public void postCustomerProducts(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+        repository.postCustomerProducts(path, userLoginKey, customerProductInfo);
     }
 
     public void fetchProductInfo(String path, String userLoginKey, int productID) {
@@ -180,7 +179,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return deleteClickedSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProducts> getEditClicked() {
+    public SingleLiveEvent<CustomerProductInfo> getEditClicked() {
         return editClickedSingleLiveEvent;
     }
 
@@ -196,8 +195,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.getSipSupportServiceForEditCustomerProduct(baseUrl);
     }
 
-    public void editCustomerProduct(String path, String userLoginKey, CustomerProducts customerProducts) {
-        repository.editCustomerProduct(path, userLoginKey, customerProducts);
+    public void editCustomerProduct(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+        repository.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
     public SingleLiveEvent<Boolean> getYesDelete() {

@@ -4,7 +4,7 @@ public class CustomerProductResult {
 
     private String error;
     private String errorCode;
-    private CustomerProducts[] customerProducts;
+    private CustomerProductInfo[] customerProducts;
 
     public String getError() {
         return error;
@@ -22,11 +22,11 @@ public class CustomerProductResult {
         this.errorCode = errorCode;
     }
 
-    public CustomerProducts[] getCustomerProducts() {
+    public CustomerProductInfo[] getCustomerProducts() {
         return customerProducts;
     }
 
-    public void setCustomerProducts(CustomerProducts[] customerProducts) {
+    public void setCustomerProducts(CustomerProductInfo[] customerProducts) {
         this.customerProducts = customerProducts;
     }
 }

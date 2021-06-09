@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.model;
 
 public class PaymentSubjectResult {
+
     private String error;
     private String errorCode;
     private PaymentSubjectInfo[] paymentSubjects;

@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.model;
 
 public class BankAccountResult {
+
     private String errorCode;
     private String error;
     private BankAccountInfo[] bankAccounts;

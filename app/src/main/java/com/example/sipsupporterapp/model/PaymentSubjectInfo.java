@@ -1,14 +1,15 @@
 package com.example.sipsupporterapp.model;
 
 public class PaymentSubjectInfo {
+
     private int paymentSubjectID;
-    private String paymentSubject;
     private int row;
     private int parentID;
-    private String parentPaymentSubject;
     private int userID;
-    private String userFullName;
     private long addTime;
+    private String paymentSubject;
+    private String parentPaymentSubject;
+    private String userFullName;
 
     public int getPaymentSubjectID() {
         return paymentSubjectID;
@@ -16,14 +17,6 @@ public class PaymentSubjectInfo {
 
     public void setPaymentSubjectID(int paymentSubjectID) {
         this.paymentSubjectID = paymentSubjectID;
-    }
-
-    public String getPaymentSubject() {
-        return paymentSubject;
-    }
-
-    public void setPaymentSubject(String paymentSubject) {
-        this.paymentSubject = paymentSubject;
     }
 
     public int getRow() {
@@ -42,14 +35,6 @@ public class PaymentSubjectInfo {
         this.parentID = parentID;
     }
 
-    public String getParentPaymentSubject() {
-        return parentPaymentSubject;
-    }
-
-    public void setParentPaymentSubject(String parentPaymentSubject) {
-        this.parentPaymentSubject = parentPaymentSubject;
-    }
-
     public int getUserID() {
         return userID;
     }
@@ -58,19 +43,35 @@ public class PaymentSubjectInfo {
         this.userID = userID;
     }
 
-    public String getUserFullName() {
-        return userFullName;
-    }
-
-    public void setUserFullName(String userFullName) {
-        this.userFullName = userFullName;
-    }
-
     public long getAddTime() {
         return addTime;
     }
 
     public void setAddTime(long addTime) {
         this.addTime = addTime;
+    }
+
+    public String getPaymentSubject() {
+        return paymentSubject;
+    }
+
+    public void setPaymentSubject(String paymentSubject) {
+        this.paymentSubject = paymentSubject;
+    }
+
+    public String getParentPaymentSubject() {
+        return parentPaymentSubject;
+    }
+
+    public void setParentPaymentSubject(String parentPaymentSubject) {
+        this.parentPaymentSubject = parentPaymentSubject;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 }

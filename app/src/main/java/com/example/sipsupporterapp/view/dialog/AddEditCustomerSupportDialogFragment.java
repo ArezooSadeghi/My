@@ -20,7 +20,7 @@ import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
-import com.example.sipsupporterapp.model.SupportEvents;
+import com.example.sipsupporterapp.model.SupportEventInfo;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.AddEditCustomerSupportViewModel;
@@ -32,7 +32,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
 
     private int customerID, supportEventID;
     private String lastValueSpinner;
-    private SupportEvents[] supportEventArray;
+    private SupportEventInfo[] supportEventArray;
 
     private static final String ARGS_CUSTOMER_ID = "customerID";
 
@@ -191,7 +191,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupSpinner(SupportEvents[] supportEvents) {
+    private void setupSpinner(SupportEventInfo[] supportEvents) {
         String[] supportEventArray = new String[supportEvents.length];
         for (int i = 0; i < supportEventArray.length; i++) {
             supportEventArray[i] = supportEvents[i].getSupportEvent();
@@ -205,7 +205,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
                 for (int i = 0; i < supportEvents.length; i++) {
                     if (supportEvents[i].getSupportEventID() == supportEventID) {
                         lastValueSpinner = supportEvents[i].getSupportEvent();
-                        SupportEvents supportEvent = supportEvents[i];
+                        SupportEventInfo supportEvent = supportEvents[i];
                         supportEventID = supportEvent.getSupportEventID();
                         supportEventArray[i] = supportEventArray[0];
                         supportEventArray[0] = lastValueSpinner;

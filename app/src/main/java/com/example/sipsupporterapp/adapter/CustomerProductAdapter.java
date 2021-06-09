@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerProductAdapeterItemBinding;
-import com.example.sipsupporterapp.model.CustomerProducts;
+import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -26,12 +26,12 @@ import java.util.List;
 
 public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProductAdapter.ProductsHolder> {
     private Context context;
-    private List<CustomerProducts> customerProductsList;
+    private List<CustomerProductInfo> customerProductInfoList;
     private CustomerProductViewModel viewModel;
 
-    public CustomerProductAdapter(Context context, List<CustomerProducts> customerProductsList, CustomerProductViewModel viewModel) {
+    public CustomerProductAdapter(Context context, List<CustomerProductInfo> customerProductInfoList, CustomerProductViewModel viewModel) {
         this.context = context;
-        this.customerProductsList = customerProductsList;
+        this.customerProductInfoList = customerProductInfoList;
         this.viewModel = viewModel;
     }
 
@@ -47,10 +47,10 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
 
     @Override
     public void onBindViewHolder(@NonNull ProductsHolder holder, int position) {
-        CustomerProducts customerProducts = customerProductsList.get(position);
-        holder.bindCustomerProducts(customerProducts);
+        CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
+        holder.bindCustomerProducts(customerProductInfo);
 
-        int customerProductID = customerProducts.getCustomerProductID();
+        int customerProductID = customerProductInfo.getCustomerProductID();
 
         holder.binding.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +68,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
                     public void onItemClick(int position, PowerMenuItem item) {
                         switch (position) {
                             case 0:
-                                viewModel.getEditClicked().setValue(customerProducts);
+                                viewModel.getEditClicked().setValue(customerProductInfo);
                                 powerMenu.dismiss();
                                 break;
                             case 1:
@@ -76,7 +76,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getProductAdapterSeeDocumentsClickedSingleLiveEvent().setValue(customerProducts);
+                                viewModel.getProductAdapterSeeDocumentsClickedSingleLiveEvent().setValue(customerProductInfo);
                                 powerMenu.dismiss();
                                 break;
                         }
@@ -89,7 +89,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
 
     @Override
     public int getItemCount() {
-        return customerProductsList == null ? 0 : customerProductsList.size();
+        return customerProductInfoList == null ? 0 : customerProductInfoList.size();
     }
 
     public class ProductsHolder extends RecyclerView.ViewHolder {
@@ -100,30 +100,30 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
             this.binding = binding;
         }
 
-        public void bindCustomerProducts(CustomerProducts customerProducts) {
-            String productName = Converter.convert(customerProducts.getProductName());
+        public void bindCustomerProducts(CustomerProductInfo customerProductInfo) {
+            String productName = Converter.convert(customerProductInfo.getProductName());
             binding.txtProductName.setText(productName);
-            if (!customerProducts.getDescription().isEmpty()) {
+            if (!customerProductInfo.getDescription().isEmpty()) {
                 binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.convert(customerProducts.getDescription());
+                String description = Converter.convert(customerProductInfo.getDescription());
                 binding.txtDescription.setText(description);
             }
 
-            String userFullName = Converter.convert(customerProducts.getUserFullName());
+            String userFullName = Converter.convert(customerProductInfo.getUserFullName());
             binding.txtUserName.setText(userFullName);
 
             NumberFormat formatter = new DecimalFormat("#,###");
-            String formattedNumber = formatter.format(customerProducts.getInvoicePrice());
+            String formattedNumber = formatter.format(customerProductInfo.getInvoicePrice());
 
             binding.txtInvoicePrice.setText(formattedNumber + "تومان");
 
-            if (customerProducts.isFinish()) {
+            if (customerProductInfo.isFinish()) {
                 binding.checkBoxFinish.setChecked(true);
             } else {
                 binding.checkBoxFinish.setChecked(false);
             }
 
-            if (customerProducts.isInvoicePayment()) {
+            if (customerProductInfo.isInvoicePayment()) {
                 binding.checkBoxInvoicePayment.setChecked(true);
             } else {
                 binding.checkBoxInvoicePayment.setChecked(false);

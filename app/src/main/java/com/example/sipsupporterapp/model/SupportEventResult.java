@@ -4,7 +4,7 @@ public class SupportEventResult {
 
     private String error;
     private String errorCode;
-    private SupportEvents[] supportEvents;
+    private SupportEventInfo[] supportEvents;
 
     public String getError() {
         return error;
@@ -22,11 +22,11 @@ public class SupportEventResult {
         this.errorCode = errorCode;
     }
 
-    public SupportEvents[] getSupportEvents() {
+    public SupportEventInfo[] getSupportEvents() {
         return supportEvents;
     }
 
-    public void setSupportEvents(SupportEvents[] supportEvents) {
+    public void setSupportEvents(SupportEventInfo[] supportEvents) {
         this.supportEvents = supportEvents;
     }
 }

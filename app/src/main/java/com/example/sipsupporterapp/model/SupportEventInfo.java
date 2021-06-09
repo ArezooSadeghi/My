@@ -1,6 +1,6 @@
 package com.example.sipsupporterapp.model;
 
-public class SupportEvents {
+public class SupportEventInfo {
 
     private int supportEventID;
     private String supportEvent;

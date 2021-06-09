@@ -3,16 +3,16 @@ package com.example.sipsupporterapp.model;
 public class ProductInfo {
 
     private int productID;
-    private String productName;
+    private int row;
+    private int userID;
+    private long cost;
+    private long addTime;
+    private long editTime;
     private boolean unRepeatable;
     private boolean expirationDate;
     private boolean withInvoice;
-    private long cost;
-    private int row;
-    private int userID;
+    private String productName;
     private String userFullName;
-    private long addTime;
-    private long editTime;
 
     public int getProductID() {
         return productID;
@@ -22,12 +22,44 @@ public class ProductInfo {
         this.productID = productID;
     }
 
-    public String getProductName() {
-        return productName;
+    public int getRow() {
+        return row;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public long getCost() {
+        return cost;
+    }
+
+    public void setCost(long cost) {
+        this.cost = cost;
+    }
+
+    public long getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(long addTime) {
+        this.addTime = addTime;
+    }
+
+    public long getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(long editTime) {
+        this.editTime = editTime;
     }
 
     public boolean isUnRepeatable() {
@@ -54,28 +86,12 @@ public class ProductInfo {
         this.withInvoice = withInvoice;
     }
 
-    public long getCost() {
-        return cost;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setCost(long cost) {
-        this.cost = cost;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getUserFullName() {
@@ -84,21 +100,5 @@ public class ProductInfo {
 
     public void setUserFullName(String userFullName) {
         this.userFullName = userFullName;
-    }
-
-    public long getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(long addTime) {
-        this.addTime = addTime;
-    }
-
-    public long getEditTime() {
-        return editTime;
-    }
-
-    public void setEditTime(long editTime) {
-        this.editTime = editTime;
     }
 }

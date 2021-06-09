@@ -1,20 +1,21 @@
 package com.example.sipsupporterapp.model;
 
 public class PaymentInfo {
+
     private int paymentID;
     private int bankAccountID;
-    private String bankAccountName;
     private int paymentSubjectID;
-    private String paymentSubject;
-    private String parentPaymentSubject;
     private int datePayment;
-    private long price;
-    private String description;
-    private int attachCount;
     private int userID;
-    private String userFullName;
+    private int attachCount;
+    private long price;
     private long addTime;
     private boolean ManagerOK;
+    private String bankAccountName;
+    private String paymentSubject;
+    private String parentPaymentSubject;
+    private String description;
+    private String userFullName;
 
     public int getPaymentID() {
         return paymentID;
@@ -32,20 +33,68 @@ public class PaymentInfo {
         this.bankAccountID = bankAccountID;
     }
 
-    public String getBankAccountName() {
-        return bankAccountName;
-    }
-
-    public void setBankAccountName(String bankAccountName) {
-        this.bankAccountName = bankAccountName;
-    }
-
     public int getPaymentSubjectID() {
         return paymentSubjectID;
     }
 
     public void setPaymentSubjectID(int paymentSubjectID) {
         this.paymentSubjectID = paymentSubjectID;
+    }
+
+    public int getDatePayment() {
+        return datePayment;
+    }
+
+    public void setDatePayment(int datePayment) {
+        this.datePayment = datePayment;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public int getAttachCount() {
+        return attachCount;
+    }
+
+    public void setAttachCount(int attachCount) {
+        this.attachCount = attachCount;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public long getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(long addTime) {
+        this.addTime = addTime;
+    }
+
+    public boolean isManagerOK() {
+        return ManagerOK;
+    }
+
+    public void setManagerOK(boolean managerOK) {
+        ManagerOK = managerOK;
+    }
+
+    public String getBankAccountName() {
+        return bankAccountName;
+    }
+
+    public void setBankAccountName(String bankAccountName) {
+        this.bankAccountName = bankAccountName;
     }
 
     public String getPaymentSubject() {
@@ -64,22 +113,6 @@ public class PaymentInfo {
         this.parentPaymentSubject = parentPaymentSubject;
     }
 
-    public int getDatePayment() {
-        return datePayment;
-    }
-
-    public void setDatePayment(int datePayment) {
-        this.datePayment = datePayment;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -88,43 +121,11 @@ public class PaymentInfo {
         this.description = description;
     }
 
-    public int getAttachCount() {
-        return attachCount;
-    }
-
-    public void setAttachCount(int attachCount) {
-        this.attachCount = attachCount;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
     public String getUserFullName() {
         return userFullName;
     }
 
     public void setUserFullName(String userFullName) {
         this.userFullName = userFullName;
-    }
-
-    public long getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(long addTime) {
-        this.addTime = addTime;
-    }
-
-    public boolean isManagerOK() {
-        return ManagerOK;
-    }
-
-    public void setManagerOK(boolean managerOK) {
-        ManagerOK = managerOK;
     }
 }

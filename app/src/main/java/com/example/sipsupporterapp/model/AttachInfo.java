@@ -1,18 +1,19 @@
 package com.example.sipsupporterapp.model;
 
 public class AttachInfo {
+
     private int attachID;
     private int customerID;
     private int customerSupportID;
     private int customerPaymentID;
     private int customerProductID;
+    private int userID;
     private int paymentID;
+    private long addTime;
     private String fileName;
     private String FileData;
     private String description;
-    private int userID;
     private String userFullName;
-    private long addTime;
     private String fileBase64;
 
     public int getAttachID() {
@@ -55,12 +56,28 @@ public class AttachInfo {
         this.customerProductID = customerProductID;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
     public int getPaymentID() {
         return paymentID;
     }
 
     public void setPaymentID(int paymentID) {
         this.paymentID = paymentID;
+    }
+
+    public long getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(long addTime) {
+        this.addTime = addTime;
     }
 
     public String getFileName() {
@@ -76,7 +93,7 @@ public class AttachInfo {
     }
 
     public void setFileData(String fileData) {
-        this.FileData = fileData;
+        FileData = fileData;
     }
 
     public String getDescription() {
@@ -87,28 +104,12 @@ public class AttachInfo {
         this.description = description;
     }
 
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
     public String getUserFullName() {
         return userFullName;
     }
 
     public void setUserFullName(String userFullName) {
         this.userFullName = userFullName;
-    }
-
-    public long getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(long addTime) {
-        this.addTime = addTime;
     }
 
     public String getFileBase64() {

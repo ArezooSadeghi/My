@@ -4,14 +4,14 @@ public class CustomerSupportInfo {
 
     private int customerSupportID;
     private int supportEventID;
-    private String supportEvent;
     private int customerID;
-    private String customerName;
     private int customerUserID;
+    private int userID;
+    private String supportEvent;
+    private String customerName;
     private String customerUserName;
     private String question;
     private String regTime;
-    private int userID;
     private String userFullName;
     private String answer;
     private String answerRegTime;
@@ -40,14 +40,6 @@ public class CustomerSupportInfo {
         this.supportEventID = supportEventID;
     }
 
-    public String getSupportEvent() {
-        return supportEvent;
-    }
-
-    public void setSupportEvent(String supportEvent) {
-        this.supportEvent = supportEvent;
-    }
-
     public int getCustomerID() {
         return customerID;
     }
@@ -56,20 +48,36 @@ public class CustomerSupportInfo {
         this.customerID = customerID;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
     public int getCustomerUserID() {
         return customerUserID;
     }
 
     public void setCustomerUserID(int customerUserID) {
         this.customerUserID = customerUserID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public String getSupportEvent() {
+        return supportEvent;
+    }
+
+    public void setSupportEvent(String supportEvent) {
+        this.supportEvent = supportEvent;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getCustomerUserName() {
@@ -94,14 +102,6 @@ public class CustomerSupportInfo {
 
     public void setRegTime(String regTime) {
         this.regTime = regTime;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
     }
 
     public String getUserFullName() {

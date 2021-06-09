@@ -1,6 +1,6 @@
 package com.example.sipsupporterapp.model;
 
-public class CustomerUsers {
+public class CustomerUserInfo {
 
     private int customerUserID;
     private int customerID;
