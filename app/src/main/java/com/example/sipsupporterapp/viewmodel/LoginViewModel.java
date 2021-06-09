@@ -19,8 +19,6 @@ public class LoginViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> insertSpinnerSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> insertIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> deleteIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<ServerData> deleteSpinnerSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> updateSpinnerSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> updateIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<UserResult> userResultSingleLiveEvent;
     private SingleLiveEvent<String> errorUserResult;
@@ -35,9 +33,9 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
         repository = SipSupporterRepository.getInstance(getApplication());
         wrongIpAddressSingleLiveEvent = repository.getWrongIpAddressSingleLiveEvent();
-        userResultSingleLiveEvent = repository.getUserResultSingleLiveEvent();
-        errorUserResult = repository.getErrorUserResult();
-        noConnection = repository.getNoConnection();
+        userResultSingleLiveEvent = repository.getUserLoginResultSingleLiveEvent();
+        errorUserResult = repository.getErrorUserLoginResultSingleLiveEvent();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
@@ -56,14 +54,6 @@ public class LoginViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<ServerData> getDeleteIPAddressListSingleLiveEvent() {
         return deleteIPAddressListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<ServerData> getDeleteSpinnerSingleLiveEvent() {
-        return deleteSpinnerSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getUpdateSpinnerSingleLiveEvent() {
-        return updateSpinnerSingleLiveEvent;
     }
 
     public SingleLiveEvent<ServerData> getUpdateIPAddressListSingleLiveEvent() {

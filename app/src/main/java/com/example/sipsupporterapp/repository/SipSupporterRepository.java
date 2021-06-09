@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.database.SipSupporterDBHelper;
 import com.example.sipsupporterapp.database.SipSupporterSchema;
@@ -72,109 +70,109 @@ public class SipSupporterRepository {
 
     private static final String TAG = SipSupporterRepository.class.getSimpleName();
 
-    private SingleLiveEvent<CustomerResult> customerResultSingleLiveEvent = new SingleLiveEvent<>();
-    private MutableLiveData<String> wrongUserLoginKeyMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> notValueUserLoginKeyMutableLiveData = new MutableLiveData<>();
-    private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<UserResult> userResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> noConnectivityExceptionSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorUserResult = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> noConnection = new SingleLiveEvent<>();
-    private SingleLiveEvent<UserResult> changedPassword = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorChangedPassword = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerSupportResult> customerSupportResult = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerSupportResult = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerUserResult> customerUserResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerUserResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<SupportEventResult> supportEventResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorSupportEventResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerSupportResult> customerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerProductResult> customerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<ProductResult> productResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<ProductResult> getProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> getErrorProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerProductResult> PostCustomerProductsSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPostCustomerProductsSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomersResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<ProductResult> productInfoSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorProductInfoSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<UserResult> userLoginResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorUserLoginResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerProductResult> deleteCustomerProductSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorDeleteCustomerProductSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<UserResult> changePasswordResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorChangePasswordResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerProductResult> editCustomerProductSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorEditCustomerProductSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerSupportsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAttachResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAddCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerProductsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAddCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorEditCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> addEditDeleteCustomerPaymentsSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddEditDeleteCustomerResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorDeleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAddCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorEditCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorDeleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAddPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorEditPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorDeletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentsSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> customerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentsSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorDeleteCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> customerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentsSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorEditCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> customerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerProductIDSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> paymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerSupportIDSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerUserResult> customerUsersResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerUsersResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAttachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorSupportEventsResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<PaymentResult> paymentResultPaymentsListAllBankAccountSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentResultPaymentsListAllBankAccountSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> paymentResultPaymentsListByBankAccountSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentResultPaymentsListByBankAccountSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> paymentResultPaymentsEditSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentResultPaymentsEditSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> paymentResultPaymentsDeleteSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentResultPaymentsDeleteSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> paymentResultPaymentsAddSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentResultPaymentsAddSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectResultPaymentSubjectsListSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAttachResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorDeleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAttachmentListResultByPaymentID = new SingleLiveEvent<>();
+    private SingleLiveEvent<ProductResult> productsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorProductsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorProductInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<ProductResult> addProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAddProductResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorPaymentSubjectsSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorPaymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<PaymentResult> paymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorAttachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent = new SingleLiveEvent<>();
+
 
     private SipSupporterRepository(Context context) {
         this.context = context.getApplicationContext();
@@ -413,188 +411,136 @@ public class SipSupporterRepository {
                 }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public SingleLiveEvent<CustomerResult> getCustomerResultSingleLiveEvent() {
-        return customerResultSingleLiveEvent;
-    }
-
-    public MutableLiveData<String> getWrongUserLoginKeyMutableLiveData() {
-        return wrongUserLoginKeyMutableLiveData;
-    }
-
-    public MutableLiveData<String> getNotValueUserLoginKeyMutableLiveData() {
-        return notValueUserLoginKeyMutableLiveData;
-    }
-
-    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
-        return wrongIpAddressSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<UserResult> getUserResultSingleLiveEvent() {
-        return userResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getNoConnectivityExceptionSingleLiveEvent() {
-        return noConnectivityExceptionSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorUserResult() {
-        return errorUserResult;
-    }
-
-    public SingleLiveEvent<String> getNoConnection() {
-        return noConnection;
-    }
-
-    public SingleLiveEvent<UserResult> getChangedPassword() {
-        return changedPassword;
-    }
-
-    public SingleLiveEvent<String> getErrorChangedPassword() {
-        return errorChangedPassword;
-    }
-
-    public SingleLiveEvent<CustomerSupportResult> getCustomerSupportResult() {
-        return customerSupportResult;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerSupportResult() {
-        return errorCustomerSupportResult;
-    }
-
-    public SingleLiveEvent<CustomerUserResult> getCustomerUserResultSingleLiveEvent() {
-        return customerUserResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerUserResultSingleLiveEvent() {
-        return errorCustomerUserResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<SupportEventResult> getSupportEventResultSingleLiveEvent() {
-        return supportEventResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorSupportEventResultSingleLiveEvent() {
-        return errorSupportEventResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CustomerSupportResult> getCustomerSupportResultSingleLiveEvent() {
-        return customerSupportResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerSupportResultSingleLiveEvent() {
-        return errorCustomerSupportResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorSingleLiveEvent() {
-        return errorSingleLiveEvent;
-    }
-
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
         return dateResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProductResult> getCustomerProductResultSingleLiveEvent() {
-        return customerProductResultSingleLiveEvent;
+    public SingleLiveEvent<CustomerResult> getCustomersResultSingleLiveEvent() {
+        return customersResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerProductResultSingleLiveEvent() {
-        return errorCustomerProductResultSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomersResultSingleLiveEvent() {
+        return errorCustomersResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<ProductResult> getProductResultSingleLiveEvent() {
-        return productResultSingleLiveEvent;
+    public SingleLiveEvent<UserResult> getUserLoginResultSingleLiveEvent() {
+        return userLoginResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorProductResultSingleLiveEvent() {
-        return errorProductResultSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorUserLoginResultSingleLiveEvent() {
+        return errorUserLoginResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<ProductResult> getGetProductResultSingleLiveEvent() {
-        return getProductResultSingleLiveEvent;
+    public SingleLiveEvent<UserResult> getChangePasswordResultSingleLiveEvent() {
+        return changePasswordResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorProductResultSingleLiveEvent() {
-        return getErrorProductResultSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorChangePasswordResultSingleLiveEvent() {
+        return errorChangePasswordResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProductResult> getPostCustomerProductsSingleLiveEvent() {
-        return PostCustomerProductsSingleLiveEvent;
+    public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
+        return customerSupportsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorPostCustomerProductsSingleLiveEvent() {
-        return errorPostCustomerProductsSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerSupportsResultSingleLiveEvent() {
+        return errorCustomerSupportsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<ProductResult> getProductInfoSingleLiveEvent() {
-        return productInfoSingleLiveEvent;
+    public SingleLiveEvent<CustomerSupportResult> getAddCustomerSupportResultSingleLiveEvent() {
+        return addCustomerSupportResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorProductInfoSingleLiveEvent() {
-        return errorProductInfoSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorAddCustomerSupportResultSingleLiveEvent() {
+        return errorAddCustomerSupportResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProductResult> getDeleteCustomerProductSingleLiveEvent() {
-        return deleteCustomerProductSingleLiveEvent;
+    public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
+        return customerProductsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerProductSingleLiveEvent() {
-        return errorDeleteCustomerProductSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerProductsResultSingleLiveEvent() {
+        return errorCustomerProductsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProductResult> getEditCustomerProductSingleLiveEvent() {
-        return editCustomerProductSingleLiveEvent;
+    public SingleLiveEvent<CustomerProductResult> getAddCustomerProductResultSingleLiveEvent() {
+        return addCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditCustomerProductSingleLiveEvent() {
-        return errorEditCustomerProductSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorAddCustomerProductResultSingleLiveEvent() {
+        return errorAddCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
-        return attachResultSingleLiveEvent;
+    public SingleLiveEvent<CustomerProductResult> getEditCustomerProductResultSingleLiveEvent() {
+        return editCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAttachResultSingleLiveEvent() {
-        return errorAttachResultSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorEditCustomerProductResultSingleLiveEvent() {
+        return errorEditCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentResultSingleLiveEvent() {
-        return customerPaymentResultSingleLiveEvent;
+    public SingleLiveEvent<CustomerProductResult> getDeleteCustomerProductResultSingleLiveEvent() {
+        return deleteCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerPaymentResultSingleLiveEvent() {
-        return errorCustomerPaymentResultSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorDeleteCustomerProductResultSingleLiveEvent() {
+        return errorDeleteCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaCustomerPaymentIDSingleLiveEvent() {
-        return getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsResultSingleLiveEvent() {
+        return customerPaymentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent() {
-        return getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerPaymentsResultSingleLiveEvent() {
+        return errorCustomerPaymentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaAttachIDSingleLiveEvent() {
-        return getAttachmentFilesViaAttachIDSingleLiveEvent;
+    public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentResultSingleLiveEvent() {
+        return addCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaAttachIDSingleLiveEvent() {
-        return getErrorAttachmentFilesViaAttachIDSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorAddCustomerPaymentResultSingleLiveEvent() {
+        return errorAddCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getAddEditDeleteCustomerPaymentsSingleLiveEvent() {
-        return addEditDeleteCustomerPaymentsSingleLiveEvent;
+    public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentResultSingleLiveEvent() {
+        return editCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddEditDeleteCustomerResultSingleLiveEvent() {
-        return errorAddEditDeleteCustomerResultSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorEditCustomerPaymentResultSingleLiveEvent() {
+        return errorEditCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentResultSingleLiveEvent() {
+        return deleteCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentResultSingleLiveEvent() {
+        return errorDeleteCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentResult> getAddPaymentResultSingleLiveEvent() {
+        return addPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorAddPaymentResultSingleLiveEvent() {
+        return errorAddPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentResult> getEditPaymentResultSingleLiveEvent() {
+        return editPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorEditPaymentResultSingleLiveEvent() {
+        return errorEditPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentResult> getDeletePaymentResultSingleLiveEvent() {
+        return deletePaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorDeletePaymentResultSingleLiveEvent() {
+        return errorDeletePaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
@@ -605,100 +551,60 @@ public class SipSupporterRepository {
         return errorBankAccountsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentsSingleLiveEvent() {
-        return addCustomerPaymentsSingleLiveEvent;
+    public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsResultSingleLiveEvent() {
+        return customerProductAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddCustomerPaymentSingleLiveEvent() {
-        return errorAddCustomerPaymentSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerProductAttachmentsResultSingleLiveEvent() {
+        return errorCustomerProductAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentsSingleLiveEvent() {
-        return deleteCustomerPaymentsSingleLiveEvent;
+    public SingleLiveEvent<AttachResult> getCustomerPaymentAttachmentsResultSingleLiveEvent() {
+        return customerPaymentAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentSingleLiveEvent() {
-        return errorDeleteCustomerPaymentSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerPaymentAttachmentsResultSingleLiveEvent() {
+        return errorCustomerPaymentAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentsSingleLiveEvent() {
-        return editCustomerPaymentsSingleLiveEvent;
+    public SingleLiveEvent<AttachResult> getCustomerSupportAttachmentsResultSingleLiveEvent() {
+        return customerSupportAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditCustomerPaymentSingleLiveEvent() {
-        return errorEditCustomerPaymentSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerSupportAttachmentsResultSingleLiveEvent() {
+        return errorCustomerSupportAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaCustomerProductIDSingleLiveEvent() {
-        return getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
+    public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
+        return paymentAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent() {
-        return getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorPaymentAttachmentsResultSingleLiveEvent() {
+        return errorPaymentAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getGetAttachmentFilesViaCustomerSupportIDSingleLiveEvent() {
-        return getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
+    public SingleLiveEvent<CustomerUserResult> getCustomerUsersResultSingleLiveEvent() {
+        return customerUsersResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getGetErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent() {
-        return getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorCustomerUsersResultSingleLiveEvent() {
+        return errorCustomerUsersResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getAttachResultViaAttachIDSingleLiveEvent() {
-        return attachResultViaAttachIDSingleLiveEvent;
+    public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
+        return supportEventsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAttachResultViaAttachIDSingleLiveEvent() {
-        return errorAttachResultViaAttachIDSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorSupportEventsResultSingleLiveEvent() {
+        return errorSupportEventsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<PaymentResult> getPaymentResultPaymentsListAllBankAccountSingleLiveEvent() {
-        return paymentResultPaymentsListAllBankAccountSingleLiveEvent;
+    public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
+        return attachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorPaymentResultPaymentsListAllBankAccountSingleLiveEvent() {
-        return errorPaymentResultPaymentsListAllBankAccountSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<PaymentResult> getPaymentResultPaymentsListByBankAccountSingleLiveEvent() {
-        return paymentResultPaymentsListByBankAccountSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentResultPaymentsListByBankAccountSingleLiveEvent() {
-        return errorPaymentResultPaymentsListByBankAccountSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<PaymentResult> getPaymentResultPaymentsEditSingleLiveEvent() {
-        return paymentResultPaymentsEditSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentResultPaymentsEditSingleLiveEvent() {
-        return errorPaymentResultPaymentsEditSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<PaymentResult> getPaymentResultPaymentsDeleteSingleLiveEvent() {
-        return paymentResultPaymentsDeleteSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentResultPaymentsDeleteSingleLiveEvent() {
-        return errorPaymentResultPaymentsDeleteSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectsResultSingleLiveEvent() {
-        return paymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentSubjectsResultSingleLiveEvent() {
-        return errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<PaymentResult> getPaymentResultPaymentsAddSingleLiveEvent() {
-        return paymentResultPaymentsAddSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentResultPaymentsAddSingleLiveEvent() {
-        return errorPaymentResultPaymentsAddSingleLiveEvent;
+    public SingleLiveEvent<String> getErrorAttachResultSingleLiveEvent() {
+        return errorAttachResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getDeleteAttachResultSingleLiveEvent() {
@@ -709,12 +615,36 @@ public class SipSupporterRepository {
         return errorDeleteAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachResult> getAttachmentListResultByPaymentID() {
-        return attachmentListResultByPaymentID;
+    public SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent() {
+        return productsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAttachmentListResultByPaymentID() {
-        return errorAttachmentListResultByPaymentID;
+    public SingleLiveEvent<String> getErrorProductsResultSingleLiveEvent() {
+        return errorProductsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<ProductResult> getProductInfoResultSingleLiveEvent() {
+        return productInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorProductInfoResultSingleLiveEvent() {
+        return errorProductInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<ProductResult> getAddProductResultSingleLiveEvent() {
+        return addProductResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorAddProductResultSingleLiveEvent() {
+        return errorAddProductResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectsResultSingleLiveEvent() {
+        return paymentSubjectsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorPaymentSubjectsSingleLiveEvent() {
+        return errorPaymentSubjectsSingleLiveEvent;
     }
 
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectInfoResultSingleLiveEvent() {
@@ -723,6 +653,38 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<String> getErrorPaymentSubjectInfoResultSingleLiveEvent() {
         return errorPaymentSubjectInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentResult> getPaymentsResultSingleLiveEvent() {
+        return paymentsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorPaymentsResultSingleLiveEvent() {
+        return errorPaymentsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AttachResult> getAttachResultViaAttachIDSingleLiveEvent() {
+        return attachResultViaAttachIDSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorAttachResultViaAttachIDSingleLiveEvent() {
+        return errorAttachResultViaAttachIDSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
+        return wrongIpAddressSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
+        return dangerousUserSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -826,7 +788,7 @@ public class SipSupporterRepository {
                     @Override
                     public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                         if (response.isSuccessful()) {
-                            userResultSingleLiveEvent.setValue(response.body());
+                            userLoginResultSingleLiveEvent.setValue(response.body());
                         } else {
                             try {
                                 Gson gson = new Gson();
@@ -834,7 +796,7 @@ public class SipSupporterRepository {
                                 if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
                                     dangerousUserSingleLiveEvent.setValue(true);
                                 } else {
-                                    errorUserResult.setValue(userResult.getError());
+                                    errorUserLoginResultSingleLiveEvent.setValue(userResult.getError());
                                 }
                             } catch (IOException e) {
                                 Log.e(TAG, e.getMessage());
@@ -845,7 +807,7 @@ public class SipSupporterRepository {
                     @Override
                     public void onFailure(Call<UserResult> call, Throwable t) {
                         if (t instanceof NoConnectivityException) {
-                            noConnection.setValue(t.getMessage());
+                            noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                         } else if (t instanceof SocketTimeoutException) {
                             timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                         } else {
@@ -860,7 +822,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerResult> call, Response<CustomerResult> response) {
                 if (response.isSuccessful()) {
-                    customerResultSingleLiveEvent.setValue(response.body());
+                    customersResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -869,7 +831,7 @@ public class SipSupporterRepository {
                             if (Integer.valueOf(customerResult.getErrorCode()) <= -9001) {
                                 dangerousUserSingleLiveEvent.setValue(true);
                             } else {
-                                errorSingleLiveEvent.setValue(customerResult.getError());
+                                errorCustomersResultSingleLiveEvent.setValue(customerResult.getError());
                             }
                         } catch (NumberFormatException e) {
                             Log.e(TAG, e.getMessage());
@@ -883,7 +845,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -898,7 +860,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 if (response.isSuccessful()) {
-                    changedPassword.setValue(response.body());
+                    changePasswordResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -906,7 +868,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorChangedPassword.setValue(userResult.getError());
+                            errorChangePasswordResultSingleLiveEvent.setValue(userResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -917,7 +879,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -932,7 +894,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
                 if (response.isSuccessful()) {
-                    customerSupportResult.setValue(response.body());
+                    customerSupportsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -940,7 +902,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerSupportResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorCustomerSupportResult.setValue(customerSupportResult.getError());
+                            errorCustomerSupportsResultSingleLiveEvent.setValue(customerSupportResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -951,7 +913,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerSupportResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -967,7 +929,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerUserResult> call, Response<CustomerUserResult> response) {
                 if (response.isSuccessful()) {
-                    customerUserResultSingleLiveEvent.setValue(response.body());
+                    customerUsersResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -975,7 +937,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerUserResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorCustomerUserResultSingleLiveEvent.setValue(customerUserResult.getError());
+                            errorCustomerUsersResultSingleLiveEvent.setValue(customerUserResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -986,7 +948,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerUserResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1002,7 +964,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<SupportEventResult> call, Response<SupportEventResult> response) {
                 if (response.isSuccessful()) {
-                    supportEventResultSingleLiveEvent.setValue(response.body());
+                    supportEventsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1010,7 +972,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(supportEventResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorSupportEventResultSingleLiveEvent.setValue(supportEventResult.getError());
+                            errorSupportEventsResultSingleLiveEvent.setValue(supportEventResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1021,7 +983,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<SupportEventResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1036,7 +998,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
                 if (response.isSuccessful()) {
-                    customerSupportResultSingleLiveEvent.setValue(response.body());
+                    addCustomerSupportResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1044,7 +1006,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerSupportResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult.getError());
+                            errorAddCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1055,7 +1017,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerSupportResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1077,7 +1039,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<DateResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1092,7 +1054,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
-                    customerProductResultSingleLiveEvent.setValue(response.body());
+                    customerProductsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1100,7 +1062,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
+                            errorCustomerProductsResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1111,7 +1073,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1126,7 +1088,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.isSuccessful()) {
-                    productResultSingleLiveEvent.setValue(response.body());
+                    addProductResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1134,7 +1096,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorProductResultSingleLiveEvent.setValue(productResult.getError());
+                            errorAddProductResultSingleLiveEvent.setValue(productResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1145,7 +1107,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<ProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1160,7 +1122,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.isSuccessful()) {
-                    getProductResultSingleLiveEvent.setValue(response.body());
+                    productsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1168,7 +1130,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            getErrorProductResultSingleLiveEvent.setValue(productResult.getError());
+                            errorProductsResultSingleLiveEvent.setValue(productResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1179,7 +1141,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<ProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1194,7 +1156,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
-                    PostCustomerProductsSingleLiveEvent.setValue(response.body());
+                    addCustomerProductResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1202,7 +1164,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorPostCustomerProductsSingleLiveEvent.setValue(customerProductResult.getError());
+                            errorAddCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1213,7 +1175,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1228,7 +1190,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
                 if (response.isSuccessful()) {
-                    productInfoSingleLiveEvent.setValue(response.body());
+                    productInfoResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1236,7 +1198,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorProductInfoSingleLiveEvent.setValue(productResult.getError());
+                            errorProductInfoResultSingleLiveEvent.setValue(productResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1247,7 +1209,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<ProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1262,7 +1224,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
-                    deleteCustomerProductSingleLiveEvent.setValue(response.body());
+                    deleteCustomerProductResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1270,7 +1232,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorDeleteCustomerProductSingleLiveEvent.setValue(customerProductResult.getError());
+                            errorDeleteCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1281,7 +1243,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1296,7 +1258,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
                 if (response.isSuccessful()) {
-                    editCustomerProductSingleLiveEvent.setValue(response.body());
+                    editCustomerProductResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1304,7 +1266,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorEditCustomerProductSingleLiveEvent.setValue(customerProductResult.getError());
+                            errorEditCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1315,7 +1277,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1349,7 +1311,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1364,7 +1326,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
-                    customerPaymentResultSingleLiveEvent.setValue(response.body());
+                    customerPaymentsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1372,7 +1334,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(customerPaymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult.getError());
+                            errorCustomerPaymentsResultSingleLiveEvent.setValue(customerPaymentResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1383,7 +1345,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1398,7 +1360,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
-                    getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent.setValue(response.body());
+                    customerPaymentAttachmentsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1406,7 +1368,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent.setValue(attachResult.getError());
+                            errorCustomerPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1417,7 +1379,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1432,7 +1394,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
-                    addCustomerPaymentsSingleLiveEvent.setValue(response.body());
+                    addCustomerPaymentResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1440,7 +1402,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorAddCustomerPaymentSingleLiveEvent.setValue(attachResult.getError());
+                            errorAddCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1451,7 +1413,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1466,7 +1428,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
-                    editCustomerPaymentsSingleLiveEvent.setValue(response.body());
+                    editCustomerPaymentResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1474,7 +1436,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorEditCustomerPaymentSingleLiveEvent.setValue(attachResult.getError());
+                            errorEditCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1485,7 +1447,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1500,7 +1462,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
-                    deleteCustomerPaymentsSingleLiveEvent.setValue(response.body());
+                    deleteCustomerPaymentResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1508,7 +1470,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorDeleteCustomerPaymentSingleLiveEvent.setValue(attachResult.getError());
+                            errorDeleteCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1519,7 +1481,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1553,7 +1515,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<BankAccountResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1568,7 +1530,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
-                    getAttachmentFilesViaCustomerProductIDSingleLiveEvent.setValue(response.body());
+                    customerProductAttachmentsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1576,7 +1538,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent.setValue(attachResult.getError());
+                            errorCustomerProductAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1587,7 +1549,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1602,7 +1564,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
-                    getAttachmentFilesViaCustomerSupportIDSingleLiveEvent.setValue(response.body());
+                    customerSupportAttachmentsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1610,7 +1572,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent.setValue(attachResult.getError());
+                            errorCustomerSupportAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1621,7 +1583,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1655,7 +1617,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1670,7 +1632,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
-                    paymentResultPaymentsListByBankAccountSingleLiveEvent.setValue(response.body());
+                    paymentsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1678,7 +1640,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorPaymentResultPaymentsListByBankAccountSingleLiveEvent.setValue(paymentResult.getError());
+                            errorPaymentsResultSingleLiveEvent.setValue(paymentResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1689,7 +1651,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1704,7 +1666,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
-                    paymentResultPaymentsEditSingleLiveEvent.setValue(response.body());
+                    editPaymentResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1712,7 +1674,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorPaymentResultPaymentsEditSingleLiveEvent.setValue(paymentResult.getError());
+                            errorEditPaymentResultSingleLiveEvent.setValue(paymentResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1723,7 +1685,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1738,7 +1700,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
-                    paymentResultPaymentsDeleteSingleLiveEvent.setValue(response.body());
+                    deletePaymentResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1746,7 +1708,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorPaymentResultPaymentsDeleteSingleLiveEvent.setValue(paymentResult.getError());
+                            errorDeletePaymentResultSingleLiveEvent.setValue(paymentResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1757,7 +1719,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1772,7 +1734,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
                 if (response.isSuccessful()) {
-                    paymentSubjectResultPaymentSubjectsListSingleLiveEvent.setValue(response.body());
+                    paymentSubjectsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1780,7 +1742,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(paymentSubjectResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent.setValue(paymentSubjectResult.getError());
+                            errorPaymentSubjectsSingleLiveEvent.setValue(paymentSubjectResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1791,7 +1753,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1806,7 +1768,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
                 if (response.isSuccessful()) {
-                    paymentResultPaymentsAddSingleLiveEvent.setValue(response.body());
+                    addPaymentResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1814,7 +1776,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(paymentSubjectResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorPaymentResultPaymentsAddSingleLiveEvent.setValue(paymentSubjectResult.getError());
+                            errorAddPaymentResultSingleLiveEvent.setValue(paymentSubjectResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1825,7 +1787,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1859,7 +1821,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1874,7 +1836,7 @@ public class SipSupporterRepository {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
                 if (response.isSuccessful()) {
-                    attachmentListResultByPaymentID.setValue(response.body());
+                    paymentAttachmentsResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
@@ -1882,7 +1844,7 @@ public class SipSupporterRepository {
                         if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
                             dangerousUserSingleLiveEvent.setValue(true);
                         } else {
-                            errorAttachmentListResultByPaymentID.setValue(attachResult.getError());
+                            errorPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -1893,7 +1855,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
@@ -1927,7 +1889,7 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnection.setValue(t.getMessage());
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {

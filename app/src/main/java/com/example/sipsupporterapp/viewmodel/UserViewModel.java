@@ -21,17 +21,16 @@ public class UserViewModel extends AndroidViewModel {
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnection;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> successfulRegisterItemClickedSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> successfulRegisterCustomerUsersSingleLiveEvent = new SingleLiveEvent<>();
 
     public UserViewModel(@NonNull Application application) {
         super(application);
         repository = SipSupporterRepository.getInstance(getApplication());
-        customerUserResultSingleLiveEvent = repository.getCustomerUserResultSingleLiveEvent();
-        errorCustomerUserResultSingleLiveEvent = repository.getErrorCustomerUserResultSingleLiveEvent();
+        customerUserResultSingleLiveEvent = repository.getCustomerUsersResultSingleLiveEvent();
+        errorCustomerUserResultSingleLiveEvent = repository.getErrorCustomerUsersResultSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-        noConnection = repository.getNoConnection();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
@@ -71,24 +70,12 @@ public class UserViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public void deleteServerData(ServerData serverData) {
-        repository.deleteServerData(serverData);
-    }
-
-    public List<ServerData> getServerDataList() {
-        return repository.getServerDataList();
-    }
-
     public void getSipSupportServiceGetDateResult(String baseUrl) {
         repository.getSipSupportServiceGetDateResult(baseUrl);
     }
 
     public SingleLiveEvent<String> getNoConnection() {
         return noConnection;
-    }
-
-    public SingleLiveEvent<Boolean> getSuccessfulRegisterItemClickedSingleLiveEvent() {
-        return successfulRegisterItemClickedSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getSuccessfulRegisterCustomerUsersSingleLiveEvent() {

@@ -24,9 +24,9 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         paymentSubjectsResultSingleLiveEvent = repository.getPaymentSubjectsResultSingleLiveEvent();
-        errorPaymentSubjectsResultSingleLiveEvent = repository.getErrorPaymentSubjectsResultSingleLiveEvent();
+        errorPaymentSubjectsResultSingleLiveEvent = repository.getErrorPaymentSubjectsSingleLiveEvent();
 
-        noConnection = repository.getNoConnection();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappen = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 

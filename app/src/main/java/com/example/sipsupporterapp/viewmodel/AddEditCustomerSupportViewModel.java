@@ -11,8 +11,6 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-import java.util.List;
-
 public class AddEditCustomerSupportViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
     private SingleLiveEvent<SupportEventResult> supportEventResultSingleLiveEvent;
@@ -26,11 +24,11 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
     public AddEditCustomerSupportViewModel(@NonNull Application application) {
         super(application);
         repository = SipSupporterRepository.getInstance(getApplication());
-        supportEventResultSingleLiveEvent = repository.getSupportEventResultSingleLiveEvent();
-        errorSupportEventResultSingleLiveEvent = repository.getErrorSupportEventResultSingleLiveEvent();
-        customerSupportResultSingleLiveEvent = repository.getCustomerSupportResultSingleLiveEvent();
-        errorCustomerSupportResultSingleLiveEvent = repository.getErrorCustomerSupportResultSingleLiveEvent();
-        noConnection = repository.getNoConnection();
+        supportEventResultSingleLiveEvent = repository.getSupportEventsResultSingleLiveEvent();
+        errorSupportEventResultSingleLiveEvent = repository.getErrorSupportEventsResultSingleLiveEvent();
+        customerSupportResultSingleLiveEvent = repository.getAddCustomerSupportResultSingleLiveEvent();
+        errorCustomerSupportResultSingleLiveEvent = repository.getErrorAddCustomerSupportResultSingleLiveEvent();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
@@ -82,12 +80,4 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
     public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
         return dangerousUserSingleLiveEvent;
     }
-
-    public void deleteServerData(ServerData serverData) {
-        repository.deleteServerData(serverData);
-    }
-    public List<ServerData> getServerDataList() {
-        return repository.getServerDataList();
-    }
-
 }

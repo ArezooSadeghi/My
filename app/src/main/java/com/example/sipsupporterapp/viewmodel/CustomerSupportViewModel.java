@@ -22,33 +22,16 @@ public class CustomerSupportViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnection;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
-    private SingleLiveEvent<CustomerSupportInfo> attachFileClicked = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<String> fileDataSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> requestPermissionSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> allowPermissionSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorAttachResultSingleLiveEvent;
-
-    private SingleLiveEvent<Boolean> dismissClickedSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> yesAgain = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> noAgain = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CustomerSupportInfo> mCustomerSupportInfoAdapterSeeDocumentClickedSingleLiveEvent = new SingleLiveEvent<>();
 
     public CustomerSupportViewModel(@NonNull Application application) {
         super(application);
         repository = SipSupporterRepository.getInstance(getApplication());
-        customerSupportResult = repository.getCustomerSupportResult();
-        errorCustomerSupportResult = repository.getErrorCustomerSupportResult();
+        customerSupportResult = repository.getCustomerSupportsResultSingleLiveEvent();
+        errorCustomerSupportResult = repository.getErrorCustomerSupportsResultSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
-        noConnection = repository.getNoConnection();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        attachResultSingleLiveEvent = repository.getAttachResultSingleLiveEvent();
-        errorAttachResultSingleLiveEvent = repository.getErrorAttachResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
@@ -83,75 +66,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerSupportInfo> getAttachFileClicked() {
-        return attachFileClicked;
-    }
-
-    public void deleteServerData(ServerData serverData) {
-        repository.deleteServerData(serverData);
-    }
-
-    public List<ServerData> getServerDataList() {
-        return repository.getServerDataList();
-    }
-
-    public SingleLiveEvent<String> getFileDataSingleLiveEvent() {
-        return fileDataSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getRequestPermissionSingleLiveEvent() {
-        return requestPermissionSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getAllowPermissionSingleLiveEvent() {
-        return allowPermissionSingleLiveEvent;
-    }
-
-    public void getSipSupportServiceAttach(String baseUrl) {
-        repository.getSipSupportServiceAttach(baseUrl);
-    }
-
-    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
-        repository.attach(path, userLoginKey, attachInfo);
-    }
-
-    public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
-        return attachResultSingleLiveEvent;
-    }
-
-    public void setAttachResultSingleLiveEvent(SingleLiveEvent<AttachResult> attachResultSingleLiveEvent) {
-        this.attachResultSingleLiveEvent = attachResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAttachResultSingleLiveEvent() {
-        return errorAttachResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerSupportInfo> getCustomerSupportInfoAdapterSeeDocumentClickedSingleLiveEvent() {
         return mCustomerSupportInfoAdapterSeeDocumentClickedSingleLiveEvent;
-    }
-
-    public void setErrorAttachResultSingleLiveEvent(SingleLiveEvent<String> errorAttachResultSingleLiveEvent) {
-        this.errorAttachResultSingleLiveEvent = errorAttachResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDismissClickedSingleLiveEvent() {
-        return dismissClickedSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getYesAgain() {
-        return yesAgain;
-    }
-
-    public void setYesAgain(SingleLiveEvent<Boolean> yesAgain) {
-        this.yesAgain = yesAgain;
-    }
-
-    public SingleLiveEvent<Boolean> getNoAgain() {
-        return noAgain;
-    }
-
-    public void setNoAgain(SingleLiveEvent<Boolean> noAgain) {
-        this.noAgain = noAgain;
     }
 }

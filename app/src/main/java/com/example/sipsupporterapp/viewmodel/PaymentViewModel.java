@@ -35,24 +35,16 @@ public class PaymentViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Boolean> yesDeleteSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-    private SingleLiveEvent<String> errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-
-    private SingleLiveEvent<BankAccountResult> addPaymentDialogBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<PaymentResult> paymentResultPaymentsAddSingleLiveEvent;
     private SingleLiveEvent<String> errorPaymentResultPaymentsAddSingleLiveEvent;
 
     private SingleLiveEvent<Integer> updatingSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<HashMap<Integer, String>> subjectSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnection;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorPaymentSubjectInfoResultSingleLiveEvent;
 
     public PaymentViewModel(@NonNull Application application) {
         super(application);
@@ -62,27 +54,23 @@ public class PaymentViewModel extends AndroidViewModel {
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
         errorBankAccountsResultSingleLiveEvent = repository.getErrorBankAccountsResultSingleLiveEvent();
 
-        paymentResultPaymentsListByBankAccountSingleLiveEvent = repository.getPaymentResultPaymentsListByBankAccountSingleLiveEvent();
-        errorPaymentResultPaymentsListByBankAccountSingleLiveEvent = repository.getErrorPaymentResultPaymentsListByBankAccountSingleLiveEvent();
+        paymentResultPaymentsListByBankAccountSingleLiveEvent = repository.getPaymentsResultSingleLiveEvent();
+        errorPaymentResultPaymentsListByBankAccountSingleLiveEvent = repository.getErrorPaymentsResultSingleLiveEvent();
 
-        paymentResultPaymentsEditSingleLiveEvent = repository.getPaymentResultPaymentsEditSingleLiveEvent();
-        errorPaymentResultPaymentsEditSingleLiveEvent = repository.getErrorPaymentResultPaymentsEditSingleLiveEvent();
+        paymentResultPaymentsEditSingleLiveEvent = repository.getEditPaymentResultSingleLiveEvent();
+        errorPaymentResultPaymentsEditSingleLiveEvent = repository.getErrorEditPaymentResultSingleLiveEvent();
 
-        paymentResultPaymentsDeleteSingleLiveEvent = repository.getPaymentResultPaymentsDeleteSingleLiveEvent();
-        errorPaymentResultPaymentsDeleteSingleLiveEvent = repository.getErrorPaymentResultPaymentsDeleteSingleLiveEvent();
+        paymentResultPaymentsDeleteSingleLiveEvent = repository.getDeletePaymentResultSingleLiveEvent();
+        errorPaymentResultPaymentsDeleteSingleLiveEvent = repository.getErrorDeletePaymentResultSingleLiveEvent();
 
-        paymentSubjectResultPaymentSubjectsListSingleLiveEvent = repository.getPaymentSubjectsResultSingleLiveEvent();
-        errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent = repository.getErrorPaymentSubjectsResultSingleLiveEvent();
+        paymentResultPaymentsAddSingleLiveEvent = repository.getAddPaymentResultSingleLiveEvent();
+        errorPaymentResultPaymentsAddSingleLiveEvent = repository.getErrorAddPaymentResultSingleLiveEvent();
 
-        paymentResultPaymentsAddSingleLiveEvent = repository.getPaymentResultPaymentsAddSingleLiveEvent();
-        errorPaymentResultPaymentsAddSingleLiveEvent = repository.getErrorPaymentResultPaymentsAddSingleLiveEvent();
-
-        noConnection = repository.getNoConnection();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
 
         paymentSubjectInfoResultSingleLiveEvent = repository.getPaymentSubjectInfoResultSingleLiveEvent();
-        errorPaymentSubjectInfoResultSingleLiveEvent = repository.getErrorPaymentSubjectInfoResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<PaymentResult> getPaymentsByBankAccountIDResultSingleLiveEvent() {
@@ -125,14 +113,6 @@ public class PaymentViewModel extends AndroidViewModel {
         return yesDeleteSingleLiveEvent;
     }
 
-    public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectResultPaymentSubjectsListSingleLiveEvent() {
-        return paymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent() {
-        return errorPaymentSubjectResultPaymentSubjectsListSingleLiveEvent;
-    }
-
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
         return bankAccountsResultSingleLiveEvent;
     }
@@ -165,16 +145,8 @@ public class PaymentViewModel extends AndroidViewModel {
         return dangerousUserSingleLiveEvent;
     }
 
-    public SingleLiveEvent<HashMap<Integer, String>> getSubjectSingleLiveEvent() {
-        return subjectSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectInfoResultSingleLiveEvent() {
         return paymentSubjectInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentSubjectInfoResultSingleLiveEvent() {
-        return errorPaymentSubjectInfoResultSingleLiveEvent;
     }
 
     public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
@@ -193,10 +165,6 @@ public class PaymentViewModel extends AndroidViewModel {
         repository.getSipSupportServicePaymentsDelete(baseUrl);
     }
 
-    public void getSipSupportServicePaymentSubjectsList(String userLoginKey) {
-        repository.getSipSupporterServicePaymentSubjects(userLoginKey);
-    }
-
     public void getSipSupportServicePaymentsAdd(String baseUrl) {
         repository.getSipSupportServicePaymentsAdd(baseUrl);
     }
@@ -211,10 +179,6 @@ public class PaymentViewModel extends AndroidViewModel {
 
     public void fetchPaymentsListByBankAccounts(String path, String userLoginKey, int bankAccountID) {
         repository.fetchPaymentsListByBankAccounts(path, userLoginKey, bankAccountID);
-    }
-
-    public void fetchPaymentSubjectsList(String path, String baseUrl) {
-        repository.fetchPaymentSubjects(path, baseUrl);
     }
 
     public void paymentsDelete(String path, String userLoginKey, int paymentID) {

@@ -27,8 +27,6 @@ public class AttachmentViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> mTimeOutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> mDangerousUserSingleLiveEvent;
 
-    private SingleLiveEvent<String> mBitmapAsStringSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Boolean> mIsAttachAgainSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mYesAgainSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mNoAgainSingleLiveEvent = new SingleLiveEvent<>();
@@ -36,39 +34,24 @@ public class AttachmentViewModel extends AndroidViewModel {
     private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
     private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
 
-    private SingleLiveEvent<AttachInfo[]> doneWriteFilesSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> attachResultForImageListSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
     private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
     private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
 
-    private SingleLiveEvent<Bitmap> attachmentAdapterItemClickedSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> showFullScreenSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent;
     private SingleLiveEvent<String> errorAttachResultViaAttachIDSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> updateImageListSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> bitmapIsSetSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<List<Bitmap>> bitmapListSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> yesDelete = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
     private SingleLiveEvent<String> errorDeleteAttachResultSingleLiveEvent;
 
-    private SingleLiveEvent<Map<Uri, String>> showFullScreenImage = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID;
     private SingleLiveEvent<String> errorAttachmentListResultByPaymentID;
-
-    private SingleLiveEvent<Bitmap> decodeBitmap = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> finishWriteToStorage = new SingleLiveEvent<>();
 
@@ -83,18 +66,18 @@ public class AttachmentViewModel extends AndroidViewModel {
 
         mAttachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
         mErrorAttachResultSingleLiveEvent = mRepository.getErrorAttachResultSingleLiveEvent();
-        mNoConnectionSingleLiveEvent = mRepository.getNoConnection();
+        mNoConnectionSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
         mTimeOutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
         mDangerousUserSingleLiveEvent = mRepository.getDangerousUserSingleLiveEvent();
 
-        getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getGetAttachmentFilesViaCustomerPaymentIDSingleLiveEvent();
-        getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getGetErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent();
+        getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
+        getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getErrorCustomerPaymentAttachmentsResultSingleLiveEvent();
 
-        getAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getGetAttachmentFilesViaCustomerProductIDSingleLiveEvent();
-        getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getGetErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent();
+        getAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getCustomerProductAttachmentsResultSingleLiveEvent();
+        getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getErrorCustomerProductAttachmentsResultSingleLiveEvent();
 
-        getAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getGetAttachmentFilesViaCustomerSupportIDSingleLiveEvent();
-        getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getGetErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent();
+        getAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getCustomerSupportAttachmentsResultSingleLiveEvent();
+        getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getErrorCustomerSupportAttachmentsResultSingleLiveEvent();
 
         attachResultViaAttachIDSingleLiveEvent = mRepository.getAttachResultViaAttachIDSingleLiveEvent();
         errorAttachResultViaAttachIDSingleLiveEvent = mRepository.getErrorAttachResultViaAttachIDSingleLiveEvent();
@@ -102,8 +85,8 @@ public class AttachmentViewModel extends AndroidViewModel {
         deleteAttachResultSingleLiveEvent = mRepository.getDeleteAttachResultSingleLiveEvent();
         errorDeleteAttachResultSingleLiveEvent = mRepository.getErrorDeleteAttachResultSingleLiveEvent();
 
-        attachmentListResultByPaymentID = mRepository.getAttachmentListResultByPaymentID();
-        errorAttachmentListResultByPaymentID = mRepository.getErrorAttachmentListResultByPaymentID();
+        attachmentListResultByPaymentID = mRepository.getPaymentAttachmentsResultSingleLiveEvent();
+        errorAttachmentListResultByPaymentID = mRepository.getErrorPaymentAttachmentsResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<Boolean> getRequestCameraPermission() {
@@ -112,10 +95,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Boolean> getAllowCameraPermissionSingleLiveEvent() {
         return mAllowPermissionSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getBitmapAsStringSingleLiveEvent() {
-        return mBitmapAsStringSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
@@ -158,14 +137,6 @@ public class AttachmentViewModel extends AndroidViewModel {
         return getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AttachInfo[]> getDoneWriteFilesSingleLiveEvent() {
-        return doneWriteFilesSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<AttachResult> getAttachResultForImageListSingleLiveEvent() {
-        return attachResultForImageListSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsSingleLiveEvent() {
         return getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
     }
@@ -182,14 +153,6 @@ public class AttachmentViewModel extends AndroidViewModel {
         return getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Bitmap> getAttachmentAdapterItemClickedSingleLiveEvent() {
-        return attachmentAdapterItemClickedSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getShowFullScreenSingleLiveEvent() {
-        return showFullScreenSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getAttachInfoResultSingleLiveEvent() {
         return attachResultViaAttachIDSingleLiveEvent;
     }
@@ -200,14 +163,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<AttachResult> getUpdatePhotoGallerySingleLiveEvent() {
         return updateImageListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getBitmapIsSetSingleLiveEvent() {
-        return bitmapIsSetSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<List<Bitmap>> getBitmapListSingleLiveEvent() {
-        return bitmapListSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getYesDelete() {
@@ -222,20 +177,12 @@ public class AttachmentViewModel extends AndroidViewModel {
         return errorDeleteAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Map<Uri, String>> getShowFullScreenPhoto() {
-        return showFullScreenImage;
-    }
-
     public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
         return attachmentListResultByPaymentID;
     }
 
     public SingleLiveEvent<String> getErrorPaymentAttachmentsResultSingleLiveEvent() {
         return errorAttachmentListResultByPaymentID;
-    }
-
-    public SingleLiveEvent<Bitmap> getDecodeBitmap() {
-        return decodeBitmap;
     }
 
     public SingleLiveEvent<String> getFinishWriteToStorage() {

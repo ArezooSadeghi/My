@@ -4,43 +4,33 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-import java.util.List;
-
 public class CustomerViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerResult> customerResultSingleLiveEvent;
-    private LiveData<String> wrongUserLoginKeyLiveData;
-    private LiveData<String> notValueUserLoginKeyLiveData;
     private SingleLiveEvent<Boolean> showProgressBarSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> itemClickedSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> noConnectivityExceptionSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
     private SingleLiveEvent<String> errorSingleLiveEvent;
     private SingleLiveEvent<String> noConnection;
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
 
-
     public CustomerViewModel(@NonNull Application application) {
         super(application);
         repository = SipSupporterRepository.getInstance(getApplication());
-        customerResultSingleLiveEvent = repository.getCustomerResultSingleLiveEvent();
-        wrongUserLoginKeyLiveData = repository.getWrongUserLoginKeyMutableLiveData();
-        notValueUserLoginKeyLiveData = repository.getNotValueUserLoginKeyMutableLiveData();
+        customerResultSingleLiveEvent = repository.getCustomersResultSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectivityExceptionSingleLiveEvent = repository.getNoConnectivityExceptionSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
-        errorSingleLiveEvent = repository.getErrorSingleLiveEvent();
+        errorSingleLiveEvent = repository.getErrorCustomersResultSingleLiveEvent();
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-        noConnection = repository.getNoConnection();
+        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<CustomerResult> getCustomerResultSingleLiveEvent() {
@@ -59,24 +49,12 @@ public class CustomerViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public LiveData<String> getWrongUserLoginKeyLiveData() {
-        return wrongUserLoginKeyLiveData;
-    }
-
-    public LiveData<String> getNotValueUserLoginKeyLiveData() {
-        return notValueUserLoginKeyLiveData;
-    }
-
     public SingleLiveEvent<Integer> getItemClickedSingleLiveEvent() {
         return itemClickedSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getNoConnectivityExceptionSingleLiveEvent() {
-        return noConnectivityExceptionSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
@@ -105,13 +83,5 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public void fetchDateResult(String path, String userLoginKey) {
         repository.fetchDateResult(path, userLoginKey);
-    }
-
-    public void deleteServerData(ServerData serverData) {
-        repository.deleteServerData(serverData);
-    }
-
-    public List<ServerData> getServerDataList() {
-        return repository.getServerDataList();
     }
 }
