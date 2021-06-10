@@ -3,6 +3,7 @@ package com.example.sipsupporterapp.view.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,21 +32,24 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PaymentSubjectContainerActivity;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
-import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
+import ir.hamsaa.persiandatepicker.api.PersianPickerDate;
+import ir.hamsaa.persiandatepicker.api.PersianPickerListener;
 
 public class AddEditPaymentDialogFragment extends DialogFragment {
     private FragmentAddEditPaymentDialogBinding binding;
     private PaymentViewModel viewModel;
 
-    private int paymentID, datePayment, paymentSubjectID, bankAccountID;
-    private String lastValueSpinner, description, paymentSubject;
+    private int paymentID, datePayment, paymentSubjectID, bankAccountID, currentYear, currentMonth, currentDay;
+    private String lastValueSpinner, description, paymentSubject, currentDate;
     private BankAccountInfo[] bankAccountInfoArray;
     private long price;
 
@@ -243,13 +247,18 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         if (datePayment == 0) {
             binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
         } else {
-            String date = String.valueOf(datePayment);
-            String year = date.substring(0, 4);
-            String month = date.substring(4, 6);
-            String day = date.substring(6);
-            String dateFormat = year + "/" + month + "/" + day;
+            String dateFormat = formatDate();
             binding.btnDatePayment.setText(dateFormat);
         }
+    }
+
+    @NotNull
+    private String formatDate() {
+        String date = String.valueOf(datePayment);
+        String year = date.substring(0, 4);
+        String month = date.substring(4, 6);
+        String day = date.substring(6);
+        return year + "/" + month + "/" + day;
     }
 
     private void handleEvents() {
@@ -304,26 +313,47 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         binding.btnDatePayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PersianCalendar persianCalendar = new PersianCalendar();
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                        new DatePickerDialog.OnDateSetListener() {
+                currentDate = binding.btnDatePayment.getText().toString();
+                currentYear = Integer.parseInt(currentDate.substring(0, 4));
+                currentMonth = Integer.parseInt(currentDate.substring(5, 7));
+                currentDay = Integer.parseInt(currentDate.substring(8));
+
+                PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
+                        .setPositiveButtonString("تایید")
+                        .setNegativeButton("انصراف")
+                        .setMinYear(1300)
+                        .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                        .setInitDate(currentYear, currentMonth, currentDay)
+                        .setActionTextColor(Color.BLACK)
+                        .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                        .setCancelable(false)
+                        .setListener(new PersianPickerListener() {
                             @Override
-                            public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                                if (String.valueOf(monthOfYear + 1).length() == 1 & String.valueOf(dayOfMonth).length() == 1) {
-                                    binding.btnDatePayment.setText(year + "/" + "0" + (monthOfYear + 1) + "/" + "0" + dayOfMonth);
-                                } else if (String.valueOf(monthOfYear + 1).length() == 1) {
-                                    binding.btnDatePayment.setText(year + "/" + "0" + (monthOfYear + 1) + "/" + dayOfMonth);
-                                } else if (String.valueOf(dayOfMonth).length() == 1) {
-                                    binding.btnDatePayment.setText(year + "/" + (monthOfYear + 1) + "/" + "0" + dayOfMonth);
+                            public void onDateSelected(PersianPickerDate persianPickerDate) {
+                                int year = persianPickerDate.getPersianYear();
+                                int month = persianPickerDate.getPersianMonth();
+                                int day = persianPickerDate.getPersianDay();
+                                if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
+                                    datePayment = Integer.parseInt(year + "0" + month + "0" + day);
+                                    binding.btnDatePayment.setText(formatDate());
+                                } else if (String.valueOf(month).length() == 1) {
+                                    datePayment = Integer.parseInt(year + "0" + month + "" + day);
+                                    binding.btnDatePayment.setText(formatDate());
+                                } else if (String.valueOf(day).length() == 1) {
+                                    datePayment = Integer.parseInt(year + "" + month + "0" + day);
+                                    binding.btnDatePayment.setText(formatDate());
                                 } else {
-                                    binding.btnDatePayment.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                                    datePayment = Integer.parseInt(year + "" + month + "" + day);
+                                    binding.btnDatePayment.setText(formatDate());
                                 }
                             }
-                        },
-                        persianCalendar.getPersianYear(),
-                        persianCalendar.getPersianMonth(),
-                        persianCalendar.getPersianDay());
-                datePickerDialog.show(getActivity().getFragmentManager(), "datePicker");
+
+                            @Override
+                            public void onDismissed() {
+
+                            }
+                        });
+                persianDatePickerDialog.show();
             }
         });
 

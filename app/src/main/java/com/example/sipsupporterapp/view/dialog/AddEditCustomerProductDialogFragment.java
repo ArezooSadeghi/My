@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.dialog;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,8 +20,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerProductDialogBinding;
-import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
+import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -29,19 +30,23 @@ import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
-import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
+import ir.hamsaa.persiandatepicker.api.PersianPickerDate;
+import ir.hamsaa.persiandatepicker.api.PersianPickerListener;
 
 public class AddEditCustomerProductDialogFragment extends DialogFragment {
     public static final String ARGS_PRODUCT_ID = "productID";
     private FragmentAddEditCustomerProductDialogBinding binding;
     private CustomerProductViewModel viewModel;
 
-    private String lastValueSpinner;
-    private int customerID, customerProductID, productID;
+    private String lastValueSpinner, currentDate;
+    private int customerID, customerProductID, productID, currentYear, currentMonth, currentDay;
     private boolean finish, invoicePayment;
     private long invoicePrice, expireDate;
     private String description;
@@ -209,30 +214,47 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         binding.btnDateExpiration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PersianCalendar persianCalendar = new PersianCalendar();
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                        new DatePickerDialog.OnDateSetListener() {
+                currentDate = binding.btnDateExpiration.getText().toString();
+                currentYear = Integer.parseInt(currentDate.substring(0, 4));
+                currentMonth = Integer.parseInt(currentDate.substring(5, 7));
+                currentDay = Integer.parseInt(currentDate.substring(8));
+
+                PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
+                        .setPositiveButtonString("تایید")
+                        .setNegativeButton("انصراف")
+                        .setMinYear(1300)
+                        .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                        .setInitDate(currentYear, currentMonth, currentDay)
+                        .setActionTextColor(Color.BLACK)
+                        .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                        .setCancelable(false)
+                        .setListener(new PersianPickerListener() {
                             @Override
-                            public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                                if (String.valueOf(monthOfYear + 1).length() == 1 & String.valueOf(dayOfMonth).length() == 1) {
-                                    expireDate = Long.valueOf(year + "0" + (monthOfYear + 1) + "0" + dayOfMonth);
-                                    binding.btnDateExpiration.setText(year + "/" + "0" + (monthOfYear + 1) + "/" + "0" + dayOfMonth);
-                                } else if (String.valueOf(monthOfYear + 1).length() == 1) {
-                                    expireDate = Long.valueOf(year + "0" + (monthOfYear + 1) + dayOfMonth);
-                                    binding.btnDateExpiration.setText(year + "/" + "0" + (monthOfYear + 1) + "/" + dayOfMonth);
-                                } else if (String.valueOf(dayOfMonth).length() == 1) {
-                                    expireDate = Long.valueOf(year + (monthOfYear + 1) + "0" + dayOfMonth);
-                                    binding.btnDateExpiration.setText(year + "/" + (monthOfYear + 1) + "/" + "0" + dayOfMonth);
+                            public void onDateSelected(PersianPickerDate persianPickerDate) {
+                                int year = persianPickerDate.getPersianYear();
+                                int month = persianPickerDate.getPersianMonth();
+                                int day = persianPickerDate.getPersianDay();
+                                if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
+                                    expireDate = Long.parseLong(year + "0" + month + "0" + day);
+                                    binding.btnDateExpiration.setText(formatDate());
+                                } else if (String.valueOf(month).length() == 1) {
+                                    expireDate = Integer.parseInt(year + "0" + month + "" + day);
+                                    binding.btnDateExpiration.setText(formatDate());
+                                } else if (String.valueOf(day).length() == 1) {
+                                    expireDate = Integer.parseInt(year + "" + month + "0" + day);
+                                    binding.btnDateExpiration.setText(formatDate());
                                 } else {
-                                    expireDate = Long.valueOf(String.valueOf(year + (monthOfYear + 1) + dayOfMonth));
-                                    binding.btnDateExpiration.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                                    expireDate = Integer.parseInt(year + "" + month + "" + day);
+                                    binding.btnDateExpiration.setText(formatDate());
                                 }
                             }
-                        },
-                        persianCalendar.getPersianYear(),
-                        persianCalendar.getPersianMonth(),
-                        persianCalendar.getPersianDay());
-                datePickerDialog.show(getActivity().getFragmentManager(), "datePicker");
+
+                            @Override
+                            public void onDismissed() {
+
+                            }
+                        });
+                persianDatePickerDialog.show();
             }
         });
 
@@ -281,11 +303,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         binding.edTextDescription.setSelection(binding.edTextDescription.getText().toString().length());
 
         if (expireDate != 0) {
-            String date = String.valueOf(expireDate);
-            String year = date.substring(0, 4);
-            String month = date.substring(4, 6);
-            String day = date.substring(6);
-            String dateFormat = year + "/" + month + "/" + day;
+            String dateFormat = formatDate();
             binding.btnDateExpiration.setText(dateFormat);
         } else {
             binding.btnDateExpiration.setText(SipSupportSharedPreferences.getDate(getContext()));
@@ -302,6 +320,15 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         } else {
             binding.checkBoxInvoicePayment.setChecked(false);
         }
+    }
+
+    @NotNull
+    private String formatDate() {
+        String date = String.valueOf(expireDate);
+        String year = date.substring(0, 4);
+        String month = date.substring(4, 6);
+        String day = date.substring(6);
+        return year + "/" + month + "/" + day;
     }
 
     private void createViewModel() {
