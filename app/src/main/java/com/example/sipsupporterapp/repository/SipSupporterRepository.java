@@ -168,6 +168,9 @@ public class SipSupporterRepository {
     private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorAttachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<PaymentResult> paymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
@@ -409,6 +412,13 @@ public class SipSupporterRepository {
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<PaymentSubjectResult>() {
                 }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServicePaymentsByBankAccount(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<PaymentResult>() {
+                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
@@ -673,6 +683,14 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
         return dangerousUserSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentResult> getPaymentsByBankAccountResultSingleLiveEvent() {
+        return paymentsByBankAccountResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorPaymentsByBankAccountResultSingleLiveEvent() {
+        return errorPaymentsByBankAccountResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -1873,6 +1891,41 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
+        sipSupporterService.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
+            @Override
+            public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
+                if (response.isSuccessful()) {
+                    paymentsByBankAccountResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
+                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
+                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
+                        } else {
+                            errorPaymentsByBankAccountResultSingleLiveEvent.setValue(paymentResult.getError());
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

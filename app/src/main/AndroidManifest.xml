@@ -24,9 +24,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SipSupporterApp"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.activity.NewPaymentContainer"></activity>
         <activity
             android:name=".view.activity.FullScreenPhotoContainerActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.PhotoGalleryContainerActivity"
             android:screenOrientation="portrait" />

@@ -15,6 +15,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.PaymentAdapterItemBinding;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.utils.Converter;
+import com.example.sipsupporterapp.viewmodel.NewPaymentViewModel;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -26,11 +27,21 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
     private Context context;
     private List<PaymentInfo> paymentInfoList;
     private PaymentViewModel viewModel;
+    private NewPaymentViewModel paymentViewModel;
+    private boolean flag;
 
     public PaymentAdapter(Context context, List<PaymentInfo> paymentInfoList, PaymentViewModel viewModel) {
         this.context = context;
         this.paymentInfoList = paymentInfoList;
         this.viewModel = viewModel;
+        flag = true;
+    }
+
+    public PaymentAdapter(Context context, List<PaymentInfo> paymentInfoList, NewPaymentViewModel paymentViewModel) {
+        this.context = context;
+        this.paymentInfoList = paymentInfoList;
+        this.paymentViewModel = paymentViewModel;
+        flag = false;
     }
 
     @NonNull
@@ -61,19 +72,36 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                 powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
                     @Override
                     public void onItemClick(int i, PowerMenuItem item) {
-                        switch (i) {
-                            case 0:
-                                viewModel.getEditClickedSingleLiveEvent().setValue(paymentInfoList.get(position));
-                                powerMenu.dismiss();
-                                break;
-                            case 1:
-                                viewModel.getDeleteClicked().setValue(paymentInfoList.get(position));
-                                powerMenu.dismiss();
-                                break;
-                            case 2:
-                                viewModel.getSeeDocumentsClicked().setValue(paymentInfoList.get(position));
-                                powerMenu.dismiss();
-                                break;
+                        if (flag) {
+                            switch (i) {
+                                case 0:
+                                    viewModel.getEditClickedSingleLiveEvent().setValue(paymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                                case 1:
+                                    viewModel.getDeleteClicked().setValue(paymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                                case 2:
+                                    viewModel.getSeeDocumentsClicked().setValue(paymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                            }
+                        } else {
+                            switch (i) {
+                                case 0:
+                                    paymentViewModel.getEditClickedSingleLiveEvent().setValue(paymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                                case 1:
+                                    paymentViewModel.getDeleteClicked().setValue(paymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                                case 2:
+                                    paymentViewModel.getSeeDocumentsClicked().setValue(paymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                            }
                         }
                     }
                 });
