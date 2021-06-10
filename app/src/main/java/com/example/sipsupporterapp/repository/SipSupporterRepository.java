@@ -47,6 +47,7 @@ import com.example.sipsupporterapp.retrofit.RetrofitInstance;
 import com.example.sipsupporterapp.retrofit.SipSupporterService;
 import com.example.sipsupporterapp.retrofit.SupportEventResultDeserializer;
 import com.example.sipsupporterapp.retrofit.UserResultDeserializer;
+import com.example.sipsupporterapp.utils.CheckStringIsNumeric;
 import com.example.sipsupporterapp.viewmodel.SingleLiveEvent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -780,8 +781,9 @@ public class SipSupporterRepository {
                             try {
                                 Gson gson = new Gson();
                                 UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
-                                if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
-                                    dangerousUserSingleLiveEvent.setValue(true);
+                                if (CheckStringIsNumeric.isNumeric(userResult.getErrorCode())) {
+                                    if (Integer.parseInt(userResult.getErrorCode()) <= -9001)
+                                        dangerousUserSingleLiveEvent.setValue(true);
                                 } else {
                                     errorUserLoginResultSingleLiveEvent.setValue(userResult.getError());
                                 }
@@ -815,8 +817,9 @@ public class SipSupporterRepository {
                         Gson gson = new Gson();
                         CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
                         try {
-                            if (Integer.valueOf(customerResult.getErrorCode()) <= -9001) {
-                                dangerousUserSingleLiveEvent.setValue(true);
+                            if (CheckStringIsNumeric.isNumeric(customerResult.getErrorCode())) {
+                                if (Integer.parseInt(customerResult.getErrorCode()) <= -9001)
+                                    dangerousUserSingleLiveEvent.setValue(true);
                             } else {
                                 errorCustomersResultSingleLiveEvent.setValue(customerResult.getError());
                             }
@@ -852,8 +855,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
-                        if (Integer.valueOf(userResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(userResult.getErrorCode())) {
+                            if (Integer.parseInt(userResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorChangePasswordResultSingleLiveEvent.setValue(userResult.getError());
                         }
@@ -886,8 +890,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
-                        if (Integer.valueOf(customerSupportResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerSupportResult.getErrorCode())) {
+                            if (Integer.parseInt(customerSupportResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerSupportsResultSingleLiveEvent.setValue(customerSupportResult.getError());
                         }
@@ -921,8 +926,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerUserResult customerUserResult = gson.fromJson(response.errorBody().string(), CustomerUserResult.class);
-                        if (Integer.valueOf(customerUserResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerUserResult.getErrorCode())) {
+                            if (Integer.parseInt(customerUserResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerUsersResultSingleLiveEvent.setValue(customerUserResult.getError());
                         }
@@ -956,8 +962,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         SupportEventResult supportEventResult = gson.fromJson(response.errorBody().string(), SupportEventResult.class);
-                        if (Integer.valueOf(supportEventResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(supportEventResult.getErrorCode())) {
+                            if (Integer.parseInt(supportEventResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorSupportEventsResultSingleLiveEvent.setValue(supportEventResult.getError());
                         }
@@ -990,8 +997,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
-                        if (Integer.valueOf(customerSupportResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerSupportResult.getErrorCode())) {
+                            if (Integer.parseInt(customerSupportResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAddCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult.getError());
                         }
@@ -1046,8 +1054,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
+                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerProductsResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
@@ -1080,8 +1089,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
-                        if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(productResult.getErrorCode())) {
+                            if (Integer.parseInt(productResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorProductsResultSingleLiveEvent.setValue(productResult.getError());
                         }
@@ -1114,8 +1124,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
+                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAddCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
@@ -1148,8 +1159,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
-                        if (Integer.valueOf(productResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(productResult.getErrorCode())) {
+                            if (Integer.parseInt(productResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorProductInfoResultSingleLiveEvent.setValue(productResult.getError());
                         }
@@ -1182,8 +1194,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
+                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
@@ -1216,8 +1229,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (Integer.valueOf(customerProductResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
+                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorEditCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
                         }
@@ -1250,8 +1264,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAttachResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1284,8 +1299,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
-                        if (Integer.valueOf(customerPaymentResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(customerPaymentResult.getErrorCode())) {
+                            if (Integer.parseInt(customerPaymentResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerPaymentsResultSingleLiveEvent.setValue(customerPaymentResult.getError());
                         }
@@ -1318,8 +1334,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1352,8 +1369,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAddCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1386,8 +1404,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorEditCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1420,8 +1439,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1454,8 +1474,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
-                        if (Integer.valueOf(bankAccountResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(bankAccountResult.getErrorCode())) {
+                            if (Integer.parseInt(bankAccountResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorBankAccountsResultSingleLiveEvent.setValue(bankAccountResult.getError());
                         }
@@ -1488,8 +1509,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerProductAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1522,8 +1544,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorCustomerSupportAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1556,8 +1579,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAttachResultViaAttachIDSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1590,8 +1614,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
+                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentsResultSingleLiveEvent.setValue(paymentResult.getError());
                         }
@@ -1624,8 +1649,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
+                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorEditPaymentResultSingleLiveEvent.setValue(paymentResult.getError());
                         }
@@ -1658,8 +1684,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (Integer.valueOf(paymentResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
+                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeletePaymentResultSingleLiveEvent.setValue(paymentResult.getError());
                         }
@@ -1692,8 +1719,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
-                        if (Integer.valueOf(paymentSubjectResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(paymentSubjectResult.getErrorCode())) {
+                            if (Integer.parseInt(paymentSubjectResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentSubjectsSingleLiveEvent.setValue(paymentSubjectResult.getError());
                         }
@@ -1726,8 +1754,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
-                        if (Integer.valueOf(paymentSubjectResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(paymentSubjectResult.getErrorCode())) {
+                            if (Integer.parseInt(paymentSubjectResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorAddPaymentResultSingleLiveEvent.setValue(paymentSubjectResult.getError());
                         }
@@ -1760,8 +1789,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorDeleteAttachResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1794,8 +1824,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
                         }
@@ -1828,8 +1859,9 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (Integer.valueOf(attachResult.getErrorCode()) <= -9001) {
-                            dangerousUserSingleLiveEvent.setValue(true);
+                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
+                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
                         } else {
                             errorPaymentSubjectInfoResultSingleLiveEvent.setValue(attachResult.getError());
                         }
