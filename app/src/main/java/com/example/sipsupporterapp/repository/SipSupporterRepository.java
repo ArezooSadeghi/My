@@ -120,9 +120,6 @@ public class SipSupporterRepository {
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorDeletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AttachResult> customerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorCustomerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
@@ -170,6 +167,12 @@ public class SipSupporterRepository {
 
     private SingleLiveEvent<PaymentResult> paymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> errorPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorCustomerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -419,6 +422,20 @@ public class SipSupporterRepository {
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<PaymentResult>() {
                 }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceCustomerPaymentsByBankAccount(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceBankAccounts(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CustomerPaymentResult>() {
+                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
@@ -691,6 +708,14 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<String> getErrorPaymentsByBankAccountResultSingleLiveEvent() {
         return errorPaymentsByBankAccountResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
+        return customerPaymentsByBankAccountResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent() {
+        return errorCustomerPaymentsByBankAccountResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -1482,41 +1507,6 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchBankAccounts(String path, String userLoginKey) {
-        sipSupporterService.fetchBankAccounts(path, userLoginKey).enqueue(new Callback<BankAccountResult>() {
-            @Override
-            public void onResponse(Call<BankAccountResult> call, Response<BankAccountResult> response) {
-                if (response.isSuccessful()) {
-                    bankAccountsResultSingleLiveEvent.setValue(response.body());
-                } else {
-                    try {
-                        Gson gson = new Gson();
-                        BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
-                        if (CheckStringIsNumeric.isNumeric(bankAccountResult.getErrorCode())) {
-                            if (Integer.parseInt(bankAccountResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorBankAccountsResultSingleLiveEvent.setValue(bankAccountResult.getError());
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BankAccountResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
     public void fetchFileWithCustomerProductID(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
         sipSupporterService.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
@@ -1926,6 +1916,76 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
+        sipSupporterService.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<CustomerPaymentResult>() {
+            @Override
+            public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
+                if (response.isSuccessful()) {
+                    customerPaymentsByBankAccountResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
+                        if (CheckStringIsNumeric.isNumeric(customerPaymentResult.getErrorCode())) {
+                            if (Integer.parseInt(customerPaymentResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
+                        } else {
+                            errorCustomerPaymentsByBankAccountResultSingleLiveEvent.setValue(customerPaymentResult.getError());
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchBankAccounts(String path, String userLoginKey) {
+        sipSupporterService.fetchBankAccounts(path, userLoginKey).enqueue(new Callback<BankAccountResult>() {
+            @Override
+            public void onResponse(Call<BankAccountResult> call, Response<BankAccountResult> response) {
+                if (response.isSuccessful()) {
+                    bankAccountsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
+                        if (CheckStringIsNumeric.isNumeric(bankAccountResult.getErrorCode())) {
+                            if (Integer.parseInt(bankAccountResult.getErrorCode()) <= -9001)
+                                dangerousUserSingleLiveEvent.setValue(true);
+                        } else {
+                            errorBankAccountsResultSingleLiveEvent.setValue(bankAccountResult.getError());
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BankAccountResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

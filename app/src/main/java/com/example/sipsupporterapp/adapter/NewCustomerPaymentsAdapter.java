@@ -12,40 +12,42 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
-import com.example.sipsupporterapp.databinding.PaymentAdapterItemBinding;
-import com.example.sipsupporterapp.model.PaymentInfo;
+import com.example.sipsupporterapp.databinding.CustomerPaymentAdapterItemBinding;
+import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.utils.Converter;
-import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
+import com.example.sipsupporterapp.viewmodel.NewCustomerPaymentsViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
-public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentHolder> {
+public class NewCustomerPaymentsAdapter extends RecyclerView.Adapter<NewCustomerPaymentsAdapter.NewCustomerPaymentsHolder> {
     private Context context;
-    private List<PaymentInfo> paymentInfoList;
-    private PaymentViewModel viewModel;
+    private NewCustomerPaymentsViewModel viewModel;
+    private List<CustomerPaymentInfo> customerPaymentInfoList;
 
-    public PaymentAdapter(Context context, List<PaymentInfo> paymentInfoList, PaymentViewModel viewModel) {
+    public NewCustomerPaymentsAdapter(Context context, NewCustomerPaymentsViewModel viewModel, List<CustomerPaymentInfo> customerPaymentInfoList) {
         this.context = context;
-        this.paymentInfoList = paymentInfoList;
         this.viewModel = viewModel;
+        this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
     @NonNull
     @Override
-    public PaymentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new PaymentHolder(DataBindingUtil.inflate(
+    public NewCustomerPaymentsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new NewCustomerPaymentsHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
-                R.layout.payment_adapter_item,
+                R.layout.customer_payment_adapter_item,
                 parent,
                 false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PaymentHolder holder, int position) {
-        holder.bindPaymentInfo(paymentInfoList.get(position));
+    public void onBindViewHolder(@NonNull NewCustomerPaymentsHolder holder, int position) {
+        holder.bindCustomerPaymentInfo(customerPaymentInfoList.get(position));
 
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,15 +65,15 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                viewModel.getEditClickedSingleLiveEvent().setValue(paymentInfoList.get(position));
+                                viewModel.getEditCustomerPaymentClicked().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteClicked().setValue(paymentInfoList.get(position));
+                                viewModel.getDeleteCustomerPaymentClicked().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getSeeDocumentsClicked().setValue(paymentInfoList.get(position));
+                                viewModel.getSeeCustomerPaymentAttachmentsClicked().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                         }
@@ -84,36 +86,34 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
 
     @Override
     public int getItemCount() {
-        return paymentInfoList == null ? 0 : paymentInfoList.size();
+        return customerPaymentInfoList != null ? customerPaymentInfoList.size() : 0;
     }
 
-    public class PaymentHolder extends RecyclerView.ViewHolder {
-        private PaymentAdapterItemBinding binding;
+    public class NewCustomerPaymentsHolder extends RecyclerView.ViewHolder {
+        private CustomerPaymentAdapterItemBinding binding;
 
-        public PaymentHolder(PaymentAdapterItemBinding binding) {
+        public NewCustomerPaymentsHolder(CustomerPaymentAdapterItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bindPaymentInfo(PaymentInfo paymentInfo) {
-            String paymentSubject = Converter.convert(paymentInfo.getPaymentSubject());
-            binding.txtPaymentSubject.setText(paymentSubject);
+        public void bindCustomerPaymentInfo(CustomerPaymentInfo info) {
+            String bankAccountName = Converter.convert(info.getBankAccountName());
+            binding.txtBankAccountName.setText(bankAccountName);
+            binding.txtBankAccountNo.setText(info.getBankAccountNO());
+            String bankName = Converter.convert(info.getBankName());
+            binding.txtBankName.setText(bankName);
 
-            if (!paymentInfo.getDescription().isEmpty()) {
-                binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.convert(paymentInfo.getDescription());
-                binding.txtDescription.setText(description);
-            }
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(info.getPrice());
+            binding.txtPrice.setText(currencyFormat + "تومان");
 
-            if (paymentInfo.getDatePayment() != 0) {
-                String date = String.valueOf(paymentInfo.getDatePayment());
+            if (info.getDatePayment() != 0) {
+                String date = String.valueOf(info.getDatePayment());
                 String year = date.substring(0, 4);
                 String month = date.substring(4, 6);
                 String day = date.substring(6);
                 String dateFormat = year + "/" + month + "/" + day;
                 binding.txtDatePayment.setText(dateFormat);
-            } else {
-                binding.txtDatePayment.setText(paymentInfo.getDatePayment() + "");
             }
         }
     }

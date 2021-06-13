@@ -130,8 +130,11 @@ public interface SipSupporterService {
     Call<PaymentResult> deletePayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID);
 
     @GET("{path}")
-    Call<BankAccountResult> fetchBankAccounts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+    Call<PaymentResult> fetchPaymentsByBankAccount(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
 
     @GET("{path}")
-    Call<PaymentResult> fetchPaymentsByBankAccount(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
+    Call<CustomerPaymentResult> fetchCustomerPaymentsByBankAccount(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
+
+    @GET("{path}")
+    Call<BankAccountResult> fetchBankAccounts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
 }

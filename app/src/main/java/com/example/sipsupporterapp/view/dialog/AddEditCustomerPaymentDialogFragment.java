@@ -41,11 +41,13 @@ import ir.hamsaa.persiandatepicker.api.PersianPickerDate;
 import ir.hamsaa.persiandatepicker.api.PersianPickerListener;
 
 public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
+    public static final String ARGS_SHOW_SPINNER_BANK_ACCOUNTS = "showSpinnerBankAccounts";
     private FragmentAddEditCustomerPaymentDialogBinding binding;
     private CustomerPaymentViewModel viewModel;
 
     private String description, lastValueSpinner, currentDate;
     private long price;
+    private boolean showSpinnerBankAccounts;
     private int datePayment, customerID, customerPaymentID, bankAccountID, currentYear, currentMonth, currentDay;
     private BankAccountInfo[] bankAccountInfoArray;
 
@@ -58,15 +60,18 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
     public static final String TAG = AddEditCustomerPaymentDialogFragment.class.getSimpleName();
 
-    public static AddEditCustomerPaymentDialogFragment newInstance(String description, long price, int datePayment, int customerID, int customerPaymentID, int bankAccountID) {
+    public static AddEditCustomerPaymentDialogFragment newInstance(String description, long price, int datePayment, int customerID, int customerPaymentID, int bankAccountID, boolean showSpinnerBankAccounts) {
         AddEditCustomerPaymentDialogFragment fragment = new AddEditCustomerPaymentDialogFragment();
         Bundle args = new Bundle();
+
         args.putString(ARGS_DESCRIPTION, description);
         args.putLong(ARGS_PRICE, price);
         args.putInt(ARGS_DATE_PAYMENT, datePayment);
         args.putInt(ARGS_CUSTOMER_ID, customerID);
         args.putInt(ARGS_CUSTOMER_PAYMENT_ID, customerPaymentID);
         args.putInt(ARGS_BANK_ACCOUNT_ID, bankAccountID);
+        args.putBoolean(ARGS_SHOW_SPINNER_BANK_ACCOUNTS, showSpinnerBankAccounts);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,9 +86,12 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
         bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
+        showSpinnerBankAccounts = getArguments().getBoolean(ARGS_SHOW_SPINNER_BANK_ACCOUNTS);
 
         createViewModel();
-        fetchBankAccounts();
+        if (showSpinnerBankAccounts) {
+            fetchBankAccounts();
+        }
         setObserver();
     }
 
@@ -95,6 +103,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 R.layout.fragment_add_edit_customer_payment_dialog,
                 null,
                 false);
+
+        if (showSpinnerBankAccounts) {
+            binding.spinnerBankAccountNames.setVisibility(View.VISIBLE);
+        }
 
         initViews();
         handleEvents();

@@ -116,7 +116,7 @@ public class CustomerPaymentFragment extends Fragment {
                                 0,
                                 0,
                                 customerID,
-                                0, 0);
+                                0, 0, true);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });
@@ -224,7 +224,7 @@ public class CustomerPaymentFragment extends Fragment {
                                 customerPaymentInfo.getPrice(),
                                 customerPaymentInfo.getDatePayment(),
                                 customerID,
-                                customerPaymentInfo.getCustomerPaymentID(), customerPaymentInfo.getBankAccountID());
+                                customerPaymentInfo.getCustomerPaymentID(), customerPaymentInfo.getBankAccountID(), true);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });

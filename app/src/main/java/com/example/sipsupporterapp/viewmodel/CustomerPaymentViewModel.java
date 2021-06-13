@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.AttachInfo;
-import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;

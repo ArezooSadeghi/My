@@ -5,13 +5,13 @@ import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.sipsupporterapp.view.fragment.NewPaymentFragment;
+import com.example.sipsupporterapp.view.fragment.NewCustomerPaymentsFragment;
 
 public class NewPaymentContainer extends SingleFragmentActivity {
 
     @Override
     public Fragment createFragment() {
-        return NewPaymentFragment.newInstance();
+        return NewCustomerPaymentsFragment.newInstance();
     }
 
     public static Intent start(Context context) {

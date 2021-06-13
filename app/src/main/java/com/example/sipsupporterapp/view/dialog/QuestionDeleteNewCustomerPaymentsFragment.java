@@ -3,34 +3,29 @@ package com.example.sipsupporterapp.view.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentQuestionDialogBinding;
-import com.example.sipsupporterapp.viewmodel.NewPaymentViewModel;
-import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
+import com.example.sipsupporterapp.viewmodel.NewCustomerPaymentsViewModel;
 
-public class QuestionDeleteNewPaymentFragment extends DialogFragment {
+public class QuestionDeleteNewCustomerPaymentsFragment extends DialogFragment {
     private FragmentQuestionDialogBinding binding;
-    private NewPaymentViewModel viewModel;
+    private NewCustomerPaymentsViewModel viewModel;
 
     private static final String ARGS_MESSAGE = "message";
 
-    public static final String TAG = QuestionDeleteNewPaymentFragment.class.getSimpleName();
+    public static final String TAG = QuestionDeleteNewCustomerPaymentsFragment.class.getSimpleName();
 
-    public static QuestionDeleteNewPaymentFragment newInstance(String message) {
-        QuestionDeleteNewPaymentFragment fragment = new QuestionDeleteNewPaymentFragment();
+    public static QuestionDeleteNewCustomerPaymentsFragment newInstance(String message) {
+        QuestionDeleteNewCustomerPaymentsFragment fragment = new QuestionDeleteNewCustomerPaymentsFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_MESSAGE, message);
         fragment.setArguments(args);
@@ -67,10 +62,6 @@ public class QuestionDeleteNewPaymentFragment extends DialogFragment {
         return dialog;
     }
 
-    private void createViewModel() {
-        viewModel = new ViewModelProvider(this).get(NewPaymentViewModel.class);
-    }
-
     private void initViews() {
         String message = getArguments().getString(ARGS_MESSAGE);
         binding.txtMessage.setText(message);
@@ -79,17 +70,21 @@ public class QuestionDeleteNewPaymentFragment extends DialogFragment {
     private void handleEvents() {
         binding.btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 dismiss();
             }
         });
 
         binding.btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                viewModel.getYesDelete().setValue(true);
+            public void onClick(View v) {
+                viewModel.getOkDeleteClicked().setValue(true);
                 dismiss();
             }
         });
+    }
+
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(NewCustomerPaymentsViewModel.class);
     }
 }

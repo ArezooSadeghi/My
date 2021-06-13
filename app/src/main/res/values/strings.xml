@@ -33,4 +33,6 @@
     <string name="not_exist_payment_subject">لطفا مشخص کنید پرداخت در چه زمینه ای صورت گرفته است</string>
     <string name="zero_price">مبلغ پرداختی نباید صفر باشد</string>
     <string name="not_exist_server">سرور موجود نمی باشد</string>
+    <string name="delete_new_customer_payments_question_message">آیا می خواهید واریزی موردنظر را حذف کنید؟</string>
+    <string name="success_delete_customer_payments_message">حذف واریزی موردنظر موفقیت آمیز بود</string>
 </resources>
