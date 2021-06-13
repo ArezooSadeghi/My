@@ -29,7 +29,6 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
-import com.example.sipsupporterapp.retrofit.AddProductResultDeserializer;
 import com.example.sipsupporterapp.retrofit.AttachResultDeserializer;
 import com.example.sipsupporterapp.retrofit.BankAccountResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerPaymentResultDeserializer;
@@ -38,7 +37,6 @@ import com.example.sipsupporterapp.retrofit.CustomerResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerSupportResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerUserResultDeserializer;
 import com.example.sipsupporterapp.retrofit.DateResultDeserializer;
-import com.example.sipsupporterapp.retrofit.NewProductResultDeserializer;
 import com.example.sipsupporterapp.retrofit.NoConnectivityException;
 import com.example.sipsupporterapp.retrofit.PaymentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.PaymentSubjectResultDeserializer;
@@ -253,14 +251,14 @@ public class SipSupporterRepository {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerProductResult>() {
-                }.getType(), new ProductResultDeserializer(), context).create(SipSupporterService.class);
+                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceGetProductResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<ProductResult>() {
-                }.getType(), new AddProductResultDeserializer(), context).create(SipSupporterService.class);
+                }.getType(), new ProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServicePostCustomerProducts(String baseUrl) {
@@ -274,7 +272,7 @@ public class SipSupporterRepository {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<ProductResult>() {
-                }.getType(), new NewProductResultDeserializer(), context).create(SipSupporterService.class);
+                }.getType(), new ProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupportServiceForDeleteCustomerProduct(String baseUrl) {

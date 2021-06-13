@@ -246,7 +246,7 @@ public class CustomerPaymentFragment extends Fragment {
 
     private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
         List<CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
-        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), customerPaymentInfoList, viewModel);
+        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, customerPaymentInfoList);
         binding.recyclerViewDepositAmounts.setAdapter(adapter);
     }
 }

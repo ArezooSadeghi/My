@@ -179,7 +179,7 @@ public class CustomerSupportFragment extends Fragment {
     private void setupAdapter(CustomerSupportInfo[] customerSupportInfoArray) {
         List<CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
         CustomerSupportAdapter adapter = new CustomerSupportAdapter(
-                getContext(), customerSupportInfoList, viewModel);
+                getContext(), viewModel, customerSupportInfoList);
         binding.recyclerViewSupportHistory.setAdapter(adapter);
     }
 }

@@ -17,6 +17,7 @@ import tellh.com.recyclertreeview_lib.TreeNode;
 import tellh.com.recyclertreeview_lib.TreeViewBinder;
 
 public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.DirectoryNodeHolder> {
+
     private Context context;
 
     @Override

@@ -23,14 +23,15 @@ import com.skydoves.powermenu.PowerMenuItem;
 import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentHolder> {
-    private Context context;
-    private List<PaymentInfo> paymentInfoList;
-    private PaymentViewModel viewModel;
 
-    public PaymentAdapter(Context context, List<PaymentInfo> paymentInfoList, PaymentViewModel viewModel) {
+    private Context context;
+    private PaymentViewModel viewModel;
+    private List<PaymentInfo> paymentInfoList;
+
+    public PaymentAdapter(Context context, PaymentViewModel viewModel, List<PaymentInfo> paymentInfoList) {
         this.context = context;
-        this.paymentInfoList = paymentInfoList;
         this.viewModel = viewModel;
+        this.paymentInfoList = paymentInfoList;
     }
 
     @NonNull
@@ -95,25 +96,25 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
             this.binding = binding;
         }
 
-        public void bindPaymentInfo(PaymentInfo paymentInfo) {
-            String paymentSubject = Converter.convert(paymentInfo.getPaymentSubject());
+        public void bindPaymentInfo(PaymentInfo info) {
+            String paymentSubject = Converter.convert(info.getPaymentSubject());
             binding.txtPaymentSubject.setText(paymentSubject);
 
-            if (!paymentInfo.getDescription().isEmpty()) {
+            if (!info.getDescription().isEmpty()) {
                 binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.convert(paymentInfo.getDescription());
+                String description = Converter.convert(info.getDescription());
                 binding.txtDescription.setText(description);
             }
 
-            if (paymentInfo.getDatePayment() != 0) {
-                String date = String.valueOf(paymentInfo.getDatePayment());
+            if (info.getDatePayment() != 0) {
+                String date = String.valueOf(info.getDatePayment());
                 String year = date.substring(0, 4);
                 String month = date.substring(4, 6);
                 String day = date.substring(6);
                 String dateFormat = year + "/" + month + "/" + day;
                 binding.txtDatePayment.setText(dateFormat);
             } else {
-                binding.txtDatePayment.setText(paymentInfo.getDatePayment() + "");
+                binding.txtDatePayment.setText(info.getDatePayment() + "");
             }
         }
     }

@@ -25,14 +25,15 @@ import java.text.NumberFormat;
 import java.util.List;
 
 public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProductAdapter.ProductsHolder> {
-    private Context context;
-    private List<CustomerProductInfo> customerProductInfoList;
-    private CustomerProductViewModel viewModel;
 
-    public CustomerProductAdapter(Context context, List<CustomerProductInfo> customerProductInfoList, CustomerProductViewModel viewModel) {
+    private Context context;
+    private CustomerProductViewModel viewModel;
+    private List<CustomerProductInfo> customerProductInfoList;
+
+    public CustomerProductAdapter(Context context, CustomerProductViewModel viewModel, List<CustomerProductInfo> customerProductInfoList) {
         this.context = context;
-        this.customerProductInfoList = customerProductInfoList;
         this.viewModel = viewModel;
+        this.customerProductInfoList = customerProductInfoList;
     }
 
     @NonNull
@@ -100,30 +101,30 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
             this.binding = binding;
         }
 
-        public void bindCustomerProducts(CustomerProductInfo customerProductInfo) {
-            String productName = Converter.convert(customerProductInfo.getProductName());
+        public void bindCustomerProducts(CustomerProductInfo info) {
+            String productName = Converter.convert(info.getProductName());
             binding.txtProductName.setText(productName);
-            if (!customerProductInfo.getDescription().isEmpty()) {
+            if (!info.getDescription().isEmpty()) {
                 binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.convert(customerProductInfo.getDescription());
+                String description = Converter.convert(info.getDescription());
                 binding.txtDescription.setText(description);
             }
 
-            String userFullName = Converter.convert(customerProductInfo.getUserFullName());
+            String userFullName = Converter.convert(info.getUserFullName());
             binding.txtUserName.setText(userFullName);
 
             NumberFormat formatter = new DecimalFormat("#,###");
-            String formattedNumber = formatter.format(customerProductInfo.getInvoicePrice());
+            String formattedNumber = formatter.format(info.getInvoicePrice());
 
             binding.txtInvoicePrice.setText(formattedNumber + "تومان");
 
-            if (customerProductInfo.isFinish()) {
+            if (info.isFinish()) {
                 binding.checkBoxFinish.setChecked(true);
             } else {
                 binding.checkBoxFinish.setChecked(false);
             }
 
-            if (customerProductInfo.isInvoicePayment()) {
+            if (info.isInvoicePayment()) {
                 binding.checkBoxInvoicePayment.setChecked(true);
             } else {
                 binding.checkBoxInvoicePayment.setChecked(false);

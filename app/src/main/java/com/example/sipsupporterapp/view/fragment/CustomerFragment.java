@@ -239,7 +239,7 @@ public class CustomerFragment extends Fragment {
     private void setupAdapter(List<CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
                 getContext(),
-                customerInfoList, viewModel, SipSupportSharedPreferences.getDate(getContext()));
+                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()));
         binding.recyclerViewCustomerList.setAdapter(adapter);
     }
 }

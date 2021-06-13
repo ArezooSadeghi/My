@@ -18,15 +18,16 @@ import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 import java.util.List;
 
 public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAddressHolder> {
+
     private Context context;
-    private List<ServerData> serverDataList;
     private LoginViewModel viewModel;
+    private List<ServerData> serverDataList;
     private int lastSelectedPosition = -1;
 
-    public IPAddressAdapter(Context context, List<ServerData> serverDataList, LoginViewModel viewModel) {
+    public IPAddressAdapter(Context context, LoginViewModel viewModel, List<ServerData> serverDataList) {
         this.context = context;
-        this.serverDataList = serverDataList;
         this.viewModel = viewModel;
+        this.serverDataList = serverDataList;
     }
 
     @NonNull
@@ -43,14 +44,6 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
     public void onBindViewHolder(@NonNull IPAddressHolder holder, int position) {
         ServerData serverData = serverDataList.get(position);
         holder.bindServerData(serverData);
-        holder.binding.radioBtn.setChecked(lastSelectedPosition == position);
-        holder.binding.radioBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                lastSelectedPosition = position;
-                notifyDataSetChanged();
-            }
-        });
 
         holder.binding.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -25,14 +25,15 @@ import java.util.List;
 import java.util.Locale;
 
 public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPaymentAdapter.CustomerPaymentInfoHolder> {
-    private Context context;
-    private List<CustomerPaymentInfo> customerPaymentInfoList;
-    private CustomerPaymentViewModel viewModel;
 
-    public CustomerPaymentAdapter(Context context, List<CustomerPaymentInfo> customerPaymentInfoList, CustomerPaymentViewModel viewModel) {
+    private Context context;
+    private CustomerPaymentViewModel viewModel;
+    private List<CustomerPaymentInfo> customerPaymentInfoList;
+
+    public CustomerPaymentAdapter(Context context, CustomerPaymentViewModel viewModel, List<CustomerPaymentInfo> customerPaymentInfoList) {
         this.context = context;
-        this.customerPaymentInfoList = customerPaymentInfoList;
         this.viewModel = viewModel;
+        this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
     @NonNull
@@ -97,18 +98,18 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             this.binding = binding;
         }
 
-        public void bindCustomerPaymentInfo(CustomerPaymentInfo customerPaymentInfo) {
-            String bankAccountName = Converter.convert(customerPaymentInfo.getBankAccountName());
+        public void bindCustomerPaymentInfo(CustomerPaymentInfo info) {
+            String bankAccountName = Converter.convert(info.getBankAccountName());
             binding.txtBankAccountName.setText(bankAccountName);
-            binding.txtBankAccountNo.setText(customerPaymentInfo.getBankAccountNO());
-            String bankName = Converter.convert(customerPaymentInfo.getBankName());
+            binding.txtBankAccountNo.setText(info.getBankAccountNO());
+            String bankName = Converter.convert(info.getBankName());
             binding.txtBankName.setText(bankName);
 
-            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(info.getPrice());
             binding.txtPrice.setText(currencyFormat + "تومان");
 
-            if (customerPaymentInfo.getDatePayment() != 0) {
-                String date = String.valueOf(customerPaymentInfo.getDatePayment());
+            if (info.getDatePayment() != 0) {
+                String date = String.valueOf(info.getDatePayment());
                 String year = date.substring(0, 4);
                 String month = date.substring(4, 6);
                 String day = date.substring(6);

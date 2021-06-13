@@ -23,14 +23,15 @@ import com.skydoves.powermenu.PowerMenuItem;
 import java.util.List;
 
 public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupportAdapter.CustomerSupportInfoHolder> {
-    private Context context;
-    private List<CustomerSupportInfo> customerSupportInfoList;
-    private CustomerSupportViewModel viewModel;
 
-    public CustomerSupportAdapter(Context context, List<CustomerSupportInfo> customerSupportInfoList, CustomerSupportViewModel viewModel) {
+    private Context context;
+    private CustomerSupportViewModel viewModel;
+    private List<CustomerSupportInfo> customerSupportInfoList;
+
+    public CustomerSupportAdapter(Context context, CustomerSupportViewModel viewModel, List<CustomerSupportInfo> customerSupportInfoList) {
         this.context = context;
-        this.customerSupportInfoList = customerSupportInfoList;
         this.viewModel = viewModel;
+        this.customerSupportInfoList = customerSupportInfoList;
     }
 
     @NonNull
@@ -86,18 +87,18 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerSupportInfo customerSupportInfo) {
-            String question = Converter.convert(customerSupportInfo.getQuestion());
+        public void bindCustomerSupportInfo(CustomerSupportInfo info) {
+            String question = Converter.convert(info.getQuestion());
             binding.txtQuestion.setText(question);
-            String answer = Converter.convert(customerSupportInfo.getAnswer());
+            String answer = Converter.convert(info.getAnswer());
             binding.txtAnswer.setText(answer);
-            String userFullName = Converter.convert(customerSupportInfo.getUserFullName());
+            String userFullName = Converter.convert(info.getUserFullName());
             binding.txtUserFullName.setText(userFullName + " :");
 
-            String customerSupportID = String.valueOf(customerSupportInfo.getCustomerSupportID());
+            String customerSupportID = String.valueOf(info.getCustomerSupportID());
             binding.txtCustomerSupportID.setText(customerSupportID);
 
-            binding.txtRegTime.setText(customerSupportInfo.getRegTime());
+            binding.txtRegTime.setText(info.getRegTime());
 
         }
     }

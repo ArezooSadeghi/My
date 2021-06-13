@@ -20,15 +20,16 @@ import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 import java.util.List;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
+
     private Context context;
-    private List<CustomerInfo> customerInfoList;
     private CustomerViewModel viewModel;
+    private List<CustomerInfo> customerInfoList;
     private String date;
 
-    public CustomerAdapter(Context context, List<CustomerInfo> customerInfoList, CustomerViewModel viewModel, String date) {
+    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerInfo> customerInfoList, String date) {
         this.context = context;
-        this.customerInfoList = customerInfoList;
         this.viewModel = viewModel;
+        this.customerInfoList = customerInfoList;
         this.date = date;
     }
 
@@ -45,7 +46,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull CustomerHolder holder, int position) {
         CustomerInfo customerInfo = customerInfoList.get(position);
-        holder.bindCustomInfo(customerInfo);
+        holder.bindCustomerInfo(customerInfo);
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,14 +81,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             this.binding = binding;
         }
 
-        public void bindCustomInfo(CustomerInfo customerInfo) {
-            String city = Converter.convert(customerInfo.getCity());
+        public void bindCustomerInfo(CustomerInfo info) {
+            String city = Converter.convert(info.getCity());
             binding.txtCity.setText(city);
-            binding.txtLastSeen.setText(customerInfo.getLastSeen());
+            binding.txtLastSeen.setText(info.getLastSeen());
 
-            String customerName = Converter.convert(customerInfo.getCustomerName());
+            String customerName = Converter.convert(info.getCustomerName());
             binding.txtCustomerName.setText(customerName);
-            binding.txtCustomerID.setText(String.valueOf(customerInfo.getCustomerID()));
+            binding.txtCustomerID.setText(String.valueOf(info.getCustomerID()));
         }
     }
 }

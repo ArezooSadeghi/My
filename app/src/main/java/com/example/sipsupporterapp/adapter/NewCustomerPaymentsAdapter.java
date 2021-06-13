@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class NewCustomerPaymentsAdapter extends RecyclerView.Adapter<NewCustomerPaymentsAdapter.NewCustomerPaymentsHolder> {
+
     private Context context;
     private NewCustomerPaymentsViewModel viewModel;
     private List<CustomerPaymentInfo> customerPaymentInfoList;

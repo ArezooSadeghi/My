@@ -199,7 +199,7 @@ public class UserFragment extends Fragment {
 
     private void setupAdapter(CustomerUserInfo[] customerUserInfoArray) {
         List<CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
-        UserAdapter adapter = new UserAdapter(getContext(), customerUserInfoList, viewModel, date);
+        UserAdapter adapter = new UserAdapter(getContext(), viewModel, customerUserInfoList, date);
         binding.recyclerViewCustomerUsers.setAdapter(adapter);
     }
 }

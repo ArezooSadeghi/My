@@ -20,15 +20,16 @@ import com.example.sipsupporterapp.viewmodel.UserViewModel;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersHolder> {
+
     private Context context;
-    private List<CustomerUserInfo> customerUserInfoList;
     private UserViewModel viewModel;
+    private List<CustomerUserInfo> customerUserInfoList;
     private String date;
 
-    public UserAdapter(Context context, List<CustomerUserInfo> customerUserInfoList, UserViewModel viewModel, String date) {
+    public UserAdapter(Context context, UserViewModel viewModel, List<CustomerUserInfo> customerUserInfoList, String date) {
         this.context = context;
-        this.customerUserInfoList = customerUserInfoList;
         this.viewModel = viewModel;
+        this.customerUserInfoList = customerUserInfoList;
         this.date = date;
     }
 
@@ -87,10 +88,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerUserInfo customerUserInfo) {
-            String userName = Converter.convert(customerUserInfo.getUserName());
+        public void bindCustomerSupportInfo(CustomerUserInfo info) {
+            String userName = Converter.convert(info.getUserName());
             binding.txtCustomerUserName.setText(userName);
-            binding.txtLastSeen.setText(customerUserInfo.getLastSeen());
+            binding.txtLastSeen.setText(info.getLastSeen());
         }
     }
 }

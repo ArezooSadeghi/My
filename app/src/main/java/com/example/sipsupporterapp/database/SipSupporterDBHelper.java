@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class SipSupporterDBHelper extends SQLiteOpenHelper {
+
     public SipSupporterDBHelper(@Nullable Context context) {
         super(context, SipSupporterSchema.DB_NAME, null, SipSupporterSchema.DB_VERSION);
     }
@@ -27,6 +28,5 @@ public class SipSupporterDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoGalleryDiffUtil extends DiffUtil.Callback {
+
     private List<String> oldFilePathList = new ArrayList<>();
     private List<String> newFilePathList = new ArrayList<>();
 

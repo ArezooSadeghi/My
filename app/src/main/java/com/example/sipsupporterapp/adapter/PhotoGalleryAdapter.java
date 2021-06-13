@@ -20,6 +20,7 @@ import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 import java.util.List;
 
 public class PhotoGalleryAdapter extends RecyclerView.Adapter<PhotoGalleryAdapter.PhotoGalleryHolder> {
+
     private Context context;
     private AttachmentViewModel viewModel;
     private List<String> filePathList;

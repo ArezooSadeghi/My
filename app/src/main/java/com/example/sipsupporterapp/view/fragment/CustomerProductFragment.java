@@ -265,7 +265,7 @@ public class CustomerProductFragment extends Fragment {
 
     private void setupAdapter(CustomerProductInfo[] customerProductInfoArray) {
         List<CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
-        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), customerProductInfoList, viewModel);
+        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, customerProductInfoList);
         binding.recyclerViewProducts.setAdapter(adapter);
     }
 }
