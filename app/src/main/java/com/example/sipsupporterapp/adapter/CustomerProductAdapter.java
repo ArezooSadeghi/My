@@ -77,7 +77,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getProductAdapterSeeDocumentsClickedSingleLiveEvent().setValue(customerProductInfo);
+                                viewModel.getSeeCustomerProductAttachmentsClicked().setValue(customerProductInfo);
                                 powerMenu.dismiss();
                                 break;
                         }

@@ -66,11 +66,11 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                viewModel.getEditCustomerPaymentClicked().setValue(customerPaymentInfoList.get(position));
+                                viewModel.getEditClicked().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteCustomerPaymentClicked().setValue(customerPaymentInfoList.get(position));
+                                viewModel.getDeleteClicked().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 2:

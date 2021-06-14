@@ -1,8 +1,6 @@
 package com.example.sipsupporterapp.viewmodel;
 
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,19 +10,18 @@ import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-import java.util.List;
-import java.util.Map;
-
 public class AttachmentViewModel extends AndroidViewModel {
+
     private SipSupporterRepository mRepository;
 
-    private SingleLiveEvent<Boolean> mRequestPermissionSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> mAllowPermissionSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> requestPermission = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> allowPermission = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<AttachResult> mAttachResultSingleLiveEvent;
-    private SingleLiveEvent<String> mErrorAttachResultSingleLiveEvent;
-    private SingleLiveEvent<String> mNoConnectionSingleLiveEvent;
-    private SingleLiveEvent<String> mTimeOutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorAttachResultSingleLiveEvent;
+
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> mDangerousUserSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> mIsAttachAgainSingleLiveEvent = new SingleLiveEvent<>();
@@ -64,10 +61,10 @@ public class AttachmentViewModel extends AndroidViewModel {
 
         mRepository = SipSupporterRepository.getInstance(getApplication());
 
-        mAttachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
-        mErrorAttachResultSingleLiveEvent = mRepository.getErrorAttachResultSingleLiveEvent();
-        mNoConnectionSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
-        mTimeOutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
+        attachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
+        errorAttachResultSingleLiveEvent = mRepository.getErrorAttachResultSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
         mDangerousUserSingleLiveEvent = mRepository.getDangerousUserSingleLiveEvent();
 
         getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
@@ -90,27 +87,27 @@ public class AttachmentViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<Boolean> getRequestCameraPermission() {
-        return mRequestPermissionSingleLiveEvent;
+        return requestPermission;
     }
 
     public SingleLiveEvent<Boolean> getAllowCameraPermissionSingleLiveEvent() {
-        return mAllowPermissionSingleLiveEvent;
+        return allowPermission;
     }
 
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
-        return mAttachResultSingleLiveEvent;
+        return attachResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorAttachResultSingleLiveEvent() {
-        return mErrorAttachResultSingleLiveEvent;
+        return errorAttachResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionSingleLiveEvent() {
-        return mNoConnectionSingleLiveEvent;
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getmTimeOutExceptionHappenSingleLiveEvent() {
-        return mTimeOutExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {

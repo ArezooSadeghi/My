@@ -41,8 +41,8 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
-    private SingleLiveEvent<CustomerPaymentInfo> DeleteCustomerPaymentClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerPaymentInfo> editCustomerPaymentClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentInfo> DeleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
 
 
@@ -142,12 +142,12 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return dangerousUserSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getDeleteCustomerPaymentClicked() {
-        return DeleteCustomerPaymentClicked;
+    public SingleLiveEvent<CustomerPaymentInfo> getDeleteClicked() {
+        return DeleteClicked;
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getEditCustomerPaymentClicked() {
-        return editCustomerPaymentClicked;
+    public SingleLiveEvent<CustomerPaymentInfo> getEditClicked() {
+        return editClicked;
     }
 
     public SingleLiveEvent<CustomerPaymentInfo> getSeeCustomerPaymentAttachmentsClicked() {

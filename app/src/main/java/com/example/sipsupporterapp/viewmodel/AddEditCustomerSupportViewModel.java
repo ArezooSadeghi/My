@@ -12,72 +12,80 @@ import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class AddEditCustomerSupportViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
-    private SingleLiveEvent<SupportEventResult> supportEventResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorSupportEventResultSingleLiveEvent;
-    private SingleLiveEvent<CustomerSupportResult> customerSupportResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerSupportResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnection;
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
+
+    private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorSupportEventsResultSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorAddCustomerSupportResultSingleLiveEvent;
+
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
     public AddEditCustomerSupportViewModel(@NonNull Application application) {
         super(application);
+
         repository = SipSupporterRepository.getInstance(getApplication());
-        supportEventResultSingleLiveEvent = repository.getSupportEventsResultSingleLiveEvent();
-        errorSupportEventResultSingleLiveEvent = repository.getErrorSupportEventsResultSingleLiveEvent();
-        customerSupportResultSingleLiveEvent = repository.getAddCustomerSupportResultSingleLiveEvent();
-        errorCustomerSupportResultSingleLiveEvent = repository.getErrorAddCustomerSupportResultSingleLiveEvent();
-        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
+
+        supportEventsResultSingleLiveEvent = repository.getSupportEventsResultSingleLiveEvent();
+        errorSupportEventsResultSingleLiveEvent = repository.getErrorSupportEventsResultSingleLiveEvent();
+
+        addCustomerSupportResultSingleLiveEvent = repository.getAddCustomerSupportResultSingleLiveEvent();
+        errorAddCustomerSupportResultSingleLiveEvent = repository.getErrorAddCustomerSupportResultSingleLiveEvent();
+
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
     }
 
     public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
-        return supportEventResultSingleLiveEvent;
+        return supportEventsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorSupportEventsResultSingleLiveEvent() {
-        return errorSupportEventResultSingleLiveEvent;
+        return errorSupportEventsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerSupportResult> getAddCustomerSupportResultSingleLiveEvent() {
-        return customerSupportResultSingleLiveEvent;
+        return addCustomerSupportResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorAddCustomerSupportResultSingleLiveEvent() {
-        return errorCustomerSupportResultSingleLiveEvent;
+        return errorAddCustomerSupportResultSingleLiveEvent;
     }
 
-    public void getSipSupportServiceSupportEventResult(String baseUrl) {
-        repository.getSipSupportServiceSupportEventResult(baseUrl);
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public void fetchSupportEventResult(String path, String userLoginKey) {
-        repository.fetchSupportEventResult(path, userLoginKey);
+    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
+        return dangerousUserSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
 
-    public void postCustomerSupportInfo(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
-        repository.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo);
+    public void getSipSupporterServiceSupportEventsResult(String baseUrl) {
+        repository.getSipSupporterServiceSupportEventsResult(baseUrl);
     }
 
-    public void getSipSupportServicePostCustomerSupportResult(String baseUrl) {
-        repository.getSipSupportServicePostCustomerSupportResult(baseUrl);
+    public void getSipSupporterServiceAddCustomerSupportResult(String baseUrl) {
+        repository.getSipSupporterServiceAddCustomerSupportResult(baseUrl);
     }
 
-    public SingleLiveEvent<String> getNoConnection() {
-        return noConnection;
+    public void fetchSupportEventsResult(String path, String userLoginKey) {
+        repository.fetchSupportEventsResult(path, userLoginKey);
     }
 
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
+    public void addCustomerSupport(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
+        repository.addCustomerSupport(path, userLoginKey, customerSupportInfo);
     }
 }

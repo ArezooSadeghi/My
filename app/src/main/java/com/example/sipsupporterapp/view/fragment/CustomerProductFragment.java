@@ -86,9 +86,9 @@ public class CustomerProductFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceGetCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerProductsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/List/";
-        viewModel.fetchProductResult(path, userLoginKey, customerID);
+        viewModel.fetchCustomerProducts(path, userLoginKey, customerID);
     }
 
     private void createViewModel() {
@@ -151,7 +151,7 @@ public class CustomerProductFragment extends Fragment {
                     }
                 });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
@@ -196,7 +196,7 @@ public class CustomerProductFragment extends Fragment {
                     }
                 });
 
-        viewModel.getYesDelete()
+        viewModel.getYesDeleteClicked()
                 .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean yesDelete) {
@@ -239,14 +239,14 @@ public class CustomerProductFragment extends Fragment {
                     }
                 });
 
-        viewModel.getProductsFragmentDialogDismissSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getDialogDismissed().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean dialogDismissed) {
                 fetchCustomerProducts();
             }
         });
 
-        viewModel.getProductAdapterSeeDocumentsClickedSingleLiveEvent()
+        viewModel.getSeeCustomerProductAttachmentsClicked()
                 .observe(getViewLifecycleOwner(), new Observer<CustomerProductInfo>() {
                     @Override
                     public void onChanged(CustomerProductInfo customerProductInfo) {
@@ -258,7 +258,7 @@ public class CustomerProductFragment extends Fragment {
 
     private void deleteProduct() {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-        viewModel.getSipSupportServiceForDeleteCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceDeleteCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Delete/";
         viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
     }

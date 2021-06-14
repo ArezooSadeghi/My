@@ -10,8 +10,6 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-import java.util.List;
-
 public class UserViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerUserResult> customerUserResultSingleLiveEvent;
@@ -71,7 +69,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public void getSipSupportServiceGetDateResult(String baseUrl) {
-        repository.getSipSupportServiceGetDateResult(baseUrl);
+        repository.getSipSupporterServiceDateResult(baseUrl);
     }
 
     public SingleLiveEvent<String> getNoConnection() {

@@ -182,7 +182,7 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getDeleteCustomerPaymentClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
                 customerPaymentID = customerPaymentInfo.getCustomerPaymentID();
@@ -215,7 +215,7 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getEditCustomerPaymentClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
                 AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment

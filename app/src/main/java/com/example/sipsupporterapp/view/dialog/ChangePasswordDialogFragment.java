@@ -72,7 +72,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
                         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     } else {
                         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-                        viewModel.getSipSupportServiceChangePassword(serverData.getIpAddress() + ":" + serverData.getPort());
+                        viewModel.getSipSupporterServiceChangePassword(serverData.getIpAddress() + ":" + serverData.getPort());
                         String path = "/api/v1/users/changePassword/";
                         viewModel.changePassword(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), binding.edTextNewPassword.getText().toString());
                     }
@@ -90,7 +90,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
 
 
     private void setObserver() {
-        viewModel.getChangedPassword().observe(this, new Observer<UserResult>() {
+        viewModel.getChangedPasswordResultSingleLiveEvent().observe(this, new Observer<UserResult>() {
             @Override
             public void onChanged(UserResult userResult) {
                 SipSupportSharedPreferences.setUserLoginKey(getContext(), userResult.getUsers()[0].getUserLoginKey());
@@ -100,7 +100,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getErrorChangedPassword().observe(this, new Observer<String>() {
+        viewModel.getErrorChangedPasswordResultSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String errorChangedPassword) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(errorChangedPassword);
@@ -131,7 +131,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getNoConnection().observe(this, new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String error) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);

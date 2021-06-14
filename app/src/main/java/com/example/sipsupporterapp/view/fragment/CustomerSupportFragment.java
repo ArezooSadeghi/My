@@ -88,7 +88,7 @@ public class CustomerSupportFragment extends Fragment {
         ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupportServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerSupports/ListByCustomer/";
-        viewModel.getCustomerSupportResult(path, userLoginKey, customerID);
+        viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
     }
 
     private void initView() {
@@ -130,7 +130,7 @@ public class CustomerSupportFragment extends Fragment {
                     }
                 });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBar.setVisibility(View.GONE);
@@ -166,7 +166,7 @@ public class CustomerSupportFragment extends Fragment {
                     }
                 });
 
-        viewModel.getCustomerSupportInfoAdapterSeeDocumentClickedSingleLiveEvent()
+        viewModel.getSeeCustomerSupportAttachmentsClicked()
                 .observe(getViewLifecycleOwner(), new Observer<CustomerSupportInfo>() {
                     @Override
                     public void onChanged(CustomerSupportInfo customerSupportInfo) {

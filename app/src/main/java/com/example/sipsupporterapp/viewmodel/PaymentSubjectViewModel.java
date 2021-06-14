@@ -10,13 +10,14 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class PaymentSubjectViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent;
     private SingleLiveEvent<String> errorPaymentSubjectsResultSingleLiveEvent;
 
-    private SingleLiveEvent<String> noConnection;
-    private SingleLiveEvent<String> timeoutExceptionHappen;
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
     public PaymentSubjectViewModel(@NonNull Application application) {
         super(application);
@@ -26,8 +27,8 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         paymentSubjectsResultSingleLiveEvent = repository.getPaymentSubjectsResultSingleLiveEvent();
         errorPaymentSubjectsResultSingleLiveEvent = repository.getErrorPaymentSubjectsSingleLiveEvent();
 
-        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappen = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectsResultSingleLiveEvent() {
@@ -38,12 +39,12 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         return errorPaymentSubjectsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnection() {
-        return noConnection;
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappen() {
-        return timeoutExceptionHappen;
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {

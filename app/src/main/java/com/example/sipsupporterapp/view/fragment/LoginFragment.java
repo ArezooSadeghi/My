@@ -2,7 +2,6 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,7 +139,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String error) {
                 binding.loadingLayout.setVisibility(View.GONE);

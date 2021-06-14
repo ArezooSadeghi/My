@@ -140,7 +140,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             public void onChanged(PaymentResult paymentResult) {
                 SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
                 fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getUpdateCostListSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
+                viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
                 dismiss();
             }
         });
@@ -158,7 +158,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             public void onChanged(PaymentResult paymentResult) {
                 SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
                 fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getUpdateCostListSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
+                viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
                 dismiss();
             }
         });
@@ -171,7 +171,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getNoConnection().observe(this, new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -412,18 +412,18 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentsEdit(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceEditPayment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Edit/";
-        viewModel.paymentEdit(path, userLoginKey, paymentInfo);
+        viewModel.editPayment(path, userLoginKey, paymentInfo);
     }
 
     private void addCost(PaymentInfo paymentInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentsAdd(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAddPayment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Add/";
-        viewModel.paymentsAdd(path, userLoginKey, paymentInfo);
+        viewModel.addPayment(path, userLoginKey, paymentInfo);
     }
 
     private void fetchPaymentSubjectInfo(int paymentSubjectID) {

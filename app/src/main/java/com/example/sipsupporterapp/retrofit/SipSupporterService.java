@@ -15,6 +15,8 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
+import com.example.sipsupporterapp.model.ProductGroupInfo;
+import com.example.sipsupporterapp.model.ProductGroupResult;
 import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.SupportEventResult;
@@ -137,4 +139,7 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<BankAccountResult> fetchBankAccounts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @GET("{path}")
+    Call<ProductGroupResult> fetchProductGroups(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
 }

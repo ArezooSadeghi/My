@@ -63,7 +63,7 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
                     public void onItemClick(int position, PowerMenuItem item) {
                         switch (position) {
                             case 0:
-                                viewModel.getCustomerSupportInfoAdapterSeeDocumentClickedSingleLiveEvent().setValue(customerSupportInfo);
+                                viewModel.getSeeCustomerSupportAttachmentsClicked().setValue(customerSupportInfo);
                                 powerMenu.dismiss();
                                 break;
                         }

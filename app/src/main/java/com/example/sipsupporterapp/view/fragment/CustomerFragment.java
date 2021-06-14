@@ -2,8 +2,6 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,10 +73,10 @@ public class CustomerFragment extends Fragment {
             binding.progressBarLoading.setVisibility(View.VISIBLE);
             ServerData serverData = viewModel
                     .getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-            viewModel.getSupportServicePostCustomerParameter(
+            viewModel.getSupporterServicePostCustomerParameter(
                     serverData.getIpAddress() + ":" + serverData.getPort());
             String path = "/api/v1/customers/";
-            viewModel.fetchCustomerResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
+            viewModel.fetchCustomersResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
         }
 
         return binding.getRoot();
@@ -101,14 +99,14 @@ public class CustomerFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceGetDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/common/getDate/";
         viewModel.fetchDateResult(path, userLoginKey);
     }
 
 
     private void setObserver() {
-        viewModel.getCustomerResultSingleLiveEvent()
+        viewModel.getCustomersResultSingleLiveEvent()
                 .observe(getViewLifecycleOwner(), new Observer<CustomerResult>() {
                     @Override
                     public void onChanged(CustomerResult customerResult) {
@@ -132,7 +130,7 @@ public class CustomerFragment extends Fragment {
                     }
                 });
 
-        viewModel.getErrorSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getErrorCustomersResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String error) {
                 binding.progressBarLoading.setVisibility(View.GONE);
@@ -141,7 +139,7 @@ public class CustomerFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String error) {
                 binding.progressBarLoading.setVisibility(View.GONE);
@@ -177,7 +175,7 @@ public class CustomerFragment extends Fragment {
                     }
                 });
 
-        viewModel.getItemClickedSingleLiveEvent()
+        viewModel.getItemClicked()
                 .observe(getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
                     public void onChanged(Integer customerID) {
@@ -228,9 +226,9 @@ public class CustomerFragment extends Fragment {
                 String centerName = SipSupportSharedPreferences.getCenterName(getContext());
                 String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
                 ServerData serverData = viewModel.getServerData(centerName);
-                viewModel.getSupportServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
+                viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customers/search";
-                viewModel.fetchCustomerResult(path, userLoginKey, binding.edTextSearch.getText().toString());
+                viewModel.fetchCustomersResult(path, userLoginKey, binding.edTextSearch.getText().toString());
             }
         });
     }

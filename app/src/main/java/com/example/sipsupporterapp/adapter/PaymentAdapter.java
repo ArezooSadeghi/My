@@ -64,7 +64,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                viewModel.getEditClickedSingleLiveEvent().setValue(paymentInfoList.get(position));
+                                viewModel.getEditClicked().setValue(paymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 1:
@@ -72,7 +72,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getSeeDocumentsClicked().setValue(paymentInfoList.get(position));
+                                viewModel.getSeePaymentAttachmentsClicked().setValue(paymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                         }

@@ -13,6 +13,7 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 import java.util.List;
 
 public class LoginViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent;
@@ -22,9 +23,11 @@ public class LoginViewModel extends AndroidViewModel {
     private SingleLiveEvent<ServerData> updateIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<UserResult> userResultSingleLiveEvent;
     private SingleLiveEvent<String> errorUserResult;
-    private SingleLiveEvent<String> noConnection;
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
+
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
+
 
     private SingleLiveEvent<ServerData> yesDeleteSpinner = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> yesDeleteIPAddressList = new SingleLiveEvent<>();
@@ -35,7 +38,7 @@ public class LoginViewModel extends AndroidViewModel {
         wrongIpAddressSingleLiveEvent = repository.getWrongIpAddressSingleLiveEvent();
         userResultSingleLiveEvent = repository.getUserLoginResultSingleLiveEvent();
         errorUserResult = repository.getErrorUserLoginResultSingleLiveEvent();
-        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
@@ -76,8 +79,8 @@ public class LoginViewModel extends AndroidViewModel {
         return errorUserResult;
     }
 
-    public SingleLiveEvent<String> getNoConnection() {
-        return noConnection;
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<ServerData> getYesDeleteSpinner() {

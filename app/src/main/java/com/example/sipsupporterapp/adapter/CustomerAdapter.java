@@ -50,7 +50,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getItemClickedSingleLiveEvent().setValue(customerInfo.getCustomerID());
+                viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
                 SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
                 SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
             }

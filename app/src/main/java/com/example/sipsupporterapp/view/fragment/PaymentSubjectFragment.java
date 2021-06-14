@@ -127,7 +127,7 @@ public class PaymentSubjectFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -135,7 +135,7 @@ public class PaymentSubjectFragment extends Fragment {
             }
         });
 
-        viewModel.getTimeoutExceptionHappen().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);

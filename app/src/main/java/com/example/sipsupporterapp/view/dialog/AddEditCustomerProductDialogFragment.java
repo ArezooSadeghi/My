@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerProductDialogBinding;
+import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ProductInfo;
@@ -28,9 +29,11 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
+import com.example.sipsupporterapp.view.activity.ProductsContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
@@ -45,8 +48,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     private FragmentAddEditCustomerProductDialogBinding binding;
     private CustomerProductViewModel viewModel;
 
-    private String lastValueSpinner, currentDate;
-    private int customerID, customerProductID, productID, currentYear, currentMonth, currentDay;
+    private String lastValueSpinner, currentDate, productGroup;
+    private int customerID, customerProductID, productID, currentYear, currentMonth, currentDay, productGroupID;
     private boolean finish, invoicePayment;
     private long invoicePrice, expireDate;
     private String description;
@@ -161,46 +164,59 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomerProductInfo customerProductInfo = new CustomerProductInfo();
-
-                String productName = lastValueSpinner;
-                customerProductInfo.setProductName(productName);
-
-                customerProductInfo.setProductID(productID);
-
-                String description = binding.edTextDescription.getText().toString();
-                customerProductInfo.setDescription(description);
-
-                String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
-                customerProductInfo.setInvoicePrice(Long.valueOf(price));
-
-                boolean paymentPrice;
-                if (binding.checkBoxInvoicePayment.isChecked()) {
-                    paymentPrice = true;
+                if (binding.btnProductName.getText().toString().isEmpty()) {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("لطفا نوع محصول را انتخاب نمایید");
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
-                    paymentPrice = false;
+                    CustomerProductInfo customerProductInfo = new CustomerProductInfo();
+
+                    String productName = productGroup;
+                    customerProductInfo.setProductName(productName);
+
+                    customerProductInfo.setProductID(productGroupID);
+
+                    String description = binding.edTextDescription.getText().toString();
+                    customerProductInfo.setDescription(description);
+
+                    String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
+                    customerProductInfo.setInvoicePrice(Long.valueOf(price));
+
+                    boolean paymentPrice;
+                    if (binding.checkBoxInvoicePayment.isChecked()) {
+                        paymentPrice = true;
+                    } else {
+                        paymentPrice = false;
+                    }
+
+                    boolean finish;
+                    if (binding.checkBoxFinish.isChecked()) {
+                        finish = true;
+                    } else {
+                        finish = false;
+                    }
+
+                    customerProductInfo.setCustomerID(customerID);
+                    customerProductInfo.setCustomerProductID(customerProductID);
+                    customerProductInfo.setInvoicePayment(paymentPrice);
+                    customerProductInfo.setFinish(finish);
+
+                    String date = binding.btnDateExpiration.getText().toString().replaceAll("/", "");
+                    customerProductInfo.setExpireDate(Long.valueOf(date));
+
+                    if (customerProductID == 0) {
+                        addProduct(customerProductInfo);
+                    } else {
+                        editProduct(customerProductInfo);
+                    }
                 }
+            }
+        });
 
-                boolean finish;
-                if (binding.checkBoxFinish.isChecked()) {
-                    finish = true;
-                } else {
-                    finish = false;
-                }
-
-                customerProductInfo.setCustomerID(customerID);
-                customerProductInfo.setCustomerProductID(customerProductID);
-                customerProductInfo.setInvoicePayment(paymentPrice);
-                customerProductInfo.setFinish(finish);
-
-                String date = binding.btnDateExpiration.getText().toString().replaceAll("/", "");
-                customerProductInfo.setExpireDate(Long.valueOf(date));
-
-                if (customerProductID == 0) {
-                    addProduct(customerProductInfo);
-                } else {
-                    editProduct(customerProductInfo);
-                }
+        binding.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent starter = ProductsContainerActivity.start(getContext());
+                startActivity(starter);
             }
         });
 
@@ -258,7 +274,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             }
         });
 
-        binding.spinnerProducts.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        /*binding.spinnerProducts.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 lastValueSpinner = (String) item;
@@ -266,23 +282,23 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
                 fetchProductInfo();
             }
-        });
+        });*/
     }
 
     private void fetchProductInfo() {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceForGetCustomerProductInfo(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceProductInfo(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/products/Info/";
-        viewModel.fetchProductInfo(path, userLoginKey, productID);
+        viewModel.fetchProductInfo(path, userLoginKey, productGroupID);
     }
 
     private void editProduct(CustomerProductInfo customerProductInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceForEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Edit/";
         viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
@@ -291,9 +307,9 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePostCustomerProducts(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAddCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Add/";
-        viewModel.postCustomerProducts(path, userLoginKey, customerProductInfo);
+        viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
     private void initViews() {
@@ -339,9 +355,9 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceGetProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceProductsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/products/List/";
-        viewModel.fetchProductResult(path, userLoginKey);
+        viewModel.fetchProducts(path, userLoginKey);
     }
 
     private void setupObserver() {
@@ -362,17 +378,17 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getAddProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
+        viewModel.getAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
                 SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
                 fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getProductsFragmentDialogDismissSingleLiveEvent().setValue(true);
+                viewModel.getDialogDismissed().setValue(true);
                 dismiss();
             }
         });
 
-        viewModel.getErrorAddProductResultSingleLiveEvent().observe(this, new Observer<String>() {
+        viewModel.getErrorAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -399,17 +415,17 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getEditProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
+        viewModel.getEditCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
                 SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
                 fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getProductsFragmentDialogDismissSingleLiveEvent().setValue(true);
+                viewModel.getDialogDismissed().setValue(true);
                 dismiss();
             }
         });
 
-        viewModel.getErrorEditProductResultSingleLiveEvent().observe(this, new Observer<String>() {
+        viewModel.getErrorEditCustomerProductResultSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -417,7 +433,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getNoConnection().observe(this, new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -450,7 +466,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     }
 
     private void setupSpinner(ProductInfo[] productInfoArray) {
-        String[] productNameArray = new String[productInfoArray.length];
+       /* String[] productNameArray = new String[productInfoArray.length];
         for (int i = 0; i < productNameArray.length; i++) {
             productNameArray[i] = productInfoArray[i].getProductName();
         }
@@ -473,6 +489,27 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 }
                 binding.spinnerProducts.setItems(productNameArray);
             }
-        }
+        }*/
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void getProductGroupID(PostProductGroupIDEvent event) {
+        productGroupID = event.getProductGroupID();
+        productGroup = event.getProductGroup();
+        binding.btnProductName.setText(productGroup);
+        fetchProductInfo();
+        EventBus.getDefault().removeStickyEvent(event);
     }
 }

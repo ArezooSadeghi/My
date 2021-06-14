@@ -87,9 +87,9 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceSupportEventResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceSupportEventsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/supportEvents/List/";
-        viewModel.fetchSupportEventResult(path, userLoginKey);
+        viewModel.fetchSupportEventsResult(path, userLoginKey);
     }
 
     private void handleEvents() {
@@ -159,7 +159,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getNoConnection().observe(this, new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -222,8 +222,8 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePostCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAddCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerSupports/AddWithAnswer/";
-        viewModel.postCustomerSupportInfo(path, userLoginKey, customerSupportInfo);
+        viewModel.addCustomerSupport(path, userLoginKey, customerSupportInfo);
     }
 }

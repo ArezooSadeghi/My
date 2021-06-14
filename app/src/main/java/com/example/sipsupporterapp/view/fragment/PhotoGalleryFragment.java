@@ -478,7 +478,7 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getmTimeOutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 showErrorDialog(message);

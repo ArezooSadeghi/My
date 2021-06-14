@@ -93,7 +93,7 @@ public class PaymentFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceGetBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceBankAccountsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/bankAccounts/List/";
         viewModel.fetchBankAccounts(path, userLoginKey);
     }
@@ -145,7 +145,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getPaymentsByBankAccountIDResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
+        viewModel.getPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -162,7 +162,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getErrorPaymentsByBankAccountIDResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getErrorPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
@@ -171,7 +171,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
@@ -204,7 +204,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getEditClickedSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
             @Override
             public void onChanged(PaymentInfo paymentInfo) {
                 AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(paymentInfo.getPaymentID(), paymentInfo.getDescription(), paymentInfo.getDatePayment(), paymentInfo.getPrice(), paymentInfo.getBankAccountID(), paymentInfo.getPaymentSubjectID(), paymentInfo.getPaymentSubject());
@@ -221,14 +221,14 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getYesDelete().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean yesDelete) {
                 deleteCost();
             }
         });
 
-        viewModel.getPaymentDeleteResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
+        viewModel.getDeletePaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
                 SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
@@ -237,7 +237,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getErrorPaymentDeleteResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getErrorDeletePaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -245,7 +245,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getSeeDocumentsClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
+        viewModel.getSeePaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
             @Override
             public void onChanged(PaymentInfo paymentInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, 0, paymentInfo.getPaymentID());
@@ -253,7 +253,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getUpdateCostListSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        viewModel.getUpdatingSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer bankAccountID) {
                 for (int i = 0; i < bankAccountInfoArray.length; i++) {
@@ -272,18 +272,18 @@ public class PaymentFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentsDelete(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceDeletePayment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Delete/";
-        viewModel.paymentsDelete(path, userLoginKey, paymentID);
+        viewModel.deletePayment(path, userLoginKey, paymentID);
     }
 
     private void fetchCostsByBankAccountID() {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentsListByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServicePaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/ListByBankAccount/";
-        viewModel.fetchPaymentsListByBankAccounts(path, userLoginKey, bankAccountID);
+        viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
