@@ -82,7 +82,7 @@ public class QuestionDeleteCustomerPaymentDialogFragment extends DialogFragment 
         binding.btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.getYesDeleteCustomerPayment().setValue(true);
+                viewModel.getYesDeleteClicked().setValue(true);
                 dismiss();
             }
         });

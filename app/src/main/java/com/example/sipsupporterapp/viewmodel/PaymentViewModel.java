@@ -12,8 +12,6 @@ import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-import java.util.HashMap;
-
 public class PaymentViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
@@ -150,7 +148,7 @@ public class PaymentViewModel extends AndroidViewModel {
     }
 
     public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
-        repository.getSipSupportServiceGetBankAccountResult(baseUrl);
+        repository.getSipSupporterServiceGetBankAccountsResult(baseUrl);
     }
 
     public void getSipSupportServicePaymentsListByBankAccount(String baseUrl) {

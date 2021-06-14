@@ -74,7 +74,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getSeeDocumentsClickedSingleLiveEvent().setValue(customerPaymentInfoList.get(position));
+                                viewModel.getSeeCustomerPaymentAttachmentsClicked().setValue(customerPaymentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                         }

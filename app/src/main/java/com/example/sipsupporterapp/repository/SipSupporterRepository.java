@@ -296,7 +296,7 @@ public class SipSupporterRepository {
                 }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceCustomerPaymentResult(String baseUrl) {
+    public void getSipSupporterServiceCustomerPaymentsResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
@@ -317,28 +317,28 @@ public class SipSupporterRepository {
                 }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceAddCustomerPayments(String baseUrl) {
+    public void getSipSupporterServiceAddCustomerPayment(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
                 }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceEditCustomerPayments(String baseUrl) {
+    public void getSipSupporterServiceEditCustomerPayment(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
                 }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceDeleteCustomerPayments(String baseUrl) {
+    public void getSipSupporterServiceDeleteCustomerPayment(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
                 }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
+    public void getSipSupporterServiceGetBankAccountsResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
@@ -1330,7 +1330,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchCustomerPaymentResult(String path, String userLoginKey, int customerID) {
+    public void fetchCustomerPaymentsResult(String path, String userLoginKey, int customerID) {
         sipSupporterService.fetchCustomerPayments(path, userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
@@ -1400,7 +1400,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addCustomerPayments(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+    public void addCustomerPayment(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
         sipSupporterService.addCustomerPayment(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
@@ -1435,7 +1435,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editCustomerPayments(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+    public void editCustomerPayment(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
         sipSupporterService.editCustomerPayment(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
@@ -1470,7 +1470,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void deleteCustomerPayments(String path, String userLoginKey, int customerPaymentID) {
+    public void deleteCustomerPayment(String path, String userLoginKey, int customerPaymentID) {
         sipSupporterService.deleteCustomerPayment(path, userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {

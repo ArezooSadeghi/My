@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
@@ -13,101 +12,66 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class CustomerPaymentViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
-
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerPaymentResultSingleLiveEvent;
-
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnection;
-
-    private SingleLiveEvent<CustomerPaymentInfo> seeDocumentsClickedSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> yesDeleteCustomerPaymentsSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerPaymentInfo> DeleteCustomerPaymentsClickedSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerPaymentInfo> editCustomerPaymentsClickedSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
     private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent;
 
-    private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentsSingleLiveEvent;
-    private SingleLiveEvent<String> errorAddCustomerPaymentSingleLiveEvent;
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorCustomerPaymentsResultSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorCustomerPaymentsByBankAccountResultSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorAddCustomerPaymentResultSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorEditCustomerPaymentResultSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorDeleteCustomerPaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> updateListAddCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentsSingleLiveEvent;
-    private SingleLiveEvent<String> errorDeleteCustomerPaymentSingleLiveEvent;
+    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentsSingleLiveEvent;
-    private SingleLiveEvent<String> errorEditCustomerPaymentSingleLiveEvent;
-
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerPaymentInfo> DeleteCustomerPaymentClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentInfo> editCustomerPaymentClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
 
 
     public CustomerPaymentViewModel(@NonNull Application application) {
         super(application);
+
         repository = SipSupporterRepository.getInstance(getApplication());
-
-        customerPaymentResultSingleLiveEvent = repository.getCustomerPaymentsResultSingleLiveEvent();
-        errorCustomerPaymentResultSingleLiveEvent = repository.getErrorCustomerPaymentsResultSingleLiveEvent();
-
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
 
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
         errorBankAccountsResultSingleLiveEvent = repository.getErrorBankAccountsResultSingleLiveEvent();
 
-        addCustomerPaymentsSingleLiveEvent = repository.getAddCustomerPaymentResultSingleLiveEvent();
-        errorAddCustomerPaymentSingleLiveEvent = repository.getErrorAddCustomerPaymentResultSingleLiveEvent();
+        customerPaymentsResultSingleLiveEvent = repository.getCustomerPaymentsResultSingleLiveEvent();
+        errorCustomerPaymentsResultSingleLiveEvent = repository.getErrorCustomerPaymentsResultSingleLiveEvent();
 
-        deleteCustomerPaymentsSingleLiveEvent = repository.getDeleteCustomerPaymentResultSingleLiveEvent();
-        errorDeleteCustomerPaymentSingleLiveEvent = repository.getErrorDeleteCustomerPaymentResultSingleLiveEvent();
+        customerPaymentsByBankAccountResultSingleLiveEvent = repository.getCustomerPaymentsByBankAccountResultSingleLiveEvent();
+        errorCustomerPaymentsByBankAccountResultSingleLiveEvent = repository.getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent();
 
-        editCustomerPaymentsSingleLiveEvent = repository.getEditCustomerPaymentResultSingleLiveEvent();
-        errorEditCustomerPaymentSingleLiveEvent = repository.getErrorEditCustomerPaymentResultSingleLiveEvent();
+        addCustomerPaymentResultSingleLiveEvent = repository.getAddCustomerPaymentResultSingleLiveEvent();
+        errorAddCustomerPaymentResultSingleLiveEvent = repository.getErrorAddCustomerPaymentResultSingleLiveEvent();
 
+        editCustomerPaymentResultSingleLiveEvent = repository.getEditCustomerPaymentResultSingleLiveEvent();
+        errorEditCustomerPaymentResultSingleLiveEvent = repository.getErrorEditCustomerPaymentResultSingleLiveEvent();
+
+        deleteCustomerPaymentResultSingleLiveEvent = repository.getDeleteCustomerPaymentResultSingleLiveEvent();
+        errorDeleteCustomerPaymentResultSingleLiveEvent = repository.getErrorDeleteCustomerPaymentResultSingleLiveEvent();
+
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
-    }
-
-    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsResultSingleLiveEvent() {
-        return customerPaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerPaymentsResultSingleLiveEvent() {
-        return errorCustomerPaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnection() {
-        return noConnection;
-    }
-
-    public SingleLiveEvent<CustomerPaymentInfo> getSeeDocumentsClickedSingleLiveEvent() {
-        return seeDocumentsClickedSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getYesDeleteCustomerPayment() {
-        return yesDeleteCustomerPaymentsSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
-    }
-
-    public ServerData getServerData(String centerName) {
-        return repository.getServerData(centerName);
-    }
-
-    public SingleLiveEvent<CustomerPaymentInfo> getDeleteCustomerPaymentClicked() {
-        return DeleteCustomerPaymentsClickedSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CustomerPaymentInfo> getEditCustomerPaymentClicked() {
-        return editCustomerPaymentsClickedSingleLiveEvent;
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
@@ -118,75 +82,127 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return errorBankAccountsResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsResultSingleLiveEvent() {
+        return customerPaymentsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorCustomerPaymentsResultSingleLiveEvent() {
+        return errorCustomerPaymentsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
+        return customerPaymentsByBankAccountResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent() {
+        return errorCustomerPaymentsByBankAccountResultSingleLiveEvent;
+    }
+
     public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentResultSingleLiveEvent() {
-        return addCustomerPaymentsSingleLiveEvent;
+        return addCustomerPaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorAddCustomerPaymentResultSingleLiveEvent() {
-        return errorAddCustomerPaymentSingleLiveEvent;
+        return errorAddCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentResultSingleLiveEvent() {
+        return editCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorEditCustomerPaymentResultSingleLiveEvent() {
+        return errorEditCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentResultSingleLiveEvent() {
+        return deleteCustomerPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentResultSingleLiveEvent() {
+        return errorDeleteCustomerPaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getUpdateListAddCustomerPaymentSingleLiveEvent() {
         return updateListAddCustomerPaymentSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentResultSingleLiveEvent() {
-        return deleteCustomerPaymentsSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
+        return yesDeleteClicked;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentResultSingleLiveEvent() {
-        return errorDeleteCustomerPaymentSingleLiveEvent;
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentResultSingleLiveEvent() {
-        return editCustomerPaymentsSingleLiveEvent;
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditCustomerPaymentResultSingleLiveEvent() {
-        return errorEditCustomerPaymentSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
+        return dangerousUserSingleLiveEvent;
     }
 
-    public void getSipSupportServiceCustomerPaymentResult(String baseUrl) {
-        repository.getSipSupportServiceCustomerPaymentResult(baseUrl);
+    public SingleLiveEvent<CustomerPaymentInfo> getDeleteCustomerPaymentClicked() {
+        return DeleteCustomerPaymentClicked;
     }
 
-    public void fetchCustomerPaymentResult(String path, String userLoginKey, int customerID) {
-        repository.fetchCustomerPaymentResult(path, userLoginKey, customerID);
+    public SingleLiveEvent<CustomerPaymentInfo> getEditCustomerPaymentClicked() {
+        return editCustomerPaymentClicked;
     }
 
-    public void getSipSupportServiceAddCustomerPayments(String baseUrl) {
-        repository.getSipSupportServiceAddCustomerPayments(baseUrl);
+    public SingleLiveEvent<CustomerPaymentInfo> getSeeCustomerPaymentAttachmentsClicked() {
+        return seeCustomerPaymentAttachmentsClicked;
     }
 
-    public void getSipSupportServiceEditCustomerPayments(String baseUrl) {
-        repository.getSipSupportServiceEditCustomerPayments(baseUrl);
+    public ServerData getServerData(String centerName) {
+        return repository.getServerData(centerName);
     }
 
-    public void getSipSupportServiceDeleteCustomerPayments(String baseUrl) {
-        repository.getSipSupportServiceDeleteCustomerPayments(baseUrl);
+    public void getSipSupporterServiceCustomerPaymentsResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerPaymentsResult(baseUrl);
     }
 
-    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
-        repository.attach(path, userLoginKey, attachInfo);
+    public void getSipSupporterServiceCustomerPaymentsByBankAccount(String baseUrl) {
+        repository.getSipSupporterServiceCustomerPaymentsByBankAccount(baseUrl);
     }
 
-    public void addCustomerPaymentsResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        repository.addCustomerPayments(path, userLoginKey, customerPaymentInfo);
+    public void getSipSupporterServiceBankAccounts(String baseUrl) {
+        repository.getSipSupporterServiceBankAccounts(baseUrl);
     }
 
-    public void editCustomerPaymentsResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
-        repository.editCustomerPayments(path, userLoginKey, customerPaymentInfo);
+    public void getSipSupporterServiceAddCustomerPayment(String baseUrl) {
+        repository.getSipSupporterServiceAddCustomerPayment(baseUrl);
     }
 
-    public void deleteCustomerPayments(String path, String userLoginKey, int customerPaymentID) {
-        repository.deleteCustomerPayments(path, userLoginKey, customerPaymentID);
+    public void getSipSupportServiceEditCustomerPayment(String baseUrl) {
+        repository.getSipSupporterServiceEditCustomerPayment(baseUrl);
     }
 
-    public void getSipSupportServiceGetBankAccountResult(String baseUrl) {
-        repository.getSipSupportServiceGetBankAccountResult(baseUrl);
+    public void getSipSupporterServiceDeleteCustomerPayment(String baseUrl) {
+        repository.getSipSupporterServiceDeleteCustomerPayment(baseUrl);
+    }
+
+    public void fetchCustomerPaymentsResult(String path, String userLoginKey, int customerID) {
+        repository.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
+    }
+
+    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
+        repository.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     public void fetchBankAccounts(String path, String userLoginKey) {
         repository.fetchBankAccounts(path, userLoginKey);
+    }
+
+    public void addCustomerPaymentResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+        repository.addCustomerPayment(path, userLoginKey, customerPaymentInfo);
+    }
+
+    public void editCustomerPaymentResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+        repository.editCustomerPayment(path, userLoginKey, customerPaymentInfo);
+    }
+
+    public void deleteCustomerPayment(String path, String userLoginKey, int customerPaymentID) {
+        repository.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
     }
 }

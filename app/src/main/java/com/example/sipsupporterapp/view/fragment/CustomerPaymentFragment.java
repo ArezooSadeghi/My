@@ -101,9 +101,9 @@ public class CustomerPaymentFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerPaymentsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/ListByCustomer/";
-        viewModel.fetchCustomerPaymentResult(path, userLoginKey, customerID);
+        viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
     }
 
     private void handleEvents() {
@@ -141,7 +141,7 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
@@ -174,7 +174,7 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getSeeDocumentsClickedSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
@@ -191,7 +191,7 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getYesDeleteCustomerPayment().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean yesDeleteCustomerPayment) {
                 deleteCustomerPayment();
@@ -239,9 +239,9 @@ public class CustomerPaymentFragment extends Fragment {
 
     private void deleteCustomerPayment() {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-        viewModel.getSipSupportServiceDeleteCustomerPayments(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceDeleteCustomerPayment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/Delete/";
-        viewModel.deleteCustomerPayments(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentID);
+        viewModel.deleteCustomerPayment(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentID);
     }
 
     private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
