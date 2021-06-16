@@ -3,6 +3,7 @@ package com.example.sipsupporterapp.model;
 public class ProductInfo {
 
     private int productID;
+    private int productGroupID;
     private int row;
     private int userID;
     private long cost;
@@ -20,6 +21,14 @@ public class ProductInfo {
 
     public void setProductID(int productID) {
         this.productID = productID;
+    }
+
+    public int getProductGroupID() {
+        return productGroupID;
+    }
+
+    public void setProductGroupID(int productGroupID) {
+        this.productGroupID = productGroupID;
     }
 
     public int getRow() {
