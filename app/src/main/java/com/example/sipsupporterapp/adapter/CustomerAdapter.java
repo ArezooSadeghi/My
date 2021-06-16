@@ -63,7 +63,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             holder.binding.txtLastSeen.setTextColor(Color.parseColor("#000000"));
         } else {
             holder.binding.frameLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.binding.txtCustomerName.setTextColor(Color.parseColor("#696969"));
             holder.binding.txtLastSeen.setTextColor(Color.parseColor("#808080"));
         }
     }

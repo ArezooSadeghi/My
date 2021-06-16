@@ -15,7 +15,7 @@
             android:id="@+id/tool_bar_products"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFEA00">
+            android:background="#3A3B3B">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,13 +27,13 @@
                     android:id="@+id/txt_customer_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/regular"
                     android:maxLines="1"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textDirection="rtl"
                     android:textSize="12sp" />
 
@@ -41,11 +41,14 @@
                     android:id="@+id/txt_count_products"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/robotobold"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/regular"
+                    android:maxLines="1"
                     android:text="تعداد محصولات: ۰"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textDirection="rtl"
                     android:textSize="12sp" />
 
@@ -53,9 +56,15 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#ED9D0B" />
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#3A3B3B">
 
             <ProgressBar
                 android:id="@+id/progress_bar_loading"
@@ -76,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:backgroundTint="#FFEA00" />
+                android:backgroundTint="#ED9D0B" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_new_product"

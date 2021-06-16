@@ -50,12 +50,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
         if (this.date != null) {
             if (this.date.equals(date)) {
                 holder.binding.imgUserStatus.setImageResource(R.drawable.user_online);
-                holder.binding.txtCustomerUserName.setTextColor(Color.parseColor("#000000"));
-                holder.binding.txtLastSeen.setTextColor(Color.parseColor("#000000"));
+               /* holder.binding.txtCustomerUserName.setTextColor(Color.parseColor("#000000"));
+                holder.binding.txtLastSeen.setTextColor(Color.parseColor("#000000"));*/
             } else {
                 holder.binding.imgUserStatus.setImageResource(R.drawable.offline_user);
-                holder.binding.txtCustomerUserName.setTextColor(Color.parseColor("#696969"));
-                holder.binding.txtLastSeen.setTextColor(Color.parseColor("#696969"));
+               /* holder.binding.txtCustomerUserName.setTextColor(Color.parseColor("#696969"));*/
+               /* holder.binding.txtLastSeen.setTextColor(Color.parseColor("#696969"));*/
             }
         }
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {

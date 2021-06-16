@@ -18,7 +18,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/regular"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textDirection="rtl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +31,7 @@
             android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_more"
+            android:tint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:fontFamily="@font/yekan"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +56,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/iranyekanweblight"
             android:maxLines="2"
+            android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="10sp"
             android:visibility="gone"
@@ -68,7 +70,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/iranyekanweblight"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +84,7 @@
             android:layout_marginRight="8dp"
             android:clickable="false"
             android:text="پایان کار"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -94,6 +97,7 @@
             android:layout_marginLeft="8dp"
             android:clickable="false"
             android:text="تسویه فاکتور"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/check_box_finish" />

@@ -10,13 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#3A3B3B"
         android:orientation="vertical"
         tools:context=".view.fragment.PaymentFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFEA00">
+            android:background="#3A3B3B">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,14 +29,13 @@
                     android:id="@+id/txt_user_full_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/regular"
                     android:lineSpacingMultiplier="1"
                     android:maxLines="1"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textDirection="rtl"
                     android:textSize="12sp" />
 
@@ -43,17 +43,24 @@
                     android:id="@+id/txt_count_costs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/robotobold"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/regular"
+                    android:maxLines="1"
                     android:text="تعداد برداشت ها: ۰"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textDirection="rtl"
                     android:textSize="12sp" />
 
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#ED9D0B" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner_bank_account_names"
@@ -94,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:backgroundTint="#FFEA00" />
+                android:backgroundTint="#ED9D0B" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_cost"
