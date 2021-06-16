@@ -11,76 +11,86 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class UserViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
-    private SingleLiveEvent<CustomerUserResult> customerUserResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerUserResultSingleLiveEvent;
-    private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
+
+    private SingleLiveEvent<CustomerUserResult> usersResultSingleLiveEvent;
+    private SingleLiveEvent<String> errorUsersResultSingleLiveEvent;
+
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnection;
+
+    private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
+
     private SingleLiveEvent<Boolean> successfulRegisterCustomerUsersSingleLiveEvent = new SingleLiveEvent<>();
 
     public UserViewModel(@NonNull Application application) {
         super(application);
+
         repository = SipSupporterRepository.getInstance(getApplication());
-        customerUserResultSingleLiveEvent = repository.getCustomerUsersResultSingleLiveEvent();
-        errorCustomerUserResultSingleLiveEvent = repository.getErrorCustomerUsersResultSingleLiveEvent();
-        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
+
+        usersResultSingleLiveEvent = repository.getCustomerUsersResultSingleLiveEvent();
+        errorUsersResultSingleLiveEvent = repository.getErrorCustomerUsersResultSingleLiveEvent();
+
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-        noConnection = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
     }
 
     public SingleLiveEvent<CustomerUserResult> getUsersResultSingleLiveEvent() {
-        return customerUserResultSingleLiveEvent;
+        return usersResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorUsersResultSingleLiveEvent() {
-        return errorCustomerUserResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Integer> getItemClicked() {
-        return itemClicked;
-    }
-
-    public ServerData getServerData(String centerName) {
-        return repository.getServerData(centerName);
-    }
-
-    public void getSipSupportServiceCustomerUserResult(String baseUrl) {
-        repository.getSipSupportServiceCustomerUserResult(baseUrl);
+        return errorUsersResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
         return dateResultSingleLiveEvent;
     }
 
-    public void fetchCustomerUserResult(String path, String userLoginKey, int customerID) {
-        repository.fetchCustomerUserResult(path, userLoginKey, customerID);
+    public SingleLiveEvent<Integer> getItemClicked() {
+        return itemClicked;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public void getSipSupportServiceGetDateResult(String baseUrl) {
-        repository.getSipSupporterServiceDateResult(baseUrl);
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnection() {
-        return noConnection;
+    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
+        return dangerousUserSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getSuccessfulRegisterCustomerUsersSingleLiveEvent() {
         return successfulRegisterCustomerUsersSingleLiveEvent;
     }
 
-    public void fetchDateResult(String path, String userLoginKey) {
-        repository.fetchDateResult(path, userLoginKey);
+    public ServerData getServerData(String centerName) {
+        return repository.getServerData(centerName);
+    }
+
+    public void getSipSupporterServiceUsersResult(String baseUrl) {
+        repository.getSipSupporterServiceUsersResult(baseUrl);
+    }
+
+    public void getSipSupporterServiceDateResult(String baseUrl) {
+        repository.getSipSupporterServiceDateResult(baseUrl);
+    }
+
+    public void fetchUsers(String path, String userLoginKey, int customerID) {
+        repository.fetchUsers(path, userLoginKey, customerID);
+    }
+
+    public void fetchDate(String path, String userLoginKey) {
+        repository.fetchDate(path, userLoginKey);
     }
 }

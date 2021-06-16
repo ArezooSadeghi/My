@@ -34,13 +34,19 @@ public class LoginViewModel extends AndroidViewModel {
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
+
         repository = SipSupporterRepository.getInstance(getApplication());
+
         wrongIpAddressSingleLiveEvent = repository.getWrongIpAddressSingleLiveEvent();
         userResultSingleLiveEvent = repository.getUserLoginResultSingleLiveEvent();
         errorUserResult = repository.getErrorUserLoginResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+    }
+
+    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
+        return wrongIpAddressSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getInsertSpinnerSingleLiveEvent() {
@@ -51,10 +57,6 @@ public class LoginViewModel extends AndroidViewModel {
         return insertIPAddressListSingleLiveEvent;
     }
 
-    public void insertServerData(ServerData serverData) {
-        repository.insertServerData(serverData);
-    }
-
     public SingleLiveEvent<ServerData> getDeleteIPAddressListSingleLiveEvent() {
         return deleteIPAddressListSingleLiveEvent;
     }
@@ -63,24 +65,24 @@ public class LoginViewModel extends AndroidViewModel {
         return updateIPAddressListSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
-        return wrongIpAddressSingleLiveEvent;
-    }
-
     public SingleLiveEvent<UserResult> getUserResultSingleLiveEvent() {
         return userResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getErrorUserResult() {
         return errorUserResult;
     }
 
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
+    }
+
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
         return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
+        return dangerousUserSingleLiveEvent;
     }
 
     public SingleLiveEvent<ServerData> getYesDeleteSpinner() {
@@ -89,6 +91,14 @@ public class LoginViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<ServerData> getYesDeleteIPAddressList() {
         return yesDeleteIPAddressList;
+    }
+
+    public void getSipSupportServicePostUserLoginParameter(String baseUrl) {
+        repository.getSipSupportServicePostUserLoginParameter(baseUrl);
+    }
+
+    public void insertServerData(ServerData serverData) {
+        repository.insertServerData(serverData);
     }
 
     public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
@@ -103,15 +113,8 @@ public class LoginViewModel extends AndroidViewModel {
         repository.deleteServerData(serverData);
     }
 
-    public void getSipSupportServicePostUserLoginParameter(String baseUrl) {
-        repository.getSipSupportServicePostUserLoginParameter(baseUrl);
-    }
 
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
     }
 }

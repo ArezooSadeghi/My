@@ -148,7 +148,7 @@ public class PaymentViewModel extends AndroidViewModel {
         return paymentSubjectInfoResultSingleLiveEvent;
     }
 
-    public void getSipSupporterServiceBankAccountsResult(String baseUrl) {
+    public void getSipSupporterServiceBankAccounts(String baseUrl) {
         repository.getSipSupporterServiceBankAccountsResult(baseUrl);
     }
 

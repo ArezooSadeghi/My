@@ -1,7 +1,5 @@
 package com.example.sipsupporterapp.retrofit;
 
-import android.util.Log;
-
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

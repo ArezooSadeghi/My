@@ -91,6 +91,6 @@ public class CustomerViewModel extends AndroidViewModel {
     }
 
     public void fetchDateResult(String path, String userLoginKey) {
-        repository.fetchDateResult(path, userLoginKey);
+        repository.fetchDate(path, userLoginKey);
     }
 }

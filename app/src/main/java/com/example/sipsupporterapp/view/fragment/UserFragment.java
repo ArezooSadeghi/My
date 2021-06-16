@@ -89,9 +89,9 @@ public class UserFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceGetDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/common/getDate/";
-        viewModel.fetchDateResult(path, userLoginKey);
+        viewModel.fetchDate(path, userLoginKey);
     }
 
     private void initViews() {
@@ -106,9 +106,9 @@ public class UserFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceUsersResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerUsers/userList/";
-        viewModel.fetchCustomerUserResult(path, userLoginKey, customerID);
+        viewModel.fetchUsers(path, userLoginKey, customerID);
     }
 
     private void setupObserver() {
@@ -138,7 +138,7 @@ public class UserFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnection().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBar.setVisibility(View.GONE);

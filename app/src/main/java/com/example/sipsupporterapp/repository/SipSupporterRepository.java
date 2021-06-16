@@ -24,7 +24,6 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
-import com.example.sipsupporterapp.model.ProductGroupInfo;
 import com.example.sipsupporterapp.model.ProductGroupResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -225,7 +224,7 @@ public class SipSupporterRepository {
                 }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceCustomerUserResult(String baseUrl) {
+    public void getSipSupporterServiceUsersResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerUserResult>() {
@@ -419,13 +418,6 @@ public class SipSupporterRepository {
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<PaymentSubjectResult>() {
                 }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServicePaymentsByBankAccount(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupporterServiceCustomerPaymentsByBankAccount(String baseUrl) {
@@ -713,14 +705,6 @@ public class SipSupporterRepository {
         return dangerousUserSingleLiveEvent;
     }
 
-    public SingleLiveEvent<PaymentResult> getPaymentsByBankAccountResultSingleLiveEvent() {
-        return paymentsByBankAccountResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentsByBankAccountResultSingleLiveEvent() {
-        return errorPaymentsByBankAccountResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
         return customerPaymentsByBankAccountResultSingleLiveEvent;
     }
@@ -978,7 +962,7 @@ public class SipSupporterRepository {
     }
 
 
-    public void fetchCustomerUserResult(String path, String userLoginKey, int customerID) {
+    public void fetchUsers(String path, String userLoginKey, int customerID) {
         sipSupporterService.fetchCustomerUsers(path, userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
             @Override
             public void onResponse(Call<CustomerUserResult> call, Response<CustomerUserResult> response) {
@@ -1084,7 +1068,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchDateResult(String path, String userLoginKey) {
+    public void fetchDate(String path, String userLoginKey) {
         sipSupporterService.fetchDate(path, userLoginKey).enqueue(new Callback<DateResult>() {
             @Override
             public void onResponse(Call<DateResult> call, Response<DateResult> response) {
@@ -1900,41 +1884,6 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
-    public void fetchPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
-        sipSupporterService.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
-            @Override
-            public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-                if (response.isSuccessful()) {
-                    paymentsByBankAccountResultSingleLiveEvent.setValue(response.body());
-                } else {
-                    try {
-                        Gson gson = new Gson();
-                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
-                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorPaymentsByBankAccountResultSingleLiveEvent.setValue(paymentResult.getError());
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

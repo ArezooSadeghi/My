@@ -15,9 +15,7 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
-import com.example.sipsupporterapp.model.ProductGroupInfo;
 import com.example.sipsupporterapp.model.ProductGroupResult;
-import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.model.UserLoginParameter;
@@ -61,9 +59,6 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CustomerProductResult> fetchCustomerProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
-
-    @POST("{path}")
-    Call<ProductResult> addProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body ProductInfo productInfo);
 
     @GET("{path}")
     Call<ProductResult> fetchProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
@@ -130,9 +125,6 @@ public interface SipSupporterService {
 
     @DELETE("{path}")
     Call<PaymentResult> deletePayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID);
-
-    @GET("{path}")
-    Call<PaymentResult> fetchPaymentsByBankAccount(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
 
     @GET("{path}")
     Call<CustomerPaymentResult> fetchCustomerPaymentsByBankAccount(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
