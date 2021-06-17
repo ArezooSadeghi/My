@@ -10,7 +10,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3A3B3B"
         android:layoutDirection="ltr"
         tools:context=".view.fragment.CustomerFragment">
 
@@ -18,27 +17,14 @@
             android:id="@+id/search_bar_holder"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="#3A3B3B"
             app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/img_btn_more"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="4dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_more"
-                app:layout_constraintBottom_toBottomOf="@id/ed_text_search"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ed_text_search"
-                app:tint="@color/white" />
 
             <EditText
                 android:id="@+id/ed_text_search"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="48dp"
+                android:layout_marginRight="32dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_edit_text"
                 android:ellipsize="end"
@@ -61,27 +47,20 @@
                 android:background="@drawable/search_btn_bg"
                 android:drawableLeft="@drawable/ic_search"
                 android:paddingLeft="16dp"
-                app:backgroundTint="#ED9D0B"
+                app:backgroundTint="#5F6D7A"
                 app:layout_constraintBottom_toBottomOf="@id/ed_text_search"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/ed_text_search" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/view_separator_one"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#ED9D0B"
-            app:layout_constraintTop_toBottomOf="@id/search_bar_holder" />
-
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_customer_list"
+            android:id="@+id/recycler_view_customers"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/holder_name"
-            app:layout_constraintTop_toBottomOf="@id/view_separator_one" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_bar_holder" />
 
         <ProgressBar
             android:id="@+id/progress_bar_loading"
@@ -92,57 +71,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/view_separator_two"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#ED9D0B"
-            app:layout_constraintBottom_toTopOf="@id/holder_name" />
-
-        <FrameLayout
-            android:id="@+id/holder_name"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:backgroundTint="#3A3B3B"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/regular"
-                    android:maxLines="1"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/txt_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/regular"
-                    android:maxLines="1"
-                    android:text="تعدادمراکز: ۰"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

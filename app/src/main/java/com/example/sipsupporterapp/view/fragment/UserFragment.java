@@ -23,8 +23,8 @@ import com.example.sipsupporterapp.model.CustomerUserInfo;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.CustomerContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
+import com.example.sipsupporterapp.view.activity.MainActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCustomerSupportDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.UserViewModel;
@@ -189,7 +189,7 @@ public class UserFragment extends Fragment {
         viewModel.getSuccessfulRegisterCustomerUsersSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isSuccessfulRegister) {
-                Intent starter = CustomerContainerActivity.start(getContext());
+                Intent starter = MainActivity.start(getContext());
                 starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(starter);
                 getActivity().finish();

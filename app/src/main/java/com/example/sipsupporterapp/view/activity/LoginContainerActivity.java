@@ -3,6 +3,7 @@ package com.example.sipsupporterapp.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,8 +21,10 @@ public class LoginContainerActivity extends SingleFragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Arezoo", "onCreateLogin");
         if (SipSupportSharedPreferences.getUserLoginKey(this) != null) {
-            Intent starter = CustomerContainerActivity.start(this);
+            Log.d("Arezoo", "loginContainer: " + SipSupportSharedPreferences.getUserLoginKey(this));
+            Intent starter = MainActivity.start(this);
             startActivity(starter);
             finish();
         }

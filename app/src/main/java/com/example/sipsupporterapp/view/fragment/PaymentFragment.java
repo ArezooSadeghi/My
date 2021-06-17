@@ -99,8 +99,8 @@ public class PaymentFragment extends Fragment {
     }
 
     private void initViews() {
-        String userFullName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
-        binding.txtUserFullName.setText(userFullName);
+       /* String userFullName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
+        binding.txtUserFullName.setText(userFullName);*/
         binding.recyclerViewCosts.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewCosts.addItemDecoration(new DividerItemDecoration(
                 binding.recyclerViewCosts.getContext(),
@@ -148,14 +148,14 @@ public class PaymentFragment extends Fragment {
         viewModel.getPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                StringBuilder stringBuilder = new StringBuilder();
+               /* StringBuilder stringBuilder = new StringBuilder();
                 String arrayLength = String.valueOf(paymentResult.getPayments().length);
 
                 for (int i = 0; i < arrayLength.length(); i++) {
                     stringBuilder.append((char) ((int) arrayLength.charAt(i) - 48 + 1632));
                 }
 
-                binding.txtCountCosts.setText("تعداد برداشت ها: " + stringBuilder.toString());
+                binding.txtCountCosts.setText("تعداد برداشت ها: " + stringBuilder.toString());*/
                 binding.progressBarLoading.setVisibility(View.GONE);
                 binding.recyclerViewCosts.setVisibility(View.VISIBLE);
                 setupAdapter(paymentResult.getPayments());

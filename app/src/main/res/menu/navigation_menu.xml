@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_search"
+        android:title="جستجو" />
+
+    <item
+        android:id="@+id/menu_change_password"
+        android:icon="@drawable/change_password"
+        android:title="تغییر رمز عبور" />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/logout"
+        android:title="خروج از حساب کاربری" />
+
+    <item
+        android:id="@+id/menu_customer_payments"
+        android:icon="@drawable/customer_payments"
+        android:title="مبالغ واریزی مشتریان" />
+
+    <item
+        android:id="@+id/menu_payments"
+        android:icon="@drawable/payments"
+        android:title="پرداختی ها" />
+
+    <item
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/setting"
+        android:title="تنظیمات" />
+
+</menu>

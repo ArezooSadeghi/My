@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/menu_search">
+
+    <fragment
+        android:id="@+id/menu_search"
+        android:name="com.example.sipsupporterapp.view.fragment.CustomerFragment"
+        android:label="CustomerFragment" />
+
+    <dialog
+        android:id="@+id/menu_change_password"
+        android:name="com.example.sipsupporterapp.view.dialog.ChangePasswordDialogFragment"
+        android:label="ChangePasswordDialogFragment" />
+
+    <fragment
+        android:id="@+id/menu_customer_payments"
+        android:name="com.example.sipsupporterapp.view.fragment.NewCustomerPaymentsFragment"
+        android:label="NewCustomerPaymentsFragment" />
+
+    <fragment
+        android:id="@+id/menu_payments"
+        android:name="com.example.sipsupporterapp.view.fragment.PaymentFragment"
+        android:label="PaymentFragment" />
+
+    <fragment
+        android:id="@+id/menu_setting"
+        android:name="com.example.sipsupporterapp.view.fragment.SettingFragment"
+        android:label="PaymentFragment" />
+
+</navigation>

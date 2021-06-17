@@ -86,11 +86,11 @@ public class CustomerPaymentFragment extends Fragment {
     }
 
     private void initViews() {
-        String customerName = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
+       /* String customerName = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
         String userName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
         binding.txtCustomerName.setText(customerName);
         binding.txtUserName.setText(userName);
-
+*/
         binding.recyclerViewDepositAmounts.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewDepositAmounts.addItemDecoration(new DividerItemDecoration(
                 binding.recyclerViewDepositAmounts.getContext(),

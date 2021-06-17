@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,8 @@ import com.example.sipsupporterapp.model.UserInfo;
 import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.CustomerContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
+import com.example.sipsupporterapp.view.activity.MainActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.IPAddressListDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RequireIPAddressDialogFragment;
@@ -118,7 +119,9 @@ public class LoginFragment extends Fragment {
                             SipSupportSharedPreferences
                                     .setUserFullName(getContext(), userInfoArray[0].getUserFullName());
 
-                            Intent intent = CustomerContainerActivity.start(getContext());
+                            Log.d("Arezoo", SipSupportSharedPreferences.getUserLoginKey(getContext()));
+
+                            Intent intent = MainActivity.start(getContext());
                             startActivity(intent);
                             getActivity().finish();
                         }

@@ -24,7 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SipSupporterApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activity.ProductsContainerActivity"></activity>
+        <activity android:name=".view.activity.MainActivity">
+        </activity>
+        <activity android:name=".view.activity.ProductsContainerActivity" />
         <activity android:name=".view.activity.NewPaymentContainer" />
         <activity
             android:name=".view.activity.FullScreenPhotoContainerActivity"
@@ -58,17 +60,15 @@
             android:name=".view.activity.ItemClickedContainerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.CustomerContainerActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".view.activity.LoginContainerActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <provider
