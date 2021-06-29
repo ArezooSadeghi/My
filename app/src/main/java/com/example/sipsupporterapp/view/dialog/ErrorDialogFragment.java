@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.view.dialog;
 
 import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentErrorDialogBinding;
+import com.example.sipsupporterapp.utils.Converter;
 
 public class ErrorDialogFragment extends DialogFragment {
     private FragmentErrorDialogBinding binding;
@@ -33,7 +35,7 @@ public class ErrorDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        text = getArguments().getString(ARGS_TEXT);
+        text = Converter.convert(getArguments().getString(ARGS_TEXT));
     }
 
     @NonNull
@@ -45,16 +47,9 @@ public class ErrorDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        binding.txtMessage.setText(text);
+        binding.txtErrorMessage.setText(text);
 
         binding.btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        binding.imgCloseWindow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -65,6 +60,10 @@ public class ErrorDialogFragment extends DialogFragment {
                 .Builder(getContext())
                 .setView(binding.getRoot())
                 .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
