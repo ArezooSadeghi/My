@@ -127,7 +127,7 @@ public class PaymentFragment extends Fragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                if (bankAccountResult.getErrorCode() == "0") {
+                if (bankAccountResult.getErrorCode().equals("0")) {
                     EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
                     bankAccountInfoArray = bankAccountResult.getBankAccounts();
                     setupSpinner(bankAccountResult.getBankAccounts());
@@ -144,7 +144,7 @@ public class PaymentFragment extends Fragment {
             public void onChanged(PaymentResult paymentResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
-                if (paymentResult.getErrorCode() == "0") {
+                if (paymentResult.getErrorCode().equals("0")) {
                     binding.recyclerViewCosts.setVisibility(View.VISIBLE);
                     setupAdapter(paymentResult.getPayments());
                 } else {
@@ -214,7 +214,7 @@ public class PaymentFragment extends Fragment {
         viewModel.getDeletePaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                if (paymentResult.getErrorCode() == "0") {
+                if (paymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCostsByBankAccountID();

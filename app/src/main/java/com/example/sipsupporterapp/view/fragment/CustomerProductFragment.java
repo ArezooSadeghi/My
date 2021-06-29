@@ -127,7 +127,7 @@ public class CustomerProductFragment extends Fragment {
             public void onChanged(CustomerProductResult productResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
-                if (productResult.getErrorCode() == "0") {
+                if (productResult.getErrorCode().equals("0")) {
                     binding.recyclerViewProducts.setVisibility(View.VISIBLE);
 
                     StringBuilder stringBuilder = new StringBuilder();
@@ -202,7 +202,7 @@ public class CustomerProductFragment extends Fragment {
         viewModel.getDeleteCustomerProductResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
-                if (customerProductResult.getErrorCode() == "0") {
+                if (customerProductResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_product));
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCustomerProducts();

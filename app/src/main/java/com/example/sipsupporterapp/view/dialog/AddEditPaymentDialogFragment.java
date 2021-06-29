@@ -138,7 +138,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.getAddPaymentResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                if (paymentResult.getErrorCode() == "0") {
+                if (paymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
@@ -153,7 +153,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.getEditPaymentResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                if (paymentResult.getErrorCode() == "0") {
+                if (paymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());

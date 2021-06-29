@@ -111,7 +111,7 @@ public class ProductsFragment extends Fragment {
         viewModel.getProductGroupsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<ProductGroupResult>() {
             @Override
             public void onChanged(ProductGroupResult productGroupResult) {
-                if (productGroupResult.getErrorCode() == "0") {
+                if (productGroupResult.getErrorCode().equals("0")) {
                     productGroupInfoList = Arrays.asList(productGroupResult.getProductGroups());
                     for (int i = 0; i < productGroupResult.getProductGroups().length; i++) {
                         ProductGroupInfo productGroupInfo = productGroupResult.getProductGroups()[i];

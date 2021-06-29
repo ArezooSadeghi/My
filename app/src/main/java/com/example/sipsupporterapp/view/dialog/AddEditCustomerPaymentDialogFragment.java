@@ -153,7 +153,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(this, new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                if (bankAccountResult.getErrorCode() == "0") {
+                if (bankAccountResult.getErrorCode().equals("0")) {
                     bankAccountInfoArray = bankAccountResult.getBankAccounts();
                     setupSpinner(bankAccountResult.getBankAccounts());
                 } else {
@@ -197,7 +197,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode() == "0") {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
@@ -212,7 +212,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getEditCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode() == "0") {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);

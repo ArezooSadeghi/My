@@ -108,7 +108,7 @@ public class CustomerFragment extends Fragment {
                     public void onChanged(CustomerResult customerResult) {
                         binding.progressBarLoading.setVisibility(View.GONE);
 
-                        if (customerResult.getErrorCode() == "0") {
+                        if (customerResult.getErrorCode().equals("0")) {
                             binding.recyclerViewCustomers.setVisibility(View.VISIBLE);
                             List<CustomerInfo> customerInfoList = new ArrayList<>();
                             for (CustomerInfo customerInfo : customerResult.getCustomers()) {

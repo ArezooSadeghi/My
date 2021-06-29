@@ -117,7 +117,7 @@ public class UserFragment extends Fragment {
             public void onChanged(CustomerUserResult customerUserResult) {
                 binding.progressBar.setVisibility(View.GONE);
 
-                if (customerUserResult.getErrorCode() == "0") {
+                if (customerUserResult.getErrorCode().equals("0")) {
                     binding.recyclerViewCustomerUsers.setVisibility(View.VISIBLE);
 
                     String str = (customerUserResult.getCustomerUsers().length) + "";

@@ -130,7 +130,7 @@ public class CustomerPaymentFragment extends Fragment {
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
-                if (customerPaymentResult.getErrorCode() == "0") {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
                     binding.recyclerViewDepositAmounts.setVisibility(View.VISIBLE);
                     setupAdapter(customerPaymentResult.getCustomerPayments());
                 } else {
@@ -200,7 +200,7 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getDeleteCustomerPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode() == "0") {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_payment_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCustomerPayments();

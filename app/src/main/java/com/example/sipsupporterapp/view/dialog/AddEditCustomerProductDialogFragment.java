@@ -354,7 +354,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getProductsResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
             @Override
             public void onChanged(ProductResult productResult) {
-                if (productResult.getErrorCode() == "0") {
+                if (productResult.getErrorCode().equals("0")) {
                     productInfoArray = productResult.getProducts();
                     setupSpinner(productResult.getProducts());
                     fetchProductInfo();
@@ -368,7 +368,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
-                if (customerProductResult.getErrorCode() == "0") {
+                if (customerProductResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getDialogDismissed().setValue(true);
@@ -383,7 +383,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getProductInfoResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
             @Override
             public void onChanged(ProductResult productResult) {
-                if (productResult.getErrorCode() == "0") {
+                if (productResult.getErrorCode().equals("0")) {
                     if (invoicePrice == 0) {
                         binding.edTextInvoicePrice.setText(String.valueOf(productResult.getProducts()[0].getCost()));
                     } else {
@@ -399,7 +399,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getEditCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
-                if (customerProductResult.getErrorCode() == "0") {
+                if (customerProductResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getDialogDismissed().setValue(true);

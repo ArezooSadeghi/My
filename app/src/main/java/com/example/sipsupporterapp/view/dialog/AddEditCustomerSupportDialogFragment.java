@@ -129,7 +129,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         viewModel.getSupportEventsResultSingleLiveEvent().observe(this, new Observer<SupportEventResult>() {
             @Override
             public void onChanged(SupportEventResult supportEventResult) {
-                if (supportEventResult.getErrorCode() == "0") {
+                if (supportEventResult.getErrorCode().equals("0")) {
                     supportEventArray = supportEventResult.getSupportEvents();
                     setupSpinner(supportEventResult.getSupportEvents());
                 } else {
@@ -142,7 +142,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         viewModel.getAddCustomerSupportResultSingleLiveEvent().observe(this, new Observer<CustomerSupportResult>() {
             @Override
             public void onChanged(CustomerSupportResult customerSupportResult) {
-                if (customerSupportResult.getErrorCode() == "0") {
+                if (customerSupportResult.getErrorCode().equals("0")) {
                     SuccessAddEditCustomerSupportDialogFragment fragment = SuccessAddEditCustomerSupportDialogFragment.newInstance("ثبت پشتیبانی موفقیت آمیز بود");
                     fragment.show(getParentFragmentManager(), "ok");
                     dismiss();

@@ -133,7 +133,7 @@ public class FullScreenPhotoFragment extends Fragment {
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);
                 }
 
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
 
                     if (attachResult.getAttachs().length != 0) {
                         int attachID = attachResult.getAttachs()[0].getAttachID();

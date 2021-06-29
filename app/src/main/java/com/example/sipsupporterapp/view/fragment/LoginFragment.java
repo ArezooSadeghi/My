@@ -107,7 +107,7 @@ public class LoginFragment extends Fragment {
                 binding.btnLogin.setEnabled(true);
                 binding.imgBtnMore.setEnabled(true);
 
-                if (userResult.getErrorCode() == "0") {
+                if (userResult.getErrorCode().equals("0")) {
                     SipSupportSharedPreferences
                             .setUserName(getContext(), binding.edTextUserName.getText().toString());
                     SipSupportSharedPreferences.setLastValueSpinner(getContext(), spinnerValue);

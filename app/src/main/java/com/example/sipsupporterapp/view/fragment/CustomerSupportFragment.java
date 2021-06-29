@@ -107,7 +107,7 @@ public class CustomerSupportFragment extends Fragment {
                     public void onChanged(CustomerSupportResult customerSupportResult) {
                         binding.progressBar.setVisibility(View.GONE);
 
-                        if (customerSupportResult.getErrorCode() == "0") {
+                        if (customerSupportResult.getErrorCode().equals("0")) {
                             binding.recyclerViewSupportHistory.setVisibility(View.VISIBLE);
 
                             StringBuilder stringBuilder = new StringBuilder();

@@ -369,7 +369,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getCustomerSupportAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
                 } else {
                     showErrorDialog(attachResult.getError());
@@ -380,7 +380,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getCustomerProductAttachmentsSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
                 } else {
                     showErrorDialog(attachResult.getError());
@@ -391,7 +391,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getCustomerPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
                 } else {
                     showErrorDialog(attachResult.getError());
@@ -402,7 +402,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
                 } else {
                     showErrorDialog(attachResult.getError());
@@ -413,7 +413,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getAttachInfoResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
                     if (attachResult.getAttachs().length != 0) {
                         AttachInfo attachInfo = attachResult.getAttachs()[0];
                         new Thread(new Runnable() {

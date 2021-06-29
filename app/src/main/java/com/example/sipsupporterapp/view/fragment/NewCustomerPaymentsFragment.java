@@ -135,7 +135,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                if (bankAccountResult.getErrorCode() == "0") {
+                if (bankAccountResult.getErrorCode().equals("0")) {
                     setupSpinner(bankAccountResult.getBankAccounts());
                 } else {
                     ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(bankAccountResult.getError());
@@ -149,7 +149,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
                 binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
 
-                if (customerPaymentResult.getErrorCode() == "0") {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
                     binding.recyclerViewPayments.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                     setupAdapter(customerPaymentResult.getCustomerPayments());
                 } else {
@@ -198,7 +198,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         viewModel.getDeleteCustomerPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode() == "0") {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
                     fetchCustomerPaymentsByBankAccount(bankAccountID);
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_payments_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);

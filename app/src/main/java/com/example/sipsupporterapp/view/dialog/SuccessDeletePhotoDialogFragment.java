@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,10 @@ public class SuccessDeletePhotoDialogFragment extends DialogFragment {
                 .setView(binding.getRoot())
                 .create();
 
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -59,11 +64,11 @@ public class SuccessDeletePhotoDialogFragment extends DialogFragment {
 
     private void initViews() {
         String message = getArguments().getString(ARGS_MESSAGE);
-        binding.txtMessage.setText(message);
+        binding.txtSuccessMessage.setText(message);
     }
 
     private void handleEvents() {
-        binding.imgClose.setOnClickListener(new View.OnClickListener() {
+        binding.btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();

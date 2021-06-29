@@ -103,7 +103,7 @@ public class PaymentSubjectFragment extends Fragment {
         viewModel.getPaymentSubjectsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentSubjectResult>() {
             @Override
             public void onChanged(PaymentSubjectResult paymentSubjectResult) {
-                if (paymentSubjectResult.getErrorCode() == "0") {
+                if (paymentSubjectResult.getErrorCode().equals("0")) {
                     paymentSubjectInfoList = Arrays.asList(paymentSubjectResult.getPaymentSubjects());
                     for (int i = 0; i < paymentSubjectResult.getPaymentSubjects().length; i++) {
                         PaymentSubjectInfo paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[i];
