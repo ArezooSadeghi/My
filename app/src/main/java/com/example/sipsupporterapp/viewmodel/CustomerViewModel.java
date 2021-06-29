@@ -15,7 +15,6 @@ public class CustomerViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomersResultSingleLiveEvent;
 
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
 
@@ -33,7 +32,6 @@ public class CustomerViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         customersResultSingleLiveEvent = repository.getCustomersResultSingleLiveEvent();
-        errorCustomersResultSingleLiveEvent = repository.getErrorCustomersResultSingleLiveEvent();
 
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
 
@@ -44,10 +42,6 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CustomerResult> getCustomersResultSingleLiveEvent() {
         return customersResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomersResultSingleLiveEvent() {
-        return errorCustomersResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {

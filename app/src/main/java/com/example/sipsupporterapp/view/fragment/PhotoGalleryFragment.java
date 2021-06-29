@@ -369,83 +369,68 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getCustomerSupportAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                showAttachments(attachResult);
-            }
-        });
-
-        viewModel.getErrorCustomerSupportAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
+                if (attachResult.getErrorCode() == "0") {
+                    showAttachments(attachResult);
+                } else {
+                    showErrorDialog(attachResult.getError());
+                }
             }
         });
 
         viewModel.getCustomerProductAttachmentsSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                showAttachments(attachResult);
-            }
-        });
-
-        viewModel.getErrorCustomerProductAttachmentsSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
+                if (attachResult.getErrorCode() == "0") {
+                    showAttachments(attachResult);
+                } else {
+                    showErrorDialog(attachResult.getError());
+                }
             }
         });
 
         viewModel.getCustomerPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                showAttachments(attachResult);
-            }
-        });
-
-        viewModel.getErrorCustomerPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
+                if (attachResult.getErrorCode() == "0") {
+                    showAttachments(attachResult);
+                } else {
+                    showErrorDialog(attachResult.getError());
+                }
             }
         });
 
         viewModel.getPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                showAttachments(attachResult);
-            }
-        });
-
-        viewModel.getErrorPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
+                if (attachResult.getErrorCode() == "0") {
+                    showAttachments(attachResult);
+                } else {
+                    showErrorDialog(attachResult.getError());
+                }
             }
         });
 
         viewModel.getAttachInfoResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getAttachs().length != 0) {
-                    AttachInfo attachInfo = attachResult.getAttachs()[0];
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                String filePath = writeToExternalStorage(attachInfo);
-                                viewModel.getFinishWriteToStorage().postValue(filePath);
-                            } catch (IOException e) {
-                                Log.e(TAG, e.getMessage());
+                if (attachResult.getErrorCode() == "0") {
+                    if (attachResult.getAttachs().length != 0) {
+                        AttachInfo attachInfo = attachResult.getAttachs()[0];
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    String filePath = writeToExternalStorage(attachInfo);
+                                    viewModel.getFinishWriteToStorage().postValue(filePath);
+                                } catch (IOException e) {
+                                    Log.e(TAG, e.getMessage());
+                                }
                             }
-                        }
-                    }).start();
+                        }).start();
+                    }
+                } else {
+                    showErrorDialog(attachResult.getError());
                 }
-            }
-        });
-
-        viewModel.getErrorAttachInfoResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
             }
         });
 

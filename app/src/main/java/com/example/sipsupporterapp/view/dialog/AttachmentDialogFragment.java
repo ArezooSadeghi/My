@@ -330,25 +330,22 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         viewModel.getAttachResultSingleLiveEvent().observe(this, new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                viewModel.getUpdatePhotoGallerySingleLiveEvent().setValue(attachResult);
+                if (attachResult.getErrorCode() == "0") {
+                    viewModel.getUpdatePhotoGallerySingleLiveEvent().setValue(attachResult);
 
-                binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                binding.imgClose.setEnabled(true);
-                binding.imgSend.setEnabled(true);
-                binding.imgCamera.setEnabled(true);
-                binding.edTextDescription.setEnabled(true);
-                binding.imgRotate.setEnabled(true);
-                binding.imgMore.setEnabled(true);
+                    binding.progressBarLoading.setVisibility(View.INVISIBLE);
+                    binding.imgClose.setEnabled(true);
+                    binding.imgSend.setEnabled(true);
+                    binding.imgCamera.setEnabled(true);
+                    binding.edTextDescription.setEnabled(true);
+                    binding.imgRotate.setEnabled(true);
+                    binding.imgMore.setEnabled(true);
 
-                SuccessAttachDialogFragment fragment = SuccessAttachDialogFragment.newInstance(getString(R.string.success_attach_message));
-                fragment.show(getParentFragmentManager(), SuccessAttachDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getErrorAttachResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
+                    SuccessAttachDialogFragment fragment = SuccessAttachDialogFragment.newInstance(getString(R.string.success_attach_message));
+                    fragment.show(getParentFragmentManager(), SuccessAttachDialogFragment.TAG);
+                } else {
+                    showErrorDialog(attachResult.getError());
+                }
             }
         });
 

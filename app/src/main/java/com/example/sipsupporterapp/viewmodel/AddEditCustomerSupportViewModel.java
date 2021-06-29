@@ -16,10 +16,8 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorSupportEventsResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorAddCustomerSupportResultSingleLiveEvent;
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
@@ -31,10 +29,8 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         supportEventsResultSingleLiveEvent = repository.getSupportEventsResultSingleLiveEvent();
-        errorSupportEventsResultSingleLiveEvent = repository.getErrorSupportEventsResultSingleLiveEvent();
 
         addCustomerSupportResultSingleLiveEvent = repository.getAddCustomerSupportResultSingleLiveEvent();
-        errorAddCustomerSupportResultSingleLiveEvent = repository.getErrorAddCustomerSupportResultSingleLiveEvent();
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
@@ -45,16 +41,8 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         return supportEventsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorSupportEventsResultSingleLiveEvent() {
-        return errorSupportEventsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerSupportResult> getAddCustomerSupportResultSingleLiveEvent() {
         return addCustomerSupportResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAddCustomerSupportResultSingleLiveEvent() {
-        return errorAddCustomerSupportResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {

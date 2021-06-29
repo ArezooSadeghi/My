@@ -273,16 +273,6 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 persianDatePickerDialog.show();
             }
         });
-
-        /*binding.spinnerProducts.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                lastValueSpinner = (String) item;
-                productID = productInfoArray[position].getProductID();
-
-                fetchProductInfo();
-            }
-        });*/
     }
 
     private void fetchProductInfo() {
@@ -364,72 +354,60 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getProductsResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
             @Override
             public void onChanged(ProductResult productResult) {
-                productInfoArray = productResult.getProducts();
-                setupSpinner(productResult.getProducts());
-                fetchProductInfo();
-            }
-        });
-
-        viewModel.getErrorProductsResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (productResult.getErrorCode() == "0") {
+                    productInfoArray = productResult.getProducts();
+                    setupSpinner(productResult.getProducts());
+                    fetchProductInfo();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
-                fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getDialogDismissed().setValue(true);
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerProductResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
+                    fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getDialogDismissed().setValue(true);
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerProductResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getProductInfoResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
             @Override
             public void onChanged(ProductResult productResult) {
-                if (invoicePrice == 0) {
-                    binding.edTextInvoicePrice.setText(String.valueOf(productResult.getProducts()[0].getCost()));
+                if (productResult.getErrorCode() == "0") {
+                    if (invoicePrice == 0) {
+                        binding.edTextInvoicePrice.setText(String.valueOf(productResult.getProducts()[0].getCost()));
+                    } else {
+                        binding.edTextInvoicePrice.setText(String.valueOf(invoicePrice));
+                    }
                 } else {
-                    binding.edTextInvoicePrice.setText(String.valueOf(invoicePrice));
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 }
-            }
-        });
-
-        viewModel.getErrorProductInfoResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
 
         viewModel.getEditCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
-                fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getDialogDismissed().setValue(true);
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorEditCustomerProductResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getActivity().getSupportFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerProductResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
+                    fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getDialogDismissed().setValue(true);
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerProductResult.getError());
+                    fragment.show(getActivity().getSupportFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

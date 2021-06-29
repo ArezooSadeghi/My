@@ -14,7 +14,6 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorPaymentSubjectsResultSingleLiveEvent;
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
@@ -25,7 +24,6 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         paymentSubjectsResultSingleLiveEvent = repository.getPaymentSubjectsResultSingleLiveEvent();
-        errorPaymentSubjectsResultSingleLiveEvent = repository.getErrorPaymentSubjectsSingleLiveEvent();
 
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
@@ -33,10 +31,6 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectsResultSingleLiveEvent() {
         return paymentSubjectsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentSubjectsResultSingleLiveEvent() {
-        return errorPaymentSubjectsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {

@@ -135,15 +135,12 @@ public class NewCustomerPaymentsFragment extends Fragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                setupSpinner(bankAccountResult.getBankAccounts());
-            }
-        });
-
-        viewModel.getErrorBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (bankAccountResult.getErrorCode() == "0") {
+                    setupSpinner(bankAccountResult.getBankAccounts());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(bankAccountResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
@@ -151,17 +148,14 @@ public class NewCustomerPaymentsFragment extends Fragment {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
                 binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
-                binding.recyclerViewPayments.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                setupAdapter(customerPaymentResult.getCustomerPayments());
-            }
-        });
 
-        viewModel.getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerPaymentResult.getErrorCode() == "0") {
+                    binding.recyclerViewPayments.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    setupAdapter(customerPaymentResult.getCustomerPayments());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerPaymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
@@ -204,17 +198,14 @@ public class NewCustomerPaymentsFragment extends Fragment {
         viewModel.getDeleteCustomerPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                fetchCustomerPaymentsByBankAccount(bankAccountID);
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_payments_message));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getErrorDeleteCustomerPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerPaymentResult.getErrorCode() == "0") {
+                    fetchCustomerPaymentsByBankAccount(bankAccountID);
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_payments_message));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerPaymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

@@ -153,16 +153,13 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(this, new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                bankAccountInfoArray = bankAccountResult.getBankAccounts();
-                setupSpinner(bankAccountResult.getBankAccounts());
-            }
-        });
-
-        viewModel.getErrorBankAccountsResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (bankAccountResult.getErrorCode() == "0") {
+                    bankAccountInfoArray = bankAccountResult.getBankAccounts();
+                    setupSpinner(bankAccountResult.getBankAccounts());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(bankAccountResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
@@ -200,36 +197,30 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerPaymentResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerPaymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getEditCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorEditCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerPaymentResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_payment_message));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerPaymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
     }

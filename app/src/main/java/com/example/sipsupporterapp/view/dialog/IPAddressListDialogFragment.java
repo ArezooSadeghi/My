@@ -121,8 +121,6 @@ public class IPAddressListDialogFragment extends DialogFragment {
             public void onChanged(ServerData serverData) {
                 QuestionDeleteServerDataDialogFragment fragment = QuestionDeleteServerDataDialogFragment.newInstance("آیا می خواهید آدرس مربوطه را حذف کنید؟", serverData);
                 fragment.show(getParentFragmentManager(), QuestionDeleteServerDataDialogFragment.TAG);
-                /*viewModel.deleteServerData(serverData);
-                setupAdapter();*/
             }
         });
 

@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerProductAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerProductBinding;
-import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
+import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -122,34 +122,29 @@ public class CustomerProductFragment extends Fragment {
     }
 
     private void setupObserver() {
-        viewModel.getCustomerProductsResultSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
-                    @Override
-                    public void onChanged(CustomerProductResult productResult) {
-                        binding.progressBarLoading.setVisibility(View.GONE);
-                        binding.recyclerViewProducts.setVisibility(View.VISIBLE);
+        viewModel.getCustomerProductsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
+            @Override
+            public void onChanged(CustomerProductResult productResult) {
+                binding.progressBarLoading.setVisibility(View.GONE);
 
-                        StringBuilder stringBuilder = new StringBuilder();
-                        String listSize = String.valueOf(productResult.getCustomerProducts().length);
+                if (productResult.getErrorCode() == "0") {
+                    binding.recyclerViewProducts.setVisibility(View.VISIBLE);
 
-                        for (int i = 0; i < listSize.length(); i++) {
-                            stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
-                        }
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String listSize = String.valueOf(productResult.getCustomerProducts().length);
 
-                        binding.txtCountProducts.setText("تعداد محصولات: " + stringBuilder.toString());
-                        setupAdapter(productResult.getCustomerProducts());
+                    for (int i = 0; i < listSize.length(); i++) {
+                        stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
                     }
-                });
 
-        viewModel.getErrorCustomerProductsResultSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String message) {
-                        binding.progressBarLoading.setVisibility(View.GONE);
-                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    }
-                });
+                    binding.txtCountProducts.setText("تعداد محصولات: " + stringBuilder.toString());
+                    setupAdapter(productResult.getCustomerProducts());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
+            }
+        });
 
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -204,24 +199,19 @@ public class CustomerProductFragment extends Fragment {
                     }
                 });
 
-        viewModel.getDeleteCustomerProductResultSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
-                    @Override
-                    public void onChanged(CustomerProductResult customerProductResult) {
-                        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_product));
-                        fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                        fetchCustomerProducts();
-                    }
-                });
-
-        viewModel.getErrorDeleteCustomerProductResultSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String message) {
-                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                        fragment.show(getActivity().getSupportFragmentManager(), ErrorDialogFragment.TAG);
-                    }
-                });
+        viewModel.getDeleteCustomerProductResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
+            @Override
+            public void onChanged(CustomerProductResult customerProductResult) {
+                if (customerProductResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_product));
+                    fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
+                    fetchCustomerProducts();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerProductResult.getError());
+                    fragment.show(getActivity().getSupportFragmentManager(), ErrorDialogFragment.TAG);
+                }
+            }
+        });
 
         viewModel.getEditClicked()
                 .observe(getViewLifecycleOwner(), new Observer<CustomerProductInfo>() {

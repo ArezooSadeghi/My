@@ -15,7 +15,6 @@ public class CustomerSupportViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerSupportsResultSingleLiveEvent;
 
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionSingleLiveEvent;
@@ -29,7 +28,6 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         customerSupportsResultSingleLiveEvent = repository.getCustomerSupportsResultSingleLiveEvent();
-        errorCustomerSupportsResultSingleLiveEvent = repository.getErrorCustomerSupportsResultSingleLiveEvent();
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
@@ -38,10 +36,6 @@ public class CustomerSupportViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
         return customerSupportsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerSupportsResultSingleLiveEvent() {
-        return errorCustomerSupportsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {

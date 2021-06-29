@@ -18,7 +18,6 @@ public class AttachmentViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> allowPermission = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorAttachResultSingleLiveEvent;
 
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
@@ -29,26 +28,20 @@ public class AttachmentViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> mNoAgainSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
-    private SingleLiveEvent<String> getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent;
-    private SingleLiveEvent<String> errorAttachResultViaAttachIDSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> updateImageListSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> yesDelete = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorDeleteAttachResultSingleLiveEvent;
 
     private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID;
-    private SingleLiveEvent<String> errorAttachmentListResultByPaymentID;
 
     private SingleLiveEvent<String> finishWriteToStorage = new SingleLiveEvent<>();
 
@@ -62,28 +55,21 @@ public class AttachmentViewModel extends AndroidViewModel {
         mRepository = SipSupporterRepository.getInstance(getApplication());
 
         attachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
-        errorAttachResultSingleLiveEvent = mRepository.getErrorAttachResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
         mDangerousUserSingleLiveEvent = mRepository.getDangerousUserSingleLiveEvent();
 
         getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
-        getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getErrorCustomerPaymentAttachmentsResultSingleLiveEvent();
 
         getAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getCustomerProductAttachmentsResultSingleLiveEvent();
-        getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getErrorCustomerProductAttachmentsResultSingleLiveEvent();
 
         getAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getCustomerSupportAttachmentsResultSingleLiveEvent();
-        getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getErrorCustomerSupportAttachmentsResultSingleLiveEvent();
 
         attachResultViaAttachIDSingleLiveEvent = mRepository.getAttachResultViaAttachIDSingleLiveEvent();
-        errorAttachResultViaAttachIDSingleLiveEvent = mRepository.getErrorAttachResultViaAttachIDSingleLiveEvent();
 
         deleteAttachResultSingleLiveEvent = mRepository.getDeleteAttachResultSingleLiveEvent();
-        errorDeleteAttachResultSingleLiveEvent = mRepository.getErrorDeleteAttachResultSingleLiveEvent();
 
         attachmentListResultByPaymentID = mRepository.getPaymentAttachmentsResultSingleLiveEvent();
-        errorAttachmentListResultByPaymentID = mRepository.getErrorPaymentAttachmentsResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<Boolean> getRequestCameraPermission() {
@@ -96,10 +82,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
         return attachResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAttachResultSingleLiveEvent() {
-        return errorAttachResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionSingleLiveEvent() {
@@ -130,32 +112,16 @@ public class AttachmentViewModel extends AndroidViewModel {
         return getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerPaymentAttachmentsResultSingleLiveEvent() {
-        return getErrorAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsSingleLiveEvent() {
         return getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerProductAttachmentsSingleLiveEvent() {
-        return getErrorAttachmentFilesViaCustomerProductIDSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getCustomerSupportAttachmentsResultSingleLiveEvent() {
         return getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerSupportAttachmentsResultSingleLiveEvent() {
-        return getErrorAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getAttachInfoResultSingleLiveEvent() {
         return attachResultViaAttachIDSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAttachInfoResultSingleLiveEvent() {
-        return errorAttachResultViaAttachIDSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getUpdatePhotoGallerySingleLiveEvent() {
@@ -170,16 +136,8 @@ public class AttachmentViewModel extends AndroidViewModel {
         return deleteAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteAttachResultSingleLiveEvent() {
-        return errorDeleteAttachResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
         return attachmentListResultByPaymentID;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentAttachmentsResultSingleLiveEvent() {
-        return errorAttachmentListResultByPaymentID;
     }
 
     public SingleLiveEvent<String> getFinishWriteToStorage() {

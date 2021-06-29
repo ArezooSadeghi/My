@@ -14,7 +14,6 @@ public class ProductsViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorProductGroupsResultSingleLiveEvent;
 
     public ProductsViewModel(@NonNull Application application) {
         super(application);
@@ -22,15 +21,10 @@ public class ProductsViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         productGroupsResultSingleLiveEvent = repository.getProductGroupsResultSingleLiveEvent();
-        errorProductGroupsResultSingleLiveEvent = repository.getErrorProductGroupsResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<ProductGroupResult> getProductGroupsResultSingleLiveEvent() {
         return productGroupsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorProductGroupsResultSingleLiveEvent() {
-        return errorProductGroupsResultSingleLiveEvent;
     }
 
     public ServerData getServerDate(String centerName) {

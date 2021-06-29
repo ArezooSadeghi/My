@@ -16,21 +16,15 @@ public class CustomerProductViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorAddCustomerProductResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorEditCustomerProductResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorDeleteCustomerProductResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerProductsResultSingleLiveEvent;
 
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorProductInfoResultSingleLiveEvent;
 
-    private SingleLiveEvent<String> errorProductsResultSingleLiveEvent;
     private SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent;
 
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
@@ -51,21 +45,15 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         addCustomerProductResultSingleLiveEvent = repository.getAddCustomerProductResultSingleLiveEvent();
-        errorAddCustomerProductResultSingleLiveEvent = repository.getErrorAddCustomerProductResultSingleLiveEvent();
 
         editCustomerProductResultSingleLiveEvent = repository.getEditCustomerProductResultSingleLiveEvent();
-        errorEditCustomerProductResultSingleLiveEvent = repository.getErrorEditCustomerProductResultSingleLiveEvent();
 
         deleteCustomerProductResultSingleLiveEvent = repository.getDeleteCustomerProductResultSingleLiveEvent();
-        errorDeleteCustomerProductResultSingleLiveEvent = repository.getErrorDeleteCustomerProductResultSingleLiveEvent();
 
         customerProductsResultSingleLiveEvent = repository.getCustomerProductsResultSingleLiveEvent();
-        errorCustomerProductsResultSingleLiveEvent = repository.getErrorCustomerProductsResultSingleLiveEvent();
 
         productInfoResultSingleLiveEvent = repository.getProductInfoResultSingleLiveEvent();
-        errorProductInfoResultSingleLiveEvent = repository.getErrorProductInfoResultSingleLiveEvent();
 
-        errorProductsResultSingleLiveEvent = repository.getErrorAddProductResultSingleLiveEvent();
         getProductsResultSingleLiveEvent = repository.getProductsResultSingleLiveEvent();
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
@@ -77,44 +65,20 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return addCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddCustomerProductResultSingleLiveEvent() {
-        return errorAddCustomerProductResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerProductResult> getEditCustomerProductResultSingleLiveEvent() {
         return editCustomerProductResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorEditCustomerProductResultSingleLiveEvent() {
-        return errorEditCustomerProductResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerProductResult> getDeleteCustomerProductResultSingleLiveEvent() {
         return deleteCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerProductResultSingleLiveEvent() {
-        return errorDeleteCustomerProductResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
         return customerProductsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerProductsResultSingleLiveEvent() {
-        return errorCustomerProductsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<ProductResult> getProductInfoResultSingleLiveEvent() {
         return productInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorProductInfoResultSingleLiveEvent() {
-        return errorProductInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorProductsResultSingleLiveEvent() {
-        return errorProductsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent() {

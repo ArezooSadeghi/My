@@ -19,8 +19,8 @@ import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerSupportDia
 import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.model.SupportEventInfo;
+import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.AddEditCustomerSupportViewModel;
@@ -129,33 +129,27 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         viewModel.getSupportEventsResultSingleLiveEvent().observe(this, new Observer<SupportEventResult>() {
             @Override
             public void onChanged(SupportEventResult supportEventResult) {
-                supportEventArray = supportEventResult.getSupportEvents();
-                setupSpinner(supportEventResult.getSupportEvents());
-            }
-        });
-
-        viewModel.getErrorSupportEventsResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String error) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (supportEventResult.getErrorCode() == "0") {
+                    supportEventArray = supportEventResult.getSupportEvents();
+                    setupSpinner(supportEventResult.getSupportEvents());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(supportEventResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getAddCustomerSupportResultSingleLiveEvent().observe(this, new Observer<CustomerSupportResult>() {
             @Override
             public void onChanged(CustomerSupportResult customerSupportResult) {
-                SuccessAddEditCustomerSupportDialogFragment fragment = SuccessAddEditCustomerSupportDialogFragment.newInstance("ثبت پشتیبانی موفقیت آمیز بود");
-                fragment.show(getParentFragmentManager(), "ok");
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorAddCustomerSupportResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (customerSupportResult.getErrorCode() == "0") {
+                    SuccessAddEditCustomerSupportDialogFragment fragment = SuccessAddEditCustomerSupportDialogFragment.newInstance("ثبت پشتیبانی موفقیت آمیز بود");
+                    fragment.show(getParentFragmentManager(), "ok");
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerSupportResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

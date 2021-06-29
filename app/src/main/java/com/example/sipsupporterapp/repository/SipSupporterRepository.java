@@ -47,7 +47,6 @@ import com.example.sipsupporterapp.retrofit.RetrofitInstance;
 import com.example.sipsupporterapp.retrofit.SipSupporterService;
 import com.example.sipsupporterapp.retrofit.SupportEventResultDeserializer;
 import com.example.sipsupporterapp.retrofit.UserResultDeserializer;
-import com.example.sipsupporterapp.utils.CheckStringIsNumeric;
 import com.example.sipsupporterapp.viewmodel.SingleLiveEvent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -73,109 +72,74 @@ public class SipSupporterRepository {
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomersResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<UserResult> userLoginResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorUserLoginResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<UserResult> changePasswordResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorChangePasswordResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerSupportsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerProductsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorEditCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorDeleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorEditCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorDeleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorEditPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorDeletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> customerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> customerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> customerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> paymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerUserResult> customerUsersResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerUsersResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorSupportEventsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAttachResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorDeleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<ProductResult> productsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorProductsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorProductInfoResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<ProductResult> addProductResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAddProductResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentSubjectsSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> paymentsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorAttachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> paymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorCustomerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> errorProductGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -449,200 +413,100 @@ public class SipSupporterRepository {
         return customersResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomersResultSingleLiveEvent() {
-        return errorCustomersResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<UserResult> getUserLoginResultSingleLiveEvent() {
         return userLoginResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorUserLoginResultSingleLiveEvent() {
-        return errorUserLoginResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<UserResult> getChangePasswordResultSingleLiveEvent() {
         return changePasswordResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorChangePasswordResultSingleLiveEvent() {
-        return errorChangePasswordResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
         return customerSupportsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerSupportsResultSingleLiveEvent() {
-        return errorCustomerSupportsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerSupportResult> getAddCustomerSupportResultSingleLiveEvent() {
         return addCustomerSupportResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddCustomerSupportResultSingleLiveEvent() {
-        return errorAddCustomerSupportResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
         return customerProductsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerProductsResultSingleLiveEvent() {
-        return errorCustomerProductsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerProductResult> getAddCustomerProductResultSingleLiveEvent() {
         return addCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddCustomerProductResultSingleLiveEvent() {
-        return errorAddCustomerProductResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerProductResult> getEditCustomerProductResultSingleLiveEvent() {
         return editCustomerProductResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorEditCustomerProductResultSingleLiveEvent() {
-        return errorEditCustomerProductResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerProductResult> getDeleteCustomerProductResultSingleLiveEvent() {
         return deleteCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerProductResultSingleLiveEvent() {
-        return errorDeleteCustomerProductResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsResultSingleLiveEvent() {
         return customerPaymentsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerPaymentsResultSingleLiveEvent() {
-        return errorCustomerPaymentsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentResultSingleLiveEvent() {
         return addCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddCustomerPaymentResultSingleLiveEvent() {
-        return errorAddCustomerPaymentResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentResultSingleLiveEvent() {
         return editCustomerPaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorEditCustomerPaymentResultSingleLiveEvent() {
-        return errorEditCustomerPaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentResultSingleLiveEvent() {
         return deleteCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentResultSingleLiveEvent() {
-        return errorDeleteCustomerPaymentResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentResult> getAddPaymentResultSingleLiveEvent() {
         return addPaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAddPaymentResultSingleLiveEvent() {
-        return errorAddPaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<PaymentResult> getEditPaymentResultSingleLiveEvent() {
         return editPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditPaymentResultSingleLiveEvent() {
-        return errorEditPaymentResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentResult> getDeletePaymentResultSingleLiveEvent() {
         return deletePaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorDeletePaymentResultSingleLiveEvent() {
-        return errorDeletePaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
         return bankAccountsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorBankAccountsResultSingleLiveEvent() {
-        return errorBankAccountsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsResultSingleLiveEvent() {
         return customerProductAttachmentsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerProductAttachmentsResultSingleLiveEvent() {
-        return errorCustomerProductAttachmentsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getCustomerPaymentAttachmentsResultSingleLiveEvent() {
         return customerPaymentAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerPaymentAttachmentsResultSingleLiveEvent() {
-        return errorCustomerPaymentAttachmentsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getCustomerSupportAttachmentsResultSingleLiveEvent() {
         return customerSupportAttachmentsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerSupportAttachmentsResultSingleLiveEvent() {
-        return errorCustomerSupportAttachmentsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
         return paymentAttachmentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorPaymentAttachmentsResultSingleLiveEvent() {
-        return errorPaymentAttachmentsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerUserResult> getCustomerUsersResultSingleLiveEvent() {
         return customerUsersResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerUsersResultSingleLiveEvent() {
-        return errorCustomerUsersResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
         return supportEventsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorSupportEventsResultSingleLiveEvent() {
-        return errorSupportEventsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
         return attachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAttachResultSingleLiveEvent() {
-        return errorAttachResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getDeleteAttachResultSingleLiveEvent() {
         return deleteAttachResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorDeleteAttachResultSingleLiveEvent() {
-        return errorDeleteAttachResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent() {
@@ -653,20 +517,8 @@ public class SipSupporterRepository {
         return productInfoResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorProductInfoResultSingleLiveEvent() {
-        return errorProductInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAddProductResultSingleLiveEvent() {
-        return errorAddProductResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectsResultSingleLiveEvent() {
         return paymentSubjectsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentSubjectsSingleLiveEvent() {
-        return errorPaymentSubjectsSingleLiveEvent;
     }
 
     public SingleLiveEvent<PaymentSubjectResult> getPaymentSubjectInfoResultSingleLiveEvent() {
@@ -677,16 +529,8 @@ public class SipSupporterRepository {
         return paymentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorPaymentsResultSingleLiveEvent() {
-        return errorPaymentsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AttachResult> getAttachResultViaAttachIDSingleLiveEvent() {
         return attachResultViaAttachIDSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAttachResultViaAttachIDSingleLiveEvent() {
-        return errorAttachResultViaAttachIDSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
@@ -709,16 +553,8 @@ public class SipSupporterRepository {
         return customerPaymentsByBankAccountResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent() {
-        return errorCustomerPaymentsByBankAccountResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<ProductGroupResult> getProductGroupsResultSingleLiveEvent() {
         return productGroupsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorProductGroupsResultSingleLiveEvent() {
-        return errorProductGroupsResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -817,39 +653,33 @@ public class SipSupporterRepository {
     }
 
     public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
-        sipSupporterService.login(path, userLoginParameter)
-                .enqueue(new Callback<UserResult>() {
-                    @Override
-                    public void onResponse(Call<UserResult> call, Response<UserResult> response) {
-                        if (response.isSuccessful()) {
-                            userLoginResultSingleLiveEvent.setValue(response.body());
-                        } else {
-                            try {
-                                Gson gson = new Gson();
-                                UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
-                                if (CheckStringIsNumeric.isNumeric(userResult.getErrorCode())) {
-                                    if (Integer.parseInt(userResult.getErrorCode()) <= -9001)
-                                        dangerousUserSingleLiveEvent.setValue(true);
-                                } else {
-                                    errorUserLoginResultSingleLiveEvent.setValue(userResult.getError());
-                                }
-                            } catch (IOException e) {
-                                Log.e(TAG, e.getMessage());
-                            }
-                        }
+        sipSupporterService.login(path, userLoginParameter).enqueue(new Callback<UserResult>() {
+            @Override
+            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
+                if (response.isSuccessful()) {
+                    userLoginResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
+                        userLoginResultSingleLiveEvent.setValue(userResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
                     }
+                }
+            }
 
-                    @Override
-                    public void onFailure(Call<UserResult> call, Throwable t) {
-                        if (t instanceof NoConnectivityException) {
-                            noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
-                        } else if (t instanceof SocketTimeoutException) {
-                            timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
-                        } else {
-                            wrongIpAddressSingleLiveEvent.setValue(context.getResources().getString(R.string.not_exist_server));
-                        }
-                    }
-                });
+            @Override
+            public void onFailure(Call<UserResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    wrongIpAddressSingleLiveEvent.setValue(context.getResources().getString(R.string.not_exist_server));
+                }
+            }
+        });
     }
 
     public void fetchCustomersResult(String path, String userLoginKey, String customerName) {
@@ -862,16 +692,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
-                        try {
-                            if (CheckStringIsNumeric.isNumeric(customerResult.getErrorCode())) {
-                                if (Integer.parseInt(customerResult.getErrorCode()) <= -9001)
-                                    dangerousUserSingleLiveEvent.setValue(true);
-                            } else {
-                                errorCustomersResultSingleLiveEvent.setValue(customerResult.getError());
-                            }
-                        } catch (NumberFormatException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
+                        customersResultSingleLiveEvent.setValue(customerResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -901,12 +722,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
-                        if (CheckStringIsNumeric.isNumeric(userResult.getErrorCode())) {
-                            if (Integer.parseInt(userResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorChangePasswordResultSingleLiveEvent.setValue(userResult.getError());
-                        }
+                        changePasswordResultSingleLiveEvent.setValue(userResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -936,12 +752,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerSupportResult.getErrorCode())) {
-                            if (Integer.parseInt(customerSupportResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerSupportsResultSingleLiveEvent.setValue(customerSupportResult.getError());
-                        }
+                        customerSupportsResultSingleLiveEvent.setValue(customerSupportResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -972,12 +783,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerUserResult customerUserResult = gson.fromJson(response.errorBody().string(), CustomerUserResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerUserResult.getErrorCode())) {
-                            if (Integer.parseInt(customerUserResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerUsersResultSingleLiveEvent.setValue(customerUserResult.getError());
-                        }
+                        customerUsersResultSingleLiveEvent.setValue(customerUserResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1008,12 +814,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         SupportEventResult supportEventResult = gson.fromJson(response.errorBody().string(), SupportEventResult.class);
-                        if (CheckStringIsNumeric.isNumeric(supportEventResult.getErrorCode())) {
-                            if (Integer.parseInt(supportEventResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorSupportEventsResultSingleLiveEvent.setValue(supportEventResult.getError());
-                        }
+                        supportEventsResultSingleLiveEvent.setValue(supportEventResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1043,12 +844,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerSupportResult.getErrorCode())) {
-                            if (Integer.parseInt(customerSupportResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAddCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult.getError());
-                        }
+                        addCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1072,9 +868,7 @@ public class SipSupporterRepository {
         sipSupporterService.fetchDate(path, userLoginKey).enqueue(new Callback<DateResult>() {
             @Override
             public void onResponse(Call<DateResult> call, Response<DateResult> response) {
-                if (response.isSuccessful()) {
-                    dateResultSingleLiveEvent.setValue(response.body());
-                }
+                dateResultSingleLiveEvent.setValue(response.body());
             }
 
             @Override
@@ -1100,12 +894,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
-                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerProductsResultSingleLiveEvent.setValue(customerProductResult.getError());
-                        }
+                        customerProductsResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1135,12 +924,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
-                        if (CheckStringIsNumeric.isNumeric(productResult.getErrorCode())) {
-                            if (Integer.parseInt(productResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorProductsResultSingleLiveEvent.setValue(productResult.getError());
-                        }
+                        productsResultSingleLiveEvent.setValue(productResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1170,12 +954,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
-                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAddCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
-                        }
+                        addCustomerProductResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1205,12 +984,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
-                        if (CheckStringIsNumeric.isNumeric(productResult.getErrorCode())) {
-                            if (Integer.parseInt(productResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorProductInfoResultSingleLiveEvent.setValue(productResult.getError());
-                        }
+                        productInfoResultSingleLiveEvent.setValue(productResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1240,16 +1014,12 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
-                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorDeleteCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
-                        }
+                        deleteCustomerProductResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
                 }
+
             }
 
             @Override
@@ -1275,12 +1045,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerProductResult.getErrorCode())) {
-                            if (Integer.parseInt(customerProductResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorEditCustomerProductResultSingleLiveEvent.setValue(customerProductResult.getError());
-                        }
+                        editCustomerProductResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1310,12 +1075,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAttachResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        attachResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1345,12 +1105,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerPaymentResult.getErrorCode())) {
-                            if (Integer.parseInt(customerPaymentResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerPaymentsResultSingleLiveEvent.setValue(customerPaymentResult.getError());
-                        }
+                        customerPaymentsResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1380,12 +1135,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        customerPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1414,13 +1164,8 @@ public class SipSupporterRepository {
                 } else {
                     try {
                         Gson gson = new Gson();
-                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAddCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
+                        addCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1449,13 +1194,8 @@ public class SipSupporterRepository {
                 } else {
                     try {
                         Gson gson = new Gson();
-                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorEditCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
+                        editCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1484,13 +1224,8 @@ public class SipSupporterRepository {
                 } else {
                     try {
                         Gson gson = new Gson();
-                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorDeleteCustomerPaymentResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
+                        deleteCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1520,12 +1255,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerProductAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        customerProductAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1555,12 +1285,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerSupportAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        customerSupportAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1590,12 +1315,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAttachResultViaAttachIDSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        attachResultViaAttachIDSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1625,12 +1345,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
-                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorPaymentsResultSingleLiveEvent.setValue(paymentResult.getError());
-                        }
+                        paymentsResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1660,12 +1375,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
-                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorEditPaymentResultSingleLiveEvent.setValue(paymentResult.getError());
-                        }
+                        editPaymentResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1695,12 +1405,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
-                        if (CheckStringIsNumeric.isNumeric(paymentResult.getErrorCode())) {
-                            if (Integer.parseInt(paymentResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorDeletePaymentResultSingleLiveEvent.setValue(paymentResult.getError());
-                        }
+                        deletePaymentResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1730,12 +1435,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
-                        if (CheckStringIsNumeric.isNumeric(paymentSubjectResult.getErrorCode())) {
-                            if (Integer.parseInt(paymentSubjectResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorPaymentSubjectsSingleLiveEvent.setValue(paymentSubjectResult.getError());
-                        }
+                        paymentSubjectsResultSingleLiveEvent.setValue(paymentSubjectResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1764,13 +1464,8 @@ public class SipSupporterRepository {
                 } else {
                     try {
                         Gson gson = new Gson();
-                        PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
-                        if (CheckStringIsNumeric.isNumeric(paymentSubjectResult.getErrorCode())) {
-                            if (Integer.parseInt(paymentSubjectResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorAddPaymentResultSingleLiveEvent.setValue(paymentSubjectResult.getError());
-                        }
+                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
+                        addPaymentResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1800,12 +1495,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorDeleteAttachResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        deleteAttachResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1835,12 +1525,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        paymentAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1869,13 +1554,8 @@ public class SipSupporterRepository {
                 } else {
                     try {
                         Gson gson = new Gson();
-                        AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
-                        if (CheckStringIsNumeric.isNumeric(attachResult.getErrorCode())) {
-                            if (Integer.parseInt(attachResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorPaymentSubjectInfoResultSingleLiveEvent.setValue(attachResult.getError());
-                        }
+                        PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
+                        paymentSubjectInfoResultSingleLiveEvent.setValue(paymentSubjectResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1905,12 +1585,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
-                        if (CheckStringIsNumeric.isNumeric(customerPaymentResult.getErrorCode())) {
-                            if (Integer.parseInt(customerPaymentResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorCustomerPaymentsByBankAccountResultSingleLiveEvent.setValue(customerPaymentResult.getError());
-                        }
+                        customerPaymentsByBankAccountResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1940,12 +1615,7 @@ public class SipSupporterRepository {
                     try {
                         Gson gson = new Gson();
                         BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
-                        if (CheckStringIsNumeric.isNumeric(bankAccountResult.getErrorCode())) {
-                            if (Integer.parseInt(bankAccountResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorBankAccountsResultSingleLiveEvent.setValue(bankAccountResult.getError());
-                        }
+                        bankAccountsResultSingleLiveEvent.setValue(bankAccountResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -1974,13 +1644,8 @@ public class SipSupporterRepository {
                 } else {
                     try {
                         Gson gson = new Gson();
-                        BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
-                        if (CheckStringIsNumeric.isNumeric(bankAccountResult.getErrorCode())) {
-                            if (Integer.parseInt(bankAccountResult.getErrorCode()) <= -9001)
-                                dangerousUserSingleLiveEvent.setValue(true);
-                        } else {
-                            errorProductGroupsResultSingleLiveEvent.setValue(bankAccountResult.getError());
-                        }
+                        ProductGroupResult productGroupResult = gson.fromJson(response.errorBody().string(), ProductGroupResult.class);
+                        productGroupsResultSingleLiveEvent.setValue(productGroupResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }

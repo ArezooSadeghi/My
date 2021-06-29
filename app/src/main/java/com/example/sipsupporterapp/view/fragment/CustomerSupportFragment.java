@@ -106,27 +106,23 @@ public class CustomerSupportFragment extends Fragment {
                     @Override
                     public void onChanged(CustomerSupportResult customerSupportResult) {
                         binding.progressBar.setVisibility(View.GONE);
-                        binding.recyclerViewSupportHistory.setVisibility(View.VISIBLE);
 
-                        StringBuilder stringBuilder = new StringBuilder();
-                        String listSize = String.valueOf(customerSupportResult.getCustomerSupports().length);
+                        if (customerSupportResult.getErrorCode() == "0") {
+                            binding.recyclerViewSupportHistory.setVisibility(View.VISIBLE);
 
-                        for (int i = 0; i < listSize.length(); i++) {
-                            stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
+                            StringBuilder stringBuilder = new StringBuilder();
+                            String listSize = String.valueOf(customerSupportResult.getCustomerSupports().length);
+
+                            for (int i = 0; i < listSize.length(); i++) {
+                                stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
+                            }
+
+                            binding.txtCount.setText("تعداد پشتیبانی ها: " + stringBuilder.toString());
+                            setupAdapter(customerSupportResult.getCustomerSupports());
+                        } else {
+                            ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerSupportResult.getError());
+                            fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                         }
-
-                        binding.txtCount.setText("تعداد پشتیبانی ها: " + stringBuilder.toString());
-                        setupAdapter(customerSupportResult.getCustomerSupports());
-                    }
-                });
-
-        viewModel.getErrorCustomerSupportsResultSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String message) {
-                        binding.progressBar.setVisibility(View.GONE);
-                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     }
                 });
 

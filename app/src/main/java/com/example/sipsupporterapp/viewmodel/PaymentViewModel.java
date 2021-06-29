@@ -17,23 +17,18 @@ public class PaymentViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent;
 
     private SingleLiveEvent<PaymentResult> paymentsByBankAccountResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorPaymentsByBankAccountResultSingleLiveEvent;
 
     private SingleLiveEvent<PaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentInfo> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentInfo> seePaymentAttachmentsClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorAddPaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorEditPaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorDeletePaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
@@ -51,19 +46,14 @@ public class PaymentViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
-        errorBankAccountsResultSingleLiveEvent = repository.getErrorBankAccountsResultSingleLiveEvent();
 
         paymentsByBankAccountResultSingleLiveEvent = repository.getPaymentsResultSingleLiveEvent();
-        errorPaymentsByBankAccountResultSingleLiveEvent = repository.getErrorPaymentsResultSingleLiveEvent();
 
         addPaymentResultSingleLiveEvent = repository.getAddPaymentResultSingleLiveEvent();
-        errorAddPaymentResultSingleLiveEvent = repository.getErrorAddPaymentResultSingleLiveEvent();
 
         editPaymentResultSingleLiveEvent = repository.getEditPaymentResultSingleLiveEvent();
-        errorEditPaymentResultSingleLiveEvent = repository.getErrorEditPaymentResultSingleLiveEvent();
 
         deletePaymentResultSingleLiveEvent = repository.getDeletePaymentResultSingleLiveEvent();
-        errorDeletePaymentResultSingleLiveEvent = repository.getErrorDeletePaymentResultSingleLiveEvent();
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
@@ -76,16 +66,8 @@ public class PaymentViewModel extends AndroidViewModel {
         return bankAccountsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorBankAccountsResultSingleLiveEvent() {
-        return errorBankAccountsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentResult> getPaymentsByBankAccountResultSingleLiveEvent() {
         return paymentsByBankAccountResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorPaymentsByBankAccountResultSingleLiveEvent() {
-        return errorPaymentsByBankAccountResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<PaymentInfo> getEditClicked() {
@@ -104,24 +86,12 @@ public class PaymentViewModel extends AndroidViewModel {
         return addPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorAddPaymentResultSingleLiveEvent() {
-        return errorAddPaymentResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentResult> getEditPaymentResultSingleLiveEvent() {
         return editPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditPaymentResultSingleLiveEvent() {
-        return errorEditPaymentResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<PaymentResult> getDeletePaymentResultSingleLiveEvent() {
         return deletePaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorDeletePaymentResultSingleLiveEvent() {
-        return errorDeletePaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getYesDeleteClicked() {

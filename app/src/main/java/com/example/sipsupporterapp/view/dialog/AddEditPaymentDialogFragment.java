@@ -138,36 +138,30 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.getAddPaymentResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorAddPaymentResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (paymentResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getEditPaymentResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorEditPaymentResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (paymentResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

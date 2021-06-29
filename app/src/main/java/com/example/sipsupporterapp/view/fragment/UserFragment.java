@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.UserAdapter;
 import com.example.sipsupporterapp.databinding.FragmentUserBinding;
-import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.CustomerUserInfo;
+import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -116,25 +116,22 @@ public class UserFragment extends Fragment {
             @Override
             public void onChanged(CustomerUserResult customerUserResult) {
                 binding.progressBar.setVisibility(View.GONE);
-                binding.recyclerViewCustomerUsers.setVisibility(View.VISIBLE);
 
-                String str = (customerUserResult.getCustomerUsers().length) + "";
-                StringBuilder stringBuilder = new StringBuilder();
+                if (customerUserResult.getErrorCode() == "0") {
+                    binding.recyclerViewCustomerUsers.setVisibility(View.VISIBLE);
 
-                for (int i = 0; i < str.length(); i++) {
-                    stringBuilder.append((char) ((int) str.charAt(i) - 48 + 1632));
+                    String str = (customerUserResult.getCustomerUsers().length) + "";
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for (int i = 0; i < str.length(); i++) {
+                        stringBuilder.append((char) ((int) str.charAt(i) - 48 + 1632));
+                    }
+                    binding.txtCount.setText("تعداد کاربران: " + stringBuilder.toString());
+                    setupAdapter(customerUserResult.getCustomerUsers());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerUserResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 }
-                binding.txtCount.setText("تعداد کاربران: " + stringBuilder.toString());
-                setupAdapter(customerUserResult.getCustomerUsers());
-            }
-        });
-
-        viewModel.getErrorUsersResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String error) {
-                binding.progressBar.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
 

@@ -24,7 +24,6 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
@@ -99,8 +98,6 @@ public class PaymentFragment extends Fragment {
     }
 
     private void initViews() {
-       /* String userFullName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
-        binding.txtUserFullName.setText(userFullName);*/
         binding.recyclerViewCosts.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewCosts.addItemDecoration(new DividerItemDecoration(
                 binding.recyclerViewCosts.getContext(),
@@ -130,44 +127,30 @@ public class PaymentFragment extends Fragment {
         viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<BankAccountResult>() {
             @Override
             public void onChanged(BankAccountResult bankAccountResult) {
-                EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
-                bankAccountInfoArray = bankAccountResult.getBankAccounts();
-                setupSpinner(bankAccountResult.getBankAccounts());
-                fetchCostsByBankAccountID();
-            }
-        });
-
-        viewModel.getErrorBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (bankAccountResult.getErrorCode() == "0") {
+                    EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
+                    bankAccountInfoArray = bankAccountResult.getBankAccounts();
+                    setupSpinner(bankAccountResult.getBankAccounts());
+                    fetchCostsByBankAccountID();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(bankAccountResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 
         viewModel.getPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-               /* StringBuilder stringBuilder = new StringBuilder();
-                String arrayLength = String.valueOf(paymentResult.getPayments().length);
+                binding.progressBarLoading.setVisibility(View.GONE);
 
-                for (int i = 0; i < arrayLength.length(); i++) {
-                    stringBuilder.append((char) ((int) arrayLength.charAt(i) - 48 + 1632));
+                if (paymentResult.getErrorCode() == "0") {
+                    binding.recyclerViewCosts.setVisibility(View.VISIBLE);
+                    setupAdapter(paymentResult.getPayments());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 }
-
-                binding.txtCountCosts.setText("تعداد برداشت ها: " + stringBuilder.toString());*/
-                binding.progressBarLoading.setVisibility(View.GONE);
-                binding.recyclerViewCosts.setVisibility(View.VISIBLE);
-                setupAdapter(paymentResult.getPayments());
-            }
-        });
-
-        viewModel.getErrorPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
 
@@ -231,17 +214,14 @@ public class PaymentFragment extends Fragment {
         viewModel.getDeletePaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                fetchCostsByBankAccountID();
-            }
-        });
-
-        viewModel.getErrorDeletePaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (paymentResult.getErrorCode() == "0") {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    fetchCostsByBankAccountID();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

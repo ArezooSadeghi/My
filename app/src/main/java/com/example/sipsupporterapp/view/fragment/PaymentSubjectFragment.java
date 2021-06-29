@@ -103,27 +103,24 @@ public class PaymentSubjectFragment extends Fragment {
         viewModel.getPaymentSubjectsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<PaymentSubjectResult>() {
             @Override
             public void onChanged(PaymentSubjectResult paymentSubjectResult) {
-                paymentSubjectInfoList = Arrays.asList(paymentSubjectResult.getPaymentSubjects());
-                for (int i = 0; i < paymentSubjectResult.getPaymentSubjects().length; i++) {
-                    PaymentSubjectInfo paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[i];
-                    if (paymentSubjectInfo.getParentID() == 0 || paymentSubjectInfo.getParentPaymentSubject() == null) {
-                        String paymentSubject = Converter.convert(paymentSubjectInfo.getPaymentSubject());
-                        TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
-                        treeNodeList.add(dirNode);
-                        addChild(dirNode, paymentSubjectInfo.getPaymentSubjectID());
+                if (paymentSubjectResult.getErrorCode() == "0") {
+                    paymentSubjectInfoList = Arrays.asList(paymentSubjectResult.getPaymentSubjects());
+                    for (int i = 0; i < paymentSubjectResult.getPaymentSubjects().length; i++) {
+                        PaymentSubjectInfo paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[i];
+                        if (paymentSubjectInfo.getParentID() == 0 || paymentSubjectInfo.getParentPaymentSubject() == null) {
+                            String paymentSubject = Converter.convert(paymentSubjectInfo.getPaymentSubject());
+                            TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
+                            treeNodeList.add(dirNode);
+                            addChild(dirNode, paymentSubjectInfo.getPaymentSubjectID());
+                        }
                     }
+
+                    setupAdapter();
+                    handleEvents();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentSubjectResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 }
-
-                setupAdapter();
-                handleEvents();
-            }
-        });
-
-        viewModel.getErrorPaymentSubjectsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
 

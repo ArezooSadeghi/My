@@ -2,7 +2,6 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,46 +98,35 @@ public class LoginFragment extends Fragment {
 
 
     private void setObserver() {
-        viewModel.getUserResultSingleLiveEvent().observe(
-                getViewLifecycleOwner(), new Observer<UserResult>() {
-                    @Override
-                    public void onChanged(UserResult userResult) {
-                        binding.edTextPassword.setEnabled(true);
-                        binding.edTextUserName.setEnabled(true);
-                        binding.btnLogin.setEnabled(true);
-                        binding.imgBtnMore.setEnabled(true);
-
-                        SipSupportSharedPreferences
-                                .setUserName(getContext(), binding.edTextUserName.getText().toString());
-                        SipSupportSharedPreferences.setLastValueSpinner(getContext(), spinnerValue);
-                        binding.loadingLayout.setVisibility(View.GONE);
-                        UserInfo[] userInfoArray = userResult.getUsers();
-                        if (userInfoArray.length != 0) {
-                            SipSupportSharedPreferences
-                                    .setUserLoginKey(getContext(), userInfoArray[0].getUserLoginKey());
-                            SipSupportSharedPreferences
-                                    .setUserFullName(getContext(), userInfoArray[0].getUserFullName());
-
-                            Log.d("Arezoo", SipSupportSharedPreferences.getUserLoginKey(getContext()));
-
-                            Intent intent = MainActivity.start(getContext());
-                            startActivity(intent);
-                            getActivity().finish();
-                        }
-                    }
-                });
-
-        viewModel.getErrorUserResult().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getUserResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<UserResult>() {
             @Override
-            public void onChanged(String error) {
+            public void onChanged(UserResult userResult) {
                 binding.loadingLayout.setVisibility(View.GONE);
                 binding.edTextPassword.setEnabled(true);
                 binding.edTextUserName.setEnabled(true);
                 binding.btnLogin.setEnabled(true);
                 binding.imgBtnMore.setEnabled(true);
 
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (userResult.getErrorCode() == "0") {
+                    SipSupportSharedPreferences
+                            .setUserName(getContext(), binding.edTextUserName.getText().toString());
+                    SipSupportSharedPreferences.setLastValueSpinner(getContext(), spinnerValue);
+                    binding.loadingLayout.setVisibility(View.GONE);
+                    UserInfo[] userInfoArray = userResult.getUsers();
+                    if (userInfoArray.length != 0) {
+                        SipSupportSharedPreferences
+                                .setUserLoginKey(getContext(), userInfoArray[0].getUserLoginKey());
+                        SipSupportSharedPreferences
+                                .setUserFullName(getContext(), userInfoArray[0].getUserFullName());
+
+                        Intent intent = MainActivity.start(getContext());
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(userResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

@@ -2,7 +2,6 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,10 @@ import com.example.sipsupporterapp.model.CustomerInfo;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.ItemClickedContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.PopupDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
 import java.util.ArrayList;
@@ -50,11 +47,8 @@ public class CustomerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Arezoo", "onCreate");
         createViewModel();
-        Log.d("Arezoo", "createViewModel");
         fetchDate();
-        Log.d("Arezoo", "fetchDate");
     }
 
 
@@ -114,32 +108,19 @@ public class CustomerFragment extends Fragment {
                     public void onChanged(CustomerResult customerResult) {
                         binding.progressBarLoading.setVisibility(View.GONE);
 
-                       /* StringBuilder stringBuilder = new StringBuilder();
-                        String listSize = String.valueOf(customerResult.getCustomers().length);
-
-                        for (int i = 0; i < listSize.length(); i++) {
-                            stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
+                        if (customerResult.getErrorCode() == "0") {
+                            binding.recyclerViewCustomers.setVisibility(View.VISIBLE);
+                            List<CustomerInfo> customerInfoList = new ArrayList<>();
+                            for (CustomerInfo customerInfo : customerResult.getCustomers()) {
+                                customerInfoList.add(customerInfo);
+                            }
+                            setupAdapter(customerInfoList);
+                        } else {
+                            ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerResult.getError());
+                            fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                         }
-
-                        binding.txtCount.setText("تعداد مراکز: " + stringBuilder.toString());*/
-                        binding.progressBarLoading.setVisibility(View.GONE);
-                        binding.recyclerViewCustomers.setVisibility(View.VISIBLE);
-                        List<CustomerInfo> customerInfoList = new ArrayList<>();
-                        for (CustomerInfo customerInfo : customerResult.getCustomers()) {
-                            customerInfoList.add(customerInfo);
-                        }
-                        setupAdapter(customerInfoList);
                     }
                 });
-
-        viewModel.getErrorCustomersResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String error) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
-        });
 
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -203,8 +184,6 @@ public class CustomerFragment extends Fragment {
 
 
     private void initViews() {
-      /*  String userName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
-        binding.txtUserName.setText(userName);*/
         binding.recyclerViewCustomers.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewCustomers.addItemDecoration(new DividerItemDecoration(
                 binding.recyclerViewCustomers.getContext(),
@@ -213,22 +192,12 @@ public class CustomerFragment extends Fragment {
 
 
     private void handleEvents() {
-       /* binding.imgBtnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupDialogFragment fragment = PopupDialogFragment.newInstance();
-                fragment.show(getParentFragmentManager(), PopupDialogFragment.TAG);
-            }
-        });
-*/
         binding.btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Arezoo", "clickSearch");
                 binding.progressBarLoading.setVisibility(View.VISIBLE);
                 String centerName = SipSupportSharedPreferences.getCenterName(getContext());
                 String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-                Log.d("Arezoo", userLoginKey);
                 ServerData serverData = viewModel.getServerData(centerName);
                 viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customers/search";

@@ -132,20 +132,19 @@ public class FullScreenPhotoFragment extends Fragment {
                 if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);
                 }
-                if (attachResult.getAttachs().length != 0) {
-                    int attachID = attachResult.getAttachs()[0].getAttachID();
-                    EventBus.getDefault().postSticky(new DeleteEvent(attachID));
 
-                    SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance(getString(R.string.success_delete_photo_message));
-                    fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
+                if (attachResult.getErrorCode() == "0") {
+
+                    if (attachResult.getAttachs().length != 0) {
+                        int attachID = attachResult.getAttachs()[0].getAttachID();
+                        EventBus.getDefault().postSticky(new DeleteEvent(attachID));
+
+                        SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance(getString(R.string.success_delete_photo_message));
+                        fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
+                    }
+                } else {
+                    showErrorDialog(attachResult.getError());
                 }
-            }
-        });
-
-        viewModel.getErrorDeleteAttachResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                showErrorDialog(message);
             }
         });
 

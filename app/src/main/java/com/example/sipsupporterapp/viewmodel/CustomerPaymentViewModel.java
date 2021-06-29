@@ -16,22 +16,16 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorBankAccountsResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerPaymentsResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorCustomerPaymentsByBankAccountResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorAddCustomerPaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorEditCustomerPaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<String> errorDeleteCustomerPaymentResultSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> updateListAddCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
 
@@ -52,22 +46,16 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
 
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
-        errorBankAccountsResultSingleLiveEvent = repository.getErrorBankAccountsResultSingleLiveEvent();
 
         customerPaymentsResultSingleLiveEvent = repository.getCustomerPaymentsResultSingleLiveEvent();
-        errorCustomerPaymentsResultSingleLiveEvent = repository.getErrorCustomerPaymentsResultSingleLiveEvent();
 
         customerPaymentsByBankAccountResultSingleLiveEvent = repository.getCustomerPaymentsByBankAccountResultSingleLiveEvent();
-        errorCustomerPaymentsByBankAccountResultSingleLiveEvent = repository.getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent();
 
         addCustomerPaymentResultSingleLiveEvent = repository.getAddCustomerPaymentResultSingleLiveEvent();
-        errorAddCustomerPaymentResultSingleLiveEvent = repository.getErrorAddCustomerPaymentResultSingleLiveEvent();
 
         editCustomerPaymentResultSingleLiveEvent = repository.getEditCustomerPaymentResultSingleLiveEvent();
-        errorEditCustomerPaymentResultSingleLiveEvent = repository.getErrorEditCustomerPaymentResultSingleLiveEvent();
 
         deleteCustomerPaymentResultSingleLiveEvent = repository.getDeleteCustomerPaymentResultSingleLiveEvent();
-        errorDeleteCustomerPaymentResultSingleLiveEvent = repository.getErrorDeleteCustomerPaymentResultSingleLiveEvent();
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
@@ -78,48 +66,24 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return bankAccountsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorBankAccountsResultSingleLiveEvent() {
-        return errorBankAccountsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsResultSingleLiveEvent() {
         return customerPaymentsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorCustomerPaymentsResultSingleLiveEvent() {
-        return errorCustomerPaymentsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
         return customerPaymentsByBankAccountResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorCustomerPaymentsByBankAccountResultSingleLiveEvent() {
-        return errorCustomerPaymentsByBankAccountResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentResultSingleLiveEvent() {
         return addCustomerPaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorAddCustomerPaymentResultSingleLiveEvent() {
-        return errorAddCustomerPaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerPaymentResult> getEditCustomerPaymentResultSingleLiveEvent() {
         return editCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getErrorEditCustomerPaymentResultSingleLiveEvent() {
-        return errorEditCustomerPaymentResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getDeleteCustomerPaymentResultSingleLiveEvent() {
         return deleteCustomerPaymentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getErrorDeleteCustomerPaymentResultSingleLiveEvent() {
-        return errorDeleteCustomerPaymentResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getUpdateListAddCustomerPaymentSingleLiveEvent() {

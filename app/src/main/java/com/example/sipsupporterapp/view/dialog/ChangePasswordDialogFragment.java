@@ -93,18 +93,15 @@ public class ChangePasswordDialogFragment extends DialogFragment {
         viewModel.getChangedPasswordResultSingleLiveEvent().observe(this, new Observer<UserResult>() {
             @Override
             public void onChanged(UserResult userResult) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), userResult.getUsers()[0].getUserLoginKey());
-                SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_change_password));
-                fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                dismiss();
-            }
-        });
-
-        viewModel.getErrorChangedPasswordResultSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String errorChangedPassword) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(errorChangedPassword);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (userResult.getErrorCode() == "0") {
+                    SipSupportSharedPreferences.setUserLoginKey(getContext(), userResult.getUsers()[0].getUserLoginKey());
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_change_password));
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    dismiss();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(userResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
             }
         });
 

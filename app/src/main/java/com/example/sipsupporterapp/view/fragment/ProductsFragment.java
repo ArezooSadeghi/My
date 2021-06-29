@@ -111,32 +111,29 @@ public class ProductsFragment extends Fragment {
         viewModel.getProductGroupsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<ProductGroupResult>() {
             @Override
             public void onChanged(ProductGroupResult productGroupResult) {
-                productGroupInfoList = Arrays.asList(productGroupResult.getProductGroups());
-                for (int i = 0; i < productGroupResult.getProductGroups().length; i++) {
-                    ProductGroupInfo productGroupInfo = productGroupResult.getProductGroups()[i];
-                    if (productGroupInfo.getParentID() == 0) {
-                        String productGroup = Converter.convert(productGroupInfo.getProductGroup());
-                        TreeNode<Dir> dirNode = new TreeNode<>(new Dir(productGroup));
-                        treeNodeList.add(dirNode);
-                        for (int j = 0; j < productGroupInfo.getProducts().length; j++) {
-                            productInfoList.add(productGroupInfo.getProducts()[j]);
-                            String productName = Converter.convert(productGroupInfo.getProducts()[j].getProductName());
-                            TreeNode<Dir> dirTreeNode = new TreeNode<>(new Dir(productName));
-                            dirNode.addChild(dirTreeNode);
+                if (productGroupResult.getErrorCode() == "0") {
+                    productGroupInfoList = Arrays.asList(productGroupResult.getProductGroups());
+                    for (int i = 0; i < productGroupResult.getProductGroups().length; i++) {
+                        ProductGroupInfo productGroupInfo = productGroupResult.getProductGroups()[i];
+                        if (productGroupInfo.getParentID() == 0) {
+                            String productGroup = Converter.convert(productGroupInfo.getProductGroup());
+                            TreeNode<Dir> dirNode = new TreeNode<>(new Dir(productGroup));
+                            treeNodeList.add(dirNode);
+                            for (int j = 0; j < productGroupInfo.getProducts().length; j++) {
+                                productInfoList.add(productGroupInfo.getProducts()[j]);
+                                String productName = Converter.convert(productGroupInfo.getProducts()[j].getProductName());
+                                TreeNode<Dir> dirTreeNode = new TreeNode<>(new Dir(productName));
+                                dirNode.addChild(dirTreeNode);
+                            }
+                            addChild(dirNode, productGroupInfo.getProductGroupID());
                         }
-                        addChild(dirNode, productGroupInfo.getProductGroupID());
                     }
+                    setupAdapter();
+                    handleEvents();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productGroupResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 }
-                setupAdapter();
-                handleEvents();
-            }
-        });
-
-        viewModel.getErrorProductGroupsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
     }
