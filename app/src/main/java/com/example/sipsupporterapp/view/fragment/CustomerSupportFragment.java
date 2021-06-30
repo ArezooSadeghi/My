@@ -23,7 +23,6 @@ import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
@@ -34,7 +33,8 @@ import java.util.List;
 public class CustomerSupportFragment extends Fragment {
     private FragmentCustomerSupportBinding binding;
     private CustomerSupportViewModel viewModel;
-
+    private ServerData serverData;
+    private String centerName, userLoginKey;
     private int customerID;
 
     private static final String ARGS_CUSTOMER_ID = "customerID";
@@ -52,6 +52,9 @@ public class CustomerSupportFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
 
         createViewModel();
         fetchCustomerSupports();
@@ -82,22 +85,27 @@ public class CustomerSupportFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerSupportViewModel.class);
     }
 
-    private void fetchCustomerSupports() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerSupports/ListByCustomer/";
-        viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
-    }
-
     private void initView() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtUserFullName.setText(customerName);
+
         binding.recyclerViewSupportHistory.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewSupportHistory.addItemDecoration(new DividerItemDecoration(
                 binding.recyclerViewSupportHistory.getContext(),
                 DividerItemDecoration.VERTICAL));
+    }
+
+    private void setupAdapter(CustomerSupportInfo[] customerSupportInfoArray) {
+        List<CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
+        CustomerSupportAdapter adapter = new CustomerSupportAdapter(
+                getContext(), viewModel, customerSupportInfoList);
+        binding.recyclerViewSupportHistory.setAdapter(adapter);
+    }
+
+    private void fetchCustomerSupports() {
+        viewModel.getSipSupportServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerSupports/ListByCustomer/";
+        viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
     }
 
     private void setupObserver() {
@@ -135,47 +143,27 @@ public class CustomerSupportFragment extends Fragment {
             }
         });
 
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String message) {
-                        binding.progressBar.setVisibility(View.GONE);
-                        ErrorDialogFragment fragment = ErrorDialogFragment
-                                .newInstance(message);
-                        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    }
-                });
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBar.setVisibility(View.GONE);
+                ErrorDialogFragment fragment = ErrorDialogFragment
+                        .newInstance(message);
+                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+            }
+        });
 
-        viewModel.getDangerousUserSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean isDangerousUser) {
-                        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                        Intent intent = LoginContainerActivity.start(getContext());
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                });
-
-        viewModel.getSeeCustomerSupportAttachmentsClicked()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerSupportInfo>() {
-                    @Override
-                    public void onChanged(CustomerSupportInfo customerSupportInfo) {
-                        Intent starter = PhotoGalleryContainerActivity.start(getContext(), customerSupportInfo.getCustomerSupportID(), 0, 0, 0);
-                        startActivity(starter);
-                    }
-                });
-    }
-
-    private void setupAdapter(CustomerSupportInfo[] customerSupportInfoArray) {
-        List<CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
-        CustomerSupportAdapter adapter = new CustomerSupportAdapter(
-                getContext(), viewModel, customerSupportInfoList);
-        binding.recyclerViewSupportHistory.setAdapter(adapter);
+        viewModel.getSeeCustomerSupportAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerSupportInfo>() {
+            @Override
+            public void onChanged(CustomerSupportInfo customerSupportInfo) {
+                Intent starter = PhotoGalleryContainerActivity.start(
+                        getContext(),
+                        customerSupportInfo.getCustomerSupportID(),
+                        0,
+                        0,
+                        0);
+                startActivity(starter);
+            }
+        });
     }
 }

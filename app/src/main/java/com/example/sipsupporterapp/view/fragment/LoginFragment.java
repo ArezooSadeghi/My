@@ -24,7 +24,6 @@ import com.example.sipsupporterapp.model.UserInfo;
 import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.MainActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.IPAddressListDialogFragment;
@@ -38,10 +37,8 @@ import java.util.List;
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private LoginViewModel viewModel;
-
     private String spinnerValue;
     private IPAddressListDialogFragment fragment;
-
 
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
@@ -50,13 +47,11 @@ public class LoginFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity())
-                .get(LoginViewModel.class);
+        createViewModel();
 
         if (viewModel.getServerDataList().size() == 0) {
             RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
@@ -83,8 +78,7 @@ public class LoginFragment extends Fragment {
             setupSpinner();
         }
 
-        setListener();
-        setItemSelected();
+        handleEvents();
 
         return binding.getRoot();
     }
@@ -93,11 +87,103 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setObserver();
+        setupObserver();
     }
 
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
+    }
 
-    private void setObserver() {
+    private void setupSpinner() {
+        String lastValueSpinner = SipSupportSharedPreferences.getCenterName(getContext());
+        List<ServerData> serverDataList = viewModel.getServerDataList();
+        List<String> centerNameList = new ArrayList<>();
+        for (ServerData serverData : serverDataList) {
+            centerNameList.add(serverData.getCenterName());
+        }
+
+        List<String> newCenterNameList = new ArrayList<>();
+
+        if (lastValueSpinner != null) {
+            for (String centerName : centerNameList) {
+                if (!centerName.equals(lastValueSpinner)) {
+                    newCenterNameList.add(centerName);
+                }
+            }
+            newCenterNameList.add(0, lastValueSpinner);
+            binding.spinner.setItems(newCenterNameList);
+
+        } else {
+            binding.spinner.setItems(centerNameList);
+        }
+        if (binding.spinner.getItems().size() > 0) {
+            spinnerValue = (String) binding.spinner.getItems().get(0);
+        }
+    }
+
+    private void handleEvents() {
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (viewModel.getServerDataList() != null & viewModel.getServerDataList().size() == 0) {
+                        RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
+                        fragment.show(getParentFragmentManager(), RequireIPAddressDialogFragment.TAG);
+                    } else {
+                        binding.edTextPassword.setEnabled(false);
+                        binding.edTextUserName.setEnabled(false);
+                        binding.btnLogin.setEnabled(false);
+                        binding.imgBtnMore.setEnabled(false);
+
+                        String userName = binding.edTextUserName.getText().toString().replaceAll(" ", "");
+                        String password = binding.edTextPassword.getText().toString().replaceAll(" ", "");
+
+                        UserLoginParameter userLoginParameter = new UserLoginParameter(userName, password);
+
+                        if (spinnerValue != null) {
+                            ServerData serverData = viewModel.getServerData(spinnerValue);
+                            viewModel.getSipSupportServicePostUserLoginParameter(
+                                    serverData.getIpAddress() + ":" + serverData.getPort());
+                            String path = "/api/v1/users/Login/";
+                            viewModel.fetchUserResult(path, userLoginParameter);
+                            binding.loadingLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                } catch (Exception exception) {
+                    Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment = IPAddressListDialogFragment.newInstance();
+                fragment.show(getParentFragmentManager(), IPAddressListDialogFragment.TAG);
+            }
+        });
+
+        binding.edTextUserName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if (actionId == 0 || actionId == EditorInfo.IME_ACTION_DONE) {
+                    binding.edTextPassword.requestFocus();
+                }
+                return false;
+            }
+        });
+
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                spinnerValue = (String) item;
+            }
+        });
+    }
+
+    private void setupObserver() {
         viewModel.getUserResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<UserResult>() {
             @Override
             public void onChanged(UserResult userResult) {
@@ -110,7 +196,7 @@ public class LoginFragment extends Fragment {
                 if (userResult.getErrorCode().equals("0")) {
                     SipSupportSharedPreferences
                             .setUserName(getContext(), binding.edTextUserName.getText().toString());
-                    SipSupportSharedPreferences.setLastValueSpinner(getContext(), spinnerValue);
+                    SipSupportSharedPreferences.setCenterName(getContext(), spinnerValue);
                     binding.loadingLayout.setVisibility(View.GONE);
                     UserInfo[] userInfoArray = userResult.getUsers();
                     if (userInfoArray.length != 0) {
@@ -119,8 +205,8 @@ public class LoginFragment extends Fragment {
                         SipSupportSharedPreferences
                                 .setUserFullName(getContext(), userInfoArray[0].getUserFullName());
 
-                        Intent intent = MainActivity.start(getContext());
-                        startActivity(intent);
+                        Intent starter = MainActivity.start(getContext());
+                        startActivity(starter);
                         getActivity().finish();
                     }
                 } else {
@@ -175,35 +261,18 @@ public class LoginFragment extends Fragment {
                     }
                 });
 
-        viewModel.getDangerousUserSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean isDangerousUser) {
-                        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                        Intent intent = LoginContainerActivity.start(getContext());
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                });
-
-        viewModel.getInsertSpinnerSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean isInsert) {
-                        setupSpinner();
-                    }
-                });
+        viewModel.getInsertSpinnerSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isInsert) {
+                setupSpinner();
+            }
+        });
 
         viewModel.getYesDeleteSpinner().observe(getViewLifecycleOwner(), new Observer<ServerData>() {
             @Override
             public void onChanged(ServerData serverData) {
                 if (viewModel.getServerDataList().size() == 0) {
-                    SipSupportSharedPreferences.setLastValueSpinner(getContext(), null);
+                    SipSupportSharedPreferences.setCenterName(getContext(), null);
                     setupSpinner();
                     fragment.dismiss();
                     binding.edTextPassword.setText("");
@@ -211,102 +280,9 @@ public class LoginFragment extends Fragment {
                     RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
                     fragment.show(getChildFragmentManager(), RequireIPAddressDialogFragment.TAG);
                 } else {
-                    SipSupportSharedPreferences.setLastValueSpinner(getContext(), null);
+                    SipSupportSharedPreferences.setCenterName(getContext(), null);
                     setupSpinner();
                 }
-            }
-        });
-    }
-
-    private void setupSpinner() {
-        String lastValueSpinner = SipSupportSharedPreferences.getCenterName(getContext());
-        List<ServerData> serverDataList = viewModel.getServerDataList();
-        List<String> centerNameList = new ArrayList<>();
-        for (ServerData serverData : serverDataList) {
-            centerNameList.add(serverData.getCenterName());
-        }
-
-        List<String> newCenterNameList = new ArrayList<>();
-
-        if (lastValueSpinner != null) {
-            for (String centerName : centerNameList) {
-                if (!centerName.equals(lastValueSpinner)) {
-                    newCenterNameList.add(centerName);
-                }
-            }
-            newCenterNameList.add(0, lastValueSpinner);
-            binding.spinner.setItems(newCenterNameList);
-
-        } else {
-            binding.spinner.setItems(centerNameList);
-        }
-        if (binding.spinner.getItems().size() > 0) {
-            spinnerValue = (String) binding.spinner.getItems().get(0);
-        }
-    }
-
-
-    private void setListener() {
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (viewModel.getServerDataList() != null & viewModel.getServerDataList().size() == 0) {
-                        RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
-                        fragment.show(getParentFragmentManager(), RequireIPAddressDialogFragment.TAG);
-                    } else {
-                        binding.edTextPassword.setEnabled(false);
-                        binding.edTextUserName.setEnabled(false);
-                        binding.btnLogin.setEnabled(false);
-                        binding.imgBtnMore.setEnabled(false);
-
-                        String userName = binding.edTextUserName.getText().toString().replaceAll(" ", "");
-                        String password = binding.edTextPassword.getText().toString().replaceAll(" ", "");
-
-                        UserLoginParameter userLoginParameter = new UserLoginParameter(userName, password);
-
-                        if (spinnerValue != null) {
-                            ServerData serverData = viewModel.getServerData(spinnerValue);
-                            viewModel.getSipSupportServicePostUserLoginParameter(
-                                    serverData.getIpAddress() + ":" + serverData.getPort());
-                            String path = "/api/v1/users/Login/";
-                            viewModel.fetchUserResult(path, userLoginParameter);
-                            binding.loadingLayout.setVisibility(View.VISIBLE);
-                        }
-                    }
-                } catch (Exception exception) {
-                    Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragment = IPAddressListDialogFragment.newInstance();
-                fragment.show(getParentFragmentManager(), IPAddressListDialogFragment.TAG);
-            }
-        });
-
-        binding.edTextUserName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == 0 || actionId == EditorInfo.IME_ACTION_DONE) {
-                    binding.edTextPassword.requestFocus();
-                }
-                return false;
-            }
-        });
-    }
-
-
-    private void setItemSelected() {
-        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                spinnerValue = (String) item;
             }
         });
     }

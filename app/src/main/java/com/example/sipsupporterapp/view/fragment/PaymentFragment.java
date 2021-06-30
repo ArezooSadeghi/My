@@ -25,7 +25,6 @@ import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -42,9 +41,9 @@ import java.util.List;
 public class PaymentFragment extends Fragment {
     private FragmentPaymentBinding binding;
     private PaymentViewModel viewModel;
-
+    private ServerData serverData;
+    private String lastValueSpinner, centerName, userLoginKey;
     private int paymentID, bankAccountID;
-    private String lastValueSpinner;
     private BankAccountInfo[] bankAccountInfoArray;
 
     public static PaymentFragment newInstance() {
@@ -59,6 +58,11 @@ public class PaymentFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+
         fetchBankAccounts();
     }
 
@@ -88,15 +92,6 @@ public class PaymentFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
     }
 
-    private void fetchBankAccounts() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceBankAccounts(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/bankAccounts/List/";
-        viewModel.fetchBankAccounts(path, userLoginKey);
-    }
-
     private void initViews() {
         binding.recyclerViewCosts.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewCosts.addItemDecoration(new DividerItemDecoration(
@@ -121,6 +116,58 @@ public class PaymentFragment extends Fragment {
                 fetchCostsByBankAccountID();
             }
         });
+    }
+
+    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
+        String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
+        for (int i = 0; i < bankAccountNameArray.length; i++) {
+            bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
+        }
+
+        if (bankAccountNameArray.length != 0) {
+            if (bankAccountID == 0) {
+                lastValueSpinner = bankAccountNameArray[0];
+                bankAccountID = bankAccountInfoArray[0].getBankAccountID();
+                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
+            } else {
+                for (int i = 0; i < bankAccountInfoArray.length; i++) {
+                    if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
+                        lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
+                        BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
+                        bankAccountID = bankAccountInfo.getBankAccountID();
+                        bankAccountNameArray[i] = bankAccountNameArray[0];
+                        bankAccountNameArray[0] = lastValueSpinner;
+                        bankAccountInfoArray[i] = bankAccountInfoArray[0];
+                        bankAccountInfoArray[0] = bankAccountInfo;
+                    }
+                }
+                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
+            }
+        }
+    }
+
+    private void deleteCost() {
+        viewModel.getSipSupporterServiceDeletePayment(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/Delete/";
+        viewModel.deletePayment(path, userLoginKey, paymentID);
+    }
+
+    private void fetchCostsByBankAccountID() {
+        viewModel.getSipSupporterServicePaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/ListByBankAccount/";
+        viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
+    }
+
+    private void fetchBankAccounts() {
+        viewModel.getSipSupporterServiceBankAccounts(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/bankAccounts/List/";
+        viewModel.fetchBankAccounts(path, userLoginKey);
+    }
+
+    private void setupAdapter(PaymentInfo[] paymentInfoArray) {
+        List<PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
+        PaymentAdapter adapter = new PaymentAdapter(getContext(), viewModel, paymentInfoList);
+        binding.recyclerViewCosts.setAdapter(adapter);
     }
 
     private void setupObserver() {
@@ -169,21 +216,6 @@ public class PaymentFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getDangerousUserSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isDangerousUser) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.start(getContext());
-                startActivity(intent);
-                getActivity().finish();
             }
         });
 
@@ -246,57 +278,5 @@ public class PaymentFragment extends Fragment {
                 fetchCostsByBankAccountID();
             }
         });
-    }
-
-    private void deleteCost() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceDeletePayment(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/payments/Delete/";
-        viewModel.deletePayment(path, userLoginKey, paymentID);
-    }
-
-    private void fetchCostsByBankAccountID() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServicePaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/payments/ListByBankAccount/";
-        viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
-    }
-
-    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
-        String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
-        for (int i = 0; i < bankAccountNameArray.length; i++) {
-            bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
-        }
-
-        if (bankAccountNameArray.length != 0) {
-            if (bankAccountID == 0) {
-                lastValueSpinner = bankAccountNameArray[0];
-                bankAccountID = bankAccountInfoArray[0].getBankAccountID();
-                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
-            } else {
-                for (int i = 0; i < bankAccountInfoArray.length; i++) {
-                    if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
-                        lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
-                        BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
-                        bankAccountID = bankAccountInfo.getBankAccountID();
-                        bankAccountNameArray[i] = bankAccountNameArray[0];
-                        bankAccountNameArray[0] = lastValueSpinner;
-                        bankAccountInfoArray[i] = bankAccountInfoArray[0];
-                        bankAccountInfoArray[0] = bankAccountInfo;
-                    }
-                }
-                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
-            }
-        }
-    }
-
-    private void setupAdapter(PaymentInfo[] paymentInfoArray) {
-        List<PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
-        PaymentAdapter adapter = new PaymentAdapter(getContext(), viewModel, paymentInfoList);
-        binding.recyclerViewCosts.setAdapter(adapter);
     }
 }

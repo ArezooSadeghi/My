@@ -41,7 +41,6 @@ import tellh.com.recyclertreeview_lib.TreeViewAdapter;
 public class PaymentSubjectFragment extends Fragment {
     private FragmentPaymentSubjectBinding binding;
     private PaymentSubjectViewModel viewModel;
-
     private List<TreeNode> treeNodeList = new ArrayList<>();
     private List<PaymentSubjectInfo> paymentSubjectInfoList = new ArrayList<>();
     private TreeViewAdapter adapter;

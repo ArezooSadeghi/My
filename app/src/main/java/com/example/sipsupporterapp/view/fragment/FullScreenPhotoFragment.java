@@ -31,6 +31,8 @@ import org.greenrobot.eventbus.EventBus;
 public class FullScreenPhotoFragment extends Fragment {
     private FragmentFullScreenPhotoBinding binding;
     private AttachmentViewModel viewModel;
+    private ServerData serverData;
+    private String centerName, userLoginKey;
 
     private static final String ARGS_FILE_PATH = "filePath";
     private static final String ARGS_ATTACH_ID = "attachID";
@@ -38,10 +40,8 @@ public class FullScreenPhotoFragment extends Fragment {
     public static FullScreenPhotoFragment newInstance(String filePath, int attachID) {
         FullScreenPhotoFragment fragment = new FullScreenPhotoFragment();
         Bundle args = new Bundle();
-
         args.putString(ARGS_FILE_PATH, filePath);
         args.putInt(ARGS_ATTACH_ID, attachID);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,8 +49,11 @@ public class FullScreenPhotoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
     }
 
     @Override
@@ -106,10 +109,7 @@ public class FullScreenPhotoFragment extends Fragment {
     }
 
     private void deleteAttachment() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         int attachID = getArguments().getInt(ARGS_ATTACH_ID);
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceForDeleteAttachment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Delete/";
         viewModel.deleteAttachment(path, userLoginKey, attachID);

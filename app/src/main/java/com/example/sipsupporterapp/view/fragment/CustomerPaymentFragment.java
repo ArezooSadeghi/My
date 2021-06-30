@@ -22,7 +22,6 @@ import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCustomerPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -36,7 +35,8 @@ import java.util.List;
 public class CustomerPaymentFragment extends Fragment {
     private FragmentCustomerPaymentBinding binding;
     private CustomerPaymentViewModel viewModel;
-
+    private ServerData serverData;
+    private String centerName, userLoginKey;
     private int customerID, customerPaymentID;
 
     private static final String ARGS_CUSTOMER_ID = "customerID";
@@ -49,17 +49,18 @@ public class CustomerPaymentFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
 
         createViewModel();
         fetchCustomerPayments();
     }
-
 
     @Nullable
     @Override
@@ -76,18 +77,15 @@ public class CustomerPaymentFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserver();
     }
 
-
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
     }
-
 
     private void initViews() {
         binding.recyclerViewDepositAmounts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -95,17 +93,6 @@ public class CustomerPaymentFragment extends Fragment {
                 binding.recyclerViewDepositAmounts.getContext(),
                 DividerItemDecoration.VERTICAL));
     }
-
-
-    private void fetchCustomerPayments() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCustomerPaymentsResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerPayments/ListByCustomer/";
-        viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
-    }
-
 
     private void handleEvents() {
         binding.fabAddNewCustomerPayment.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +110,23 @@ public class CustomerPaymentFragment extends Fragment {
         });
     }
 
+    private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
+        List<CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
+        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, customerPaymentInfoList);
+        binding.recyclerViewDepositAmounts.setAdapter(adapter);
+    }
+
+    private void fetchCustomerPayments() {
+        viewModel.getSipSupporterServiceCustomerPaymentsResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/ListByCustomer/";
+        viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
+    }
+
+    private void deleteCustomerPayment() {
+        viewModel.getSipSupporterServiceDeleteCustomerPayment(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/Delete/";
+        viewModel.deleteCustomerPayment(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentID);
+    }
 
     private void setupObserver() {
         viewModel.getCustomerPaymentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
@@ -155,21 +159,6 @@ public class CustomerPaymentFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
                 ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getDangerousUserSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isDangerousUser) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.start(getContext());
-                startActivity(intent);
-                getActivity().finish();
             }
         });
 
@@ -231,20 +220,5 @@ public class CustomerPaymentFragment extends Fragment {
                 fetchCustomerPayments();
             }
         });
-    }
-
-
-    private void deleteCustomerPayment() {
-        ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-        viewModel.getSipSupporterServiceDeleteCustomerPayment(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerPayments/Delete/";
-        viewModel.deleteCustomerPayment(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentID);
-    }
-
-
-    private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
-        List<CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
-        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, customerPaymentInfoList);
-        binding.recyclerViewDepositAmounts.setAdapter(adapter);
     }
 }

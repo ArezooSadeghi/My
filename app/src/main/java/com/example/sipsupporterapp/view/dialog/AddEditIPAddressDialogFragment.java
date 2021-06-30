@@ -132,7 +132,7 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                         if (serverData.getCenterName().equals(SipSupportSharedPreferences
                                 .getCenterName(getContext()))) {
                             SipSupportSharedPreferences
-                                    .setLastValueSpinner(getContext(), serverData.getCenterName());
+                                    .setCenterName(getContext(), serverData.getCenterName());
                         }
 
                         viewModel.insertServerData(serverData);

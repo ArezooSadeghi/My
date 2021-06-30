@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +40,9 @@ import java.util.List;
 public class NewCustomerPaymentsFragment extends Fragment {
     private FragmentNewCustomerPaymentsBinding binding;
     private CustomerPaymentViewModel viewModel;
-
+    private ServerData serverData;
     private String centerName, userLoginKey;
     private int bankAccountID, customerPaymentID;
-    private ServerData serverData;
     private List<String> bankAccountNames = new ArrayList<>();
     private List<Integer> bankAccountIDs = new ArrayList<>();
 
@@ -58,7 +58,11 @@ public class NewCustomerPaymentsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-        initVariables();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+
         fetchBankAccounts();
     }
 
@@ -86,18 +90,6 @@ public class NewCustomerPaymentsFragment extends Fragment {
 
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
-    }
-
-    private void initVariables() {
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-    }
-
-    private void fetchBankAccounts() {
-        viewModel.getSipSupporterServiceBankAccounts(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/BankAccounts/List/";
-        viewModel.fetchBankAccounts(path, userLoginKey);
     }
 
     private void initViews() {
@@ -129,6 +121,34 @@ public class NewCustomerPaymentsFragment extends Fragment {
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });
+    }
+
+    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
+        for (int i = 0; i < bankAccountInfoArray.length; i++) {
+            bankAccountNames.add(i, bankAccountInfoArray[i].getBankAccountName());
+            bankAccountIDs.add(i, bankAccountInfoArray[i].getBankAccountID());
+        }
+        binding.spinnerBankAccounts.setItems(bankAccountNames);
+        bankAccountID = bankAccountIDs.get(0);
+        fetchCustomerPaymentsByBankAccount(bankAccountID);
+    }
+
+    private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
+        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, Arrays.asList(customerPaymentInfoArray));
+        binding.recyclerViewPayments.setAdapter(adapter);
+    }
+
+    private void fetchCustomerPaymentsByBankAccount(int bankAccountID) {
+        binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.GONE ? View.VISIBLE : View.VISIBLE);
+        viewModel.getSipSupporterServiceCustomerPaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/CustomerPayments/ListByBankAccount/";
+        viewModel.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
+    }
+
+    private void fetchBankAccounts() {
+        viewModel.getSipSupporterServiceBankAccounts(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/BankAccounts/List/";
+        viewModel.fetchBankAccounts(path, userLoginKey);
     }
 
     private void setupObserver() {
@@ -234,27 +254,5 @@ public class NewCustomerPaymentsFragment extends Fragment {
                 fetchCustomerPaymentsByBankAccount(bankAccountID);
             }
         });
-    }
-
-    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
-        for (int i = 0; i < bankAccountInfoArray.length; i++) {
-            bankAccountNames.add(i, bankAccountInfoArray[i].getBankAccountName());
-            bankAccountIDs.add(i, bankAccountInfoArray[i].getBankAccountID());
-        }
-        binding.spinnerBankAccounts.setItems(bankAccountNames);
-        bankAccountID = bankAccountIDs.get(0);
-        fetchCustomerPaymentsByBankAccount(bankAccountID);
-    }
-
-    private void fetchCustomerPaymentsByBankAccount(int bankAccountID) {
-        binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.GONE ? View.VISIBLE : View.VISIBLE);
-        viewModel.getSipSupporterServiceCustomerPaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/CustomerPayments/ListByBankAccount/";
-        viewModel.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
-    }
-
-    private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
-        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, Arrays.asList(customerPaymentInfoArray));
-        binding.recyclerViewPayments.setAdapter(adapter);
     }
 }

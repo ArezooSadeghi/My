@@ -37,7 +37,7 @@ public class SipSupportSharedPreferences {
         return preferences.getString(USER_LOGIN_KEY, null);
     }
 
-    public static void setLastValueSpinner(Context context, String value) {
+    public static void setCenterName(Context context, String value) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(LAST_VALUE_SPINNER, value).commit();
     }
