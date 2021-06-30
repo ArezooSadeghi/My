@@ -8,10 +8,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -19,15 +22,19 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.ActivityMainBinding;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+    private CustomerViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        viewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
 
         handleEvents();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -60,6 +67,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if (destination.getId() == R.id.menu_search) {
+                    binding.searchBarContainer.setVisibility(View.VISIBLE);
+                } else {
+                    binding.searchBarContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     private void handleEvents() {
@@ -71,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.navigationView.setItemIconTintList(null);
+
+        binding.btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
+            }
+        });
     }
 
     public static Intent start(Context context) {

@@ -25,6 +25,7 @@ public class CustomerViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> showProgressBarSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
@@ -66,6 +67,10 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Integer> getItemClicked() {
         return itemClicked;
+    }
+
+    public SingleLiveEvent<String> getSearchQuery() {
+        return searchQuery;
     }
 
     public ServerData getServerData(String centerName) {

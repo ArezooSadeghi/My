@@ -35,7 +35,6 @@ public class CustomerFragment extends Fragment {
     private FragmentCustomerBinding binding;
     private CustomerViewModel viewModel;
 
-
     public static CustomerFragment newInstance() {
         CustomerFragment fragment = new CustomerFragment();
         Bundle args = new Bundle();
@@ -43,14 +42,12 @@ public class CustomerFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createViewModel();
         fetchDate();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +60,6 @@ public class CustomerFragment extends Fragment {
                 false);
 
         initViews();
-        handleEvents();
 
         if (SipSupportSharedPreferences.getLastSearchQuery(getContext()) != null) {
             binding.progressBarLoading.setVisibility(View.VISIBLE);
@@ -78,18 +74,15 @@ public class CustomerFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setObserver();
     }
 
-
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerViewModel.class);
     }
-
 
     private void fetchDate() {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
@@ -99,7 +92,6 @@ public class CustomerFragment extends Fragment {
         String path = "/api/v1/common/getDate/";
         viewModel.fetchDateResult(path, userLoginKey);
     }
-
 
     private void setObserver() {
         viewModel.getCustomersResultSingleLiveEvent()
@@ -180,8 +172,20 @@ public class CustomerFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.VISIBLE);
             }
         });
-    }
 
+        viewModel.getSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String searchQuery) {
+                binding.progressBarLoading.setVisibility(View.VISIBLE);
+                String centerName = SipSupportSharedPreferences.getCenterName(getContext());
+                String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+                ServerData serverData = viewModel.getServerData(centerName);
+                viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
+                String path = "/api/v1/customers/search";
+                viewModel.fetchCustomersResult(path, userLoginKey, searchQuery);
+            }
+        });
+    }
 
     private void initViews() {
         binding.recyclerViewCustomers.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -189,23 +193,6 @@ public class CustomerFragment extends Fragment {
                 binding.recyclerViewCustomers.getContext(),
                 DividerItemDecoration.VERTICAL));
     }
-
-
-    private void handleEvents() {
-        binding.btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.progressBarLoading.setVisibility(View.VISIBLE);
-                String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-                String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-                ServerData serverData = viewModel.getServerData(centerName);
-                viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
-                String path = "/api/v1/customers/search";
-                viewModel.fetchCustomersResult(path, userLoginKey, binding.edTextSearch.getText().toString());
-            }
-        });
-    }
-
 
     private void setupAdapter(List<CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
