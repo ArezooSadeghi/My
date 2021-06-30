@@ -74,7 +74,7 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
         }
 
         public void bindServerData(ServerData serverData) {
-            String centerName = Converter.convert(serverData.getCenterName());
+            String centerName = Converter.letterConverter(serverData.getCenterName());
             binding.txtCenterName.setText(centerName);
             binding.txtIpAddress.setText(serverData.getIpAddress());
         }

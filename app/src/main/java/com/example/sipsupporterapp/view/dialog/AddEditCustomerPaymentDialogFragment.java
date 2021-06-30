@@ -228,7 +228,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private void initViews() {
         String customerName = SipSupportSharedPreferences.getCustomerName(getContext());
         if (customerName != null) {
-            String customer_Name = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
+            String customer_Name = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
             binding.txtCustomerName.setText(customer_Name);
         } else {
             binding.txtCustomerName.setVisibility(View.GONE);

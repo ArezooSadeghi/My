@@ -35,7 +35,7 @@ public class ErrorDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        text = Converter.convert(getArguments().getString(ARGS_TEXT));
+        text = Converter.letterConverter(getArguments().getString(ARGS_TEXT));
     }
 
     @NonNull

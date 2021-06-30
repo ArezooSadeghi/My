@@ -260,8 +260,8 @@ public class LoginFragment extends Fragment {
                         binding.btnLogin.setEnabled(false);
                         binding.imgBtnMore.setEnabled(false);
 
-                        String userName = binding.edTextUserName.getText().toString();
-                        String password = binding.edTextPassword.getText().toString();
+                        String userName = binding.edTextUserName.getText().toString().replaceAll(" ", "");
+                        String password = binding.edTextPassword.getText().toString().replaceAll(" ", "");
 
                         UserLoginParameter userLoginParameter = new UserLoginParameter(userName, password);
 

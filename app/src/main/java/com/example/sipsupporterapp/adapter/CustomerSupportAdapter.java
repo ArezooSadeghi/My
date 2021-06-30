@@ -88,11 +88,11 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
         }
 
         public void bindCustomerSupportInfo(CustomerSupportInfo info) {
-            String question = Converter.convert(info.getQuestion());
+            String question = Converter.letterConverter(info.getQuestion());
             binding.txtQuestion.setText(question);
-            String answer = Converter.convert(info.getAnswer());
+            String answer = Converter.letterConverter(info.getAnswer());
             binding.txtAnswer.setText(answer);
-            String userFullName = Converter.convert(info.getUserFullName());
+            String userFullName = Converter.letterConverter(info.getUserFullName());
             binding.txtUserFullName.setText(userFullName + " :");
 
             String customerSupportID = String.valueOf(info.getCustomerSupportID());

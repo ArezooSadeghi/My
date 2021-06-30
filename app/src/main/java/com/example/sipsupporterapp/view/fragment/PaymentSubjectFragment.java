@@ -108,7 +108,7 @@ public class PaymentSubjectFragment extends Fragment {
                     for (int i = 0; i < paymentSubjectResult.getPaymentSubjects().length; i++) {
                         PaymentSubjectInfo paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[i];
                         if (paymentSubjectInfo.getParentID() == 0 || paymentSubjectInfo.getParentPaymentSubject() == null) {
-                            String paymentSubject = Converter.convert(paymentSubjectInfo.getPaymentSubject());
+                            String paymentSubject = Converter.letterConverter(paymentSubjectInfo.getPaymentSubject());
                             TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
                             treeNodeList.add(dirNode);
                             addChild(dirNode, paymentSubjectInfo.getPaymentSubjectID());
@@ -145,7 +145,7 @@ public class PaymentSubjectFragment extends Fragment {
         for (int i = 0; i < paymentSubjectInfoList.size(); i++) {
             if (paymentSubjectInfoList.get(i).getParentID() == paymentSubjectID) {
                 PaymentSubjectInfo paymentSubjectInfo = paymentSubjectInfoList.get(i);
-                String paymentSubject = Converter.convert(paymentSubjectInfo.getPaymentSubject());
+                String paymentSubject = Converter.letterConverter(paymentSubjectInfo.getPaymentSubject());
                 TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
                 treeNode.addChild(dirNode);
                 addChild(dirNode, paymentSubjectInfo.getPaymentSubjectID());
@@ -188,7 +188,7 @@ public class PaymentSubjectFragment extends Fragment {
 
     private int getPaymentSubjectID(String paymentSubject) {
         for (int i = 0; i < paymentSubjectInfoList.size(); i++) {
-            String payment_Subject = Converter.convert(paymentSubjectInfoList.get(i).getPaymentSubject());
+            String payment_Subject = Converter.letterConverter(paymentSubjectInfoList.get(i).getPaymentSubject());
             if (payment_Subject.equals(paymentSubject)) {
                 return paymentSubjectInfoList.get(i).getPaymentSubjectID();
             }

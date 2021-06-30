@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditIPAddressDialogBinding;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 
@@ -105,8 +106,8 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                     ErrorDialogFragment fragment = ErrorDialogFragment
                             .newInstance("لطفا موارد خواسته شده را پر کنید");
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                } else if (ipAddress.length() < 7 || !hasThreeDots(ipAddress)
-                        || hasEnglishLetter(ipAddress) || hasEnglishLetter(port)) {
+                } else if (ipAddress.length() < 7 || !Converter.hasThreeDots(ipAddress)
+                        || Converter.hasEnglishLetter(ipAddress) || Converter.hasEnglishLetter(port)) {
                     ErrorDialogFragment fragment = ErrorDialogFragment
                             .newInstance("فرمت آدرس ip نادرست است");
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
@@ -123,11 +124,8 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                         }
                     }
                     if (!flag) {
-                        String newIpAddress = convertPerToEn(ipAddress, "");
-                        String newPort = convertPerToEn(port, "");
-
-                        newIpAddress = newIpAddress.replaceAll(" ", "");
-                        newPort = newPort.replaceAll(" ", "");
+                        String newIpAddress = Converter.numberConverter(ipAddress);
+                        String newPort = Converter.numberConverter(port);
 
                         ServerData serverData = new ServerData(centerName, newIpAddress, newPort);
 
@@ -177,77 +175,5 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                 return false;
             }
         });
-    }
-
-
-    private String convertPerToEn(String ipAddress, String output) {
-        for (int i = 0; i < ipAddress.length(); i++) {
-            if (ipAddress.charAt(i) == '۱') {
-                output += '1';
-            } else if (ipAddress.charAt(i) == '۲') {
-                output += '2';
-
-            } else if (ipAddress.charAt(i) == '۳') {
-                output += '3';
-
-            } else if (ipAddress.charAt(i) == '۴') {
-                output += '4';
-
-            } else if (ipAddress.charAt(i) == '۵') {
-                output += '5';
-
-            } else if (ipAddress.charAt(i) == '۶') {
-                output += '6';
-
-            } else if (ipAddress.charAt(i) == '۷') {
-                output += '7';
-
-            } else if (ipAddress.charAt(i) == '۸') {
-                output += '8';
-
-            } else if (ipAddress.charAt(i) == '۹') {
-                output += '9';
-
-            } else if (ipAddress.charAt(i) == '۰') {
-                output += '0';
-
-            } else {
-                output += ipAddress.charAt(i);
-            }
-        }
-        return output;
-    }
-
-
-    private boolean hasThreeDots(String ipAddress) {
-        int dotNumber = 0;
-        char[] chars = ipAddress.toCharArray();
-        for (Character character : chars) {
-            if (String.valueOf(character).equals(".")) {
-                dotNumber++;
-            }
-        }
-        if (dotNumber == 3) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    private boolean hasEnglishLetter(String ipAddress) {
-        String str = "";
-        char[] chars = ipAddress.toCharArray();
-        for (Character character : chars) {
-            if (!String.valueOf(character).equals(".")) {
-                str += String.valueOf(character);
-            }
-        }
-
-        if (str.matches(".*[a-zA-Z]+.*")) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

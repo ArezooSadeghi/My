@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -278,7 +279,7 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private String readFromStorage(int attachID) {
-        File dir = new File(getContext().getExternalFilesDir(null), "Attachments");
+        File dir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Attachments");
         if (dir.exists()) {
             File[] files = dir.listFiles();
             if (files.length != 0) {
@@ -299,7 +300,7 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private String writeToExternalStorage(AttachInfo attachInfo) throws IOException {
-        File dir = new File(getContext().getExternalFilesDir(null), "Attachments");
+        File dir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Attachments");
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -325,6 +326,8 @@ public class PhotoGalleryFragment extends Fragment {
 
     private void setupAdapter() {
         if (adapter == null) {
+            Log.d("Arezoo", "adapter is null");
+            Log.d("Arezoo", oldFilePathList.size() + "");
             adapter = new PhotoGalleryAdapter(getContext(), viewModel, oldFilePathList);
         } else {
             adapter.updateFilePathList(newFilePathList);
@@ -438,10 +441,8 @@ public class PhotoGalleryFragment extends Fragment {
             @Override
             public void onChanged(String filePath) {
                 if (!filePath.isEmpty()) {
-                    if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-                        binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                        binding.recyclerViewAttachmentFile.setVisibility(View.VISIBLE);
-                    }
+                    binding.progressBarLoading.setVisibility(View.INVISIBLE);
+                    binding.recyclerViewAttachmentFile.setVisibility(View.VISIBLE);
                     setupAdapter();
                 }
                 index++;

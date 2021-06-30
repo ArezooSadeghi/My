@@ -99,10 +99,10 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
         }
 
         public void bindCustomerPaymentInfo(CustomerPaymentInfo info) {
-            String bankAccountName = Converter.convert(info.getBankAccountName());
+            String bankAccountName = Converter.letterConverter(info.getBankAccountName());
             binding.txtBankAccountName.setText(bankAccountName);
             binding.txtBankAccountNo.setText(info.getBankAccountNO());
-            String bankName = Converter.convert(info.getBankName());
+            String bankName = Converter.letterConverter(info.getBankName());
             binding.txtBankName.setText(bankName);
 
             String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(info.getPrice());

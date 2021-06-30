@@ -81,11 +81,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         }
 
         public void bindCustomerInfo(CustomerInfo info) {
-            String city = Converter.convert(info.getCity());
+            String city = Converter.letterConverter(info.getCity());
             binding.txtCity.setText(city);
             binding.txtLastSeen.setText(info.getLastSeen());
 
-            String customerName = Converter.convert(info.getCustomerName());
+            String customerName = Converter.letterConverter(info.getCustomerName());
             binding.txtCustomerName.setText(customerName);
             binding.txtCustomerID.setText(String.valueOf(info.getCustomerID()));
         }

@@ -102,15 +102,15 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
         }
 
         public void bindCustomerProducts(CustomerProductInfo info) {
-            String productName = Converter.convert(info.getProductName());
+            String productName = Converter.letterConverter(info.getProductName());
             binding.txtProductName.setText(productName);
             if (!info.getDescription().isEmpty()) {
                 binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.convert(info.getDescription());
+                String description = Converter.letterConverter(info.getDescription());
                 binding.txtDescription.setText(description);
             }
 
-            String userFullName = Converter.convert(info.getUserFullName());
+            String userFullName = Converter.letterConverter(info.getUserFullName());
             binding.txtUserName.setText(userFullName);
 
             NumberFormat formatter = new DecimalFormat("#,###");

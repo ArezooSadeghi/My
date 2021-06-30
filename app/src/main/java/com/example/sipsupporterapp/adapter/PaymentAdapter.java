@@ -97,12 +97,12 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
         }
 
         public void bindPaymentInfo(PaymentInfo info) {
-            String paymentSubject = Converter.convert(info.getPaymentSubject());
+            String paymentSubject = Converter.letterConverter(info.getPaymentSubject());
             binding.txtPaymentSubject.setText(paymentSubject);
 
             if (!info.getDescription().isEmpty()) {
                 binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.convert(info.getDescription());
+                String description = Converter.letterConverter(info.getDescription());
                 binding.txtDescription.setText(description);
             }
 

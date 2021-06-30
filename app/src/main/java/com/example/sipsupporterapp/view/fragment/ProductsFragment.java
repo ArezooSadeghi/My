@@ -116,12 +116,12 @@ public class ProductsFragment extends Fragment {
                     for (int i = 0; i < productGroupResult.getProductGroups().length; i++) {
                         ProductGroupInfo productGroupInfo = productGroupResult.getProductGroups()[i];
                         if (productGroupInfo.getParentID() == 0) {
-                            String productGroup = Converter.convert(productGroupInfo.getProductGroup());
+                            String productGroup = Converter.letterConverter(productGroupInfo.getProductGroup());
                             TreeNode<Dir> dirNode = new TreeNode<>(new Dir(productGroup));
                             treeNodeList.add(dirNode);
                             for (int j = 0; j < productGroupInfo.getProducts().length; j++) {
                                 productInfoList.add(productGroupInfo.getProducts()[j]);
-                                String productName = Converter.convert(productGroupInfo.getProducts()[j].getProductName());
+                                String productName = Converter.letterConverter(productGroupInfo.getProducts()[j].getProductName());
                                 TreeNode<Dir> dirTreeNode = new TreeNode<>(new Dir(productName));
                                 dirNode.addChild(dirTreeNode);
                             }
@@ -142,7 +142,7 @@ public class ProductsFragment extends Fragment {
         for (int i = 0; i < productGroupInfoList.size(); i++) {
             if (productGroupInfoList.get(i).getParentID() == productGroupID) {
                 ProductGroupInfo productGroupInfo = productGroupInfoList.get(i);
-                String paymentSubject = Converter.convert(productGroupInfo.getProductGroup());
+                String paymentSubject = Converter.letterConverter(productGroupInfo.getProductGroup());
                 TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
                 treeNode.addChild(dirNode);
                 addChild(dirNode, productGroupInfo.getProductGroupID());
@@ -185,13 +185,13 @@ public class ProductsFragment extends Fragment {
 
     private int getProductGroupID(String productGroup) {
         for (int i = 0; i < productGroupInfoList.size(); i++) {
-            String payment_Subject = Converter.convert(productGroupInfoList.get(i).getProductGroup());
+            String payment_Subject = Converter.letterConverter(productGroupInfoList.get(i).getProductGroup());
             if (payment_Subject.equals(productGroup)) {
                 return productGroupInfoList.get(i).getProductGroupID();
             }
         }
         for (int i = 0; i < productInfoList.size(); i++) {
-            String productName = Converter.convert(productInfoList.get(i).getProductName());
+            String productName = Converter.letterConverter(productInfoList.get(i).getProductName());
             if (productName.equals(productGroup)) {
                 return productInfoList.get(i).getProductID();
             }

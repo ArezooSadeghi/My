@@ -96,7 +96,7 @@ public class CustomerProductFragment extends Fragment {
     }
 
     private void initViews() {
-        String customerName = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
+        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
 
         binding.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getContext()));

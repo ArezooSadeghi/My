@@ -92,7 +92,7 @@ public class CustomerSupportFragment extends Fragment {
     }
 
     private void initView() {
-        String customerName = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
+        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtUserFullName.setText(customerName);
         binding.recyclerViewSupportHistory.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewSupportHistory.addItemDecoration(new DividerItemDecoration(

@@ -27,7 +27,6 @@ public class LoginViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
-
     private SingleLiveEvent<ServerData> yesDeleteSpinner = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> yesDeleteIPAddressList = new SingleLiveEvent<>();
 
@@ -106,7 +105,6 @@ public class LoginViewModel extends AndroidViewModel {
     public void deleteServerData(ServerData serverData) {
         repository.deleteServerData(serverData);
     }
-
 
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);

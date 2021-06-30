@@ -59,8 +59,8 @@ public class ItemClickedFragment extends Fragment {
                 container,
                 false);
 
-        String customerName = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
-        String userName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
+        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
+        String userName = Converter.letterConverter(SipSupportSharedPreferences.getUserFullName(getContext()));
         binding.txtUserName.setText(userName);
         binding.txtCustomerName.setText(customerName);
 

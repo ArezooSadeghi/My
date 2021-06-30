@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +88,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
         }
 
         public void bindCustomerSupportInfo(CustomerUserInfo info) {
-            String userName = Converter.convert(info.getUserName());
+            String userName = Converter.letterConverter(info.getUserName());
             binding.txtCustomerUserName.setText(userName);
             binding.txtLastSeen.setText(info.getLastSeen());
         }

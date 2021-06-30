@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -301,7 +302,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
     private void openCamera() {
         Intent starterCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (starterCamera.resolveActivity(getActivity().getPackageManager()) != null) {
-            File dir = new File(getContext().getExternalFilesDir(null), "Attachments");
+            File dir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Attachments");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -330,7 +331,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         viewModel.getAttachResultSingleLiveEvent().observe(this, new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (attachResult.getErrorCode() == "0") {
+                if (attachResult.getErrorCode().equals("0")) {
                     viewModel.getUpdatePhotoGallerySingleLiveEvent().setValue(attachResult);
 
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);

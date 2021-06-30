@@ -303,7 +303,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     }
 
     private void initViews() {
-        String customerName = Converter.convert(SipSupportSharedPreferences.getCustomerName(getContext()));
+        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
         binding.edTextDescription.setText(description);
         binding.edTextDescription.setSelection(binding.edTextDescription.getText().toString().length());

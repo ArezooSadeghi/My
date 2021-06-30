@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
-        String userFullName = Converter.convert(SipSupportSharedPreferences.getUserFullName(this));
+        String userFullName = Converter.letterConverter(SipSupportSharedPreferences.getUserFullName(this));
 
         View headerView = binding.navigationView.getHeaderView(0);
         TextView navUsername = headerView.findViewById(R.id.txt_user_name);

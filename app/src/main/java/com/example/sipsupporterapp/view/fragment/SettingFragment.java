@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.view.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,7 @@ public class SettingFragment extends Fragment {
             add("2");
             add("3");
         }};
-        String userFullName = Converter.convert(SipSupportSharedPreferences.getUserFullName(getContext()));
+        String userFullName = Converter.letterConverter(SipSupportSharedPreferences.getUserFullName(getContext()));
         binding.txtUserFullName.setText(userFullName);
 
         if (SipSupportSharedPreferences.getFactor(getContext()) == null) {
