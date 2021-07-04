@@ -29,6 +29,8 @@ public class TaskViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Boolean> editClicked = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<Boolean> registerCommentClicked = new SingleLiveEvent<>();
+
     public TaskViewModel(@NonNull Application application) {
         super(application);
 
@@ -67,6 +69,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Boolean> getEditClicked() {
         return editClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getRegisterCommentClicked() {
+        return registerCommentClicked;
     }
 
     public ServerData getServerData(String centerName) {

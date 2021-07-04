@@ -26,6 +26,7 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.dialog.AddEditCaseDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ChangeCaseTypeDialogFragment;
+import com.example.sipsupporterapp.view.dialog.CommentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDeleteTaskDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RegisterCaseResultDialogFragment;
@@ -209,6 +210,14 @@ public class TaskFragment extends Fragment {
             public void onChanged(Boolean editClicked) {
                 AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, 0, "");
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getRegisterCommentClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean registerCommentClicked) {
+                CommentDialogFragment fragment = CommentDialogFragment.newInstance();
+                fragment.show(getParentFragmentManager(), CommentDialogFragment.TAG);
             }
         });
     }
