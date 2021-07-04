@@ -10,6 +10,8 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
+import java.util.List;
+
 public class CustomerViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
@@ -26,6 +28,8 @@ public class CustomerViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<List<String>> navigateToAddEditCaseDialog = new SingleLiveEvent<>();
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
@@ -71,6 +75,10 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> getSearchQuery() {
         return searchQuery;
+    }
+
+    public SingleLiveEvent<List<String>> getNavigateToAddEditCaseDialog() {
+        return navigateToAddEditCaseDialog;
     }
 
     public ServerData getServerData(String centerName) {

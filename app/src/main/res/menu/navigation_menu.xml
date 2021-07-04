@@ -27,6 +27,11 @@
         android:title="پرداختی ها" />
 
     <item
+        android:id="@+id/menu_tasks"
+        android:icon="@drawable/task"
+        android:title="لیست کارها" />
+
+    <item
         android:id="@+id/menu_setting"
         android:icon="@drawable/setting"
         android:title="تنظیمات" />

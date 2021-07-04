@@ -12,6 +12,9 @@ import com.example.sipsupporterapp.database.SipSupporterSchema;
 import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
+import com.example.sipsupporterapp.model.CaseInfo;
+import com.example.sipsupporterapp.model.CaseResult;
+import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
@@ -32,6 +35,8 @@ import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.retrofit.AttachResultDeserializer;
 import com.example.sipsupporterapp.retrofit.BankAccountResultDeserializer;
+import com.example.sipsupporterapp.retrofit.CaseResultDeserializer;
+import com.example.sipsupporterapp.retrofit.CaseTypeResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerPaymentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerProductResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerResultDeserializer;
@@ -140,6 +145,12 @@ public class SipSupporterRepository {
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -405,6 +416,27 @@ public class SipSupporterRepository {
                 }.getType(), new ProductGroupResultDeserializer(), context).create(SipSupporterService.class);
     }
 
+    public void getSipSupporterServiceCaseTypes(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CaseTypeResult>() {
+                }.getType(), new CaseTypeResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceCasesByCaseType(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CaseResult>() {
+                }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceAddCase(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CaseResult>() {
+                }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
         return dateResultSingleLiveEvent;
     }
@@ -555,6 +587,18 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<ProductGroupResult> getProductGroupsResultSingleLiveEvent() {
         return productGroupsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
+        return caseTypesResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getCasesByCaseTypeResultSingleLiveEvent() {
+        return casesByCaseTypeResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getAddCaseResultSingleLiveEvent() {
+        return addCaseResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -1654,6 +1698,96 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<ProductGroupResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCaseTypes(String path, String userLoginKey) {
+        sipSupporterService.fetchCaseTypes(path, userLoginKey).enqueue(new Callback<CaseTypeResult>() {
+            @Override
+            public void onResponse(Call<CaseTypeResult> call, Response<CaseTypeResult> response) {
+                if (response.isSuccessful()) {
+                    caseTypesResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseTypeResult caseTypeResult = gson.fromJson(response.errorBody().string(), CaseTypeResult.class);
+                        caseTypesResultSingleLiveEvent.setValue(caseTypeResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseTypeResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCasesByCaseType(String path, String userLoginKey, int caseTypeID, String search, boolean showAll) {
+        sipSupporterService.fetchCasesByCaseType(path, userLoginKey, caseTypeID, search, showAll).enqueue(new Callback<CaseResult>() {
+            @Override
+            public void onResponse(Call<CaseResult> call, Response<CaseResult> response) {
+                if (response.isSuccessful()) {
+                    casesByCaseTypeResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
+                        casesByCaseTypeResultSingleLiveEvent.setValue(caseResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void addCase(String path, String userLoginKey, CaseInfo caseInfo) {
+        sipSupporterService.addCase(path, userLoginKey, caseInfo).enqueue(new Callback<CaseResult>() {
+            @Override
+            public void onResponse(Call<CaseResult> call, Response<CaseResult> response) {
+                if (response.isSuccessful()) {
+                    addCaseResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
+                        addCaseResultSingleLiveEvent.setValue(caseResult);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

@@ -12,12 +12,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerBinding;
+import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
 import com.example.sipsupporterapp.model.CustomerInfo;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.DateResult;
@@ -27,6 +29,8 @@ import com.example.sipsupporterapp.view.activity.ItemClickedContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +38,14 @@ public class CustomerFragment extends Fragment {
     private FragmentCustomerBinding binding;
     private CustomerViewModel viewModel;
     private ServerData serverData;
+    private boolean isTask;
+    private static final String ARGS_IS_TASK = "isTask";
     private String centerName, userLoginKey;
 
-    public static CustomerFragment newInstance() {
+    public static CustomerFragment newInstance(boolean isTask) {
         CustomerFragment fragment = new CustomerFragment();
         Bundle args = new Bundle();
+        args.putBoolean(ARGS_IS_TASK, isTask);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,6 +55,7 @@ public class CustomerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         createViewModel();
 
+        isTask = getArguments().getBoolean(ARGS_IS_TASK);
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
@@ -103,7 +111,7 @@ public class CustomerFragment extends Fragment {
     private void setupAdapter(List<CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
                 getContext(),
-                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()));
+                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()), isTask);
         binding.recyclerViewCustomers.setAdapter(adapter);
     }
 
@@ -174,6 +182,14 @@ public class CustomerFragment extends Fragment {
                 viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customers/search";
                 viewModel.fetchCustomersResult(path, userLoginKey, searchQuery);
+            }
+        });
+
+        viewModel.getNavigateToAddEditCaseDialog().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> list) {
+                EventBus.getDefault().postSticky(new PostCustomerIDEvent(Integer.valueOf(list.get(0)), list.get(1)));
+                NavHostFragment.findNavController(CustomerFragment.this).navigate(R.id.menu_tasks);
             }
         });
     }

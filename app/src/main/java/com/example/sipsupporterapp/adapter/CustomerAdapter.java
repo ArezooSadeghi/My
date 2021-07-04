@@ -17,6 +17,7 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
@@ -25,12 +26,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     private CustomerViewModel viewModel;
     private List<CustomerInfo> customerInfoList;
     private String date;
+    private boolean isTask;
 
-    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerInfo> customerInfoList, String date) {
+    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerInfo> customerInfoList, String date, boolean isTask) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerInfoList = customerInfoList;
         this.date = date;
+        this.isTask = isTask;
     }
 
     @NonNull
@@ -50,9 +53,17 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
-                SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
-                SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
+                if (isTask) {
+                    viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
+                    SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
+                    SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
+                } else {
+                    List<String> list = new ArrayList<String>() {{
+                        add(0, String.valueOf(customerInfo.getCustomerID()));
+                        add(1, customerInfo.getCustomerName());
+                    }};
+                    viewModel.getNavigateToAddEditCaseDialog().setValue(list);
+                }
             }
         });
 

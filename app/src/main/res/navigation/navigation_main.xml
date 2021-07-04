@@ -7,7 +7,14 @@
     <fragment
         android:id="@+id/menu_search"
         android:name="com.example.sipsupporterapp.view.fragment.CustomerFragment"
-        android:label="CustomerFragment" />
+        android:label="CustomerFragment">
+
+        <argument
+            android:name="isTask"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+    </fragment>
 
     <dialog
         android:id="@+id/menu_change_password"
@@ -28,5 +35,14 @@
         android:id="@+id/menu_setting"
         android:name="com.example.sipsupporterapp.view.fragment.SettingFragment"
         android:label="PaymentFragment" />
+
+    <fragment
+        android:id="@+id/menu_tasks"
+        android:name="com.example.sipsupporterapp.view.fragment.TaskFragment"
+        android:label="TaskFragment" >
+        <action
+            android:id="@+id/action_menu_tasks_to_menu_search"
+            app:destination="@id/menu_search" />
+    </fragment>
 
 </navigation>

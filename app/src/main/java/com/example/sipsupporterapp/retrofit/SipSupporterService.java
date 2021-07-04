@@ -3,6 +3,8 @@ package com.example.sipsupporterapp.retrofit;
 import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
+import com.example.sipsupporterapp.model.CaseInfo;
+import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
@@ -138,4 +140,10 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CaseTypeResult> fetchCaseTypes(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @GET("{path}")
+    Call<CaseResult> fetchCasesByCaseType(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseTypeID") int caseTypeID, @Query("search") String search, @Query("showAll") boolean showAll);
+
+    @POST("{path}")
+    Call<CaseResult> addCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
 }
