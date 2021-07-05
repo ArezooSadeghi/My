@@ -72,22 +72,22 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
 
                 powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
                     @Override
-                    public void onItemClick(int position, PowerMenuItem item) {
-                        switch (position) {
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
                             case 4:
                                 viewModel.getRegisterCommentClicked().setValue(true);
                                 powerMenu.dismiss();
                                 break;
                             case 5:
-                                viewModel.getEditClicked().setValue(true);
+                                viewModel.getEditClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 6:
-                                viewModel.getDeleteClicked().setValue(true);
+                                viewModel.getDeleteClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 7:
-                                viewModel.getCaseFinishClicked().setValue(true);
+                                viewModel.getCaseFinishClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 9:

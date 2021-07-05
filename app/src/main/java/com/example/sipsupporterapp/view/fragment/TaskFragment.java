@@ -30,6 +30,7 @@ import com.example.sipsupporterapp.view.dialog.CommentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDeleteTaskDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RegisterCaseResultDialogFragment;
+import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.TaskViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -44,7 +45,7 @@ public class TaskFragment extends Fragment {
     private FragmentTaskBinding binding;
     private TaskViewModel viewModel;
     private ServerData serverData;
-    private int caseTypeID, customerID;
+    private int caseTypeID, customerID, caseID;
     private String centerName, userLoginKey;
     private List<String> caseTypes = new ArrayList<>();
     private List<Integer> caseTypeIDs = new ArrayList<>();
@@ -107,7 +108,7 @@ public class TaskFragment extends Fragment {
     public void getCustomerID(PostCustomerIDEvent event) {
         customerID = event.getCustomerID();
         String customerName = event.getCustomerName();
-        AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(caseTypeID, customerID, customerName);
+        AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, customerName, 0, false, "");
         fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -137,7 +138,7 @@ public class TaskFragment extends Fragment {
                 for (int i = 0; i < caseTypes.size(); i++) {
                     if (caseType.equals(caseTypes.get(i))) {
                         caseTypeID = caseTypeIDs.get(i);
-                        fetchCasesByCaseType(caseTypeIDs.get(i), "", true);
+                        fetchCasesByCaseType(caseTypeIDs.get(i), "تست", true);
                         break;
                     }
                 }
@@ -147,7 +148,7 @@ public class TaskFragment extends Fragment {
         binding.fabAddNewCase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(caseTypeID, 0, "");
+                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, 0, "", 0, false, "");
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
             }
         });
@@ -181,10 +182,10 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        viewModel.getCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<CaseInfo>() {
             @Override
-            public void onChanged(Boolean caseFinishClicked) {
-                RegisterCaseResultDialogFragment fragment = RegisterCaseResultDialogFragment.newInstance();
+            public void onChanged(CaseInfo caseInfo) {
+                RegisterCaseResultDialogFragment fragment = RegisterCaseResultDialogFragment.newInstance(caseInfo.getCaseID(), caseInfo.isResultOk(), caseInfo.getResultDescription());
                 fragment.show(getParentFragmentManager(), RegisterCaseResultDialogFragment.TAG);
             }
         });
@@ -197,19 +198,57 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Boolean deleteClicked) {
+            public void onChanged(Integer case_ID) {
+                caseID = case_ID;
                 QuestionDeleteTaskDialogFragment fragment = QuestionDeleteTaskDialogFragment.newInstance("آیا می خواهید کار مورد نظر را حذف کنید؟");
                 fragment.show(getParentFragmentManager(), QuestionDeleteTaskDialogFragment.TAG);
             }
         });
 
-        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean editClicked) {
-                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, 0, "");
+            public void onChanged(Boolean yesDeleteClicked) {
+                viewModel.getSipSupporterServiceDeleteCase(serverData.getIpAddress() + ":" + serverData.getPort());
+                String path = "/api/v1/Case/Delete/";
+                viewModel.deleteCase(path, userLoginKey, caseID);
+            }
+        });
+
+        viewModel.getDeleteCaseResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("حذف کار با موفقیت انجام شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    fetchCasesByCaseType(caseTypeID, "تست", true);
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
+            }
+        });
+
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CaseInfo>() {
+            @Override
+            public void onChanged(CaseInfo caseInfo) {
+                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(
+                        caseInfo.getCaseID(),
+                        caseInfo.getCaseTypeID(),
+                        caseInfo.getCustomerID(),
+                        caseInfo.getCustomerName(),
+                        caseInfo.getPriority(),
+                        caseInfo.isShare(),
+                        caseInfo.getDescription());
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refresh) {
+                fetchCasesByCaseType(caseTypeID, "تست", true);
             }
         });
 
@@ -218,6 +257,13 @@ public class TaskFragment extends Fragment {
             public void onChanged(Boolean registerCommentClicked) {
                 CommentDialogFragment fragment = CommentDialogFragment.newInstance();
                 fragment.show(getParentFragmentManager(), CommentDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getRefreshCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refreshCaseFinish) {
+                fetchCasesByCaseType(caseTypeID, "تست", true);
             }
         });
     }
@@ -229,7 +275,7 @@ public class TaskFragment extends Fragment {
         }
         binding.spinnerCaseTypes.setItems(caseTypes);
         caseTypeID = caseTypeIDs.get(0);
-        fetchCasesByCaseType(caseTypeIDs.get(0), "", true);
+        fetchCasesByCaseType(caseTypeIDs.get(0), "تست", true);
     }
 
     private void fetchCasesByCaseType(int caseTypeID, String search, boolean showAll) {

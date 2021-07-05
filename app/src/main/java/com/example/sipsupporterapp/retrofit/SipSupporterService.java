@@ -146,4 +146,13 @@ public interface SipSupporterService {
 
     @POST("{path}")
     Call<CaseResult> addCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
+
+    @DELETE("{path}")
+    Call<CaseResult> deleteCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @PUT("{path}")
+    Call<CaseResult> editCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
+
+    @PUT("{path}")
+    Call<CaseResult> closeCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
 }

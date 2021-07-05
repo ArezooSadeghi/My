@@ -28,7 +28,7 @@
             app:ms_padding_right="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/description_container"
+            android:id="@+id/result_description_container"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@id/spinner_case_result">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ed_text_description"
+                android:id="@+id/ed_text_result_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableTint="@color/black"
@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_container">
+            app:layout_constraintTop_toBottomOf="@id/result_description_container">
 
             <Button
                 android:id="@+id/btn_cancel"

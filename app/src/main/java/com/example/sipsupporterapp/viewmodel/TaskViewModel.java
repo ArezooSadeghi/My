@@ -21,13 +21,22 @@ public class TaskViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent;
 
-    private SingleLiveEvent<Boolean> caseFinishClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent;
+
+    private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent;
+
+    private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
+
+    private SingleLiveEvent<CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> changeCaseTypeClicked = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<Boolean> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<Boolean> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> registerCommentClicked = new SingleLiveEvent<>();
 
@@ -41,6 +50,12 @@ public class TaskViewModel extends AndroidViewModel {
         casesByCaseTypeResultSingleLiveEvent = repository.getCasesByCaseTypeResultSingleLiveEvent();
 
         addCaseResultSingleLiveEvent = repository.getAddCaseResultSingleLiveEvent();
+
+        deleteCaseResultSingleLiveEvent = repository.getDeleteCaseResultSingleLiveEvent();
+
+        editCaseResultSingleLiveEvent = repository.getEditCaseResultSingleLiveEvent();
+
+        closeCaseResultSingleLiveEvent = repository.getCloseCaseResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
@@ -55,7 +70,7 @@ public class TaskViewModel extends AndroidViewModel {
         return addCaseResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getCaseFinishClicked() {
+    public SingleLiveEvent<CaseInfo> getCaseFinishClicked() {
         return caseFinishClicked;
     }
 
@@ -63,16 +78,40 @@ public class TaskViewModel extends AndroidViewModel {
         return changeCaseTypeClicked;
     }
 
-    public SingleLiveEvent<Boolean> getDeleteClicked() {
+    public SingleLiveEvent<Integer> getDeleteClicked() {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<Boolean> getEditClicked() {
+    public SingleLiveEvent<CaseInfo> getEditClicked() {
         return editClicked;
     }
 
     public SingleLiveEvent<Boolean> getRegisterCommentClicked() {
         return registerCommentClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
+        return yesDeleteClicked;
+    }
+
+    public SingleLiveEvent<CaseResult> getDeleteCaseResultSingleLiveEvent() {
+        return deleteCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getEditCaseResultSingleLiveEvent() {
+        return editCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getRefresh() {
+        return refresh;
+    }
+
+    public SingleLiveEvent<CaseResult> getCloseCaseResultSingleLiveEvent() {
+        return closeCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getRefreshCaseFinishClicked() {
+        return refreshCaseFinishClicked;
     }
 
     public ServerData getServerData(String centerName) {
@@ -91,6 +130,18 @@ public class TaskViewModel extends AndroidViewModel {
         repository.getSipSupporterServiceAddCase(baseUrl);
     }
 
+    public void getSipSupporterServiceDeleteCase(String baseUrl) {
+        repository.getSipSupporterServiceDeleteCase(baseUrl);
+    }
+
+    public void getSipSupporterServiceEditCase(String baseUrl) {
+        repository.getSipSupporterServiceEditCase(baseUrl);
+    }
+
+    public void getSipSupporterServiceCloseCase(String baseUrl) {
+        repository.getSipSupporterServiceCloseCase(baseUrl);
+    }
+
     public void fetchCaseTypes(String path, String userLoginKey) {
         repository.fetchCaseTypes(path, userLoginKey);
     }
@@ -101,5 +152,17 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void addCase(String path, String userLoginKey, CaseInfo caseInfo) {
         repository.addCase(path, userLoginKey, caseInfo);
+    }
+
+    public void deleteCase(String path, String userLoginKey, int caseID) {
+        repository.deleteCase(path, userLoginKey, caseID);
+    }
+
+    public void editCase(String path, String userLoginKey, CaseInfo caseInfo) {
+        repository.editCase(path, userLoginKey, caseInfo);
+    }
+
+    public void closeCase(String path, String userLoginKey, CaseInfo caseInfo) {
+        repository.closeCase(path, userLoginKey, caseInfo);
     }
 }
