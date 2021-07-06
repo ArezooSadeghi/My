@@ -1,5 +1,7 @@
 package com.example.sipsupporterapp.retrofit;
 
+import com.example.sipsupporterapp.model.AssignInfo;
+import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
@@ -169,4 +171,19 @@ public interface SipSupporterService {
 
     @PUT("{path}")
     Call<CommentResult> editComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentInfo commentInfo);
+
+    @GET("{path}")
+    Call<UserResult> fetchUsers(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @POST("{path}")
+    Call<AssignResult> addAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignInfo assignInfo);
+
+    @GET("{path}")
+    Call<AssignResult> fetchAssigns(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @PUT("{path}")
+    Call<AssignResult> editAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignInfo assignInfo);
+
+    @DELETE("{path}")
+    Call<AssignResult> deleteAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("assignID") int assignID);
 }

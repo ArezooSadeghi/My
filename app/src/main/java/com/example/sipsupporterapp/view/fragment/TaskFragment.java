@@ -25,6 +25,7 @@ import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.dialog.AddEditCaseDialogFragment;
+import com.example.sipsupporterapp.view.dialog.AssignDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ChangeCaseTypeDialogFragment;
 import com.example.sipsupporterapp.view.dialog.CommentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -264,6 +265,14 @@ public class TaskFragment extends Fragment {
             @Override
             public void onChanged(Boolean refreshCaseFinish) {
                 fetchCasesByCaseType(caseTypeID, "تست", true);
+            }
+        });
+
+        viewModel.getAssignToOthersClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer caseID) {
+                AssignDialogFragment fragment = AssignDialogFragment.newInstance(caseID);
+                fragment.show(getParentFragmentManager(), AssignDialogFragment.TAG);
             }
         });
     }

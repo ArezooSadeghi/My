@@ -60,14 +60,14 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
 
                 powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
                     @Override
-                    public void onItemClick(int position, PowerMenuItem item) {
-                        switch (position) {
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
                             case 0:
-                                viewModel.getEditClicked().setValue(true);
+                                viewModel.getEditClicked().setValue(assignInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteClicked().setValue(true);
+                                viewModel.getDeleteClicked().setValue(assignInfoList.get(position).getAssignID());
                                 powerMenu.dismiss();
                                 break;
                             case 2:

@@ -9,6 +9,8 @@ import android.util.Log;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.database.SipSupporterDBHelper;
 import com.example.sipsupporterapp.database.SipSupporterSchema;
+import com.example.sipsupporterapp.model.AssignInfo;
+import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
@@ -35,6 +37,7 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
+import com.example.sipsupporterapp.retrofit.AssignResultDeserializer;
 import com.example.sipsupporterapp.retrofit.AttachResultDeserializer;
 import com.example.sipsupporterapp.retrofit.BankAccountResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CaseResultDeserializer;
@@ -168,6 +171,16 @@ public class SipSupporterRepository {
     private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<UserResult> usersResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<AssignResult> addAssignResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<AssignResult> assignsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -503,6 +516,41 @@ public class SipSupporterRepository {
                 }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
+    public void getSipSupporterServiceUsers(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<UserResult>() {
+                }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceAddAssign(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AssignResult>() {
+                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceAssigns(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AssignResult>() {
+                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceEditAssign(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AssignResult>() {
+                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceDeleteAssign(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<AssignResult>() {
+                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
         return dateResultSingleLiveEvent;
     }
@@ -693,6 +741,26 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CommentResult> getEditCommentResultSingleLiveEvent() {
         return editCommentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<UserResult> getUsersResultSingleLiveEvent() {
+        return usersResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult> getAddAssignResultSingleLiveEvent() {
+        return addAssignResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult> getAssignsResultSingleLiveEvent() {
+        return assignsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult> getEditAssignResultSingleLiveEvent() {
+        return editAssignResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult> getDeleteAssignResultSingleLiveEvent() {
+        return deleteAssignResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2092,6 +2160,156 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchUsers(String path, String userLoginKey) {
+        sipSupporterService.fetchUsers(path, userLoginKey).enqueue(new Callback<UserResult>() {
+            @Override
+            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
+                if (response.isSuccessful()) {
+                    usersResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
+                        usersResultSingleLiveEvent.setValue(userResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void addAssign(String path, String userLoginKey, AssignInfo assignInfo) {
+        sipSupporterService.addAssign(path, userLoginKey, assignInfo).enqueue(new Callback<AssignResult>() {
+            @Override
+            public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
+                if (response.isSuccessful()) {
+                    addAssignResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
+                        addAssignResultSingleLiveEvent.setValue(assignResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchAssigns(String path, String userLoginKey, int caseID) {
+        sipSupporterService.fetchAssigns(path, userLoginKey, caseID).enqueue(new Callback<AssignResult>() {
+            @Override
+            public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
+                if (response.isSuccessful()) {
+                    assignsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
+                        assignsResultSingleLiveEvent.setValue(assignResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void editAssign(String path, String userLoginKey, AssignInfo assignInfo) {
+        sipSupporterService.editAssign(path, userLoginKey, assignInfo).enqueue(new Callback<AssignResult>() {
+            @Override
+            public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
+                if (response.isSuccessful()) {
+                    editAssignResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
+                        editAssignResultSingleLiveEvent.setValue(assignResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void deleteAssign(String path, String userLoginKey, int assignID) {
+        sipSupporterService.deleteAssign(path, userLoginKey, assignID).enqueue(new Callback<AssignResult>() {
+            @Override
+            public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
+                if (response.isSuccessful()) {
+                    deleteAssignResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
+                        deleteAssignResultSingleLiveEvent.setValue(assignResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

@@ -8,8 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.sipsupporterapp.model.CaseInfo;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
-import com.example.sipsupporterapp.model.CommentInfo;
-import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
@@ -41,6 +39,8 @@ public class TaskViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Integer> registerCommentClicked = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Integer> assignToOthersClicked = new SingleLiveEvent<>();
 
     public TaskViewModel(@NonNull Application application) {
         super(application);
@@ -114,6 +114,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Boolean> getRefreshCaseFinishClicked() {
         return refreshCaseFinishClicked;
+    }
+
+    public SingleLiveEvent<Integer> getAssignToOthersClicked() {
+        return assignToOthersClicked;
     }
 
     public ServerData getServerData(String centerName) {
