@@ -15,6 +15,8 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CaseInfo;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
+import com.example.sipsupporterapp.model.CommentInfo;
+import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
@@ -37,6 +39,7 @@ import com.example.sipsupporterapp.retrofit.AttachResultDeserializer;
 import com.example.sipsupporterapp.retrofit.BankAccountResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CaseResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CaseTypeResultDeserializer;
+import com.example.sipsupporterapp.retrofit.CommentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerPaymentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerProductResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerResultDeserializer;
@@ -77,8 +80,6 @@ public class SipSupporterRepository {
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<UserResult> userLoginResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<UserResult> changePasswordResultSingleLiveEvent = new SingleLiveEvent<>();
 
@@ -157,6 +158,16 @@ public class SipSupporterRepository {
     private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CommentResult> addCommentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<UserResult> userLoginResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CommentResult> commentsByCaseIDResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -464,6 +475,34 @@ public class SipSupporterRepository {
                 }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
     }
 
+    public void getSipSupporterServiceAddComment(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CommentResult>() {
+                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceCommentsByCaseID(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CommentResult>() {
+                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceDeleteComment(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CommentResult>() {
+                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceEditComment(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CommentResult>() {
+                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
         return dateResultSingleLiveEvent;
     }
@@ -638,6 +677,22 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CaseResult> getCloseCaseResultSingleLiveEvent() {
         return closeCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CommentResult> getAddCommentResultSingleLiveEvent() {
+        return addCommentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CommentResult> getCommentsByCaseIDResultSingleLiveEvent() {
+        return commentsByCaseIDResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CommentResult> getDeleteCommentResultSingleLiveEvent() {
+        return deleteCommentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CommentResult> getEditCommentResultSingleLiveEvent() {
+        return editCommentResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -1917,6 +1972,126 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void addComment(String path, String userLoginKey, CommentInfo commentInfo) {
+        sipSupporterService.addComment(path, userLoginKey, commentInfo).enqueue(new Callback<CommentResult>() {
+            @Override
+            public void onResponse(Call<CommentResult> call, Response<CommentResult> response) {
+                if (response.isSuccessful()) {
+                    addCommentResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
+                        addCommentResultSingleLiveEvent.setValue(commentResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCommentsByCaseID(String path, String userLoginKey, int caseID) {
+        sipSupporterService.fetchCommentsByCaseID(path, userLoginKey, caseID).enqueue(new Callback<CommentResult>() {
+            @Override
+            public void onResponse(Call<CommentResult> call, Response<CommentResult> response) {
+                if (response.isSuccessful()) {
+                    commentsByCaseIDResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
+                        commentsByCaseIDResultSingleLiveEvent.setValue(commentResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void deleteComment(String path, String userLoginKey, int commentID) {
+        sipSupporterService.deleteComment(path, userLoginKey, commentID).enqueue(new Callback<CommentResult>() {
+            @Override
+            public void onResponse(Call<CommentResult> call, Response<CommentResult> response) {
+                if (response.isSuccessful()) {
+                    deleteCommentResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
+                        deleteCommentResultSingleLiveEvent.setValue(commentResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void editComment(String path, String userLoginKey, CommentInfo commentInfo) {
+        sipSupporterService.editComment(path, userLoginKey, commentInfo).enqueue(new Callback<CommentResult>() {
+            @Override
+            public void onResponse(Call<CommentResult> call, Response<CommentResult> response) {
+                if (response.isSuccessful()) {
+                    editCommentResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
+                        editCommentResultSingleLiveEvent.setValue(commentResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

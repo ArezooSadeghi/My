@@ -75,7 +75,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 4:
-                                viewModel.getRegisterCommentClicked().setValue(true);
+                                viewModel.getRegisterCommentClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 5:

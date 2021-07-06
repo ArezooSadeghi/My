@@ -58,14 +58,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
                 powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
                     @Override
-                    public void onItemClick(int position, PowerMenuItem item) {
-                        switch (position) {
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
                             case 0:
-                                viewModel.getEditClicked().setValue(true);
+                                viewModel.getEditClicked().setValue(commentInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteClicked().setValue(true);
+                                viewModel.getDeleteClicked().setValue(commentInfoList.get(position).getCommentID());
                                 powerMenu.dismiss();
                                 break;
                         }

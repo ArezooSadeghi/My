@@ -10,12 +10,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentQuestionDialogBinding;
+import com.example.sipsupporterapp.viewmodel.CommentViewModel;
 
 public class QuestionDeleteCommentDialogFragment extends DialogFragment {
     private FragmentQuestionDialogBinding binding;
+    private CommentViewModel viewModel;
 
     private static final String ARGS_MESSAGE = "message";
     public static final String TAG = QuestionDeleteCommentDialogFragment.class.getSimpleName();
@@ -31,6 +34,8 @@ public class QuestionDeleteCommentDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        createViewModel();
     }
 
     @NonNull
@@ -56,6 +61,10 @@ public class QuestionDeleteCommentDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(CommentViewModel.class);
+    }
+
     private void initViews() {
         String message = getArguments().getString(ARGS_MESSAGE);
         binding.txtMessage.setText(message);
@@ -65,6 +74,14 @@ public class QuestionDeleteCommentDialogFragment extends DialogFragment {
         binding.btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        binding.btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.getYesDeleteClicked().setValue(true);
                 dismiss();
             }
         });

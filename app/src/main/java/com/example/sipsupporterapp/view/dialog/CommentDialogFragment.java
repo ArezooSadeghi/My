@@ -19,20 +19,27 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CommentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCommentDialogBinding;
 import com.example.sipsupporterapp.model.CommentInfo;
+import com.example.sipsupporterapp.model.CommentResult;
+import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CommentViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class CommentDialogFragment extends DialogFragment {
     private FragmentCommentDialogBinding binding;
     private CommentViewModel viewModel;
+    private int caseID, commentID;
+    private ServerData serverData;
+    private String centerName, userLoginKey;
 
+    private static final String ARGS_CASE_ID = "caseID";
     public static final String TAG = CommentDialogFragment.class.getSimpleName();
 
-    public static CommentDialogFragment newInstance() {
+    public static CommentDialogFragment newInstance(int caseID) {
         CommentDialogFragment fragment = new CommentDialogFragment();
         Bundle args = new Bundle();
+        args.putInt(ARGS_CASE_ID, caseID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,8 +48,16 @@ public class CommentDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        caseID = getArguments().getInt(ARGS_CASE_ID);
+
         createViewModel();
         setupObserver();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+
+        fetchComments();
     }
 
     @NonNull
@@ -55,7 +70,6 @@ public class CommentDialogFragment extends DialogFragment {
                 false);
 
         initViews();
-        setupAdapter();
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
@@ -70,25 +84,79 @@ public class CommentDialogFragment extends DialogFragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CommentViewModel.class);
     }
 
     private void setupObserver() {
-        viewModel.getDeleteClicked().observe(this, new Observer<Boolean>() {
+        viewModel.getDeleteClicked().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(Boolean deleteClicked) {
+            public void onChanged(Integer comment_ID) {
+                commentID = comment_ID;
                 QuestionDeleteCommentDialogFragment fragment = QuestionDeleteCommentDialogFragment.newInstance("آیا می خواهید نظر خود را حذف کنید");
                 fragment.show(getParentFragmentManager(), QuestionDeleteCommentDialogFragment.TAG);
             }
         });
 
-        viewModel.getEditClicked().observe(this, new Observer<Boolean>() {
+        viewModel.getYesDeleteClicked().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean editClicked) {
-                AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance();
+            public void onChanged(Boolean yesDeleteClicked) {
+                deleteComment();
+            }
+        });
+
+        viewModel.getDeleteCommentResultSingleLiveEvent().observe(this, new Observer<CommentResult>() {
+            @Override
+            public void onChanged(CommentResult commentResult) {
+                if (commentResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("نظر شما با موفقیت حذف شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    fetchComments();
+
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(commentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
+            }
+        });
+
+        viewModel.getEditClicked().observe(this, new Observer<CommentInfo>() {
+            @Override
+            public void onChanged(CommentInfo commentInfo) {
+                AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance(commentInfo.getCaseID(), commentInfo.getCommentID(), commentInfo.getComment());
                 fragment.show(getParentFragmentManager(), AddEditCommentDialogFragment.TAG);
             }
         });
+
+        viewModel.getCommentsByCaseIDResultSingleLiveEvent().observe(this, new Observer<CommentResult>() {
+            @Override
+            public void onChanged(CommentResult commentResult) {
+                if (commentResult.getErrorCode().equals("0")) {
+                    setupAdapter(commentResult.getComments());
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(commentResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
+            }
+        });
+
+        viewModel.getRefreshComments().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refreshComments) {
+                fetchComments();
+            }
+        });
+    }
+
+    private void fetchComments() {
+        viewModel.getSipSupporterServiceCommentsByCaseID(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Comment/list_ByCaseID/";
+        viewModel.fetchCommentsByCaseID(path, userLoginKey, caseID);
+    }
+
+    private void deleteComment() {
+        viewModel.getSipSupporterServiceDeleteComment(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/comment/Delete/";
+        viewModel.deleteComment(path, userLoginKey, commentID);
     }
 
     private void initViews() {
@@ -98,17 +166,20 @@ public class CommentDialogFragment extends DialogFragment {
                 DividerItemDecoration.VERTICAL));
     }
 
-    private void setupAdapter() {
-        List<CommentInfo> commentInfoList = new ArrayList<>();
-        CommentAdapter adapter = new CommentAdapter(getContext(), viewModel, commentInfoList);
-        binding.recyclerViewComments.setAdapter(adapter);
+    private void setupAdapter(CommentInfo[] commentInfoArray) {
+        if (commentInfoArray.length != 0) {
+            binding.txtNoComment.setVisibility(View.INVISIBLE);
+            binding.recyclerViewComments.setVisibility(View.VISIBLE);
+            CommentAdapter adapter = new CommentAdapter(getContext(), viewModel, Arrays.asList(commentInfoArray));
+            binding.recyclerViewComments.setAdapter(adapter);
+        }
     }
 
     private void handleEvents() {
         binding.fabAddNewComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance();
+                AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance(caseID, 0, "");
                 fragment.show(getParentFragmentManager(), AddEditCommentDialogFragment.TAG);
             }
         });

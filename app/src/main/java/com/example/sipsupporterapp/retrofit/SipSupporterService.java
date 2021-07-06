@@ -6,6 +6,8 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CaseInfo;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
+import com.example.sipsupporterapp.model.CommentInfo;
+import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
@@ -155,4 +157,16 @@ public interface SipSupporterService {
 
     @PUT("{path}")
     Call<CaseResult> closeCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
+
+    @POST("{path}")
+    Call<CommentResult> addComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentInfo commentInfo);
+
+    @GET("{path}")
+    Call<CommentResult> fetchCommentsByCaseID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @DELETE("{path}")
+    Call<CommentResult> deleteComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("commentID") int commentID);
+
+    @PUT("{path}")
+    Call<CommentResult> editComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentInfo commentInfo);
 }

@@ -252,10 +252,10 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        viewModel.getRegisterCommentClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getRegisterCommentClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Boolean registerCommentClicked) {
-                CommentDialogFragment fragment = CommentDialogFragment.newInstance();
+            public void onChanged(Integer caseID) {
+                CommentDialogFragment fragment = CommentDialogFragment.newInstance(caseID);
                 fragment.show(getParentFragmentManager(), CommentDialogFragment.TAG);
             }
         });
