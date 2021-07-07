@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerAdapterItemBinding;
-import com.example.sipsupporterapp.model.CustomerInfo;
+import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
@@ -23,10 +23,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     private Context context;
     private CustomerViewModel viewModel;
-    private List<CustomerInfo> customerInfoList;
+    private List<CustomerResult.CustomerInfo> customerInfoList;
     private String date;
 
-    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerInfo> customerInfoList, String date) {
+    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String date) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerInfoList = customerInfoList;
@@ -45,7 +45,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     @Override
     public void onBindViewHolder(@NonNull CustomerHolder holder, int position) {
-        CustomerInfo customerInfo = customerInfoList.get(position);
+        CustomerResult.CustomerInfo customerInfo = customerInfoList.get(position);
         holder.bindCustomerInfo(customerInfo);
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +80,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             this.binding = binding;
         }
 
-        public void bindCustomerInfo(CustomerInfo info) {
+        public void bindCustomerInfo(CustomerResult.CustomerInfo info) {
             String city = Converter.letterConverter(info.getCity());
             binding.txtCity.setText(city);
             binding.txtLastSeen.setText(info.getLastSeen());

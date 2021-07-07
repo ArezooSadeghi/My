@@ -9,37 +9,30 @@ import android.util.Log;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.database.SipSupporterDBHelper;
 import com.example.sipsupporterapp.database.SipSupporterSchema;
-import com.example.sipsupporterapp.model.AssignInfo;
 import com.example.sipsupporterapp.model.AssignResult;
-import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.CaseInfo;
+import com.example.sipsupporterapp.model.CaseProductResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
-import com.example.sipsupporterapp.model.CommentInfo;
 import com.example.sipsupporterapp.model.CommentResult;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
-import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.CustomerResult;
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
-import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ProductGroupResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
-import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.retrofit.AssignResultDeserializer;
 import com.example.sipsupporterapp.retrofit.AttachResultDeserializer;
 import com.example.sipsupporterapp.retrofit.BankAccountResultDeserializer;
+import com.example.sipsupporterapp.retrofit.CaseProductResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CaseResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CaseTypeResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CommentResultDeserializer;
@@ -181,6 +174,10 @@ public class SipSupporterRepository {
     private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CaseProductResult> addCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -551,6 +548,20 @@ public class SipSupporterRepository {
                 }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
     }
 
+    public void getSipSupporterServiceAddCaseProduct(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CaseProductResult>() {
+                }.getType(), new CaseProductResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceCaseProductsWithSelected(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<CaseProductResult>() {
+                }.getType(), new CaseProductResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
         return dateResultSingleLiveEvent;
     }
@@ -763,6 +774,14 @@ public class SipSupporterRepository {
         return deleteAssignResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<CaseProductResult> getAddCaseProductResultSingleLiveEvent() {
+        return addCaseProductResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseProductResult> getCaseProductsWithSelectedResultSingleLiveEvent() {
+        return caseProductsWithSelectedResultSingleLiveEvent;
+    }
+
     public void insertServerData(ServerData serverData) {
         ContentValues values = new ContentValues();
 
@@ -858,7 +877,7 @@ public class SipSupporterRepository {
         database.delete(SipSupporterSchema.ServerDataTable.NAME, whereClause, whereArgs);
     }
 
-    public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
+    public void fetchUserResult(String path, UserResult.UserLoginParameter userLoginParameter) {
         sipSupporterService.login(path, userLoginParameter).enqueue(new Callback<UserResult>() {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
@@ -1040,7 +1059,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addCustomerSupport(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
+    public void addCustomerSupport(String path, String userLoginKey, CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
         sipSupporterService.addCustomerSupport(path, userLoginKey, customerSupportInfo).enqueue(new Callback<CustomerSupportResult>() {
             @Override
             public void onResponse(Call<CustomerSupportResult> call, Response<CustomerSupportResult> response) {
@@ -1150,7 +1169,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addCustomerProduct(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+    public void addCustomerProduct(String path, String userLoginKey, CustomerProductResult.CustomerProductInfo customerProductInfo) {
         sipSupporterService.addCustomerProduct(path, userLoginKey, customerProductInfo).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
@@ -1241,7 +1260,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editCustomerProduct(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+    public void editCustomerProduct(String path, String userLoginKey, CustomerProductResult.CustomerProductInfo customerProductInfo) {
         sipSupporterService.editCustomerProduct(path, userLoginKey, customerProductInfo).enqueue(new Callback<CustomerProductResult>() {
             @Override
             public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
@@ -1271,7 +1290,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void attach(String path, String userLoginKey, AttachInfo attachInfo) {
+    public void attach(String path, String userLoginKey, AttachResult.AttachInfo attachInfo) {
         sipSupporterService.attach(path, userLoginKey, attachInfo).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
@@ -1361,7 +1380,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addCustomerPayment(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+    public void addCustomerPayment(String path, String userLoginKey, CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
         sipSupporterService.addCustomerPayment(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
@@ -1391,7 +1410,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editCustomerPayment(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+    public void editCustomerPayment(String path, String userLoginKey, CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
         sipSupporterService.editCustomerPayment(path, userLoginKey, customerPaymentInfo).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
@@ -1571,7 +1590,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editPayment(String path, String userLoginKey, PaymentInfo paymentInfo) {
+    public void editPayment(String path, String userLoginKey, PaymentResult.PaymentInfo paymentInfo) {
         sipSupporterService.editPayment(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
@@ -1661,7 +1680,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addPayment(String path, String userLoginKey, PaymentInfo paymentInfo) {
+    public void addPayment(String path, String userLoginKey, PaymentResult.PaymentInfo paymentInfo) {
         sipSupporterService.addPayment(path, userLoginKey, paymentInfo).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
@@ -1931,7 +1950,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addCase(String path, String userLoginKey, CaseInfo caseInfo) {
+    public void addCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         sipSupporterService.addCase(path, userLoginKey, caseInfo).enqueue(new Callback<CaseResult>() {
             @Override
             public void onResponse(Call<CaseResult> call, Response<CaseResult> response) {
@@ -1991,7 +2010,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editCase(String path, String userLoginKey, CaseInfo caseInfo) {
+    public void editCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         sipSupporterService.editCase(path, userLoginKey, caseInfo).enqueue(new Callback<CaseResult>() {
             @Override
             public void onResponse(Call<CaseResult> call, Response<CaseResult> response) {
@@ -2021,7 +2040,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void closeCase(String path, String userLoginKey, CaseInfo caseInfo) {
+    public void closeCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         sipSupporterService.closeCase(path, userLoginKey, caseInfo).enqueue(new Callback<CaseResult>() {
             @Override
             public void onResponse(Call<CaseResult> call, Response<CaseResult> response) {
@@ -2051,7 +2070,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addComment(String path, String userLoginKey, CommentInfo commentInfo) {
+    public void addComment(String path, String userLoginKey, CommentResult.CommentInfo commentInfo) {
         sipSupporterService.addComment(path, userLoginKey, commentInfo).enqueue(new Callback<CommentResult>() {
             @Override
             public void onResponse(Call<CommentResult> call, Response<CommentResult> response) {
@@ -2141,7 +2160,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editComment(String path, String userLoginKey, CommentInfo commentInfo) {
+    public void editComment(String path, String userLoginKey, CommentResult.CommentInfo commentInfo) {
         sipSupporterService.editComment(path, userLoginKey, commentInfo).enqueue(new Callback<CommentResult>() {
             @Override
             public void onResponse(Call<CommentResult> call, Response<CommentResult> response) {
@@ -2201,7 +2220,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void addAssign(String path, String userLoginKey, AssignInfo assignInfo) {
+    public void addAssign(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
         sipSupporterService.addAssign(path, userLoginKey, assignInfo).enqueue(new Callback<AssignResult>() {
             @Override
             public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
@@ -2261,7 +2280,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editAssign(String path, String userLoginKey, AssignInfo assignInfo) {
+    public void editAssign(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
         sipSupporterService.editAssign(path, userLoginKey, assignInfo).enqueue(new Callback<AssignResult>() {
             @Override
             public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
@@ -2310,6 +2329,66 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void addCaseProduct(String path, String userLoginKey, CaseProductResult.CaseProductInfo caseProductInfo) {
+        sipSupporterService.addCaseProduct(path, userLoginKey, caseProductInfo).enqueue(new Callback<CaseProductResult>() {
+            @Override
+            public void onResponse(Call<CaseProductResult> call, Response<CaseProductResult> response) {
+                if (response.isSuccessful()) {
+                    addCaseProductResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
+                        addCaseProductResultSingleLiveEvent.setValue(caseProductResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseProductResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCaseProductsWithSelected(String path, String userLoginKey, int caseID) {
+        sipSupporterService.fetchCaseProductsWithSelected(path, userLoginKey, caseID).enqueue(new Callback<CaseProductResult>() {
+            @Override
+            public void onResponse(Call<CaseProductResult> call, Response<CaseProductResult> response) {
+                if (response.isSuccessful()) {
+                    caseProductsWithSelectedResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
+                        caseProductsWithSelectedResultSingleLiveEvent.setValue(caseProductResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

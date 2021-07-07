@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerPaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerPaymentBinding;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -111,8 +110,8 @@ public class CustomerPaymentFragment extends Fragment {
         });
     }
 
-    private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
-        List<CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
+    private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
+        List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
         CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, customerPaymentInfoList);
         binding.recyclerViewDepositAmounts.setAdapter(adapter);
     }
@@ -163,17 +162,17 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
                 startActivity(starter);
             }
         });
 
-        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
                 customerPaymentID = customerPaymentInfo.getCustomerPaymentID();
                 QuestionDeleteCustomerPaymentDialogFragment fragment = QuestionDeleteCustomerPaymentDialogFragment.newInstance(getString(R.string.question_delete_customer_payment_message));
                 fragment.show(getParentFragmentManager(), QuestionDeleteCustomerPaymentDialogFragment.TAG);
@@ -201,9 +200,9 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentInfo customerPaymentInfo) {
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
                 AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment
                         .newInstance(
                                 customerPaymentInfo.getDescription(),

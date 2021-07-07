@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.CaseInfo;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -27,7 +26,7 @@ public class TaskViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
 
-    private SingleLiveEvent<CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> changeCaseTypeClicked = new SingleLiveEvent<>();
@@ -35,7 +34,7 @@ public class TaskViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CaseInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult.CaseInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Integer> registerCommentClicked = new SingleLiveEvent<>();
@@ -43,6 +42,8 @@ public class TaskViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> assignToOthersClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Integer> printInvoiceClicked = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Integer> caseProductsClicked = new SingleLiveEvent<>();
 
     public TaskViewModel(@NonNull Application application) {
         super(application);
@@ -74,7 +75,7 @@ public class TaskViewModel extends AndroidViewModel {
         return addCaseResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CaseInfo> getCaseFinishClicked() {
+    public SingleLiveEvent<CaseResult.CaseInfo> getCaseFinishClicked() {
         return caseFinishClicked;
     }
 
@@ -86,7 +87,7 @@ public class TaskViewModel extends AndroidViewModel {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<CaseInfo> getEditClicked() {
+    public SingleLiveEvent<CaseResult.CaseInfo> getEditClicked() {
         return editClicked;
     }
 
@@ -126,6 +127,10 @@ public class TaskViewModel extends AndroidViewModel {
         return printInvoiceClicked;
     }
 
+    public SingleLiveEvent<Integer> getCaseProductsClicked() {
+        return caseProductsClicked;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -162,7 +167,7 @@ public class TaskViewModel extends AndroidViewModel {
         repository.fetchCasesByCaseType(path, userLoginKey, caseTypeID, search, showAll);
     }
 
-    public void addCase(String path, String userLoginKey, CaseInfo caseInfo) {
+    public void addCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         repository.addCase(path, userLoginKey, caseInfo);
     }
 
@@ -170,11 +175,11 @@ public class TaskViewModel extends AndroidViewModel {
         repository.deleteCase(path, userLoginKey, caseID);
     }
 
-    public void editCase(String path, String userLoginKey, CaseInfo caseInfo) {
+    public void editCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         repository.editCase(path, userLoginKey, caseInfo);
     }
 
-    public void closeCase(String path, String userLoginKey, CaseInfo caseInfo) {
+    public void closeCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         repository.closeCase(path, userLoginKey, caseInfo);
     }
 }

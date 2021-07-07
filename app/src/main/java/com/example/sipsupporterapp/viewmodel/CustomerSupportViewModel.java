@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
@@ -20,7 +19,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
-    private SingleLiveEvent<CustomerSupportInfo> seeCustomerSupportAttachmentsClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> seeCustomerSupportAttachmentsClicked = new SingleLiveEvent<>();
 
     public CustomerSupportViewModel(@NonNull Application application) {
         super(application);
@@ -50,7 +49,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return dangerousUserSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerSupportInfo> getSeeCustomerSupportAttachmentsClicked() {
+    public SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> getSeeCustomerSupportAttachmentsClicked() {
         return seeCustomerSupportAttachmentsClicked;
     }
 

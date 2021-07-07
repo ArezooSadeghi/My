@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -20,9 +19,9 @@ public class PaymentViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<PaymentResult> paymentsByBankAccountResultSingleLiveEvent;
 
-    private SingleLiveEvent<PaymentInfo> editClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<PaymentInfo> deleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<PaymentInfo> seePaymentAttachmentsClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult.PaymentInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult.PaymentInfo> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult.PaymentInfo> seePaymentAttachmentsClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent;
 
@@ -70,15 +69,15 @@ public class PaymentViewModel extends AndroidViewModel {
         return paymentsByBankAccountResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<PaymentInfo> getEditClicked() {
+    public SingleLiveEvent<PaymentResult.PaymentInfo> getEditClicked() {
         return editClicked;
     }
 
-    public SingleLiveEvent<PaymentInfo> getDeleteClicked() {
+    public SingleLiveEvent<PaymentResult.PaymentInfo> getDeleteClicked() {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<PaymentInfo> getSeePaymentAttachmentsClicked() {
+    public SingleLiveEvent<PaymentResult.PaymentInfo> getSeePaymentAttachmentsClicked() {
         return seePaymentAttachmentsClicked;
     }
 
@@ -155,11 +154,11 @@ public class PaymentViewModel extends AndroidViewModel {
         repository.fetchPaymentsListByBankAccounts(path, userLoginKey, bankAccountID);
     }
 
-    public void addPayment(String path, String userLoginKey, PaymentInfo paymentInfo) {
+    public void addPayment(String path, String userLoginKey, PaymentResult.PaymentInfo paymentInfo) {
         repository.addPayment(path, userLoginKey, paymentInfo);
     }
 
-    public void editPayment(String path, String userLoginKey, PaymentInfo paymentInfo) {
+    public void editPayment(String path, String userLoginKey, PaymentResult.PaymentInfo paymentInfo) {
         repository.editPayment(path, userLoginKey, paymentInfo);
     }
 

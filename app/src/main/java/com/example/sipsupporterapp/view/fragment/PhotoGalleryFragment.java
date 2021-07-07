@@ -25,7 +25,6 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.PhotoGalleryAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPhotoGalleryBinding;
 import com.example.sipsupporterapp.eventbus.DeleteEvent;
-import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -299,7 +298,7 @@ public class PhotoGalleryFragment extends Fragment {
         return "";
     }
 
-    private String writeToExternalStorage(AttachInfo attachInfo) throws IOException {
+    private String writeToExternalStorage(AttachResult.AttachInfo attachInfo) throws IOException {
         File dir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Attachments");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -349,7 +348,7 @@ public class PhotoGalleryFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.INVISIBLE);
             }
         } else {
-            for (AttachInfo attachInfo : attachResult.getAttachs()) {
+            for (AttachResult.AttachInfo attachInfo : attachResult.getAttachs()) {
                 String filePath = readFromStorage(attachInfo.getAttachID());
                 if (!filePath.isEmpty()) {
                     if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
@@ -418,7 +417,7 @@ public class PhotoGalleryFragment extends Fragment {
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
                     if (attachResult.getAttachs().length != 0) {
-                        AttachInfo attachInfo = attachResult.getAttachs()[0];
+                        AttachResult.AttachInfo attachInfo = attachResult.getAttachs()[0];
                         new Thread(new Runnable() {
                             @Override
                             public void run() {

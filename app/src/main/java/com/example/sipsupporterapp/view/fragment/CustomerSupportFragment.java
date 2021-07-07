@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerSupportAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerSupportBinding;
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
@@ -95,8 +94,8 @@ public class CustomerSupportFragment extends Fragment {
                 DividerItemDecoration.VERTICAL));
     }
 
-    private void setupAdapter(CustomerSupportInfo[] customerSupportInfoArray) {
-        List<CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
+    private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
+        List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
         CustomerSupportAdapter adapter = new CustomerSupportAdapter(
                 getContext(), viewModel, customerSupportInfoList);
         binding.recyclerViewSupportHistory.setAdapter(adapter);
@@ -153,9 +152,9 @@ public class CustomerSupportFragment extends Fragment {
             }
         });
 
-        viewModel.getSeeCustomerSupportAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerSupportInfo>() {
+        viewModel.getSeeCustomerSupportAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerSupportResult.CustomerSupportInfo>() {
             @Override
-            public void onChanged(CustomerSupportInfo customerSupportInfo) {
+            public void onChanged(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(
                         getContext(),
                         customerSupportInfo.getCustomerSupportID(),

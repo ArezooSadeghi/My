@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerProductDialogBinding;
 import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
-import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -167,7 +166,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("لطفا نوع محصول را انتخاب نمایید");
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
-                    CustomerProductInfo customerProductInfo = new CustomerProductInfo();
+                    CustomerProductResult.CustomerProductInfo customerProductInfo = new CustomerProductResult().new CustomerProductInfo();
 
                     String productName = productGroup;
                     customerProductInfo.setProductName(productName);
@@ -280,13 +279,13 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.fetchProductInfo(path, userLoginKey, productGroupID);
     }
 
-    private void editProduct(CustomerProductInfo customerProductInfo) {
+    private void editProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
         viewModel.getSipSupporterServiceEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Edit/";
         viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
-    private void addProduct(CustomerProductInfo customerProductInfo) {
+    private void addProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
         viewModel.getSipSupporterServiceAddCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Add/";
         viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);

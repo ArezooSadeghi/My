@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCommentDialogBinding;
-import com.example.sipsupporterapp.model.CommentInfo;
 import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -133,7 +132,7 @@ public class AddEditCommentDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommentInfo commentInfo = new CommentInfo();
+                CommentResult.CommentInfo commentInfo = new CommentResult().new CommentInfo();
                 commentInfo.setComment(binding.edTextComment.getText().toString());
 
                 int caseID = getArguments().getInt(ARGS_CASE_ID);
@@ -151,13 +150,13 @@ public class AddEditCommentDialogFragment extends DialogFragment {
         });
     }
 
-    private void addComment(CommentInfo commentInfo) {
+    private void addComment(CommentResult.CommentInfo commentInfo) {
         viewModel.getSipSupporterServiceAddComment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Comment/Add/";
         viewModel.addComment(path, userLoginKey, commentInfo);
     }
 
-    private void editComment(CommentInfo commentInfo) {
+    private void editComment(CommentResult.CommentInfo commentInfo) {
         viewModel.getSipSupporterServiceEditComment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/comment/Edit/";
         viewModel.editComment(path, userLoginKey, commentInfo);

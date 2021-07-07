@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CommentAdapterItemBinding;
-import com.example.sipsupporterapp.model.CommentInfo;
+import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.viewmodel.CommentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -24,9 +24,9 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentHolder> {
     private Context context;
     private CommentViewModel viewModel;
-    private List<CommentInfo> commentInfoList;
+    private List<CommentResult.CommentInfo> commentInfoList;
 
-    public CommentAdapter(Context context, CommentViewModel viewModel, List<CommentInfo> commentInfoList) {
+    public CommentAdapter(Context context, CommentViewModel viewModel, List<CommentResult.CommentInfo> commentInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.commentInfoList = commentInfoList;
@@ -90,7 +90,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             this.binding = binding;
         }
 
-        public void bindCommentInfo(CommentInfo commentInfo) {
+        public void bindCommentInfo(CommentResult.CommentInfo commentInfo) {
             binding.txtUserFullName.setText(commentInfo.getUserFullName());
             binding.txtComment.setText(commentInfo.getComment());
         }

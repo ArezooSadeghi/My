@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentChangeCaseTypeDialogBinding;
-import com.example.sipsupporterapp.model.CaseTypeInfo;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -92,7 +91,7 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupSpinner(CaseTypeInfo[] caseTypeInfoArray) {
+    private void setupSpinner(CaseTypeResult.CaseTypeInfo[] caseTypeInfoArray) {
         List<String> caseTypes = new ArrayList<>();
         for (int i = 0; i < caseTypeInfoArray.length; i++) {
             caseTypes.add(caseTypeInfoArray[i].getCaseType());

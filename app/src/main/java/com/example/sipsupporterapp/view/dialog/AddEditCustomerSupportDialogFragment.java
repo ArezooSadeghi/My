@@ -16,10 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerSupportDialogBinding;
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.model.SupportEventInfo;
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
@@ -32,7 +30,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
 
     private int customerID, supportEventID;
     private String lastValueSpinner;
-    private SupportEventInfo[] supportEventArray;
+    private SupportEventResult.SupportEventInfo[] supportEventArray;
 
     private static final String ARGS_CUSTOMER_ID = "customerID";
 
@@ -110,7 +108,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
                     int customerUserID = SipSupportSharedPreferences.getCustomerUserId(getContext());
                     String question = binding.edTextQuestion.getText().toString();
                     String answer = binding.edTextAnswer.getText().toString();
-                    CustomerSupportInfo customerSupportInfo = new CustomerSupportInfo(supportEventID, customerID, customerUserID, question, answer);
+                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult().new CustomerSupportInfo(supportEventID, customerID, customerUserID, question, answer);
                     addSupport(customerSupportInfo);
                 }
             }
@@ -185,7 +183,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupSpinner(SupportEventInfo[] supportEvents) {
+    private void setupSpinner(SupportEventResult.SupportEventInfo[] supportEvents) {
         String[] supportEventArray = new String[supportEvents.length];
         for (int i = 0; i < supportEventArray.length; i++) {
             supportEventArray[i] = supportEvents[i].getSupportEvent();
@@ -199,7 +197,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
                 for (int i = 0; i < supportEvents.length; i++) {
                     if (supportEvents[i].getSupportEventID() == supportEventID) {
                         lastValueSpinner = supportEvents[i].getSupportEvent();
-                        SupportEventInfo supportEvent = supportEvents[i];
+                        SupportEventResult.SupportEventInfo supportEvent = supportEvents[i];
                         supportEventID = supportEvent.getSupportEventID();
                         supportEventArray[i] = supportEventArray[0];
                         supportEventArray[0] = lastValueSpinner;
@@ -212,7 +210,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         }
     }
 
-    private void addSupport(CustomerSupportInfo customerSupportInfo) {
+    private void addSupport(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);

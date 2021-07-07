@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.CommentInfo;
 import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
@@ -16,7 +15,7 @@ public class CommentViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CommentInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CommentResult.CommentInfo> editClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CommentResult> commentsByCaseIDResultSingleLiveEvent;
 
@@ -46,7 +45,7 @@ public class CommentViewModel extends AndroidViewModel {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<CommentInfo> getEditClicked() {
+    public SingleLiveEvent<CommentResult.CommentInfo> getEditClicked() {
         return editClicked;
     }
 
@@ -98,7 +97,7 @@ public class CommentViewModel extends AndroidViewModel {
         repository.fetchCommentsByCaseID(path, userLoginKey, caseID);
     }
 
-    public void addComment(String path, String userLoginKey, CommentInfo commentInfo) {
+    public void addComment(String path, String userLoginKey, CommentResult.CommentInfo commentInfo) {
         repository.addComment(path, userLoginKey, commentInfo);
     }
 
@@ -106,7 +105,7 @@ public class CommentViewModel extends AndroidViewModel {
         repository.deleteComment(path, userLoginKey, commentID);
     }
 
-    public void editComment(String path, String userLoginKey, CommentInfo commentInfo) {
+    public void editComment(String path, String userLoginKey, CommentResult.CommentInfo commentInfo) {
         repository.editComment(path, userLoginKey, commentInfo);
     }
 }

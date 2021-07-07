@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerProductAdapeterItemBinding;
-import com.example.sipsupporterapp.model.CustomerProductInfo;
+import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -28,9 +28,9 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
 
     private Context context;
     private CustomerProductViewModel viewModel;
-    private List<CustomerProductInfo> customerProductInfoList;
+    private List<CustomerProductResult.CustomerProductInfo> customerProductInfoList;
 
-    public CustomerProductAdapter(Context context, CustomerProductViewModel viewModel, List<CustomerProductInfo> customerProductInfoList) {
+    public CustomerProductAdapter(Context context, CustomerProductViewModel viewModel, List<CustomerProductResult.CustomerProductInfo> customerProductInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerProductInfoList = customerProductInfoList;
@@ -48,7 +48,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
 
     @Override
     public void onBindViewHolder(@NonNull ProductsHolder holder, int position) {
-        CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
+        CustomerProductResult.CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
         holder.bindCustomerProducts(customerProductInfo);
 
         int customerProductID = customerProductInfo.getCustomerProductID();
@@ -101,7 +101,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
             this.binding = binding;
         }
 
-        public void bindCustomerProducts(CustomerProductInfo info) {
+        public void bindCustomerProducts(CustomerProductResult.CustomerProductInfo info) {
             String productName = Converter.letterConverter(info.getProductName());
             binding.txtProductName.setText(productName);
             if (!info.getDescription().isEmpty()) {

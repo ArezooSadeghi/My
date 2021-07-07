@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
@@ -176,7 +175,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         mRepository.getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(baseUrl);
     }
 
-    public void addAttachment(String path, String userLoginKey, AttachInfo attachInfo) {
+    public void addAttachment(String path, String userLoginKey, AttachResult.AttachInfo attachInfo) {
         mRepository.attach(path, userLoginKey, attachInfo);
     }
 

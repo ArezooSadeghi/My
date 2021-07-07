@@ -1,10 +1,10 @@
 package com.example.sipsupporterapp.model;
 
-public class InvoiceDetailsResult {
+public class CaseProductResult {
 
     private String errorCode;
     private String error;
-    private InvoiceDetailsInfo[] invoiceDetails;
+    private CaseProductInfo[] caseProducts;
 
     public String getErrorCode() {
         return errorCode;
@@ -22,42 +22,42 @@ public class InvoiceDetailsResult {
         this.error = error;
     }
 
-    public InvoiceDetailsInfo[] getInvoiceDetails() {
-        return invoiceDetails;
+    public CaseProductInfo[] getCaseProducts() {
+        return caseProducts;
     }
 
-    public void setInvoiceDetails(InvoiceDetailsInfo[] invoiceDetails) {
-        this.invoiceDetails = invoiceDetails;
+    public void setCaseProducts(CaseProductInfo[] caseProducts) {
+        this.caseProducts = caseProducts;
     }
 
-    public class InvoiceDetailsInfo {
+    public class CaseProductInfo {
 
-        private int invoiceDetailsID;
-        private int invoiceID;
+        private int caseProductID;
+        private int caseID;
         private int productID;
-        private int QTY;
-        private int unitPrice;
-        private int sumDiscountPrice;
+        private int statusID;
         private int userID;
         private long addTime;
+        private boolean selected;
         private String userFullName;
-        private String productName;
+        private String status;
         private String description;
+        private String productName;
 
-        public int getInvoiceDetailsID() {
-            return invoiceDetailsID;
+        public int getCaseProductID() {
+            return caseProductID;
         }
 
-        public void setInvoiceDetailsID(int invoiceDetailsID) {
-            this.invoiceDetailsID = invoiceDetailsID;
+        public void setCaseProductID(int caseProductID) {
+            this.caseProductID = caseProductID;
         }
 
-        public int getInvoiceID() {
-            return invoiceID;
+        public int getCaseID() {
+            return caseID;
         }
 
-        public void setInvoiceID(int invoiceID) {
-            this.invoiceID = invoiceID;
+        public void setCaseID(int caseID) {
+            this.caseID = caseID;
         }
 
         public int getProductID() {
@@ -68,28 +68,12 @@ public class InvoiceDetailsResult {
             this.productID = productID;
         }
 
-        public int getQTY() {
-            return QTY;
+        public int getStatusID() {
+            return statusID;
         }
 
-        public void setQTY(int QTY) {
-            this.QTY = QTY;
-        }
-
-        public int getUnitPrice() {
-            return unitPrice;
-        }
-
-        public void setUnitPrice(int unitPrice) {
-            this.unitPrice = unitPrice;
-        }
-
-        public int getSumDiscountPrice() {
-            return sumDiscountPrice;
-        }
-
-        public void setSumDiscountPrice(int sumDiscountPrice) {
-            this.sumDiscountPrice = sumDiscountPrice;
+        public void setStatusID(int statusID) {
+            this.statusID = statusID;
         }
 
         public int getUserID() {
@@ -108,6 +92,14 @@ public class InvoiceDetailsResult {
             this.addTime = addTime;
         }
 
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
         public String getUserFullName() {
             return userFullName;
         }
@@ -116,12 +108,12 @@ public class InvoiceDetailsResult {
             this.userFullName = userFullName;
         }
 
-        public String getProductName() {
-            return productName;
+        public String getStatus() {
+            return status;
         }
 
-        public void setProductName(String productName) {
-            this.productName = productName;
+        public void setStatus(String status) {
+            this.status = status;
         }
 
         public String getDescription() {
@@ -130,6 +122,14 @@ public class InvoiceDetailsResult {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public void setProductName(String productName) {
+            this.productName = productName;
         }
     }
 }

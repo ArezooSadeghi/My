@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.PaymentAdapterItemBinding;
-import com.example.sipsupporterapp.model.PaymentInfo;
+import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -26,9 +26,9 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
 
     private Context context;
     private PaymentViewModel viewModel;
-    private List<PaymentInfo> paymentInfoList;
+    private List<PaymentResult.PaymentInfo> paymentInfoList;
 
-    public PaymentAdapter(Context context, PaymentViewModel viewModel, List<PaymentInfo> paymentInfoList) {
+    public PaymentAdapter(Context context, PaymentViewModel viewModel, List<PaymentResult.PaymentInfo> paymentInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.paymentInfoList = paymentInfoList;
@@ -96,7 +96,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
             this.binding = binding;
         }
 
-        public void bindPaymentInfo(PaymentInfo info) {
+        public void bindPaymentInfo(PaymentResult.PaymentInfo info) {
             String paymentSubject = Converter.letterConverter(info.getPaymentSubject());
             binding.txtPaymentSubject.setText(paymentSubject);
 

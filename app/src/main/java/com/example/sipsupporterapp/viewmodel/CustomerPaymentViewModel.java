@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
@@ -35,9 +34,9 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
-    private SingleLiveEvent<CustomerPaymentInfo> DeleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> DeleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
 
 
     public CustomerPaymentViewModel(@NonNull Application application) {
@@ -106,15 +105,15 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return dangerousUserSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getDeleteClicked() {
+    public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getDeleteClicked() {
         return DeleteClicked;
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getEditClicked() {
+    public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getEditClicked() {
         return editClicked;
     }
 
-    public SingleLiveEvent<CustomerPaymentInfo> getSeeCustomerPaymentAttachmentsClicked() {
+    public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getSeeCustomerPaymentAttachmentsClicked() {
         return seeCustomerPaymentAttachmentsClicked;
     }
 
@@ -158,11 +157,11 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         repository.fetchBankAccounts(path, userLoginKey);
     }
 
-    public void addCustomerPaymentResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+    public void addCustomerPaymentResult(String path, String userLoginKey, CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
         repository.addCustomerPayment(path, userLoginKey, customerPaymentInfo);
     }
 
-    public void editCustomerPaymentResult(String path, String userLoginKey, CustomerPaymentInfo customerPaymentInfo) {
+    public void editCustomerPaymentResult(String path, String userLoginKey, CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
         repository.editCustomerPayment(path, userLoginKey, customerPaymentInfo);
     }
 

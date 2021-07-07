@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.AssignInfo;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.UserResult;
@@ -14,7 +13,7 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class AssignViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
 
-    private SingleLiveEvent<AssignInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<AssignResult.AssignInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> registerCommentClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<UserResult> usersResultSingleLiveEvent;
@@ -41,7 +40,7 @@ public class AssignViewModel extends AndroidViewModel {
         deleteAssignResultSingleLiveEvent = repository.getDeleteAssignResultSingleLiveEvent();
     }
 
-    public SingleLiveEvent<AssignInfo> getEditClicked() {
+    public SingleLiveEvent<AssignResult.AssignInfo> getEditClicked() {
         return editClicked;
     }
 
@@ -109,7 +108,7 @@ public class AssignViewModel extends AndroidViewModel {
         repository.fetchUsers(path, userLoginKey);
     }
 
-    public void addAssign(String path, String userLoginKey, AssignInfo assignInfo) {
+    public void addAssign(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
         repository.addAssign(path, userLoginKey, assignInfo);
     }
 
@@ -117,7 +116,7 @@ public class AssignViewModel extends AndroidViewModel {
         repository.fetchAssigns(path, userLoginKey, caseID);
     }
 
-    public void editAssign(String path, String userLoginKey, AssignInfo assignInfo) {
+    public void editAssign(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
         repository.editAssign(path, userLoginKey, assignInfo);
     }
 

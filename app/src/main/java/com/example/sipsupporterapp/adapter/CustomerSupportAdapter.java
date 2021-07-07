@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerSupportAdapterItemBinding;
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
+import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -26,9 +26,9 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
 
     private Context context;
     private CustomerSupportViewModel viewModel;
-    private List<CustomerSupportInfo> customerSupportInfoList;
+    private List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList;
 
-    public CustomerSupportAdapter(Context context, CustomerSupportViewModel viewModel, List<CustomerSupportInfo> customerSupportInfoList) {
+    public CustomerSupportAdapter(Context context, CustomerSupportViewModel viewModel, List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerSupportInfoList = customerSupportInfoList;
@@ -46,7 +46,7 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
 
     @Override
     public void onBindViewHolder(@NonNull CustomerSupportInfoHolder holder, int position) {
-        CustomerSupportInfo customerSupportInfo = customerSupportInfoList.get(position);
+        CustomerSupportResult.CustomerSupportInfo customerSupportInfo = customerSupportInfoList.get(position);
         holder.bindCustomerSupportInfo(customerSupportInfoList.get(position));
 
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +87,7 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerSupportInfo info) {
+        public void bindCustomerSupportInfo(CustomerSupportResult.CustomerSupportInfo info) {
             String question = Converter.letterConverter(info.getQuestion());
             binding.txtQuestion.setText(question);
             String answer = Converter.letterConverter(info.getAnswer());

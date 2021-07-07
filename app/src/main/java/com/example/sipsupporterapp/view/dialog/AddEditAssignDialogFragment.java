@@ -15,10 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditAssignDialogBinding;
-import com.example.sipsupporterapp.model.AssignInfo;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.model.UserInfo;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.AssignViewModel;
@@ -162,7 +160,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AssignInfo assignInfo = new AssignInfo();
+                AssignResult.AssignInfo assignInfo = new AssignResult().new AssignInfo();
                 assignInfo.setDescription(binding.edTextDescription.getText().toString());
 
                 int caseID = getArguments().getInt(ARGS_CASE_ID);
@@ -195,7 +193,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupSpinner(UserInfo[] userInfoArray) {
+    private void setupSpinner(UserResult.UserInfo[] userInfoArray) {
         for (int i = 0; i < userInfoArray.length; i++) {
             userFullNames.add(i, userInfoArray[i].getUserFullName());
             userIDs.add(i, userInfoArray[i].getUserID());
@@ -204,13 +202,13 @@ public class AddEditAssignDialogFragment extends DialogFragment {
         binding.spinnerAssignUserFullName.setItems(userFullNames);
     }
 
-    private void addAssign(AssignInfo assignInfo) {
+    private void addAssign(AssignResult.AssignInfo assignInfo) {
         viewModel.getSipSupporterServiceAddAssign(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Add/";
         viewModel.addAssign(path, userLoginKey, assignInfo);
     }
 
-    private void editAssign(AssignInfo assignInfo) {
+    private void editAssign(AssignResult.AssignInfo assignInfo) {
         viewModel.getSipSupporterServiceEditAssign(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Edit/";
         viewModel.editAssign(path, userLoginKey, assignInfo);

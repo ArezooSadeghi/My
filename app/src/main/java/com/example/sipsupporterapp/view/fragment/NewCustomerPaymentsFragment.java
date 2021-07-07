@@ -2,7 +2,6 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerPaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentNewCustomerPaymentsBinding;
-import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -123,7 +120,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         });
     }
 
-    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
+    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
         for (int i = 0; i < bankAccountInfoArray.length; i++) {
             bankAccountNames.add(i, bankAccountInfoArray[i].getBankAccountName());
             bankAccountIDs.add(i, bankAccountInfoArray[i].getBankAccountID());
@@ -133,7 +130,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         fetchCustomerPaymentsByBankAccount(bankAccountID);
     }
 
-    private void setupAdapter(CustomerPaymentInfo[] customerPaymentInfoArray) {
+    private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
         CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, Arrays.asList(customerPaymentInfoArray));
         binding.recyclerViewPayments.setAdapter(adapter);
     }
@@ -197,9 +194,9 @@ public class NewCustomerPaymentsFragment extends Fragment {
             }
         });
 
-        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentInfo info) {
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo info) {
                 customerPaymentID = info.getCustomerPaymentID();
                 QuestionDeleteCustomerPaymentDialogFragment fragment = QuestionDeleteCustomerPaymentDialogFragment.newInstance(getString(R.string.delete_new_customer_payments_question_message));
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
@@ -229,9 +226,9 @@ public class NewCustomerPaymentsFragment extends Fragment {
             }
         });
 
-        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentInfo info) {
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo info) {
                 int customerSupportID = 0;
                 int customerProductID = 0;
                 int paymentID = 0;
@@ -240,9 +237,9 @@ public class NewCustomerPaymentsFragment extends Fragment {
             }
         });
 
-        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentInfo info) {
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo info) {
                 AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(info.getDescription(), info.getPrice(), info.getDatePayment(), info.getCustomerID(), info.getCustomerPaymentID(), info.getBankAccountID(), false);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }

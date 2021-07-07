@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.AssignAdapterItemBinding;
-import com.example.sipsupporterapp.model.AssignInfo;
+import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.viewmodel.AssignViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -24,9 +24,9 @@ import java.util.List;
 public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHolder> {
     private Context context;
     private AssignViewModel viewModel;
-    private List<AssignInfo> assignInfoList;
+    private List<AssignResult.AssignInfo> assignInfoList;
 
-    public AssignAdapter(Context context, AssignViewModel viewModel, List<AssignInfo> assignInfoList) {
+    public AssignAdapter(Context context, AssignViewModel viewModel, List<AssignResult.AssignInfo> assignInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.assignInfoList = assignInfoList;
@@ -96,7 +96,7 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
             this.binding = binding;
         }
 
-        public void bindAssignInfo(AssignInfo assignInfo) {
+        public void bindAssignInfo(AssignResult.AssignInfo assignInfo) {
             binding.txtAssignUserFullName.setText(assignInfo.getAssignUserFullName());
             binding.txtDescription.setText(assignInfo.getDescription());
             if (assignInfo.isFinish()) {

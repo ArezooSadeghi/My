@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CommentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCommentDialogBinding;
-import com.example.sipsupporterapp.model.CommentInfo;
 import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -119,9 +118,9 @@ public class CommentDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getEditClicked().observe(this, new Observer<CommentInfo>() {
+        viewModel.getEditClicked().observe(this, new Observer<CommentResult.CommentInfo>() {
             @Override
-            public void onChanged(CommentInfo commentInfo) {
+            public void onChanged(CommentResult.CommentInfo commentInfo) {
                 AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance(commentInfo.getCaseID(), commentInfo.getCommentID(), commentInfo.getComment());
                 fragment.show(getParentFragmentManager(), AddEditCommentDialogFragment.TAG);
             }
@@ -166,7 +165,7 @@ public class CommentDialogFragment extends DialogFragment {
                 DividerItemDecoration.VERTICAL));
     }
 
-    private void setupAdapter(CommentInfo[] commentInfoArray) {
+    private void setupAdapter(CommentResult.CommentInfo[] commentInfoArray) {
         if (commentInfoArray.length != 0) {
             binding.txtNoComment.setVisibility(View.INVISIBLE);
             binding.recyclerViewComments.setVisibility(View.VISIBLE);

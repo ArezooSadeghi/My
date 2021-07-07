@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.AssignAdapter;
 import com.example.sipsupporterapp.databinding.FragmentAssignDialogBinding;
-import com.example.sipsupporterapp.model.AssignInfo;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -94,9 +93,9 @@ public class AssignDialogFragment extends DialogFragment {
     }
 
     private void setupObserver() {
-        viewModel.getEditClicked().observe(this, new Observer<AssignInfo>() {
+        viewModel.getEditClicked().observe(this, new Observer<AssignResult.AssignInfo>() {
             @Override
-            public void onChanged(AssignInfo assignInfo) {
+            public void onChanged(AssignResult.AssignInfo assignInfo) {
                 AddEditAssignDialogFragment fragment = AddEditAssignDialogFragment.newInstance(assignInfo.getAssignID(), assignInfo.getCaseID(), assignInfo.getDescription());
                 fragment.show(getParentFragmentManager(), AddEditAssignDialogFragment.TAG);
             }
@@ -178,7 +177,7 @@ public class AssignDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupAdapter(AssignInfo[] assignInfoArray) {
+    private void setupAdapter(AssignResult.AssignInfo[] assignInfoArray) {
         if (assignInfoArray.length != 0) {
             binding.txtNoAssign.setVisibility(View.INVISIBLE);
             binding.recyclerViewAssigns.setVisibility(View.VISIBLE);

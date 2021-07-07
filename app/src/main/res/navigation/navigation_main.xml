@@ -45,4 +45,9 @@
             app:destination="@id/menu_search" />
     </fragment>
 
+    <fragment
+        android:id="@+id/caseProductsFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.CaseProductsFragment"
+        android:label="CaseProductsFragment" />
+
 </navigation>

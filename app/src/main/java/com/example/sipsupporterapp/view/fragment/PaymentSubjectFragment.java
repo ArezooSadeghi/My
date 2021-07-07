@@ -21,7 +21,6 @@ import com.example.sipsupporterapp.adapter.FileNodeBinder;
 import com.example.sipsupporterapp.databinding.FragmentPaymentSubjectBinding;
 import com.example.sipsupporterapp.eventbus.PostPaymentSubjectIDEvent;
 import com.example.sipsupporterapp.model.Dir;
-import com.example.sipsupporterapp.model.PaymentSubjectInfo;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
@@ -42,7 +41,7 @@ public class PaymentSubjectFragment extends Fragment {
     private FragmentPaymentSubjectBinding binding;
     private PaymentSubjectViewModel viewModel;
     private List<TreeNode> treeNodeList = new ArrayList<>();
-    private List<PaymentSubjectInfo> paymentSubjectInfoList = new ArrayList<>();
+    private List<PaymentSubjectResult.PaymentSubjectInfo> paymentSubjectInfoList = new ArrayList<>();
     private TreeViewAdapter adapter;
 
     public static PaymentSubjectFragment newInstance() {
@@ -105,7 +104,7 @@ public class PaymentSubjectFragment extends Fragment {
                 if (paymentSubjectResult.getErrorCode().equals("0")) {
                     paymentSubjectInfoList = Arrays.asList(paymentSubjectResult.getPaymentSubjects());
                     for (int i = 0; i < paymentSubjectResult.getPaymentSubjects().length; i++) {
-                        PaymentSubjectInfo paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[i];
+                        PaymentSubjectResult.PaymentSubjectInfo paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[i];
                         if (paymentSubjectInfo.getParentID() == 0 || paymentSubjectInfo.getParentPaymentSubject() == null) {
                             String paymentSubject = Converter.letterConverter(paymentSubjectInfo.getPaymentSubject());
                             TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
@@ -143,7 +142,7 @@ public class PaymentSubjectFragment extends Fragment {
     private void addChild(TreeNode treeNode, int paymentSubjectID) {
         for (int i = 0; i < paymentSubjectInfoList.size(); i++) {
             if (paymentSubjectInfoList.get(i).getParentID() == paymentSubjectID) {
-                PaymentSubjectInfo paymentSubjectInfo = paymentSubjectInfoList.get(i);
+                PaymentSubjectResult.PaymentSubjectInfo paymentSubjectInfo = paymentSubjectInfoList.get(i);
                 String paymentSubject = Converter.letterConverter(paymentSubjectInfo.getPaymentSubject());
                 TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
                 treeNode.addChild(dirNode);

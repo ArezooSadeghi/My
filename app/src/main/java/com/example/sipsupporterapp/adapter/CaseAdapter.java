@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CaseAdapterItemBinding;
-import com.example.sipsupporterapp.model.CaseInfo;
+import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.TaskViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -26,9 +26,9 @@ import java.util.Random;
 public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     private Context context;
     private TaskViewModel viewModel;
-    private List<CaseInfo> caseInfoList;
+    private List<CaseResult.CaseInfo> caseInfoList;
 
-    public CaseAdapter(Context context, TaskViewModel viewModel, List<CaseInfo> caseInfoList) {
+    public CaseAdapter(Context context, TaskViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.caseInfoList = caseInfoList;
@@ -74,6 +74,10 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                     @Override
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
+                            case 0:
+                                viewModel.getCaseProductsClicked().setValue(caseInfoList.get(position).getCaseID());
+                                powerMenu.dismiss();
+                                break;
                             case 2:
                                 viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
@@ -124,12 +128,29 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             this.binding = binding;
         }
 
-        public void bindCaseInfo(CaseInfo caseInfo) {
+        public void bindCaseInfo(CaseResult.CaseInfo caseInfo) {
             binding.txtCaseID.setText(String.valueOf(caseInfo.getCaseID()));
             binding.txtDescription.setText(caseInfo.getDescription());
             binding.txtCustomerName.setText(caseInfo.getCustomerName());
             binding.txtUserFullName.setText(Converter.letterConverter(caseInfo.getUserFullName()));
             binding.txtAddTime.setText(formatDate(caseInfo.getAddTime()));
+
+           /* if (caseInfo.getCaseProduct().length != 0) {
+                binding.recyclerViewProductsNameContainer.setVisibility(View.VISIBLE);
+
+                binding.recyclerViewProductsName.setLayoutManager(new LinearLayoutManager(context));
+                binding.recyclerViewProductsName.addItemDecoration(new DividerItemDecoration(
+                        binding.recyclerViewProductsName.getContext(),
+                        DividerItemDecoration.VERTICAL));
+
+                List<String> productNameList = new ArrayList<>();
+                for (CaseProductInfo caseProductInfo : caseInfo.getCaseProduct()) {
+                    productNameList.add(caseProductInfo.getProductName());
+                }
+
+                ProductAdapter adapter = new ProductAdapter(context, productNameList);
+                binding.recyclerViewProductsName.setAdapter(adapter);
+            }*/
         }
 
         private String formatDate(long addTime) {

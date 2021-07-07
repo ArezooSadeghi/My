@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
@@ -73,7 +72,7 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         repository.fetchSupportEventsResult(path, userLoginKey);
     }
 
-    public void addCustomerSupport(String path, String userLoginKey, CustomerSupportInfo customerSupportInfo) {
+    public void addCustomerSupport(String path, String userLoginKey, CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
         repository.addCustomerSupport(path, userLoginKey, customerSupportInfo);
     }
 }

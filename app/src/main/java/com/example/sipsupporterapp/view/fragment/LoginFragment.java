@@ -20,8 +20,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentLoginBinding;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.model.UserInfo;
-import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.MainActivity;
@@ -138,7 +136,7 @@ public class LoginFragment extends Fragment {
                         String userName = binding.edTextUserName.getText().toString().replaceAll(" ", "");
                         String password = binding.edTextPassword.getText().toString().replaceAll(" ", "");
 
-                        UserLoginParameter userLoginParameter = new UserLoginParameter(userName, password);
+                        UserResult.UserLoginParameter userLoginParameter = new UserResult().new UserLoginParameter(userName, password);
 
                         if (spinnerValue != null) {
                             ServerData serverData = viewModel.getServerData(spinnerValue);
@@ -198,7 +196,7 @@ public class LoginFragment extends Fragment {
                             .setUserName(getContext(), binding.edTextUserName.getText().toString());
                     SipSupportSharedPreferences.setCenterName(getContext(), spinnerValue);
                     binding.loadingLayout.setVisibility(View.GONE);
-                    UserInfo[] userInfoArray = userResult.getUsers();
+                    UserResult.UserInfo[] userInfoArray = userResult.getUsers();
                     if (userInfoArray.length != 0) {
                         SipSupportSharedPreferences
                                 .setUserLoginKey(getContext(), userInfoArray[0].getUserLoginKey());

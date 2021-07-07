@@ -19,9 +19,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.PaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPaymentBinding;
 import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
-import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -44,7 +42,7 @@ public class PaymentFragment extends Fragment {
     private ServerData serverData;
     private String lastValueSpinner, centerName, userLoginKey;
     private int paymentID, bankAccountID;
-    private BankAccountInfo[] bankAccountInfoArray;
+    private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
 
     public static PaymentFragment newInstance() {
         PaymentFragment fragment = new PaymentFragment();
@@ -118,7 +116,7 @@ public class PaymentFragment extends Fragment {
         });
     }
 
-    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
+    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
         String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
         for (int i = 0; i < bankAccountNameArray.length; i++) {
             bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
@@ -133,7 +131,7 @@ public class PaymentFragment extends Fragment {
                 for (int i = 0; i < bankAccountInfoArray.length; i++) {
                     if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
                         lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
-                        BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
+                        BankAccountResult.BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
                         bankAccountID = bankAccountInfo.getBankAccountID();
                         bankAccountNameArray[i] = bankAccountNameArray[0];
                         bankAccountNameArray[0] = lastValueSpinner;
@@ -164,8 +162,8 @@ public class PaymentFragment extends Fragment {
         viewModel.fetchBankAccounts(path, userLoginKey);
     }
 
-    private void setupAdapter(PaymentInfo[] paymentInfoArray) {
-        List<PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
+    private void setupAdapter(PaymentResult.PaymentInfo[] paymentInfoArray) {
+        List<PaymentResult.PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
         PaymentAdapter adapter = new PaymentAdapter(getContext(), viewModel, paymentInfoList);
         binding.recyclerViewCosts.setAdapter(adapter);
     }
@@ -219,17 +217,17 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<PaymentResult.PaymentInfo>() {
             @Override
-            public void onChanged(PaymentInfo paymentInfo) {
+            public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
                 AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(paymentInfo.getPaymentID(), paymentInfo.getDescription(), paymentInfo.getDatePayment(), paymentInfo.getPrice(), paymentInfo.getBankAccountID(), paymentInfo.getPaymentSubjectID(), paymentInfo.getPaymentSubject());
                 fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
             }
         });
 
-        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<PaymentResult.PaymentInfo>() {
             @Override
-            public void onChanged(PaymentInfo paymentInfo) {
+            public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
                 paymentID = paymentInfo.getPaymentID();
                 QuestionDeletePaymentDialogFragment fragment = QuestionDeletePaymentDialogFragment.newInstance(getString(R.string.question_delete_cost_message));
                 fragment.show(getParentFragmentManager(), QuestionDeletePaymentDialogFragment.TAG);
@@ -257,9 +255,9 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getSeePaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<PaymentInfo>() {
+        viewModel.getSeePaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<PaymentResult.PaymentInfo>() {
             @Override
-            public void onChanged(PaymentInfo paymentInfo) {
+            public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, 0, paymentInfo.getPaymentID());
                 startActivity(starter);
             }

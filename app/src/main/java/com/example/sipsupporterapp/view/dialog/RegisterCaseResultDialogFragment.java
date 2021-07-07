@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentRegisterCaseResultDialogBinding;
-import com.example.sipsupporterapp.model.CaseInfo;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -146,7 +145,7 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CaseInfo caseInfo = new CaseInfo();
+                CaseResult.CaseInfo caseInfo = new CaseResult().new CaseInfo();
 
                 int caseID = getArguments().getInt(ARGS_CASE_ID);
                 caseInfo.setCaseID(caseID);
@@ -164,7 +163,7 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
         });
     }
 
-    private void closeCase(CaseInfo caseInfo) {
+    private void closeCase(CaseResult.CaseInfo caseInfo) {
         viewModel.getSipSupporterServiceCloseCase(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Case/Close/";
         viewModel.closeCase(path, userLoginKey, caseInfo);

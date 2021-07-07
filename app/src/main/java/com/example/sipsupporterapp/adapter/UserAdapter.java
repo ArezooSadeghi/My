@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.UserAdapterItemBinding;
-import com.example.sipsupporterapp.model.CustomerUserInfo;
+import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.UserViewModel;
@@ -22,10 +22,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
 
     private Context context;
     private UserViewModel viewModel;
-    private List<CustomerUserInfo> customerUserInfoList;
+    private List<CustomerUserResult.CustomerUserInfo> customerUserInfoList;
     private String date;
 
-    public UserAdapter(Context context, UserViewModel viewModel, List<CustomerUserInfo> customerUserInfoList, String date) {
+    public UserAdapter(Context context, UserViewModel viewModel, List<CustomerUserResult.CustomerUserInfo> customerUserInfoList, String date) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerUserInfoList = customerUserInfoList;
@@ -87,7 +87,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerUserInfo info) {
+        public void bindCustomerSupportInfo(CustomerUserResult.CustomerUserInfo info) {
             String userName = Converter.letterConverter(info.getUserName());
             binding.txtCustomerUserName.setText(userName);
             binding.txtLastSeen.setText(info.getLastSeen());

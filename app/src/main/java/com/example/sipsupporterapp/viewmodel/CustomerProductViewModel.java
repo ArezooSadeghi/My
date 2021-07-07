@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -33,9 +32,9 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Boolean> dialogDismissed = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<CustomerProductInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerProductInfo> seeCustomerProductAttachmentsClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> seeCustomerProductAttachmentsClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
@@ -101,7 +100,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return dialogDismissed;
     }
 
-    public SingleLiveEvent<CustomerProductInfo> getEditClicked() {
+    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getEditClicked() {
         return editClicked;
     }
 
@@ -109,7 +108,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<CustomerProductInfo> getSeeCustomerProductAttachmentsClicked() {
+    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getSeeCustomerProductAttachmentsClicked() {
         return seeCustomerProductAttachmentsClicked;
     }
 
@@ -149,11 +148,11 @@ public class CustomerProductViewModel extends AndroidViewModel {
         repository.fetchCustomerProducts(path, userLoginKey);
     }
 
-    public void addCustomerProduct(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+    public void addCustomerProduct(String path, String userLoginKey, CustomerProductResult.CustomerProductInfo customerProductInfo) {
         repository.addCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
-    public void editCustomerProduct(String path, String userLoginKey, CustomerProductInfo customerProductInfo) {
+    public void editCustomerProduct(String path, String userLoginKey, CustomerProductResult.CustomerProductInfo customerProductInfo) {
         repository.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 

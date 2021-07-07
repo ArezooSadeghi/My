@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAttachmentDialogBinding;
-import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.ScaleBitmap;
@@ -224,7 +223,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
 
                     String base64 = convertBitmapToBase64();
 
-                    AttachInfo attachInfo = new AttachInfo();
+                    AttachResult.AttachInfo attachInfo = new AttachResult().new AttachInfo();
 
                     attachInfo.setCustomerSupportID(customerSupportID);
                     attachInfo.setCustomerProductID(customerProductID);
@@ -252,7 +251,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         }
     }
 
-    private void addAttachment(AttachInfo attachInfo) {
+    private void addAttachment(AttachResult.AttachInfo attachInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);

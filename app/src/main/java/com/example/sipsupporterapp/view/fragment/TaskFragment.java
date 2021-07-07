@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -18,9 +19,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CaseAdapter;
 import com.example.sipsupporterapp.databinding.FragmentTaskBinding;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
-import com.example.sipsupporterapp.model.CaseInfo;
 import com.example.sipsupporterapp.model.CaseResult;
-import com.example.sipsupporterapp.model.CaseTypeInfo;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -183,9 +182,9 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        viewModel.getCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<CaseInfo>() {
+        viewModel.getCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
             @Override
-            public void onChanged(CaseInfo caseInfo) {
+            public void onChanged(CaseResult.CaseInfo caseInfo) {
                 RegisterCaseResultDialogFragment fragment = RegisterCaseResultDialogFragment.newInstance(caseInfo.getCaseID(), caseInfo.isResultOk(), caseInfo.getResultDescription());
                 fragment.show(getParentFragmentManager(), RegisterCaseResultDialogFragment.TAG);
             }
@@ -231,9 +230,9 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CaseInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
             @Override
-            public void onChanged(CaseInfo caseInfo) {
+            public void onChanged(CaseResult.CaseInfo caseInfo) {
                 AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(
                         caseInfo.getCaseID(),
                         caseInfo.getCaseTypeID(),
@@ -275,9 +274,16 @@ public class TaskFragment extends Fragment {
                 fragment.show(getParentFragmentManager(), AssignDialogFragment.TAG);
             }
         });
+
+        viewModel.getCaseProductsClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer caseID) {
+                NavHostFragment.findNavController(TaskFragment.this).navigate(R.id.caseProductsFragment);
+            }
+        });
     }
 
-    private void setupSpinner(CaseTypeInfo[] caseTypeInfoArray) {
+    private void setupSpinner(CaseTypeResult.CaseTypeInfo[] caseTypeInfoArray) {
         for (int i = 0; i < caseTypeInfoArray.length; i++) {
             caseTypes.add(i, caseTypeInfoArray[i].getCaseType());
             caseTypeIDs.add(i, caseTypeInfoArray[i].getCaseTypeID());
@@ -293,7 +299,7 @@ public class TaskFragment extends Fragment {
         viewModel.fetchCasesByCaseType(path, userLoginKey, caseTypeID, search, showAll);
     }
 
-    private void setupAdapter(CaseInfo[] caseInfoArray) {
+    private void setupAdapter(CaseResult.CaseInfo[] caseInfoArray) {
         CaseAdapter adapter = new CaseAdapter(getContext(), viewModel, Arrays.asList(caseInfoArray));
         binding.recyclerViewCases.setAdapter(adapter);
     }

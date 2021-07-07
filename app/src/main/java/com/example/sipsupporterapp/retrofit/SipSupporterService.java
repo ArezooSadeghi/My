@@ -1,31 +1,23 @@
 package com.example.sipsupporterapp.retrofit;
 
-import com.example.sipsupporterapp.model.AssignInfo;
 import com.example.sipsupporterapp.model.AssignResult;
-import com.example.sipsupporterapp.model.AttachInfo;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.CaseInfo;
+import com.example.sipsupporterapp.model.CaseProductResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
-import com.example.sipsupporterapp.model.CommentInfo;
 import com.example.sipsupporterapp.model.CommentResult;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
-import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.CustomerResult;
-import com.example.sipsupporterapp.model.CustomerSupportInfo;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
-import com.example.sipsupporterapp.model.PaymentInfo;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ProductGroupResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.SupportEventResult;
-import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 
 import retrofit2.Call;
@@ -44,7 +36,7 @@ public interface SipSupporterService {
     Call<DateResult> fetchDate(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
 
     @POST("{path}")
-    Call<UserResult> login(@Path("path") String path, @Body UserLoginParameter userLoginParameter);
+    Call<UserResult> login(@Path("path") String path, @Body UserResult.UserLoginParameter userLoginParameter);
 
     @POST("{path}")
     Call<UserResult> changePassword(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body String newPassword);
@@ -56,7 +48,7 @@ public interface SipSupporterService {
     Call<CustomerSupportResult> fetchCustomerSupports(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
 
     @POST("{path}")
-    Call<CustomerSupportResult> addCustomerSupport(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerSupportInfo customerSupportInfo);
+    Call<CustomerSupportResult> addCustomerSupport(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerSupportResult.CustomerSupportInfo customerSupportInfo);
 
     @GET("{path}")
     Call<SupportEventResult> fetchSupportEvents(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
@@ -74,10 +66,10 @@ public interface SipSupporterService {
     Call<ProductResult> fetchProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("productID") int productID);
 
     @POST("{path}")
-    Call<CustomerProductResult> addCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProductInfo customerProductInfo);
+    Call<CustomerProductResult> addCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProductResult.CustomerProductInfo customerProductInfo);
 
     @PUT("{path}")
-    Call<CustomerProductResult> editCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProductInfo customerProductInfo);
+    Call<CustomerProductResult> editCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProductResult.CustomerProductInfo customerProductInfo);
 
     @DELETE("{path}")
     Call<CustomerProductResult> deleteCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID);
@@ -86,10 +78,10 @@ public interface SipSupporterService {
     Call<CustomerPaymentResult> fetchCustomerPayments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
 
     @POST("{path}")
-    Call<CustomerPaymentResult> addCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentInfo customerPaymentInfo);
+    Call<CustomerPaymentResult> addCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo);
 
     @PUT("{path}")
-    Call<CustomerPaymentResult> editCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentInfo customerPaymentInfo);
+    Call<CustomerPaymentResult> editCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo);
 
     @DELETE("{path}")
     Call<CustomerPaymentResult> deleteCustomerPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int customerPaymentID);
@@ -107,7 +99,7 @@ public interface SipSupporterService {
     Call<AttachResult> fetchPaymentAttachments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID, @Query("LoadFileData") boolean LoadFileData);
 
     @POST("{path}")
-    Call<AttachResult> attach(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AttachInfo attachInfo);
+    Call<AttachResult> attach(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AttachResult.AttachInfo attachInfo);
 
     @DELETE("{path}")
     Call<AttachResult> deleteAttach(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("attachID") int attachID);
@@ -125,10 +117,10 @@ public interface SipSupporterService {
     Call<PaymentSubjectResult> fetchPaymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentSubjectID") int paymentSubjectID);
 
     @POST("{path}")
-    Call<PaymentResult> addPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentInfo paymentInfo);
+    Call<PaymentResult> addPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentResult.PaymentInfo paymentInfo);
 
     @PUT("{path}")
-    Call<PaymentResult> editPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentInfo paymentInfo);
+    Call<PaymentResult> editPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentResult.PaymentInfo paymentInfo);
 
     @DELETE("{path}")
     Call<PaymentResult> deletePayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID);
@@ -149,19 +141,19 @@ public interface SipSupporterService {
     Call<CaseResult> fetchCasesByCaseType(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseTypeID") int caseTypeID, @Query("search") String search, @Query("showAll") boolean showAll);
 
     @POST("{path}")
-    Call<CaseResult> addCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
+    Call<CaseResult> addCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseResult.CaseInfo caseInfo);
 
     @DELETE("{path}")
     Call<CaseResult> deleteCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
 
     @PUT("{path}")
-    Call<CaseResult> editCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
+    Call<CaseResult> editCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseResult.CaseInfo caseInfo);
 
     @PUT("{path}")
-    Call<CaseResult> closeCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseInfo caseInfo);
+    Call<CaseResult> closeCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseResult.CaseInfo caseInfo);
 
     @POST("{path}")
-    Call<CommentResult> addComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentInfo commentInfo);
+    Call<CommentResult> addComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentResult.CommentInfo commentInfo);
 
     @GET("{path}")
     Call<CommentResult> fetchCommentsByCaseID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
@@ -170,20 +162,26 @@ public interface SipSupporterService {
     Call<CommentResult> deleteComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("commentID") int commentID);
 
     @PUT("{path}")
-    Call<CommentResult> editComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentInfo commentInfo);
+    Call<CommentResult> editComment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CommentResult.CommentInfo commentInfo);
 
     @GET("{path}")
     Call<UserResult> fetchUsers(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
 
     @POST("{path}")
-    Call<AssignResult> addAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignInfo assignInfo);
+    Call<AssignResult> addAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignResult.AssignInfo assignInfo);
 
     @GET("{path}")
     Call<AssignResult> fetchAssigns(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
 
     @PUT("{path}")
-    Call<AssignResult> editAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignInfo assignInfo);
+    Call<AssignResult> editAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignResult.AssignInfo assignInfo);
 
     @DELETE("{path}")
     Call<AssignResult> deleteAssign(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("assignID") int assignID);
+
+    @POST("{path}")
+    Call<CaseProductResult> addCaseProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseProductResult.CaseProductInfo caseProductInfo);
+
+    @GET("{path}")
+    Call<CaseProductResult> fetchCaseProductsWithSelected(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
 }

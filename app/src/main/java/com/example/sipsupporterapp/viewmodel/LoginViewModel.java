@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.model.UserLoginParameter;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
@@ -94,7 +93,7 @@ public class LoginViewModel extends AndroidViewModel {
         repository.insertServerData(serverData);
     }
 
-    public void fetchUserResult(String path, UserLoginParameter userLoginParameter) {
+    public void fetchUserResult(String path, UserResult.UserLoginParameter userLoginParameter) {
         repository.fetchUserResult(path, userLoginParameter);
     }
 

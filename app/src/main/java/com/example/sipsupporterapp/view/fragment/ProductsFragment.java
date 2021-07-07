@@ -21,9 +21,8 @@ import com.example.sipsupporterapp.adapter.FileNodeBinder;
 import com.example.sipsupporterapp.databinding.FragmentProductsBinding;
 import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
 import com.example.sipsupporterapp.model.Dir;
-import com.example.sipsupporterapp.model.ProductGroupInfo;
 import com.example.sipsupporterapp.model.ProductGroupResult;
-import com.example.sipsupporterapp.model.ProductInfo;
+import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -44,8 +43,8 @@ public class ProductsFragment extends Fragment {
     private ProductsViewModel viewModel;
 
     private List<TreeNode> treeNodeList = new ArrayList<>();
-    private List<ProductGroupInfo> productGroupInfoList = new ArrayList<>();
-    private List<ProductInfo> productInfoList = new ArrayList<>();
+    private List<ProductGroupResult.ProductGroupInfo> productGroupInfoList = new ArrayList<>();
+    private List<ProductResult.ProductInfo> productInfoList = new ArrayList<>();
     private TreeViewAdapter adapter;
     private ServerData serverData;
     private String userLoginKey, centerName;
@@ -114,7 +113,7 @@ public class ProductsFragment extends Fragment {
                 if (productGroupResult.getErrorCode().equals("0")) {
                     productGroupInfoList = Arrays.asList(productGroupResult.getProductGroups());
                     for (int i = 0; i < productGroupResult.getProductGroups().length; i++) {
-                        ProductGroupInfo productGroupInfo = productGroupResult.getProductGroups()[i];
+                        ProductGroupResult.ProductGroupInfo productGroupInfo = productGroupResult.getProductGroups()[i];
                         if (productGroupInfo.getParentID() == 0) {
                             String productGroup = Converter.letterConverter(productGroupInfo.getProductGroup());
                             TreeNode<Dir> dirNode = new TreeNode<>(new Dir(productGroup));
@@ -141,7 +140,7 @@ public class ProductsFragment extends Fragment {
     private void addChild(TreeNode treeNode, int productGroupID) {
         for (int i = 0; i < productGroupInfoList.size(); i++) {
             if (productGroupInfoList.get(i).getParentID() == productGroupID) {
-                ProductGroupInfo productGroupInfo = productGroupInfoList.get(i);
+                ProductGroupResult.ProductGroupInfo productGroupInfo = productGroupInfoList.get(i);
                 String paymentSubject = Converter.letterConverter(productGroupInfo.getProductGroup());
                 TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
                 treeNode.addChild(dirNode);

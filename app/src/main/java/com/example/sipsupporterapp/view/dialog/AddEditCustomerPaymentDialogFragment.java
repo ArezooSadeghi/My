@@ -20,9 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerPaymentDialogBinding;
-import com.example.sipsupporterapp.model.BankAccountInfo;
 import com.example.sipsupporterapp.model.BankAccountResult;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
@@ -49,7 +47,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private long price;
     private boolean showSpinnerBankAccounts;
     private int datePayment, customerID, customerPaymentID, bankAccountID, currentYear, currentMonth, currentDay;
-    private BankAccountInfo[] bankAccountInfoArray;
+    private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
 
     private static final String ARGS_DESCRIPTION = "description";
     private static final String ARGS_PRICE = "price";
@@ -135,14 +133,14 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     }
 
 
-    private void editCustomerPayment(CustomerPaymentInfo customerPaymentInfo) {
+    private void editCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupportServiceEditCustomerPayment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/Edit/";
         viewModel.editCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
     }
 
-    private void addCustomerPayment(CustomerPaymentInfo customerPaymentInfo) {
+    private void addCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
         viewModel.getSipSupporterServiceAddCustomerPayment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/Add/";
@@ -265,7 +263,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentInfo();
+                CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult().new CustomerPaymentInfo();
 
                 String bankAccountName = lastValueSpinner;
                 customerPaymentInfo.setBankAccountName(bankAccountName);
@@ -382,7 +380,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
+    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
         String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
         for (int i = 0; i < bankAccountInfoArray.length; i++) {
             bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
@@ -396,7 +394,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 for (int i = 0; i < bankAccountInfoArray.length; i++) {
                     if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
                         lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
-                        BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
+                        BankAccountResult.BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
                         bankAccountID = bankAccountInfo.getBankAccountID();
                         bankAccountNameArray[i] = bankAccountNameArray[0];
                         bankAccountNameArray[0] = lastValueSpinner;

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerPaymentAdapterItemBinding;
-import com.example.sipsupporterapp.model.CustomerPaymentInfo;
+import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -28,9 +28,9 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
 
     private Context context;
     private CustomerPaymentViewModel viewModel;
-    private List<CustomerPaymentInfo> customerPaymentInfoList;
+    private List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList;
 
-    public CustomerPaymentAdapter(Context context, CustomerPaymentViewModel viewModel, List<CustomerPaymentInfo> customerPaymentInfoList) {
+    public CustomerPaymentAdapter(Context context, CustomerPaymentViewModel viewModel, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerPaymentInfoList = customerPaymentInfoList;
@@ -98,7 +98,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             this.binding = binding;
         }
 
-        public void bindCustomerPaymentInfo(CustomerPaymentInfo info) {
+        public void bindCustomerPaymentInfo(CustomerPaymentResult.CustomerPaymentInfo info) {
             String bankAccountName = Converter.letterConverter(info.getBankAccountName());
             binding.txtBankAccountName.setText(bankAccountName);
             binding.txtBankAccountNo.setText(info.getBankAccountNO());

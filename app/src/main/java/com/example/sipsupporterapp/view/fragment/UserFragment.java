@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.UserAdapter;
 import com.example.sipsupporterapp.databinding.FragmentUserBinding;
-import com.example.sipsupporterapp.model.CustomerUserInfo;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -194,8 +193,8 @@ public class UserFragment extends Fragment {
         });
     }
 
-    private void setupAdapter(CustomerUserInfo[] customerUserInfoArray) {
-        List<CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
+    private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
+        List<CustomerUserResult.CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
         UserAdapter adapter = new UserAdapter(getContext(), viewModel, customerUserInfoList, date);
         binding.recyclerViewCustomerUsers.setAdapter(adapter);
     }

@@ -20,7 +20,6 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerBinding;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
-import com.example.sipsupporterapp.model.CustomerInfo;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -104,7 +103,7 @@ public class CustomerFragment extends Fragment {
                 DividerItemDecoration.VERTICAL));
     }
 
-    private void setupAdapter(List<CustomerInfo> customerInfoList) {
+    private void setupAdapter(List<CustomerResult.CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
                 getContext(),
                 viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()));
@@ -119,8 +118,8 @@ public class CustomerFragment extends Fragment {
 
                 if (customerResult.getErrorCode().equals("0")) {
                     binding.recyclerViewCustomers.setVisibility(View.VISIBLE);
-                    List<CustomerInfo> customerInfoList = new ArrayList<>();
-                    for (CustomerInfo customerInfo : customerResult.getCustomers()) {
+                    List<CustomerResult.CustomerInfo> customerInfoList = new ArrayList<>();
+                    for (CustomerResult.CustomerInfo customerInfo : customerResult.getCustomers()) {
                         customerInfoList.add(customerInfo);
                     }
                     setupAdapter(customerInfoList);

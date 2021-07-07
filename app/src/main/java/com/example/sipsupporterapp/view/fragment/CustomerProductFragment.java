@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerProductAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerProductBinding;
-import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
@@ -116,8 +115,8 @@ public class CustomerProductFragment extends Fragment {
         });
     }
 
-    private void setupAdapter(CustomerProductInfo[] customerProductInfoArray) {
-        List<CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
+    private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
+        List<CustomerProductResult.CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
         CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, customerProductInfoList);
         binding.recyclerViewProducts.setAdapter(adapter);
     }
@@ -208,9 +207,9 @@ public class CustomerProductFragment extends Fragment {
             }
         });
 
-        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerProductInfo>() {
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult.CustomerProductInfo>() {
             @Override
-            public void onChanged(CustomerProductInfo customerProductInfo) {
+            public void onChanged(CustomerProductResult.CustomerProductInfo customerProductInfo) {
                 AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
                         customerID,
                         customerProductInfo.getDescription(),
@@ -231,9 +230,9 @@ public class CustomerProductFragment extends Fragment {
         });
 
         viewModel.getSeeCustomerProductAttachmentsClicked()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerProductInfo>() {
+                .observe(getViewLifecycleOwner(), new Observer<CustomerProductResult.CustomerProductInfo>() {
                     @Override
-                    public void onChanged(CustomerProductInfo customerProductInfo) {
+                    public void onChanged(CustomerProductResult.CustomerProductInfo customerProductInfo) {
                         Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, customerProductInfo.getCustomerProductID(), 0, 0);
                         startActivity(starter);
                     }

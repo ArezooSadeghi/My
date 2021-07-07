@@ -22,8 +22,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditPaymentDialogBinding;
 import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
 import com.example.sipsupporterapp.eventbus.PostPaymentSubjectIDEvent;
-import com.example.sipsupporterapp.model.BankAccountInfo;
-import com.example.sipsupporterapp.model.PaymentInfo;
+import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -50,7 +49,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
 
     private int paymentID, datePayment, paymentSubjectID, bankAccountID, currentYear, currentMonth, currentDay;
     private String lastValueSpinner, description, paymentSubject, currentDate;
-    private BankAccountInfo[] bankAccountInfoArray;
+    private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
     private long price;
 
     private static final String ARGS_PAYMENT_ID = "paymentID";
@@ -205,7 +204,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupSpinner(BankAccountInfo[] bankAccountInfoArray) {
+    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
         String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
         for (int i = 0; i < bankAccountInfoArray.length; i++) {
             bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
@@ -219,7 +218,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 for (int i = 0; i < bankAccountInfoArray.length; i++) {
                     if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
                         lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
-                        BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
+                        BankAccountResult.BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
                         bankAccountID = bankAccountInfo.getBankAccountID();
                         bankAccountNameArray[i] = bankAccountNameArray[0];
                         bankAccountNameArray[0] = lastValueSpinner;
@@ -275,7 +274,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                     ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.zero_price));
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
-                    PaymentInfo paymentInfo = new PaymentInfo();
+                    PaymentResult.PaymentInfo paymentInfo = new PaymentResult().new PaymentInfo();
 
                     String bankAccountName = lastValueSpinner;
                     paymentInfo.setBankAccountName(bankAccountName);
@@ -402,7 +401,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         });
     }
 
-    private void editCost(PaymentInfo paymentInfo) {
+    private void editCost(PaymentResult.PaymentInfo paymentInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
@@ -411,7 +410,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.editPayment(path, userLoginKey, paymentInfo);
     }
 
-    private void addCost(PaymentInfo paymentInfo) {
+    private void addCost(PaymentResult.PaymentInfo paymentInfo) {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
