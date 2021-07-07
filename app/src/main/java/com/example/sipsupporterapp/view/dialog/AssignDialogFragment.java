@@ -187,7 +187,7 @@ public class AssignDialogFragment extends DialogFragment {
     }
 
     private void deleteAssign() {
-        viewModel.getSipSupporterServiceDeleteAssign(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Delete/";
         viewModel.deleteAssign(path, userLoginKey, assignID);
     }

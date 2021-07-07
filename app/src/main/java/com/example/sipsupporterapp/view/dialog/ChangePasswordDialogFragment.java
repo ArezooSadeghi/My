@@ -72,7 +72,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
                         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     } else {
                         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-                        viewModel.getSipSupporterServiceChangePassword(serverData.getIpAddress() + ":" + serverData.getPort());
+                        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
                         String path = "/api/v1/users/changePassword/";
                         viewModel.changePassword(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), binding.edTextNewPassword.getText().toString());
                     }

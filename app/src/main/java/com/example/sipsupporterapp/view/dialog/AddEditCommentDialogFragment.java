@@ -157,7 +157,7 @@ public class AddEditCommentDialogFragment extends DialogFragment {
     }
 
     private void editComment(CommentResult.CommentInfo commentInfo) {
-        viewModel.getSipSupporterServiceEditComment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/comment/Edit/";
         viewModel.editComment(path, userLoginKey, commentInfo);
     }

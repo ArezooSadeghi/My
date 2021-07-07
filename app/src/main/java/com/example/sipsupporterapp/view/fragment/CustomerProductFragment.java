@@ -128,7 +128,7 @@ public class CustomerProductFragment extends Fragment {
     }
 
     private void deleteProduct() {
-        viewModel.getSipSupporterServiceDeleteCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Delete/";
         viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
     }

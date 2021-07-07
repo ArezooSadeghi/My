@@ -210,7 +210,7 @@ public class TaskFragment extends Fragment {
         viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean yesDeleteClicked) {
-                viewModel.getSipSupporterServiceDeleteCase(serverData.getIpAddress() + ":" + serverData.getPort());
+                viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/Case/Delete/";
                 viewModel.deleteCase(path, userLoginKey, caseID);
             }

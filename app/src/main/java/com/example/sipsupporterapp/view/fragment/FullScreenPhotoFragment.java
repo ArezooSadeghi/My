@@ -110,7 +110,7 @@ public class FullScreenPhotoFragment extends Fragment {
 
     private void deleteAttachment() {
         int attachID = getArguments().getInt(ARGS_ATTACH_ID);
-        viewModel.getSipSupporterServiceForDeleteAttachment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Delete/";
         viewModel.deleteAttachment(path, userLoginKey, attachID);
     }

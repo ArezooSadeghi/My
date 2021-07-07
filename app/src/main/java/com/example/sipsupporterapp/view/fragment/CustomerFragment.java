@@ -72,7 +72,7 @@ public class CustomerFragment extends Fragment {
 
         if (SipSupportSharedPreferences.getLastSearchQuery(getContext()) != null) {
             binding.progressBarLoading.setVisibility(View.VISIBLE);
-            viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
+            viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
             String path = "/api/v1/customers/";
             viewModel.fetchCustomersResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
         }
@@ -174,7 +174,7 @@ public class CustomerFragment extends Fragment {
             @Override
             public void onChanged(String searchQuery) {
                 binding.progressBarLoading.setVisibility(View.VISIBLE);
-                viewModel.getSupporterServicePostCustomerParameter(serverData.getIpAddress() + ":" + serverData.getPort());
+                viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customers/search";
                 viewModel.fetchCustomersResult(path, userLoginKey, searchQuery);
             }

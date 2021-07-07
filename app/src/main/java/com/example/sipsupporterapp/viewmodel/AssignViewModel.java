@@ -84,24 +84,16 @@ public class AssignViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceUsers(String baseUrl) {
-        repository.getSipSupporterServiceUsers(baseUrl);
+    public void getSipSupporterServiceUserResult(String baseUrl) {
+        repository.getSipSupporterServiceUserResult(baseUrl);
     }
 
-    public void getSipSupporterServiceAddAssign(String baseUrl) {
-        repository.getSipSupporterServiceAddAssign(baseUrl);
+    public void getSipSupporterServiceAssignResult(String baseUrl) {
+        repository.getSipSupporterServiceAssignResult(baseUrl);
     }
 
     public void getSipSupporterServiceAssigns(String baseUrl) {
-        repository.getSipSupporterServiceAssigns(baseUrl);
-    }
-
-    public void getSipSupporterServiceEditAssign(String baseUrl) {
-        repository.getSipSupporterServiceEditAssign(baseUrl);
-    }
-
-    public void getSipSupporterServiceDeleteAssign(String baseUrl) {
-        repository.getSipSupporterServiceDeleteAssign(baseUrl);
+        repository.getSipSupporterServiceAssignResult(baseUrl);
     }
 
     public void fetchUsers(String path, String userLoginKey) {

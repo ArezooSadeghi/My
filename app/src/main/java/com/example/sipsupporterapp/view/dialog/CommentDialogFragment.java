@@ -147,13 +147,13 @@ public class CommentDialogFragment extends DialogFragment {
     }
 
     private void fetchComments() {
-        viewModel.getSipSupporterServiceCommentsByCaseID(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Comment/list_ByCaseID/";
         viewModel.fetchCommentsByCaseID(path, userLoginKey, caseID);
     }
 
     private void deleteComment() {
-        viewModel.getSipSupporterServiceDeleteComment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/comment/Delete/";
         viewModel.deleteComment(path, userLoginKey, commentID);
     }

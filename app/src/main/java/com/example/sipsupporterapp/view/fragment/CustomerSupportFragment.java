@@ -102,7 +102,7 @@ public class CustomerSupportFragment extends Fragment {
     }
 
     private void fetchCustomerSupports() {
-        viewModel.getSipSupportServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerSupports/ListByCustomer/";
         viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
     }

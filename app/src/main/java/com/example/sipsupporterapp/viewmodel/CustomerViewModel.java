@@ -85,8 +85,8 @@ public class CustomerViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSupporterServicePostCustomerParameter(String baseUrl) {
-        repository.getSupporterServicePostCustomerParameter(baseUrl);
+    public void getSupporterServiceCustomerResult(String baseUrl) {
+        repository.getSupporterServiceCustomerResult(baseUrl);
     }
 
     public void getSipSupporterServiceDateResult(String baseUrl) {

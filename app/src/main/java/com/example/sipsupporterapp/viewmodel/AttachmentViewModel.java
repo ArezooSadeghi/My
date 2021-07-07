@@ -156,23 +156,11 @@ public class AttachmentViewModel extends AndroidViewModel {
     }
 
     public void getSipSupporterServiceForAddAttachment(String baseUrl) {
-        mRepository.getSipSupportServiceAttach(baseUrl);
+        mRepository.getSipSupporterServiceAttachResult(baseUrl);
     }
 
-    public void getSipSupporterServiceForCustomerPaymentAttachments(String baseUrl) {
-        mRepository.getSipSupportServiceGetAttachmentFilesViaCustomerPaymentID(baseUrl);
-    }
-
-    public void getSipSupporterServiceForCustomerProductAttachments(String baseUrl) {
-        mRepository.getSipSupportServiceGetAttachmentFilesViaCustomerProductID(baseUrl);
-    }
-
-    public void getSipSupporterServiceForCustomerSupportAttachments(String baseUrl) {
-        mRepository.getSipSupportServiceGetAttachmentFilesViaCustomerSupportID(baseUrl);
-    }
-
-    public void getSipSupporterServiceForAttachInfo(String baseUrl) {
-        mRepository.getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(baseUrl);
+    public void getSipSupporterServiceAttachResult(String baseUrl) {
+        mRepository.getSipSupporterServiceAttachResult(baseUrl);
     }
 
     public void addAttachment(String path, String userLoginKey, AttachResult.AttachInfo attachInfo) {
@@ -197,14 +185,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public void deleteAttachment(String path, String userLoginKey, int attachID) {
         mRepository.deleteAttach(path, userLoginKey, attachID);
-    }
-
-    public void getSipSupporterServiceForDeleteAttachment(String baseUrl) {
-        mRepository.getSipSupportServiceDeleteAttach(baseUrl);
-    }
-
-    public void getSipSupporterServiceForPaymentAttachments(String baseUrl) {
-        mRepository.getSipSupportServiceGetAttachmentListByPaymentID(baseUrl);
     }
 
     public void fetchPaymentAttachments(String path, String userLoginKey, int paymentID, boolean LoadFileData) {

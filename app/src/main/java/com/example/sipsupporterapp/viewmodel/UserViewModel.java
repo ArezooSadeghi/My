@@ -72,8 +72,8 @@ public class UserViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceUsersResult(String baseUrl) {
-        repository.getSipSupporterServiceUsersResult(baseUrl);
+    public void getSipSupporterServiceCustomerUserResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerUserResult(baseUrl);
     }
 
     public void getSipSupporterServiceDateResult(String baseUrl) {

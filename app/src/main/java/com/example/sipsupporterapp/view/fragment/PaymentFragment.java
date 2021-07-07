@@ -145,19 +145,19 @@ public class PaymentFragment extends Fragment {
     }
 
     private void deleteCost() {
-        viewModel.getSipSupporterServiceDeletePayment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Delete/";
         viewModel.deletePayment(path, userLoginKey, paymentID);
     }
 
     private void fetchCostsByBankAccountID() {
-        viewModel.getSipSupporterServicePaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/ListByBankAccount/";
         viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     private void fetchBankAccounts() {
-        viewModel.getSipSupporterServiceBankAccounts(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/bankAccounts/List/";
         viewModel.fetchBankAccounts(path, userLoginKey);
     }

@@ -32,7 +32,7 @@ public class CaseProductsViewModel extends AndroidViewModel {
     }
 
     public void getSipSupporterServiceCaseProductsWithSelected(String baseUrl) {
-        repository.getSipSupporterServiceCaseProductsWithSelected(baseUrl);
+        repository.getSipSupporterServiceCaseProductResult(baseUrl);
     }
 
     public void fetchCaseProductsWithSelected(String path, String userLoginKey, int caseID) {

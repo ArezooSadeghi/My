@@ -140,23 +140,11 @@ public class TaskViewModel extends AndroidViewModel {
     }
 
     public void getSipSupporterServiceCasesByCaseType(String baseUrl) {
-        repository.getSipSupporterServiceCasesByCaseType(baseUrl);
+        repository.getSipSupporterServiceCaseResult(baseUrl);
     }
 
-    public void getSipSupporterServiceAddCase(String baseUrl) {
-        repository.getSipSupporterServiceAddCase(baseUrl);
-    }
-
-    public void getSipSupporterServiceDeleteCase(String baseUrl) {
-        repository.getSipSupporterServiceDeleteCase(baseUrl);
-    }
-
-    public void getSipSupporterServiceEditCase(String baseUrl) {
-        repository.getSipSupporterServiceEditCase(baseUrl);
-    }
-
-    public void getSipSupporterServiceCloseCase(String baseUrl) {
-        repository.getSipSupporterServiceCloseCase(baseUrl);
+    public void getSipSupporterServiceCaseResult(String baseUrl) {
+        repository.getSipSupporterServiceCaseResult(baseUrl);
     }
 
     public void fetchCaseTypes(String path, String userLoginKey) {

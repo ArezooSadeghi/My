@@ -248,31 +248,31 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void fetchCustomerSupportAttachments() {
-        viewModel.getSipSupporterServiceForCustomerSupportAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerSupport/";
         viewModel.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, false);
     }
 
     private void fetchCustomerProductAttachments() {
-        viewModel.getSipSupporterServiceForCustomerProductAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerProduct/";
         viewModel.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, false);
     }
 
     private void fetchCustomerPaymentAttachments() {
-        viewModel.getSipSupporterServiceForCustomerPaymentAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerPayment/";
         viewModel.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, false);
     }
 
     private void fetchPaymentAttachments() {
-        viewModel.getSipSupporterServiceForPaymentAttachments(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByPayment/";
         viewModel.fetchPaymentAttachments(path, userLoginKey, paymentID, false);
     }
 
     private void fetchAttachInfo(int attachID) {
-        viewModel.getSipSupporterServiceForAttachInfo(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Info/";
         viewModel.fetchAttachInfo(path, userLoginKey, attachID, true);
     }

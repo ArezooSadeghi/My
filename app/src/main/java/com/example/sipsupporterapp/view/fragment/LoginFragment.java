@@ -140,7 +140,7 @@ public class LoginFragment extends Fragment {
 
                         if (spinnerValue != null) {
                             ServerData serverData = viewModel.getServerData(spinnerValue);
-                            viewModel.getSipSupportServicePostUserLoginParameter(
+                            viewModel.getSipSupporterServiceUserResult(
                                     serverData.getIpAddress() + ":" + serverData.getPort());
                             String path = "/api/v1/users/Login/";
                             viewModel.fetchUserResult(path, userLoginParameter);

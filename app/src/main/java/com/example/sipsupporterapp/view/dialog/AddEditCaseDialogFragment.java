@@ -222,11 +222,11 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 }
 
                 if (caseID == 0) {
-                    viewModel.getSipSupporterServiceAddCase(serverData.getIpAddress() + ":" + serverData.getPort());
+                    viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
                     String path = "/api/v1/case/Add/";
                     viewModel.addCase(path, userLoginKey, caseInfo);
                 } else {
-                    viewModel.getSipSupporterServiceEditCase(serverData.getIpAddress() + ":" + serverData.getPort());
+                    viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
                     String path = "/api/v1/Case/Edit/";
                     viewModel.editCase(path, userLoginKey, caseInfo);
                 }

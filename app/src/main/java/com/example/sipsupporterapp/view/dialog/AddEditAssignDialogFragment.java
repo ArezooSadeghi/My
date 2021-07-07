@@ -139,7 +139,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
     }
 
     private void fetchUsers() {
-        viewModel.getSipSupporterServiceUsers(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/users/List/";
         viewModel.fetchUsers(path, userLoginKey);
     }
@@ -203,13 +203,13 @@ public class AddEditAssignDialogFragment extends DialogFragment {
     }
 
     private void addAssign(AssignResult.AssignInfo assignInfo) {
-        viewModel.getSipSupporterServiceAddAssign(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Add/";
         viewModel.addAssign(path, userLoginKey, assignInfo);
     }
 
     private void editAssign(AssignResult.AssignInfo assignInfo) {
-        viewModel.getSipSupporterServiceEditAssign(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Edit/";
         viewModel.editAssign(path, userLoginKey, assignInfo);
     }

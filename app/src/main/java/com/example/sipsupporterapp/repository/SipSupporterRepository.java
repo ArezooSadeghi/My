@@ -198,53 +198,39 @@ public class SipSupporterRepository {
         return instance;
     }
 
-    public void getSipSupportServicePostUserLoginParameter(String baseUrl) {
+    public void getSipSupporterServiceUserResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<UserResult>() {
                 }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSupporterServicePostCustomerParameter(String baseUrl) {
+    public void getSupporterServiceCustomerResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerResult>() {
                 }.getType(), new CustomerResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceChangePassword(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<UserResult>() {
-                }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServiceCustomerSupportResult(String baseUrl) {
+    public void getSipSupporterServiceCustomerSupportResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerSupportResult>() {
                 }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceUsersResult(String baseUrl) {
+    public void getSipSupporterServiceCustomerUserResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerUserResult>() {
                 }.getType(), new CustomerUserResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceSupportEventsResult(String baseUrl) {
+    public void getSipSupporterServiceSupportEventResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<SupportEventResult>() {
                 }.getType(), new SupportEventResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceAddCustomerSupportResult(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerSupportResult>() {
-                }.getType(), new CustomerSupportResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupporterServiceDateResult(String baseUrl) {
@@ -254,186 +240,53 @@ public class SipSupporterRepository {
                 }.getType(), new DateResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceCustomerProductsResult(String baseUrl) {
+    public void getSipSupporterServiceCustomerProductResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerProductResult>() {
                 }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceProductsResult(String baseUrl) {
+    public void getSipSupporterServiceProductResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<ProductResult>() {
                 }.getType(), new ProductResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceAddCustomerProduct(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerProductResult>() {
-                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceProductInfo(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<ProductResult>() {
-                }.getType(), new ProductResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceDeleteCustomerProduct(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerProductResult>() {
-                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceEditCustomerProduct(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerProductResult>() {
-                }.getType(), new CustomerProductResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServiceAttach(String baseUrl) {
+    public void getSipSupporterServiceAttachResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<AttachResult>() {
                 }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceCustomerPaymentsResult(String baseUrl) {
+    public void getSipSupporterServiceCustomerPaymentResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
                 }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceGetAttachmentFilesViaCustomerPaymentID(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServiceGetAttachmentFileViaAttachIDRetrofitInstance(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceAddCustomerPayment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceEditCustomerPayment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceDeleteCustomerPayment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceBankAccountsResult(String baseUrl) {
+    public void getSipSupporterServiceBankAccountResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerPaymentResult>() {
                 }.getType(), new BankAccountResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupportServiceGetAttachmentFilesViaCustomerProductID(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServiceGetAttachmentFilesViaCustomerSupportID(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServicePaymentsListByBankAccount(String baseUrl) {
+    public void getSipSupporterServicePaymentResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<PaymentResult>() {
                 }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceEditPayment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceDeletePayment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceAddPayment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<PaymentResult>() {
-                }.getType(), new PaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServicePaymentSubjects(String baseUrl) {
+    public void getSipSupporterServicePaymentSubjectResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<PaymentSubjectResult>() {
                 }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServiceDeleteAttach(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupportServiceGetAttachmentListByPaymentID(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AttachResult>() {
-                }.getType(), new AttachResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServicePaymentInfo(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<PaymentSubjectResult>() {
-                }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceCustomerPaymentsByBankAccount(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceBankAccounts(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CustomerPaymentResult>() {
-                }.getType(), new CustomerPaymentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public void getSipSupporterServiceProductGroups(String baseUrl) {
@@ -450,112 +303,28 @@ public class SipSupporterRepository {
                 }.getType(), new CaseTypeResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceCasesByCaseType(String baseUrl) {
+    public void getSipSupporterServiceCaseResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CaseResult>() {
                 }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceAddCase(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CaseResult>() {
-                }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceDeleteCase(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CaseResult>() {
-                }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceEditCase(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CaseResult>() {
-                }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceCloseCase(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CaseResult>() {
-                }.getType(), new CaseResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceAddComment(String baseUrl) {
+    public void getSipSupporterServiceCommentResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CommentResult>() {
                 }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceCommentsByCaseID(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CommentResult>() {
-                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceDeleteComment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CommentResult>() {
-                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceEditComment(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CommentResult>() {
-                }.getType(), new CommentResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceUsers(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<UserResult>() {
-                }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceAddAssign(String baseUrl) {
+    public void getSipSupporterServiceAssignResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<AssignResult>() {
                 }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceAssigns(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AssignResult>() {
-                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceEditAssign(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AssignResult>() {
-                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceDeleteAssign(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<AssignResult>() {
-                }.getType(), new AssignResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceAddCaseProduct(String baseUrl) {
-        RetrofitInstance.getNewBaseUrl(baseUrl);
-        sipSupporterService = RetrofitInstance
-                .getRI(new TypeToken<CaseProductResult>() {
-                }.getType(), new CaseProductResultDeserializer(), context).create(SipSupporterService.class);
-    }
-
-    public void getSipSupporterServiceCaseProductsWithSelected(String baseUrl) {
+    public void getSipSupporterServiceCaseProductResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CaseProductResult>() {

@@ -405,7 +405,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceEditPayment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Edit/";
         viewModel.editPayment(path, userLoginKey, paymentInfo);
     }
@@ -414,7 +414,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceAddPayment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Add/";
         viewModel.addPayment(path, userLoginKey, paymentInfo);
     }
@@ -423,7 +423,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServicePaymentInfo(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServicePaymentSubjectResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/paymentSubjects/Info/";
         viewModel.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
     }

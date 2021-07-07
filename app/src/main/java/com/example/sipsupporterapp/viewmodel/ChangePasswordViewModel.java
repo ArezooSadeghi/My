@@ -51,8 +51,8 @@ public class ChangePasswordViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceChangePassword(String baseUrl) {
-        repository.getSipSupporterServiceChangePassword(baseUrl);
+    public void getSipSupporterServiceCustomerUserResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerUserResult(baseUrl);
     }
 
     public void changePassword(String path, String userLoginKey, String newPassword) {

@@ -117,30 +117,21 @@ public class PaymentViewModel extends AndroidViewModel {
         return paymentSubjectInfoResultSingleLiveEvent;
     }
 
-    public void getSipSupporterServiceBankAccounts(String baseUrl) {
-        repository.getSipSupporterServiceBankAccountsResult(baseUrl);
+    public void getSipSupporterServiceBankAccountResult(String baseUrl) {
+        repository.getSipSupporterServiceBankAccountResult(baseUrl);
     }
 
-    public void getSipSupporterServicePaymentsByBankAccount(String baseUrl) {
-        repository.getSipSupportServicePaymentsListByBankAccount(baseUrl);
+    public void getSipSupporterServicePaymentResult(String baseUrl) {
+        repository.getSipSupporterServicePaymentResult(baseUrl);
     }
 
-    public void getSipSupporterServiceAddPayment(String baseUrl) {
-        repository.getSipSupporterServiceAddPayment(baseUrl);
+    public void getSipSupportServicePaymentResult(String baseUrl) {
+        repository.getSipSupporterServicePaymentResult(baseUrl);
     }
 
-    public void getSipSupporterServiceEditPayment(String baseUrl) {
-        repository.getSipSupporterServiceEditPayment(baseUrl);
+    public void getSipSupporterServicePaymentSubjectResult(String baseUrl) {
+        repository.getSipSupporterServicePaymentSubjectResult(baseUrl);
     }
-
-    public void getSipSupporterServiceDeletePayment(String baseUrl) {
-        repository.getSipSupporterServiceDeletePayment(baseUrl);
-    }
-
-    public void getSipSupporterServicePaymentInfo(String baseUrl) {
-        repository.getSipSupporterServicePaymentInfo(baseUrl);
-    }
-
 
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);

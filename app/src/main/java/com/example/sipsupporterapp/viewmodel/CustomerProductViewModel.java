@@ -121,27 +121,19 @@ public class CustomerProductViewModel extends AndroidViewModel {
     }
 
     public void getSipSupporterServiceProductsResult(String baseUrl) {
-        repository.getSipSupporterServiceProductsResult(baseUrl);
+        repository.getSipSupporterServiceProductResult(baseUrl);
     }
 
-    public void getSipSupporterServiceAddCustomerProduct(String baseUrl) {
-        repository.getSipSupporterServiceAddCustomerProduct(baseUrl);
+    public void getSipSupporterServiceCustomerProductResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerProductResult(baseUrl);
     }
 
-    public void getSipSupporterServiceEditCustomerProduct(String baseUrl) {
-        repository.getSipSupporterServiceEditCustomerProduct(baseUrl);
-    }
-
-    public void getSipSupporterServiceDeleteCustomerProduct(String baseUrl) {
-        repository.getSipSupporterServiceDeleteCustomerProduct(baseUrl);
-    }
-
-    public void getSipSupporterServiceProductInfo(String baseUrl) {
-        repository.getSipSupporterServiceProductInfo(baseUrl);
+    public void getSipSupporterServiceProductResult(String baseUrl) {
+        repository.getSipSupporterServiceProductResult(baseUrl);
     }
 
     public void getSipSupporterServiceCustomerProductsResult(String baseUrl) {
-        repository.getSipSupporterServiceCustomerProductsResult(baseUrl);
+        repository.getSipSupporterServiceCustomerProductResult(baseUrl);
     }
 
     public void fetchProducts(String path, String userLoginKey) {

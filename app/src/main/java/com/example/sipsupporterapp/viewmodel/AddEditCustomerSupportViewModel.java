@@ -60,12 +60,12 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceSupportEventsResult(String baseUrl) {
-        repository.getSipSupporterServiceSupportEventsResult(baseUrl);
+    public void getSipSupporterServiceSupportEventResult(String baseUrl) {
+        repository.getSipSupporterServiceSupportEventResult(baseUrl);
     }
 
-    public void getSipSupporterServiceAddCustomerSupportResult(String baseUrl) {
-        repository.getSipSupporterServiceAddCustomerSupportResult(baseUrl);
+    public void getSipSupporterServiceCustomerSupportResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerSupportResult(baseUrl);
     }
 
     public void fetchSupportEventsResult(String path, String userLoginKey) {

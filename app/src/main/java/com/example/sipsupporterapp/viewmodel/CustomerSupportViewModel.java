@@ -53,8 +53,8 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return seeCustomerSupportAttachmentsClicked;
     }
 
-    public void getSipSupportServiceCustomerSupportResult(String baseUrl) {
-        repository.getSipSupportServiceCustomerSupportResult(baseUrl);
+    public void getSipSupporterServiceCustomerSupportResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerSupportResult(baseUrl);
     }
 
     public ServerData getServerData(String centerName) {

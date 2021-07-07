@@ -122,27 +122,11 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     }
 
     public void getSipSupporterServiceCustomerPaymentsResult(String baseUrl) {
-        repository.getSipSupporterServiceCustomerPaymentsResult(baseUrl);
+        repository.getSipSupporterServiceCustomerPaymentResult(baseUrl);
     }
 
-    public void getSipSupporterServiceCustomerPaymentsByBankAccount(String baseUrl) {
-        repository.getSipSupporterServiceCustomerPaymentsByBankAccount(baseUrl);
-    }
-
-    public void getSipSupporterServiceBankAccounts(String baseUrl) {
-        repository.getSipSupporterServiceBankAccounts(baseUrl);
-    }
-
-    public void getSipSupporterServiceAddCustomerPayment(String baseUrl) {
-        repository.getSipSupporterServiceAddCustomerPayment(baseUrl);
-    }
-
-    public void getSipSupportServiceEditCustomerPayment(String baseUrl) {
-        repository.getSipSupporterServiceEditCustomerPayment(baseUrl);
-    }
-
-    public void getSipSupporterServiceDeleteCustomerPayment(String baseUrl) {
-        repository.getSipSupporterServiceDeleteCustomerPayment(baseUrl);
+    public void getSipSupporterServiceCustomerPaymentResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerPaymentResult(baseUrl);
     }
 
     public void fetchCustomerPaymentsResult(String path, String userLoginKey, int customerID) {

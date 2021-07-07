@@ -85,8 +85,8 @@ public class LoginViewModel extends AndroidViewModel {
         return yesDeleteIPAddressList;
     }
 
-    public void getSipSupportServicePostUserLoginParameter(String baseUrl) {
-        repository.getSipSupportServicePostUserLoginParameter(baseUrl);
+    public void getSipSupporterServiceUserResult(String baseUrl) {
+        repository.getSipSupporterServiceUserResult(baseUrl);
     }
 
     public void insertServerData(ServerData serverData) {

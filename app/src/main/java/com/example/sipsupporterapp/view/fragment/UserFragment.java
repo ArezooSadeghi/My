@@ -105,7 +105,7 @@ public class UserFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceUsersResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerUsers/userList/";
         viewModel.fetchUsers(path, userLoginKey, customerID);
     }

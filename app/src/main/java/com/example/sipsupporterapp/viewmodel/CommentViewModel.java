@@ -77,20 +77,12 @@ public class CommentViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceCommentsByCaseID(String baseUrl) {
-        repository.getSipSupporterServiceCommentsByCaseID(baseUrl);
+    public void getSipSupporterServiceCommentResult(String baseUrl) {
+        repository.getSipSupporterServiceCommentResult(baseUrl);
     }
 
     public void getSipSupporterServiceAddComment(String baseUrl) {
-        repository.getSipSupporterServiceAddComment(baseUrl);
-    }
-
-    public void getSipSupporterServiceDeleteComment(String baseUrl) {
-        repository.getSipSupporterServiceDeleteComment(baseUrl);
-    }
-
-    public void getSipSupporterServiceEditComment(String baseUrl) {
-        repository.getSipSupporterServiceEditComment(baseUrl);
+        repository.getSipSupporterServiceCommentResult(baseUrl);
     }
 
     public void fetchCommentsByCaseID(String path, String userLoginKey, int caseID) {

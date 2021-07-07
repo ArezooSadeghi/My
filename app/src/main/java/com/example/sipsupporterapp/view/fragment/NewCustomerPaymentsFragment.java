@@ -137,13 +137,13 @@ public class NewCustomerPaymentsFragment extends Fragment {
 
     private void fetchCustomerPaymentsByBankAccount(int bankAccountID) {
         binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.GONE ? View.VISIBLE : View.VISIBLE);
-        viewModel.getSipSupporterServiceCustomerPaymentsByBankAccount(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/CustomerPayments/ListByBankAccount/";
         viewModel.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     private void fetchBankAccounts() {
-        viewModel.getSipSupporterServiceBankAccounts(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/BankAccounts/List/";
         viewModel.fetchBankAccounts(path, userLoginKey);
     }
@@ -206,7 +206,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean okDeleteClicked) {
-                viewModel.getSipSupporterServiceDeleteCustomerPayment(serverData.getIpAddress() + ":" + serverData.getPort());
+                viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customerPayments/Delete/";
                 viewModel.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
             }

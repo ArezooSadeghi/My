@@ -274,19 +274,19 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     }
 
     private void fetchProductInfo() {
-        viewModel.getSipSupporterServiceProductInfo(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/products/Info/";
         viewModel.fetchProductInfo(path, userLoginKey, productGroupID);
     }
 
     private void editProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-        viewModel.getSipSupporterServiceEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Edit/";
         viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
     private void addProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-        viewModel.getSipSupporterServiceAddCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Add/";
         viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);
     }

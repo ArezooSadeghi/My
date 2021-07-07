@@ -164,7 +164,7 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
     }
 
     private void closeCase(CaseResult.CaseInfo caseInfo) {
-        viewModel.getSipSupporterServiceCloseCase(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Case/Close/";
         viewModel.closeCase(path, userLoginKey, caseInfo);
     }
