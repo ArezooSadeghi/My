@@ -74,6 +74,10 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                     @Override
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
+                            case 2:
+                                viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position).getCaseID());
+                                powerMenu.dismiss();
+                                break;
                             case 3:
                                 viewModel.getAssignToOthersClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();

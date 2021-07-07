@@ -23,12 +23,10 @@ import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerProductDia
 import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
 import com.example.sipsupporterapp.model.CustomerProductInfo;
 import com.example.sipsupporterapp.model.CustomerProductResult;
-import com.example.sipsupporterapp.model.ProductInfo;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.ProductsContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
 
@@ -44,35 +42,31 @@ import ir.hamsaa.persiandatepicker.api.PersianPickerDate;
 import ir.hamsaa.persiandatepicker.api.PersianPickerListener;
 
 public class AddEditCustomerProductDialogFragment extends DialogFragment {
-    public static final String ARGS_PRODUCT_ID = "productID";
     private FragmentAddEditCustomerProductDialogBinding binding;
     private CustomerProductViewModel viewModel;
 
-    private String lastValueSpinner, currentDate, productGroup;
+    private ServerData serverData;
+    private String currentDate, productGroup, centerName, userLoginKey;
     private int customerID, customerProductID, productID, currentYear, currentMonth, currentDay, productGroupID;
     private boolean finish, invoicePayment;
     private long invoicePrice, expireDate;
     private String description;
 
-    private ProductInfo[] productInfoArray;
-
-    private static final String ARGS_FINISH = "finish";
     private static final String ARGS_CUSTOMER_ID = "customerID";
     private static final String ARGS_DESCRIPTION = "description";
     private static final String ARGS_INVOICE_PRICE = "invoicePrice";
     private static final String ARGS_INVOICE_PAYMENT = "invoicePayment";
+    private static final String ARGS_FINISH = "finish";
     private static final String ARGS_EXPIRE_DATE = "expireDate";
     private static final String ARGS_CUSTOMER_PRODUCT_ID = "customerProductID";
+    private static final String ARGS_PRODUCT_ID = "productID";
 
     public static final String TAG = AddEditCustomerProductDialogFragment.class.getSimpleName();
 
-    public static AddEditCustomerProductDialogFragment newInstance(int customerID,
-                                                                   String description,
-                                                                   long invoicePrice,
-                                                                   boolean invoicePayment,
-                                                                   boolean finish, long expireDate, int customerProductID, int productID) {
+    public static AddEditCustomerProductDialogFragment newInstance(int customerID, String description, long invoicePrice, boolean invoicePayment, boolean finish, long expireDate, int customerProductID, int productID) {
         AddEditCustomerProductDialogFragment fragment = new AddEditCustomerProductDialogFragment();
         Bundle args = new Bundle();
+
         args.putInt(ARGS_CUSTOMER_ID, customerID);
         args.putString(ARGS_DESCRIPTION, description);
         args.putLong(ARGS_INVOICE_PRICE, invoicePrice);
@@ -81,6 +75,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         args.putLong(ARGS_EXPIRE_DATE, expireDate);
         args.putInt(ARGS_CUSTOMER_PRODUCT_ID, customerProductID);
         args.putInt(ARGS_PRODUCT_ID, productID);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,16 +85,20 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-        invoicePrice = getArguments().getLong(ARGS_INVOICE_PRICE);
-        finish = getArguments().getBoolean(ARGS_FINISH);
-        invoicePayment = getArguments().getBoolean(ARGS_INVOICE_PAYMENT);
         description = getArguments().getString(ARGS_DESCRIPTION);
-        customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
+        invoicePrice = getArguments().getLong(ARGS_INVOICE_PRICE);
+        invoicePayment = getArguments().getBoolean(ARGS_INVOICE_PAYMENT);
+        finish = getArguments().getBoolean(ARGS_FINISH);
         expireDate = getArguments().getLong(ARGS_EXPIRE_DATE);
+        customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
         productID = getArguments().getInt(ARGS_PRODUCT_ID);
 
         createViewModel();
-        fetchProducts();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+
         setupObserver();
     }
 
@@ -276,27 +275,18 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     }
 
     private void fetchProductInfo() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceProductInfo(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/products/Info/";
         viewModel.fetchProductInfo(path, userLoginKey, productGroupID);
     }
 
     private void editProduct(CustomerProductInfo customerProductInfo) {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceEditCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Edit/";
         viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
     private void addProduct(CustomerProductInfo customerProductInfo) {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceAddCustomerProduct(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Add/";
         viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);
@@ -341,30 +331,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerProductViewModel.class);
     }
 
-    private void fetchProducts() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceProductsResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/products/List/";
-        viewModel.fetchProducts(path, userLoginKey);
-    }
-
     private void setupObserver() {
-        viewModel.getProductsResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
-            @Override
-            public void onChanged(ProductResult productResult) {
-                if (productResult.getErrorCode().equals("0")) {
-                    productInfoArray = productResult.getProducts();
-                    setupSpinner(productResult.getProducts());
-                    fetchProductInfo();
-                } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                }
-            }
-        });
-
         viewModel.getAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
@@ -426,48 +393,6 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
             }
         });
-
-        viewModel.getDangerousUserSingleLiveEvent().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isDangerousUser) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.start(getContext());
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
-    }
-
-    private void setupSpinner(ProductInfo[] productInfoArray) {
-       /* String[] productNameArray = new String[productInfoArray.length];
-        for (int i = 0; i < productNameArray.length; i++) {
-            productNameArray[i] = productInfoArray[i].getProductName();
-        }
-        if (productNameArray.length != 0) {
-            if (productID == 0) {
-                lastValueSpinner = productNameArray[0];
-                productID = productInfoArray[0].getProductID();
-                binding.spinnerProducts.setItems(productNameArray);
-            } else {
-                for (int i = 0; i < productInfoArray.length; i++) {
-                    if (productInfoArray[i].getProductID() == productID) {
-                        lastValueSpinner = productInfoArray[i].getProductName();
-                        ProductInfo productInfo = productInfoArray[i];
-                        productID = productInfo.getProductID();
-                        productNameArray[i] = productNameArray[0];
-                        productNameArray[0] = lastValueSpinner;
-                        productInfoArray[i] = productInfoArray[0];
-                        productInfoArray[0] = productInfo;
-                    }
-                }
-                binding.spinnerProducts.setItems(productNameArray);
-            }
-        }*/
     }
 
     @Override

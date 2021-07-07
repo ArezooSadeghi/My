@@ -38,14 +38,11 @@ public class CustomerFragment extends Fragment {
     private FragmentCustomerBinding binding;
     private CustomerViewModel viewModel;
     private ServerData serverData;
-    private boolean isTask;
-    private static final String ARGS_IS_TASK = "isTask";
     private String centerName, userLoginKey;
 
-    public static CustomerFragment newInstance(boolean isTask) {
+    public static CustomerFragment newInstance() {
         CustomerFragment fragment = new CustomerFragment();
         Bundle args = new Bundle();
-        args.putBoolean(ARGS_IS_TASK, isTask);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +52,6 @@ public class CustomerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         createViewModel();
 
-        isTask = getArguments().getBoolean(ARGS_IS_TASK);
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
@@ -111,7 +107,7 @@ public class CustomerFragment extends Fragment {
     private void setupAdapter(List<CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
                 getContext(),
-                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()), isTask);
+                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()));
         binding.recyclerViewCustomers.setAdapter(adapter);
     }
 

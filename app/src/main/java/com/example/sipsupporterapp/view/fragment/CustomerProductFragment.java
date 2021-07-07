@@ -55,11 +55,12 @@ public class CustomerProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+        createViewModel();
+
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
 
-        createViewModel();
         fetchCustomerProducts();
     }
 
