@@ -51,12 +51,13 @@ public class CustomerSupportFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        createViewModel();
+
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
 
-        createViewModel();
         fetchCustomerSupports();
     }
 

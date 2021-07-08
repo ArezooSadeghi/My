@@ -79,6 +79,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        createViewModel();
+
         description = getArguments().getString(ARGS_DESCRIPTION);
         price = getArguments().getLong(ARGS_PRICE);
         datePayment = getArguments().getInt(ARGS_DATE_PAYMENT);
@@ -92,7 +94,6 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
-        createViewModel();
         if (showSpinnerBankAccounts) {
             fetchBankAccounts();
         }

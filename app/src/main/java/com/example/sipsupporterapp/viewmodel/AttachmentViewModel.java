@@ -20,7 +20,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> mDangerousUserSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> mIsAttachAgainSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mYesAgainSingleLiveEvent = new SingleLiveEvent<>();
@@ -56,7 +55,6 @@ public class AttachmentViewModel extends AndroidViewModel {
         attachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
-        mDangerousUserSingleLiveEvent = mRepository.getDangerousUserSingleLiveEvent();
 
         getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
 
@@ -89,10 +87,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return mDangerousUserSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getShowAttachAgainDialog() {

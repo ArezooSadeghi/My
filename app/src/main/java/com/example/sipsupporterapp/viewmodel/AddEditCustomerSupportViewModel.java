@@ -20,7 +20,6 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
     public AddEditCustomerSupportViewModel(@NonNull Application application) {
         super(application);
@@ -33,7 +32,6 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
     }
 
     public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
@@ -50,10 +48,6 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {
