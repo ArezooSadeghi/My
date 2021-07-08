@@ -184,4 +184,7 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CaseProductResult> fetchCaseProductsWithSelected(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @GET("{path}")
+    Call<CustomerResult> fetchCustomerInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
+import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
@@ -45,6 +46,13 @@ public class TaskViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Integer> caseProductsClicked = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent;
+
+    private SingleLiveEvent<Boolean> navigateToCustomerFragment = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+
     public TaskViewModel(@NonNull Application application) {
         super(application);
 
@@ -61,6 +69,11 @@ public class TaskViewModel extends AndroidViewModel {
         editCaseResultSingleLiveEvent = repository.getEditCaseResultSingleLiveEvent();
 
         closeCaseResultSingleLiveEvent = repository.getCloseCaseResultSingleLiveEvent();
+
+        customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
+
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
@@ -131,6 +144,22 @@ public class TaskViewModel extends AndroidViewModel {
         return caseProductsClicked;
     }
 
+    public SingleLiveEvent<CustomerResult> getCustomerInfoResultSingleLiveEvent() {
+        return customerInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getNavigateToCustomerFragment() {
+        return navigateToCustomerFragment;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -145,6 +174,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void getSipSupporterServiceCaseResult(String baseUrl) {
         repository.getSipSupporterServiceCaseResult(baseUrl);
+    }
+
+    public void getSupporterServiceCustomerResult(String baseUrl) {
+        repository.getSupporterServiceCustomerResult(baseUrl);
     }
 
     public void fetchCaseTypes(String path, String userLoginKey) {
@@ -169,5 +202,9 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void closeCase(String path, String userLoginKey, CaseResult.CaseInfo caseInfo) {
         repository.closeCase(path, userLoginKey, caseInfo);
+    }
+
+    public void fetchCustomerInfo(String path, String userLoginKey, int customerID) {
+        repository.fetchCustomerInfo(path, userLoginKey, customerID);
     }
 }

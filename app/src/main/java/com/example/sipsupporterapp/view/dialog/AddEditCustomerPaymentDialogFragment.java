@@ -43,7 +43,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private FragmentAddEditCustomerPaymentDialogBinding binding;
     private CustomerPaymentViewModel viewModel;
 
-    private String description, lastValueSpinner, currentDate;
+    private ServerData serverData;
+    private String description, lastValueSpinner, currentDate, centerName, userLoginKey;
     private long price;
     private boolean showSpinnerBankAccounts;
     private int datePayment, customerID, customerPaymentID, bankAccountID, currentYear, currentMonth, currentDay;
@@ -86,6 +87,11 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
         showSpinnerBankAccounts = getArguments().getBoolean(ARGS_SHOW_SPINNER_BANK_ACCOUNTS);
 
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+
         createViewModel();
         if (showSpinnerBankAccounts) {
             fetchBankAccounts();
@@ -124,25 +130,17 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     }
 
     private void fetchBankAccounts() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/bankAccounts/List/";
         viewModel.fetchBankAccounts(path, userLoginKey);
     }
 
 
     private void editCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-        ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/Edit/";
         viewModel.editCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
     }
 
     private void addCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-        ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/Add/";
         viewModel.addCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
     }
@@ -154,9 +152,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 if (bankAccountResult.getErrorCode().equals("0")) {
                     bankAccountInfoArray = bankAccountResult.getBankAccounts();
                     setupSpinner(bankAccountResult.getBankAccounts());
+                } else if (bankAccountResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(bankAccountResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(bankAccountResult.getError());
                 }
             }
         });
@@ -164,31 +163,14 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                handleError(message);
             }
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getDangerousUserSingleLiveEvent().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isDangerousUser) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                Intent intent = LoginContainerActivity.start(getContext());
-                startActivity(intent);
-                getActivity().finish();
+                handleError(message);
             }
         });
 
@@ -200,9 +182,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
                     dismiss();
+                } else if (customerPaymentResult.getErrorCode().equals(-9001)) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerPaymentResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(customerPaymentResult.getError());
                 }
             }
         });
@@ -215,12 +198,35 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdateListAddCustomerPaymentSingleLiveEvent().setValue(true);
                     dismiss();
+                } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerPaymentResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(customerPaymentResult.getError());
                 }
             }
         });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void initViews() {

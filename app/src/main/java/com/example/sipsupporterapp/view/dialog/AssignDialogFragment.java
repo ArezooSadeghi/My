@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.view.dialog;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.sipsupporterapp.databinding.FragmentAssignDialogBinding;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.AssignViewModel;
 
 import java.util.Arrays;
@@ -54,6 +56,7 @@ public class AssignDialogFragment extends DialogFragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
         fetchAssigns();
         setupObserver();
@@ -87,7 +90,6 @@ public class AssignDialogFragment extends DialogFragment {
     }
 
     private void fetchAssigns() {
-        viewModel.getSipSupporterServiceAssigns(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/List/";
         viewModel.fetchAssigns(path, userLoginKey, caseID);
     }
@@ -125,9 +127,10 @@ public class AssignDialogFragment extends DialogFragment {
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     fetchAssigns();
                     dismiss();
+                } else if (assignResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(assignResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(assignResult.getError());
                     dismiss();
                 }
             }
@@ -145,9 +148,10 @@ public class AssignDialogFragment extends DialogFragment {
             public void onChanged(AssignResult assignResult) {
                 if (assignResult.getErrorCode().equals("0")) {
                     setupAdapter(assignResult.getAssigns());
+                } else if (assignResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(assignResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(assignResult.getError());
                 }
             }
         });
@@ -158,6 +162,42 @@ public class AssignDialogFragment extends DialogFragment {
                 fetchAssigns();
             }
         });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void initViews() {
@@ -187,7 +227,6 @@ public class AssignDialogFragment extends DialogFragment {
     }
 
     private void deleteAssign() {
-        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Delete/";
         viewModel.deleteAssign(path, userLoginKey, assignID);
     }

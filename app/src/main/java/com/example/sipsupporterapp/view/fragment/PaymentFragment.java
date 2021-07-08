@@ -23,6 +23,7 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -177,9 +178,10 @@ public class PaymentFragment extends Fragment {
                     bankAccountInfoArray = bankAccountResult.getBankAccounts();
                     setupSpinner(bankAccountResult.getBankAccounts());
                     fetchCostsByBankAccountID();
+                } else if (bankAccountResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(bankAccountResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(bankAccountResult.getError());
                 }
             }
         });
@@ -192,9 +194,10 @@ public class PaymentFragment extends Fragment {
                 if (paymentResult.getErrorCode().equals("0")) {
                     binding.recyclerViewCosts.setVisibility(View.VISIBLE);
                     setupAdapter(paymentResult.getPayments());
+                } else if (paymentResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                   handleError(paymentResult.getError());
                 }
             }
         });
@@ -203,8 +206,7 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+               handleError(message);
             }
         });
 
@@ -212,8 +214,7 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+               handleError(message);
             }
         });
 
@@ -248,9 +249,10 @@ public class PaymentFragment extends Fragment {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCostsByBankAccountID();
+                } else if (paymentResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                   handleError(paymentResult.getError());
                 }
             }
         });
@@ -276,5 +278,27 @@ public class PaymentFragment extends Fragment {
                 fetchCostsByBankAccountID();
             }
         });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }

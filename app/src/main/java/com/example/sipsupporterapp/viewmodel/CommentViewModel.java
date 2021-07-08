@@ -27,6 +27,9 @@ public class CommentViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Boolean> refreshComments = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+
     public CommentViewModel(@NonNull Application application) {
         super(application);
 
@@ -39,6 +42,9 @@ public class CommentViewModel extends AndroidViewModel {
         deleteCommentResultSingleLiveEvent = repository.getDeleteCommentResultSingleLiveEvent();
 
         editCommentResultSingleLiveEvent = repository.getEditCommentResultSingleLiveEvent();
+
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<Integer> getDeleteClicked() {
@@ -71,6 +77,14 @@ public class CommentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CommentResult> getEditCommentResultSingleLiveEvent() {
         return editCommentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {

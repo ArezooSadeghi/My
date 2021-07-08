@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.view.dialog;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.AssignViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -30,13 +32,14 @@ public class AddEditAssignDialogFragment extends DialogFragment {
     private AssignViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
-    private int assignUserID;
     private List<String> userFullNames = new ArrayList<>();
     private List<Integer> userIDs = new ArrayList<>();
+    private int assignUserID;
 
     private static final String ARGS_ASSIGN_ID = "assignID";
     private static final String ARGS_CASE_ID = "caseID";
     private static final String ARGS_DESCRIPTION = "description";
+
     public static final String TAG = AddEditAssignDialogFragment.class.getSimpleName();
 
     public static AddEditAssignDialogFragment newInstance(int assignID, int caseID, String description) {
@@ -60,6 +63,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
         fetchUsers();
         setupObserver();
@@ -90,58 +94,6 @@ public class AddEditAssignDialogFragment extends DialogFragment {
 
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(AssignViewModel.class);
-    }
-
-    private void setupObserver() {
-        viewModel.getUsersResultSingleLiveEvent().observe(this, new Observer<UserResult>() {
-            @Override
-            public void onChanged(UserResult userResult) {
-                if (userResult.getErrorCode().equals("0")) {
-                    setupSpinner(userResult.getUsers());
-                } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(userResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                }
-            }
-        });
-
-        viewModel.getAddAssignResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
-            @Override
-            public void onChanged(AssignResult assignResult) {
-                if (assignResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("موفقیت آمیز بود Assign");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefreshAssigns().setValue(true);
-                    dismiss();
-                } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(assignResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    dismiss();
-                }
-            }
-        });
-
-        viewModel.getEditAssignResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
-            @Override
-            public void onChanged(AssignResult assignResult) {
-                if (assignResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("موفقیت آمیز بود Assign");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefreshAssigns().setValue(true);
-                    dismiss();
-                } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(assignResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    dismiss();
-                }
-            }
-        });
-    }
-
-    private void fetchUsers() {
-        viewModel.getSipSupporterServiceUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/users/List/";
-        viewModel.fetchUsers(path, userLoginKey);
     }
 
     private void initViews() {
@@ -193,6 +145,91 @@ public class AddEditAssignDialogFragment extends DialogFragment {
         });
     }
 
+    private void setupObserver() {
+        viewModel.getUsersResultSingleLiveEvent().observe(this, new Observer<UserResult>() {
+            @Override
+            public void onChanged(UserResult userResult) {
+                if (userResult.getErrorCode().equals("0")) {
+                    setupSpinner(userResult.getUsers());
+                } else if (userResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(userResult.getError());
+                }
+            }
+        });
+
+        viewModel.getAddAssignResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
+            @Override
+            public void onChanged(AssignResult assignResult) {
+                if (assignResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("موفقیت آمیز بود Assign");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getRefreshAssigns().setValue(true);
+                    dismiss();
+                } else if (assignResult.getErrorCode().equals("0")) {
+                    ejectUser();
+                } else {
+                    handleError(assignResult.getError());
+                    dismiss();
+                }
+            }
+        });
+
+        viewModel.getEditAssignResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
+            @Override
+            public void onChanged(AssignResult assignResult) {
+                if (assignResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("موفقیت آمیز بود Assign");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getRefreshAssigns().setValue(true);
+                    dismiss();
+                } else if (assignResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(assignResult.getError());
+                    dismiss();
+                }
+            }
+        });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
+    }
+
     private void setupSpinner(UserResult.UserInfo[] userInfoArray) {
         for (int i = 0; i < userInfoArray.length; i++) {
             userFullNames.add(i, userInfoArray[i].getUserFullName());
@@ -202,14 +239,18 @@ public class AddEditAssignDialogFragment extends DialogFragment {
         binding.spinnerAssignUserFullName.setItems(userFullNames);
     }
 
+    private void fetchUsers() {
+        viewModel.getSipSupporterServiceUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/users/List/";
+        viewModel.fetchUsers(path, userLoginKey);
+    }
+
     private void addAssign(AssignResult.AssignInfo assignInfo) {
-        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Add/";
         viewModel.addAssign(path, userLoginKey, assignInfo);
     }
 
     private void editAssign(AssignResult.AssignInfo assignInfo) {
-        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Edit/";
         viewModel.editAssign(path, userLoginKey, assignInfo);
     }

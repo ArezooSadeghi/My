@@ -28,7 +28,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
     private SingleLiveEvent<Boolean> dialogDismissed = new SingleLiveEvent<>();
 
@@ -57,7 +56,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
     }
 
     public SingleLiveEvent<CustomerProductResult> getAddCustomerProductResultSingleLiveEvent() {
@@ -90,10 +88,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
         return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
     }
 
     public SingleLiveEvent<Boolean> getDialogDismissed() {

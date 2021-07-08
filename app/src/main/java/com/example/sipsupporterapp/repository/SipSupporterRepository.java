@@ -179,11 +179,11 @@ public class SipSupporterRepository {
 
     private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent = new SingleLiveEvent<>();
-
 
     private SipSupporterRepository(Context context) {
         this.context = context.getApplicationContext();
@@ -471,10 +471,6 @@ public class SipSupporterRepository {
         return wrongIpAddressSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
-    }
-
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
         return customerPaymentsByBankAccountResultSingleLiveEvent;
     }
@@ -549,6 +545,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CaseProductResult> getCaseProductsWithSelectedResultSingleLiveEvent() {
         return caseProductsWithSelectedResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerResult> getCustomerInfoResultSingleLiveEvent() {
+        return customerInfoResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2158,6 +2158,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCustomerInfo(String path, String userLoginKey, int customerID) {
+        sipSupporterService.fetchCustomerInfo(path, userLoginKey, customerID).enqueue(new Callback<CustomerResult>() {
+            @Override
+            public void onResponse(Call<CustomerResult> call, Response<CustomerResult> response) {
+                if (response.isSuccessful()) {
+                    customerInfoResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
+                        customerInfoResultSingleLiveEvent.setValue(customerResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

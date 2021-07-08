@@ -26,6 +26,7 @@ import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.ProductsContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
 
@@ -97,6 +98,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
         setupObserver();
     }
@@ -274,19 +276,16 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     }
 
     private void fetchProductInfo() {
-        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/products/Info/";
         viewModel.fetchProductInfo(path, userLoginKey, productGroupID);
     }
 
     private void editProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Edit/";
         viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
     private void addProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Add/";
         viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);
     }
@@ -339,9 +338,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getDialogDismissed().setValue(true);
                     dismiss();
+                } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerProductResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(customerProductResult.getError());
                 }
             }
         });
@@ -355,9 +355,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     } else {
                         binding.edTextInvoicePrice.setText(String.valueOf(invoicePrice));
                     }
+                } else if (productResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(productResult.getError());
                 }
             }
         });
@@ -370,9 +371,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getDialogDismissed().setValue(true);
                     dismiss();
+                } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerProductResult.getError());
-                    fragment.show(getActivity().getSupportFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(customerProductResult.getError());
                 }
             }
         });
@@ -380,18 +382,38 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+               handleError(message);
             }
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                handleError(message);
             }
         });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override

@@ -15,16 +15,30 @@ public class CaseProductsViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent;
 
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+
     public CaseProductsViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
 
         caseProductsWithSelectedResultSingleLiveEvent = repository.getCaseProductsWithSelectedResultSingleLiveEvent();
+
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseProductResult> getCaseProductsWithSelectedResultSingleLiveEvent() {
         return caseProductsWithSelectedResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {

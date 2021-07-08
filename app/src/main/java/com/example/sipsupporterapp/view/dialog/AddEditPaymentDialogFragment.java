@@ -47,8 +47,9 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     private FragmentAddEditPaymentDialogBinding binding;
     private PaymentViewModel viewModel;
 
+    private ServerData serverData;
     private int paymentID, datePayment, paymentSubjectID, bankAccountID, currentYear, currentMonth, currentDay;
-    private String lastValueSpinner, description, paymentSubject, currentDate;
+    private String lastValueSpinner, description, paymentSubject, currentDate, centerName, userLoginKey;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
     private long price;
 
@@ -81,6 +82,11 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
         paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
         description = getArguments().getString(ARGS_DESCRIPTION);
@@ -142,9 +148,10 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
                     dismiss();
+                } else if (paymentResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(paymentResult.getError());
                 }
             }
         });
@@ -157,9 +164,10 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
                     dismiss();
+                } else if (paymentResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(paymentResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                   handleError(paymentResult.getError());
                 }
             }
         });
@@ -167,31 +175,14 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+               handleError(message);
             }
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getDangerousUserSingleLiveEvent().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isDangerousUser) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.start(getContext());
-                startActivity(intent);
-                getActivity().finish();
+              handleError(message);
             }
         });
 
@@ -202,6 +193,28 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 binding.btnWhat.setText(paymentSubject);
             }
         });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
@@ -402,27 +415,16 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     }
 
     private void editCost(PaymentResult.PaymentInfo paymentInfo) {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Edit/";
         viewModel.editPayment(path, userLoginKey, paymentInfo);
     }
 
     private void addCost(PaymentResult.PaymentInfo paymentInfo) {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Add/";
         viewModel.addPayment(path, userLoginKey, paymentInfo);
     }
 
     private void fetchPaymentSubjectInfo(int paymentSubjectID) {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServicePaymentSubjectResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/paymentSubjects/Info/";
         viewModel.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);

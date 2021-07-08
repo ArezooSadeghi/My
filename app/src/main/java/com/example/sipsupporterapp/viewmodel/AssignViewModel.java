@@ -24,6 +24,9 @@ public class AssignViewModel extends AndroidViewModel {
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent;
     private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+
     public AssignViewModel(@NonNull Application application) {
         super(application);
 
@@ -38,6 +41,9 @@ public class AssignViewModel extends AndroidViewModel {
         editAssignResultSingleLiveEvent = repository.getEditAssignResultSingleLiveEvent();
 
         deleteAssignResultSingleLiveEvent = repository.getDeleteAssignResultSingleLiveEvent();
+
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<AssignResult.AssignInfo> getEditClicked() {
@@ -78,6 +84,14 @@ public class AssignViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Boolean> getYesDeleteClicked() {
         return yesDeleteClicked;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {

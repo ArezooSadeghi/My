@@ -15,6 +15,7 @@ public class SipSupportSharedPreferences {
     private static final String CUSTOMER_TEL = "customerTel";
     private static final String DATE = "date";
     private static final String FACTOR = "factor";
+    private static final String CASE_TYPE_ID = "caseTypeID";
 
 
     public static void setUserFullName(Context context, String userFullName) {
@@ -115,6 +116,16 @@ public class SipSupportSharedPreferences {
     public static String getFactor(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(FACTOR, null);
+    }
+
+    public static void setCaseTypeID(Context context, int caseTypeID) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putInt(CASE_TYPE_ID, caseTypeID).commit();
+    }
+
+    public static int getCaseTypeID(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getInt(CASE_TYPE_ID, 0);
     }
 
     private static SharedPreferences getSharedPreferences(Context context) {

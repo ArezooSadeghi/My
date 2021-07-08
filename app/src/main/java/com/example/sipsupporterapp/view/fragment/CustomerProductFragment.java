@@ -22,6 +22,7 @@ import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCustomerProductDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -151,9 +152,10 @@ public class CustomerProductFragment extends Fragment {
 
                     binding.txtCountProducts.setText("تعداد محصولات: " + stringBuilder.toString());
                     setupAdapter(productResult.getCustomerProducts());
+                } else if (productResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(productResult.getError());
                 }
             }
         });
@@ -162,8 +164,7 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+               handleError(message);
             }
         });
 
@@ -171,9 +172,7 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment
-                        .newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+               handleError(message);
             }
         });
 
@@ -200,9 +199,10 @@ public class CustomerProductFragment extends Fragment {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_product));
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCustomerProducts();
+                } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerProductResult.getError());
-                    fragment.show(getActivity().getSupportFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(customerProductResult.getError());
                 }
             }
         });
@@ -237,5 +237,27 @@ public class CustomerProductFragment extends Fragment {
                         startActivity(starter);
                     }
                 });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }

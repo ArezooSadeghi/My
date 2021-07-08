@@ -1,5 +1,6 @@
 package com.example.sipsupporterapp.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCaseDialogFragment;
 import com.example.sipsupporterapp.view.dialog.AssignDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ChangeCaseTypeDialogFragment;
@@ -138,6 +140,7 @@ public class TaskFragment extends Fragment {
                 for (int i = 0; i < caseTypes.size(); i++) {
                     if (caseType.equals(caseTypes.get(i))) {
                         caseTypeID = caseTypeIDs.get(i);
+                        SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
                         fetchCasesByCaseType(caseTypeIDs.get(i), "تست", true);
                         break;
                     }
@@ -160,9 +163,17 @@ public class TaskFragment extends Fragment {
             public void onChanged(CaseTypeResult caseTypeResult) {
                 if (caseTypeResult.getErrorCode().equals("0")) {
                     setupSpinner(caseTypeResult.getCaseTypes());
+                    TaskFragmentArgs args = TaskFragmentArgs.fromBundle(getArguments());
+                    customerID = args.getCustomerID();
+                    if (customerID != 0) {
+                        int caseTypeID = SipSupportSharedPreferences.getCaseTypeID(getContext());
+                        AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, "", 0, false, "");
+                        fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+                    }
+                } else if (caseTypeResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseTypeResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(caseTypeResult.getError());
                 }
             }
         });
@@ -174,10 +185,11 @@ public class TaskFragment extends Fragment {
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);
                     binding.recyclerViewCases.setVisibility(View.VISIBLE);
                     setupAdapter(caseResult.getCases());
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(caseResult.getError());
                 }
             }
         });
@@ -223,9 +235,10 @@ public class TaskFragment extends Fragment {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("حذف کار با موفقیت انجام شد");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCasesByCaseType(caseTypeID, "تست", true);
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(caseResult.getError());
                 }
             }
         });
@@ -281,6 +294,53 @@ public class TaskFragment extends Fragment {
                 NavHostFragment.findNavController(TaskFragment.this).navigate(R.id.caseProductsFragment);
             }
         });
+
+        viewModel.getNavigateToCustomerFragment().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean navigateToCustomerFragment) {
+                SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
+                TaskFragmentDirections.ActionMenuTasksToMenuSearch action =
+                        TaskFragmentDirections.actionMenuTasksToMenuSearch();
+                action.setIsCase(true);
+                NavHostFragment.findNavController(TaskFragment.this).navigate(action);
+            }
+        });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void setupSpinner(CaseTypeResult.CaseTypeInfo[] caseTypeInfoArray) {
@@ -288,8 +348,10 @@ public class TaskFragment extends Fragment {
             caseTypes.add(i, caseTypeInfoArray[i].getCaseType());
             caseTypeIDs.add(i, caseTypeInfoArray[i].getCaseTypeID());
         }
+
         binding.spinnerCaseTypes.setItems(caseTypes);
         caseTypeID = caseTypeIDs.get(0);
+        SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
         fetchCasesByCaseType(caseTypeIDs.get(0), "تست", true);
     }
 

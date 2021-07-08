@@ -64,12 +64,10 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (binding.edTextNewPassword.getText().toString().length() > 12 || binding.edTextRepeatNewPassword.getText().toString().length() > 12) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("حداکثر 12 کاراکتر مجاز می باشد");
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError("حداکثر 12 کاراکتر مجاز می باشد");
                 } else {
                     if (!binding.edTextNewPassword.getText().toString().equals(binding.edTextRepeatNewPassword.getText().toString())) {
-                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("عدم تطابق رمز ها");
-                        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                        handleError("عدم تطابق رمز ها");
                     } else {
                         ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
                         viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
@@ -98,42 +96,44 @@ public class ChangePasswordDialogFragment extends DialogFragment {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_change_password));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     dismiss();
+                } else if (userResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(userResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(userResult.getError());
                 }
-            }
-        });
-
-        viewModel.getDangerousUserSingleLiveEvent().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-                SipSupportSharedPreferences.setUserFullName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-                SipSupportSharedPreferences.setCustomerName(getContext(), null);
-                SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-                SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-                Intent intent = LoginContainerActivity.start(getContext());
-                startActivity(intent);
-                getActivity().finish();
             }
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                handleError(message);
             }
         });
 
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String error) {
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                handleError(error);
             }
         });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }

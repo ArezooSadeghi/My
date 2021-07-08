@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.view.dialog;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCaseDialogBinding;
 import com.example.sipsupporterapp.model.CaseResult;
+import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.TaskViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -27,13 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddEditCaseDialogFragment extends DialogFragment {
-    public static final String ARGS_CASE_ID = "caseID";
     private FragmentAddEditCaseDialogBinding binding;
     private TaskViewModel viewModel;
     private ServerData serverData;
-    private int customerID, caseID;
     private String centerName, userLoginKey, textPriority;
+    private int customerID, caseID;
 
+    private static final String ARGS_CASE_ID = "caseID";
     private static final String ARGS_CUSTOMER_ID = "CustomerID";
     private static final String ARGS_CUSTOMER_NAME = "CustomerName";
     private static final String ARGS_CASE_TYPE_ID = "caseTypeID";
@@ -69,6 +71,12 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
+        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+
+        if (customerID != 0) {
+            fetchCustomerInfo();
+        }
     }
 
     @NonNull
@@ -98,41 +106,29 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
     }
 
-    private void setupObserver() {
-        viewModel.getAddCaseResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
-            @Override
-            public void onChanged(CaseResult caseResult) {
-                if (caseResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("کار با موفقیت افزوده شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                }
-            }
-        });
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
 
-        viewModel.getEditCaseResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
-            @Override
-            public void onChanged(CaseResult caseResult) {
-                if (caseResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("کار با موفقیت افزوده شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefresh().setValue(true);
-                    dismiss();
-                } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    dismiss();
-                }
-            }
-        });
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void initViews() {
-        String customerName = Converter.letterConverter(getArguments().getString(ARGS_CUSTOMER_NAME));
-        binding.edTextCustomerName.setText(customerName);
-
         String description = getArguments().getString(ARGS_DESCRIPTION);
         binding.edTextDescription.setText(description);
 
@@ -236,7 +232,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(AddEditCaseDialogFragment.this).navigate(R.id.menu_search);
+                viewModel.getNavigateToCustomerFragment().setValue(true);
                 dismiss();
             }
         });
@@ -245,6 +241,75 @@ public class AddEditCaseDialogFragment extends DialogFragment {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 textPriority = (String) item;
+            }
+        });
+    }
+
+    private void fetchCustomerInfo() {
+        String path = "/api/v1/customers/Info/";
+        viewModel.fetchCustomerInfo(path, userLoginKey, customerID);
+    }
+
+    private void setupObserver() {
+        viewModel.getAddCaseResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("کار با موفقیت افزوده شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getRefresh().setValue(true);
+                    dismiss();
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(caseResult.getError());
+                    dismiss();
+                }
+            }
+        });
+
+        viewModel.getEditCaseResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("کار با موفقیت افزوده شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    viewModel.getRefresh().setValue(true);
+                    dismiss();
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(caseResult.getError());
+                    dismiss();
+                }
+            }
+        });
+
+        viewModel.getCustomerInfoResultSingleLiveEvent().observe(this, new Observer<CustomerResult>() {
+            @Override
+            public void onChanged(CustomerResult customerResult) {
+                if (customerResult.getErrorCode().equals("0")) {
+                    String customerName = Converter.letterConverter(customerResult.getCustomers()[0].getCustomerName());
+                    binding.edTextCustomerName.setText(customerName);
+                } else if (customerResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(customerResult.getError());
+                }
+            }
+        });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
             }
         });
     }

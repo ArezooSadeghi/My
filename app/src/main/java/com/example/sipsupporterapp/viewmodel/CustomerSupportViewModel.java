@@ -17,7 +17,6 @@ public class CustomerSupportViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionSingleLiveEvent;
-    private SingleLiveEvent<Boolean> dangerousUserSingleLiveEvent;
 
     private SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> seeCustomerSupportAttachmentsClicked = new SingleLiveEvent<>();
 
@@ -30,7 +29,6 @@ public class CustomerSupportViewModel extends AndroidViewModel {
 
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        dangerousUserSingleLiveEvent = repository.getDangerousUserSingleLiveEvent();
     }
 
     public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
@@ -43,10 +41,6 @@ public class CustomerSupportViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<String> getNoConnectionExceptionSingleLiveEvent() {
         return noConnectionExceptionSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getDangerousUserSingleLiveEvent() {
-        return dangerousUserSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> getSeeCustomerSupportAttachmentsClicked() {

@@ -1,5 +1,6 @@
 package com.example.sipsupporterapp.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.sipsupporterapp.model.CaseProductResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CaseProductsViewModel;
 
@@ -31,6 +33,8 @@ import java.util.List;
 public class CaseProductsFragment extends Fragment {
     private FragmentCaseProductsBinding binding;
     private CaseProductsViewModel viewModel;
+    private String centerName, userLoginKey;
+    private ServerData serverData;
     private List<ProductResult.ProductInfo> productInfoList = new ArrayList<>();
 
     public static CaseProductsFragment newInstance() {
@@ -45,6 +49,11 @@ public class CaseProductsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+
         fetchProductGroups();
     }
 
@@ -81,9 +90,6 @@ public class CaseProductsFragment extends Fragment {
     }
 
     private void fetchProductGroups() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceCaseProductsWithSelected(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/CaseProduct/ListWithSelected/";
         viewModel.fetchCaseProductsWithSelected(path, userLoginKey, 80);
@@ -95,12 +101,49 @@ public class CaseProductsFragment extends Fragment {
             public void onChanged(CaseProductResult caseProductResult) {
                 if (caseProductResult.getErrorCode().equals("0")) {
                     setupAdapter(caseProductResult.getCaseProducts());
+                } else if (caseProductResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseProductResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(caseProductResult.getError());
                 }
             }
         });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void setupAdapter(CaseProductResult.CaseProductInfo[] caseProductInfoArray) {

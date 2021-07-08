@@ -34,6 +34,7 @@ import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.ScaleBitmap;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
 import java.io.ByteArrayOutputStream;
@@ -45,6 +46,9 @@ import java.util.List;
 public class AttachmentDialogFragment extends DialogFragment implements View.OnClickListener {
     private FragmentAttachmentDialogBinding binding;
     private AttachmentViewModel viewModel;
+
+    private ServerData serverData;
+    private String centerName, userLoginKey;
 
     private int customerSupportID, customerProductID, customerPaymentID, paymentID, numberOfRotate;
     private Uri photoUri;
@@ -82,6 +86,10 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         if (savedInstanceState != null) {
             photoUri = savedInstanceState.getParcelable(PHOTO_URI);
         }
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
 
         customerSupportID = getArguments().getInt(ARGS_CUSTOMER_SUPPORT_ID);
         customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
@@ -175,7 +183,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 break;
             case R.id.img_rotate:
                 if (photoUri == null) {
-                    showErrorDialog(getString(R.string.no_choose_any_file));
+                    handleError(getString(R.string.no_choose_any_file));
                 } else {
                     switch (numberOfRotate) {
                         case 0:
@@ -211,7 +219,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 break;
             case R.id.img_send:
                 if (photoUri == null) {
-                    showErrorDialog(getString(R.string.no_choose_any_file));
+                    handleError(getString(R.string.no_choose_any_file));
                 } else {
                     binding.progressBarLoading.setVisibility(View.VISIBLE);
                     binding.imgMore.setEnabled(false);
@@ -252,9 +260,6 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void addAttachment(AttachResult.AttachInfo attachInfo) {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceForAddAttachment(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Add/";
         viewModel.addAttachment(path, userLoginKey, attachInfo);
@@ -277,7 +282,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         }
     }
 
-    private void showErrorDialog(String message) {
+    private void handleError(String message) {
         binding.progressBarLoading.setVisibility(View.GONE);
         binding.imgMore.setEnabled(true);
         binding.imgRotate.setEnabled(true);
@@ -343,8 +348,10 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
 
                     SuccessAttachDialogFragment fragment = SuccessAttachDialogFragment.newInstance(getString(R.string.success_attach_message));
                     fragment.show(getParentFragmentManager(), SuccessAttachDialogFragment.TAG);
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -389,5 +396,22 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 binding.edTextDescription.setText("");
             }
         });
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }

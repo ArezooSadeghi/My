@@ -25,6 +25,7 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.ItemClickedContainerActivity;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
@@ -38,6 +39,7 @@ public class CustomerFragment extends Fragment {
     private CustomerViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
+    private boolean isCase;
 
     public static CustomerFragment newInstance() {
         CustomerFragment fragment = new CustomerFragment();
@@ -83,6 +85,8 @@ public class CustomerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        CustomerFragmentArgs args = CustomerFragmentArgs.fromBundle(getArguments());
+        isCase = args.getIsCase();
         setupObserver();
     }
 
@@ -123,19 +127,19 @@ public class CustomerFragment extends Fragment {
                         customerInfoList.add(customerInfo);
                     }
                     setupAdapter(customerInfoList);
+                } else if (customerResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(customerResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(customerResult.getError());
                 }
             }
         });
 
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(String error) {
+            public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                handleError(message);
             }
         });
 
@@ -143,16 +147,22 @@ public class CustomerFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                handleError(message);
             }
         });
 
         viewModel.getItemClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer customerID) {
-                Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
-                startActivity(starter);
+                if (isCase) {
+                    CustomerFragmentDirections.ActionMenuSearchToMenuTasks action =
+                            CustomerFragmentDirections.actionMenuSearchToMenuTasks();
+                    action.setCustomerID(customerID);
+                    NavHostFragment.findNavController(CustomerFragment.this).navigate(action);
+                } else {
+                    Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
+                    startActivity(starter);
+                }
             }
         });
 
@@ -187,5 +197,27 @@ public class CustomerFragment extends Fragment {
                 NavHostFragment.findNavController(CustomerFragment.this).navigate(R.id.menu_tasks);
             }
         });
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }

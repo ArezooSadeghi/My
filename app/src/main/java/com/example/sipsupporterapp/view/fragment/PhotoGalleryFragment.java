@@ -29,6 +29,7 @@ import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.FullScreenPhotoContainerActivity;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AttachmentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
@@ -195,7 +196,7 @@ public class PhotoGalleryFragment extends Fragment {
                         fetchPaymentAttachments();
                     }
                 } else {
-                    showErrorDialog(getString(R.string.no_access_storage_permission_message));
+                    handleError(getString(R.string.no_access_storage_permission_message));
                 }
                 break;
             case REQUEST_CODE_CAMERA_PERMISSION:
@@ -205,7 +206,7 @@ public class PhotoGalleryFragment extends Fragment {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     viewModel.getAllowCameraPermissionSingleLiveEvent().setValue(true);
                 } else {
-                    showErrorDialog(getString(R.string.no_access_camera_permission_message));
+                    handleError(getString(R.string.no_access_camera_permission_message));
                 }
                 break;
         }
@@ -325,8 +326,6 @@ public class PhotoGalleryFragment extends Fragment {
 
     private void setupAdapter() {
         if (adapter == null) {
-            Log.d("Arezoo", "adapter is null");
-            Log.d("Arezoo", oldFilePathList.size() + "");
             adapter = new PhotoGalleryAdapter(getContext(), viewModel, oldFilePathList);
         } else {
             adapter.updateFilePathList(newFilePathList);
@@ -334,7 +333,7 @@ public class PhotoGalleryFragment extends Fragment {
         binding.recyclerViewAttachmentFile.setAdapter(adapter);
     }
 
-    private void showErrorDialog(String message) {
+    private void handleError(String message) {
         if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
             binding.progressBarLoading.setVisibility(View.INVISIBLE);
         }
@@ -373,8 +372,10 @@ public class PhotoGalleryFragment extends Fragment {
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -384,8 +385,10 @@ public class PhotoGalleryFragment extends Fragment {
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -395,8 +398,10 @@ public class PhotoGalleryFragment extends Fragment {
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -406,8 +411,10 @@ public class PhotoGalleryFragment extends Fragment {
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
                     showAttachments(attachResult);
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -430,8 +437,10 @@ public class PhotoGalleryFragment extends Fragment {
                             }
                         }).start();
                     }
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -458,7 +467,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                showErrorDialog(message);
+                handleError(message);
                 viewModel.getHideLoading().setValue(true);
             }
         });
@@ -466,7 +475,7 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                showErrorDialog(message);
+                handleError(message);
                 viewModel.getHideLoading().setValue(true);
             }
         });
@@ -498,5 +507,22 @@ public class PhotoGalleryFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }

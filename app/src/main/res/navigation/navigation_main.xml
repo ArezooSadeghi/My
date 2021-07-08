@@ -10,9 +10,13 @@
         android:label="CustomerFragment">
 
         <argument
-            android:name="isTask"
+            android:name="isCase"
             android:defaultValue="false"
             app:argType="boolean" />
+
+        <action
+            android:id="@+id/action_menu_search_to_menu_tasks"
+            app:destination="@id/menu_tasks" />
 
     </fragment>
 
@@ -39,15 +43,29 @@
     <fragment
         android:id="@+id/menu_tasks"
         android:name="com.example.sipsupporterapp.view.fragment.TaskFragment"
-        android:label="TaskFragment" >
+        android:label="TaskFragment">
+
         <action
             android:id="@+id/action_menu_tasks_to_menu_search"
             app:destination="@id/menu_search" />
+
+        <argument
+            android:name="customerID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
     </fragment>
 
     <fragment
         android:id="@+id/caseProductsFragment"
         android:name="com.example.sipsupporterapp.view.fragment.CaseProductsFragment"
         android:label="CaseProductsFragment" />
+
+    <dialog
+        android:id="@+id/addEditCaseDialogFragment"
+        android:name="com.example.sipsupporterapp.view.dialog.AddEditCaseDialogFragment"
+        android:label="AddEditCaseDialogFragment">
+
+    </dialog>
 
 </navigation>

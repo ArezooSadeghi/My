@@ -1,5 +1,6 @@
 package com.example.sipsupporterapp.view.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.example.sipsupporterapp.eventbus.DeleteEvent;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDeletePhotoDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDeletePhotoDialogFragment;
@@ -100,7 +102,7 @@ public class FullScreenPhotoFragment extends Fragment {
         });
     }
 
-    private void showErrorDialog(String message) {
+    private void handleError(String message) {
         if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
             binding.progressBarLoading.setVisibility(View.INVISIBLE);
         }
@@ -142,8 +144,10 @@ public class FullScreenPhotoFragment extends Fragment {
                         SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance(getString(R.string.success_delete_photo_message));
                         fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
                     }
+                } else if (attachResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 } else {
-                    showErrorDialog(attachResult.getError());
+                    handleError(attachResult.getError());
                 }
             }
         });
@@ -151,15 +155,32 @@ public class FullScreenPhotoFragment extends Fragment {
         viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                showErrorDialog(message);
+                handleError(message);
             }
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                showErrorDialog(message);
+                handleError(message);
             }
         });
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 }
