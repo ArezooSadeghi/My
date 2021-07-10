@@ -76,7 +76,7 @@ public class CustomerFragment extends Fragment {
             binding.progressBarLoading.setVisibility(View.VISIBLE);
             viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
             String path = "/api/v1/customers/";
-            viewModel.fetchCustomersResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
+            viewModel.fetchCustomers(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
         }
 
         return binding.getRoot();
@@ -110,7 +110,7 @@ public class CustomerFragment extends Fragment {
     private void setupAdapter(List<CustomerResult.CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
                 getContext(),
-                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()));
+                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()), false);
         binding.recyclerViewCustomers.setAdapter(adapter);
     }
 
@@ -186,7 +186,7 @@ public class CustomerFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.VISIBLE);
                 viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customers/search";
-                viewModel.fetchCustomersResult(path, userLoginKey, searchQuery);
+                viewModel.fetchCustomers(path, userLoginKey, searchQuery);
             }
         });
 

@@ -676,7 +676,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchCustomersResult(String path, String userLoginKey, String customerName) {
+    public void fetchCustomers(String path, String userLoginKey, String customerName) {
         sipSupporterService.fetchCustomers(path, userLoginKey, customerName).enqueue(new Callback<CustomerResult>() {
             @Override
             public void onResponse(Call<CustomerResult> call, Response<CustomerResult> response) {

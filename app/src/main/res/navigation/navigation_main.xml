@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/menu_tasks"
-        android:name="com.example.sipsupporterapp.view.fragment.TaskFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.CaseFragment"
         android:label="TaskFragment">
 
         <action

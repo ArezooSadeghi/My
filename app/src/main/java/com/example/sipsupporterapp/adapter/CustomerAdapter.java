@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerAdapterItemBinding;
+import com.example.sipsupporterapp.eventbus.CustomerSearchEvent;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -25,12 +28,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     private CustomerViewModel viewModel;
     private List<CustomerResult.CustomerInfo> customerInfoList;
     private String date;
+    private boolean flag;
 
-    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String date) {
+    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String date, boolean flag) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerInfoList = customerInfoList;
         this.date = date;
+        this.flag = flag;
     }
 
     @NonNull
@@ -50,9 +55,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
-                SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
-                SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
+                if (flag) {
+                    EventBus.getDefault().postSticky(new CustomerSearchEvent(customerInfo.getCustomerID()));
+                } else {
+                    viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
+                    SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
+                    SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
+                }
             }
         });
 

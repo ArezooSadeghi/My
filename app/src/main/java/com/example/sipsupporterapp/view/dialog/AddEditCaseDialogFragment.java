@@ -16,14 +16,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCaseDialogBinding;
+import com.example.sipsupporterapp.eventbus.CustomerSearchEvent;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.CustomerSearchContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.TaskViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,8 +237,8 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getNavigateToCustomerFragment().setValue(true);
-                dismiss();
+                Intent starter = CustomerSearchContainerActivity.start(getContext());
+                startActivity(starter);
             }
         });
 
@@ -312,5 +317,24 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 handleError(message);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void getCustomerSearchEvent(CustomerSearchEvent event) {
+        customerID = event.getCustomerID();
+        fetchCustomerInfo();
+        EventBus.getDefault().removeStickyEvent(event);
     }
 }

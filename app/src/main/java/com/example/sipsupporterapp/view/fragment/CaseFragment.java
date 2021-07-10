@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CaseAdapter;
-import com.example.sipsupporterapp.databinding.FragmentTaskBinding;
+import com.example.sipsupporterapp.databinding.FragmentCaseBinding;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TaskFragment extends Fragment {
-    private FragmentTaskBinding binding;
+public class CaseFragment extends Fragment {
+    private FragmentCaseBinding binding;
     private TaskViewModel viewModel;
     private ServerData serverData;
     private int caseTypeID, customerID, caseID;
@@ -52,8 +52,8 @@ public class TaskFragment extends Fragment {
     private List<String> caseTypes = new ArrayList<>();
     private List<Integer> caseTypeIDs = new ArrayList<>();
 
-    public static TaskFragment newInstance() {
-        TaskFragment fragment = new TaskFragment();
+    public static CaseFragment newInstance() {
+        CaseFragment fragment = new CaseFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -78,7 +78,7 @@ public class TaskFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_task,
+                R.layout.fragment_case,
                 container,
                 false);
 
@@ -163,7 +163,7 @@ public class TaskFragment extends Fragment {
             public void onChanged(CaseTypeResult caseTypeResult) {
                 if (caseTypeResult.getErrorCode().equals("0")) {
                     setupSpinner(caseTypeResult.getCaseTypes());
-                    TaskFragmentArgs args = TaskFragmentArgs.fromBundle(getArguments());
+                    CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());
                     customerID = args.getCustomerID();
                     if (customerID != 0) {
                         int caseTypeID = SipSupportSharedPreferences.getCaseTypeID(getContext());
@@ -291,7 +291,7 @@ public class TaskFragment extends Fragment {
         viewModel.getCaseProductsClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer caseID) {
-                NavHostFragment.findNavController(TaskFragment.this).navigate(R.id.caseProductsFragment);
+                NavHostFragment.findNavController(CaseFragment.this).navigate(R.id.caseProductsFragment);
             }
         });
 
@@ -299,10 +299,10 @@ public class TaskFragment extends Fragment {
             @Override
             public void onChanged(Boolean navigateToCustomerFragment) {
                 SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
-                TaskFragmentDirections.ActionMenuTasksToMenuSearch action =
-                        TaskFragmentDirections.actionMenuTasksToMenuSearch();
+                CaseFragmentDirections.ActionMenuTasksToMenuSearch action =
+                        CaseFragmentDirections.actionMenuTasksToMenuSearch();
                 action.setIsCase(true);
-                NavHostFragment.findNavController(TaskFragment.this).navigate(action);
+                NavHostFragment.findNavController(CaseFragment.this).navigate(action);
             }
         });
 

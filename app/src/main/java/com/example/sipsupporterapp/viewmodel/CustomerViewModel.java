@@ -87,8 +87,8 @@ public class CustomerViewModel extends AndroidViewModel {
         repository.getSipSupporterServiceDateResult(baseUrl);
     }
 
-    public void fetchCustomersResult(String path, String userLoginKey, String customerName) {
-        repository.fetchCustomersResult(path, userLoginKey, customerName);
+    public void fetchCustomers(String path, String userLoginKey, String customerName) {
+        repository.fetchCustomers(path, userLoginKey, customerName);
     }
 
     public void fetchDateResult(String path, String userLoginKey) {
