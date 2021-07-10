@@ -199,7 +199,6 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 CaseResult.CaseInfo caseInfo = new CaseResult().new CaseInfo();
                 int caseID = getArguments().getInt(ARGS_CASE_ID);
                 int caseTypeID = getArguments().getInt(ARGS_CASE_TYPE_ID);
-                int customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
                 caseInfo.setCaseID(caseID);
                 caseInfo.setCaseTypeID(caseTypeID);
                 caseInfo.setCustomerID(customerID);

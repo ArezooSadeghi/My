@@ -54,12 +54,23 @@
             android:defaultValue="0"
             app:argType="integer" />
 
+        <action
+            android:id="@+id/action_menu_tasks_to_caseProductsFragment"
+            app:destination="@id/caseProductsFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/caseProductsFragment"
         android:name="com.example.sipsupporterapp.view.fragment.CaseProductsFragment"
-        android:label="CaseProductsFragment" />
+        android:label="CaseProductsFragment">
+
+        <argument
+            android:name="caseID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+    </fragment>
 
     <dialog
         android:id="@+id/addEditCaseDialogFragment"

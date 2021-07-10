@@ -291,7 +291,9 @@ public class CaseFragment extends Fragment {
         viewModel.getCaseProductsClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer caseID) {
-                NavHostFragment.findNavController(CaseFragment.this).navigate(R.id.caseProductsFragment);
+                CaseFragmentDirections.ActionMenuTasksToCaseProductsFragment action = CaseFragmentDirections.actionMenuTasksToCaseProductsFragment();
+                action.setCaseID(caseID);
+                NavHostFragment.findNavController(CaseFragment.this).navigate(action);
             }
         });
 

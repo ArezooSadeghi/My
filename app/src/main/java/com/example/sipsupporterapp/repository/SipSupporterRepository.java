@@ -181,6 +181,8 @@ public class SipSupporterRepository {
 
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
@@ -549,6 +551,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CustomerResult> getCustomerInfoResultSingleLiveEvent() {
         return customerInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseProductResult> getDeleteCaseProductResultSingleLiveEvent() {
+        return deleteCaseProductResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2188,6 +2194,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void deleteCaseProduct(String path, String userLoginKey, int caseProductID) {
+        sipSupporterService.deleteCaseProduct(path, userLoginKey, caseProductID).enqueue(new Callback<CaseProductResult>() {
+            @Override
+            public void onResponse(Call<CaseProductResult> call, Response<CaseProductResult> response) {
+                if (response.isSuccessful()) {
+                    deleteCaseProductResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
+                        deleteCaseProductResultSingleLiveEvent.setValue(caseProductResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

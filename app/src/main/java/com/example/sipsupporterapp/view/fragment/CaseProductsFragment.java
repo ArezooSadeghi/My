@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
-import com.example.sipsupporterapp.adapter.ProductAdapter;
+import com.example.sipsupporterapp.adapter.CaseProductAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCaseProductsBinding;
 import com.example.sipsupporterapp.model.CaseProductResult;
 import com.example.sipsupporterapp.model.ProductResult;
@@ -24,7 +24,7 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.viewmodel.CaseProductsViewModel;
+import com.example.sipsupporterapp.viewmodel.CaseProductViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,9 +32,10 @@ import java.util.List;
 
 public class CaseProductsFragment extends Fragment {
     private FragmentCaseProductsBinding binding;
-    private CaseProductsViewModel viewModel;
+    private CaseProductViewModel viewModel;
     private String centerName, userLoginKey;
     private ServerData serverData;
+    private int caseID;
     private List<ProductResult.ProductInfo> productInfoList = new ArrayList<>();
 
     public static CaseProductsFragment newInstance() {
@@ -53,8 +54,12 @@ public class CaseProductsFragment extends Fragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
-        fetchProductGroups();
+        CaseProductsFragmentArgs args = CaseProductsFragmentArgs.fromBundle(getArguments());
+        caseID = args.getCaseID();
+
+        fetchCaseProducts();
     }
 
     @Override
@@ -86,13 +91,13 @@ public class CaseProductsFragment extends Fragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(this).get(CaseProductsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CaseProductViewModel.class);
     }
 
-    private void fetchProductGroups() {
-        viewModel.getSipSupporterServiceCaseProductsWithSelected(serverData.getIpAddress() + ":" + serverData.getPort());
+    private void fetchCaseProducts() {
+        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/CaseProduct/ListWithSelected/";
-        viewModel.fetchCaseProductsWithSelected(path, userLoginKey, 80);
+        viewModel.fetchCaseProductsWithSelected(path, userLoginKey, caseID);
     }
 
     private void setupObserver() {
@@ -122,6 +127,19 @@ public class CaseProductsFragment extends Fragment {
                 handleError(message);
             }
         });
+
+        viewModel.getUpdate().observe(getViewLifecycleOwner(), new Observer<CaseProductResult.CaseProductInfo>() {
+            @Override
+            public void onChanged(CaseProductResult.CaseProductInfo caseProductInfo) {
+                if (caseProductInfo.isSelected()) {
+                    caseProductInfo.setCaseID(caseID);
+                    addCaseProduct(caseProductInfo);
+                } else {
+                    caseProductInfo.setCaseID(0);
+                    deleteCaseProduct(caseProductInfo);
+                }
+            }
+        });
     }
 
     private void handleError(String message) {
@@ -147,7 +165,17 @@ public class CaseProductsFragment extends Fragment {
     }
 
     private void setupAdapter(CaseProductResult.CaseProductInfo[] caseProductInfoArray) {
-        ProductAdapter adapter = new ProductAdapter(getContext(), Arrays.asList(caseProductInfoArray));
+        CaseProductAdapter adapter = new CaseProductAdapter(getContext(), viewModel, Arrays.asList(caseProductInfoArray));
         binding.recyclerViewProducts.setAdapter(adapter);
+    }
+
+    private void addCaseProduct(CaseProductResult.CaseProductInfo caseProductInfo) {
+        String path = "/api/v1/CaseProduct/Add/";
+        viewModel.addCaseProduct(path, userLoginKey, caseProductInfo);
+    }
+
+    private void deleteCaseProduct(CaseProductResult.CaseProductInfo caseProductInfo) {
+        String path = "/api/v1/CaseProduct/Delete/";
+        viewModel.deleteCaseProduct(path, userLoginKey, caseProductInfo.getCaseProductID());
     }
 }

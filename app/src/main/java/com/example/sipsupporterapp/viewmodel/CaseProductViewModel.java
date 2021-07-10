@@ -9,7 +9,7 @@ import com.example.sipsupporterapp.model.CaseProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-public class CaseProductsViewModel extends AndroidViewModel {
+public class CaseProductViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
 
@@ -18,7 +18,9 @@ public class CaseProductsViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
-    public CaseProductsViewModel(@NonNull Application application) {
+    private SingleLiveEvent<CaseProductResult.CaseProductInfo> update = new SingleLiveEvent<>();
+
+    public CaseProductViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
@@ -41,15 +43,27 @@ public class CaseProductsViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
+    public SingleLiveEvent<CaseProductResult.CaseProductInfo> getUpdate() {
+        return update;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceCaseProductsWithSelected(String baseUrl) {
+    public void getSipSupporterServiceCaseProductResult(String baseUrl) {
         repository.getSipSupporterServiceCaseProductResult(baseUrl);
     }
 
     public void fetchCaseProductsWithSelected(String path, String userLoginKey, int caseID) {
         repository.fetchCaseProductsWithSelected(path, userLoginKey, caseID);
+    }
+
+    public void addCaseProduct(String path, String userLoginKey, CaseProductResult.CaseProductInfo caseProductInfo) {
+        repository.addCaseProduct(path, userLoginKey, caseProductInfo);
+    }
+
+    public void deleteCaseProduct(String path, String userLoginKey, int caseProductID) {
+        repository.deleteCaseProduct(path, userLoginKey, caseProductID);
     }
 }

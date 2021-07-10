@@ -28,6 +28,8 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     private TaskViewModel viewModel;
     private List<CaseResult.CaseInfo> caseInfoList;
 
+    final Random random = new Random();
+
     public CaseAdapter(Context context, TaskViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
         this.context = context;
         this.viewModel = viewModel;
@@ -47,8 +49,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     @Override
     public void onBindViewHolder(@NonNull CaseHolder holder, int position) {
         holder.bindCaseInfo(caseInfoList.get(position));
-        Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        int color = generateRandomColor();
         holder.binding.cardView.setCardBackgroundColor(color);
 
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +113,20 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                 powerMenu.showAsDropDown(view);
             }
         });
+    }
+
+    public int generateRandomColor() {
+        final int baseColor = Color.WHITE;
+
+        final int baseRed = Color.red(baseColor);
+        final int baseGreen = Color.green(baseColor);
+        final int baseBlue = Color.blue(baseColor);
+
+        final int red = (baseRed + random.nextInt(256)) / 2;
+        final int green = (baseGreen + random.nextInt(256)) / 2;
+        final int blue = (baseBlue + random.nextInt(256)) / 2;
+
+        return Color.rgb(red, green, blue);
     }
 
     @Override
