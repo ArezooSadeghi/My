@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CaseProductAdapter;
-import com.example.sipsupporterapp.databinding.FragmentCaseProductsBinding;
+import com.example.sipsupporterapp.databinding.FragmentCaseProductBinding;
 import com.example.sipsupporterapp.model.CaseProductResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -30,16 +31,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CaseProductsFragment extends Fragment {
-    private FragmentCaseProductsBinding binding;
+public class CaseProductFragment extends Fragment {
+    private FragmentCaseProductBinding binding;
     private CaseProductViewModel viewModel;
     private String centerName, userLoginKey;
     private ServerData serverData;
     private int caseID;
     private List<ProductResult.ProductInfo> productInfoList = new ArrayList<>();
 
-    public static CaseProductsFragment newInstance() {
-        CaseProductsFragment fragment = new CaseProductsFragment();
+    public static CaseProductFragment newInstance() {
+        CaseProductFragment fragment = new CaseProductFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -56,7 +57,7 @@ public class CaseProductsFragment extends Fragment {
         serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
-        CaseProductsFragmentArgs args = CaseProductsFragmentArgs.fromBundle(getArguments());
+        CaseProductFragmentArgs args = CaseProductFragmentArgs.fromBundle(getArguments());
         caseID = args.getCaseID();
 
         fetchCaseProducts();
@@ -68,7 +69,7 @@ public class CaseProductsFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_case_products,
+                R.layout.fragment_case_product,
                 container,
                 false);
 
@@ -84,10 +85,11 @@ public class CaseProductsFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewProducts.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewProducts.getContext(),
-                DividerItemDecoration.VERTICAL));
+        binding.recyclerViewCaseProduct.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        binding.recyclerViewCaseProduct.addItemDecoration(dividerItemDecoration);
     }
 
     private void createViewModel() {
@@ -166,7 +168,7 @@ public class CaseProductsFragment extends Fragment {
 
     private void setupAdapter(CaseProductResult.CaseProductInfo[] caseProductInfoArray) {
         CaseProductAdapter adapter = new CaseProductAdapter(getContext(), viewModel, Arrays.asList(caseProductInfoArray));
-        binding.recyclerViewProducts.setAdapter(adapter);
+        binding.recyclerViewCaseProduct.setAdapter(adapter);
     }
 
     private void addCaseProduct(CaseProductResult.CaseProductInfo caseProductInfo) {

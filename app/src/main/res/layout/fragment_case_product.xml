@@ -9,10 +9,11 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.fragment.CaseProductsFragment">
+        android:background="#3A3B3B"
+        tools:context=".view.fragment.CaseProductFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_products"
+            android:id="@+id/recycler_view_case_product"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

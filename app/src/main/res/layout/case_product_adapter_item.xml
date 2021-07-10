@@ -19,7 +19,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -62,7 +62,7 @@
 
     <fragment
         android:id="@+id/caseProductsFragment"
-        android:name="com.example.sipsupporterapp.view.fragment.CaseProductsFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.CaseProductFragment"
         android:label="CaseProductsFragment">
 
         <argument
