@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -91,10 +92,11 @@ public class NewCustomerPaymentsFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.recyclerViewPayments.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewPayments.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewPayments.getContext(),
-                DividerItemDecoration.VERTICAL));
+        binding.recyclerViewNewCustomerPayment.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerViewNewCustomerPayment.addItemDecoration(dividerItemDecoration);
     }
 
     private void handleEvents() {
@@ -133,7 +135,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
 
     private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
         CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, Arrays.asList(customerPaymentInfoArray));
-        binding.recyclerViewPayments.setAdapter(adapter);
+        binding.recyclerViewNewCustomerPayment.setAdapter(adapter);
     }
 
     private void fetchCustomerPaymentsByBankAccount(int bankAccountID) {
@@ -169,10 +171,10 @@ public class NewCustomerPaymentsFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.GONE);
 
                 if (customerPaymentResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewPayments.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    binding.recyclerViewNewCustomerPayment.setVisibility(binding.progressBarLoading.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                     setupAdapter(customerPaymentResult.getCustomerPayments());
                 } else {
-                  handleError(customerPaymentResult.getError());
+                    handleError(customerPaymentResult.getError());
                 }
             }
         });

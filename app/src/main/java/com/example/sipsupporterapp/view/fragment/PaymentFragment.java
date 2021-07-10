@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -92,10 +93,13 @@ public class PaymentFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.recyclerViewCosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewCosts.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewCosts.getContext(),
-                DividerItemDecoration.VERTICAL));
+        binding.recyclerViewPayment.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerViewPayment.addItemDecoration(dividerItemDecoration);
+
+        binding.recyclerViewPayment.setHasFixedSize(true);
     }
 
     private void handleEvents() {
@@ -166,7 +170,7 @@ public class PaymentFragment extends Fragment {
     private void setupAdapter(PaymentResult.PaymentInfo[] paymentInfoArray) {
         List<PaymentResult.PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
         PaymentAdapter adapter = new PaymentAdapter(getContext(), viewModel, paymentInfoList);
-        binding.recyclerViewCosts.setAdapter(adapter);
+        binding.recyclerViewPayment.setAdapter(adapter);
     }
 
     private void setupObserver() {
@@ -192,12 +196,12 @@ public class PaymentFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (paymentResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewCosts.setVisibility(View.VISIBLE);
+                    binding.recyclerViewPayment.setVisibility(View.VISIBLE);
                     setupAdapter(paymentResult.getPayments());
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                   handleError(paymentResult.getError());
+                    handleError(paymentResult.getError());
                 }
             }
         });
@@ -206,7 +210,7 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-               handleError(message);
+                handleError(message);
             }
         });
 
@@ -214,7 +218,7 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-               handleError(message);
+                handleError(message);
             }
         });
 
@@ -252,7 +256,7 @@ public class PaymentFragment extends Fragment {
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                   handleError(paymentResult.getError());
+                    handleError(paymentResult.getError());
                 }
             }
         });
