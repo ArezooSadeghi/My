@@ -8,32 +8,32 @@
 
     <item
         android:id="@+id/menu_change_password"
-        android:icon="@drawable/change_password"
+        android:icon="@drawable/ic_change_password"
         android:title="تغییر رمز عبور" />
 
     <item
         android:id="@+id/menu_logout"
-        android:icon="@drawable/logout"
+        android:icon="@drawable/ic_log_out"
         android:title="خروج از حساب کاربری" />
 
     <item
         android:id="@+id/menu_customer_payments"
-        android:icon="@drawable/customer_payments"
+        android:icon="@drawable/ic_customer_payment"
         android:title="مبالغ واریزی مشتریان" />
 
     <item
         android:id="@+id/menu_payments"
-        android:icon="@drawable/payments"
+        android:icon="@drawable/ic_payment"
         android:title="پرداختی ها" />
 
     <item
         android:id="@+id/menu_tasks"
-        android:icon="@drawable/task"
+        android:icon="@drawable/ic_task"
         android:title="لیست کارها" />
 
     <item
         android:id="@+id/menu_setting"
-        android:icon="@drawable/setting"
+        android:icon="@drawable/ic_setting"
         android:title="تنظیمات" />
 
 </menu>

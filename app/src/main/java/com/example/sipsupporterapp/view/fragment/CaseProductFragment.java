@@ -88,7 +88,7 @@ public class CaseProductFragment extends Fragment {
         binding.recyclerViewCaseProduct.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerViewCaseProduct.addItemDecoration(dividerItemDecoration);
     }
 
@@ -139,6 +139,24 @@ public class CaseProductFragment extends Fragment {
                 } else {
                     caseProductInfo.setCaseID(0);
                     deleteCaseProduct(caseProductInfo);
+                }
+            }
+        });
+
+        viewModel.getAddCaseProductResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CaseProductResult>() {
+            @Override
+            public void onChanged(CaseProductResult caseProductResult) {
+                if (caseProductResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                }
+            }
+        });
+
+        viewModel.getDeleteCaseProductResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CaseProductResult>() {
+            @Override
+            public void onChanged(CaseProductResult caseProductResult) {
+                if (caseProductResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
                 }
             }
         });

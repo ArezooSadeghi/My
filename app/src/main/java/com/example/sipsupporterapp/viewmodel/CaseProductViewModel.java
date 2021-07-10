@@ -18,6 +18,9 @@ public class CaseProductViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
+    private SingleLiveEvent<CaseProductResult> addCaseProductResultSingleLiveEvent;
+    private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent;
+
     private SingleLiveEvent<CaseProductResult.CaseProductInfo> update = new SingleLiveEvent<>();
 
     public CaseProductViewModel(@NonNull Application application) {
@@ -29,6 +32,9 @@ public class CaseProductViewModel extends AndroidViewModel {
 
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+
+        addCaseProductResultSingleLiveEvent = repository.getAddCaseProductResultSingleLiveEvent();
+        deleteCaseProductResultSingleLiveEvent = repository.getDeleteCaseProductResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseProductResult> getCaseProductsWithSelectedResultSingleLiveEvent() {
@@ -45,6 +51,14 @@ public class CaseProductViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CaseProductResult.CaseProductInfo> getUpdate() {
         return update;
+    }
+
+    public SingleLiveEvent<CaseProductResult> getAddCaseProductResultSingleLiveEvent() {
+        return addCaseProductResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseProductResult> getDeleteCaseProductResultSingleLiveEvent() {
+        return deleteCaseProductResultSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {

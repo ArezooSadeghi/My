@@ -98,7 +98,7 @@ public class CustomerProductFragment extends Fragment {
         binding.recyclerViewCustomerProduct.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerViewCustomerProduct.addItemDecoration(dividerItemDecoration);
 
         binding.recyclerViewCustomerProduct.setHasFixedSize(true);

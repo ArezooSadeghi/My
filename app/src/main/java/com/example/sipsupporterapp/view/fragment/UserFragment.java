@@ -105,7 +105,7 @@ public class UserFragment extends Fragment {
         binding.recyclerViewUser.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerViewUser.addItemDecoration(dividerItemDecoration);
 
         binding.recyclerViewUser.setHasFixedSize(true);
