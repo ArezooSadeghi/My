@@ -3,10 +3,12 @@ package com.example.sipsupporterapp.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -83,6 +85,17 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     binding.searchBarContainer.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+
+        binding.edTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    viewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    return true;
+                }
+                return false;
             }
         });
     }

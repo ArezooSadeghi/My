@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -102,9 +103,10 @@ public class CustomerFragment extends Fragment {
 
     private void initViews() {
         binding.recyclerViewCustomers.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewCustomers.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewCustomers.getContext(),
-                DividerItemDecoration.VERTICAL));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerViewCustomers.addItemDecoration(dividerItemDecoration);
     }
 
     private void setupAdapter(List<CustomerResult.CustomerInfo> customerInfoList) {
