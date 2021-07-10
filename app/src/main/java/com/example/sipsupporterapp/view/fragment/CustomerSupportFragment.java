@@ -1,5 +1,6 @@
 package com.example.sipsupporterapp.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -86,21 +88,25 @@ public class CustomerSupportFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerSupportViewModel.class);
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initView() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.txtUserFullName.setText(customerName);
+        binding.txtCustomerName.setText(customerName);
 
-        binding.recyclerViewSupportHistory.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewSupportHistory.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewSupportHistory.getContext(),
-                DividerItemDecoration.VERTICAL));
+        binding.recyclerViewCustomerSupport.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        binding.recyclerViewCustomerSupport.addItemDecoration(dividerItemDecoration);
+
+        binding.recyclerViewCustomerSupport.setHasFixedSize(true);
     }
 
     private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
         List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
         CustomerSupportAdapter adapter = new CustomerSupportAdapter(
                 getContext(), viewModel, customerSupportInfoList);
-        binding.recyclerViewSupportHistory.setAdapter(adapter);
+        binding.recyclerViewCustomerSupport.setAdapter(adapter);
     }
 
     private void fetchCustomerSupports() {
@@ -114,10 +120,10 @@ public class CustomerSupportFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), new Observer<CustomerSupportResult>() {
                     @Override
                     public void onChanged(CustomerSupportResult customerSupportResult) {
-                        binding.progressBar.setVisibility(View.GONE);
+                        binding.progressBarLoading.setVisibility(View.GONE);
 
                         if (customerSupportResult.getErrorCode().equals("0")) {
-                            binding.recyclerViewSupportHistory.setVisibility(View.VISIBLE);
+                            binding.recyclerViewCustomerSupport.setVisibility(View.VISIBLE);
 
                             StringBuilder stringBuilder = new StringBuilder();
                             String listSize = String.valueOf(customerSupportResult.getCustomerSupports().length);
@@ -139,7 +145,7 @@ public class CustomerSupportFragment extends Fragment {
         viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -147,7 +153,7 @@ public class CustomerSupportFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });

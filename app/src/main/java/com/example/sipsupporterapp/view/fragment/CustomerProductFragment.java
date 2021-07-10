@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -94,14 +95,17 @@ public class CustomerProductFragment extends Fragment {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
 
-        binding.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewProducts.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewProducts.getContext(),
-                DividerItemDecoration.VERTICAL));
+        binding.recyclerViewCustomerProduct.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        binding.recyclerViewCustomerProduct.addItemDecoration(dividerItemDecoration);
+
+        binding.recyclerViewCustomerProduct.setHasFixedSize(true);
     }
 
     private void handleEvents() {
-        binding.fabAddNewProduct.setOnClickListener(new View.OnClickListener() {
+        binding.fabAddNewCustomerProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
@@ -119,7 +123,7 @@ public class CustomerProductFragment extends Fragment {
     private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
         List<CustomerProductResult.CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
         CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, customerProductInfoList);
-        binding.recyclerViewProducts.setAdapter(adapter);
+        binding.recyclerViewCustomerProduct.setAdapter(adapter);
     }
 
     private void fetchCustomerProducts() {
@@ -141,7 +145,7 @@ public class CustomerProductFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (productResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewProducts.setVisibility(View.VISIBLE);
+                    binding.recyclerViewCustomerProduct.setVisibility(View.VISIBLE);
 
                     StringBuilder stringBuilder = new StringBuilder();
                     String listSize = String.valueOf(productResult.getCustomerProducts().length);
@@ -150,7 +154,7 @@ public class CustomerProductFragment extends Fragment {
                         stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
                     }
 
-                    binding.txtCountProducts.setText("تعداد محصولات: " + stringBuilder.toString());
+                    binding.txtCount.setText("تعداد محصولات: " + stringBuilder.toString());
                     setupAdapter(productResult.getCustomerProducts());
                 } else if (productResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -164,7 +168,7 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-               handleError(message);
+                handleError(message);
             }
         });
 
@@ -172,7 +176,7 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-               handleError(message);
+                handleError(message);
             }
         });
 

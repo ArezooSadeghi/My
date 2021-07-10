@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -21,6 +22,7 @@ import com.example.sipsupporterapp.databinding.FragmentUserBinding;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.MainActivity;
@@ -97,11 +99,16 @@ public class UserFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.txtCustomerName.setText(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.recyclerViewCustomerUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewCustomerUsers.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewCustomerUsers.getContext(),
-                DividerItemDecoration.VERTICAL));
+        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
+        binding.txtCustomerName.setText(customerName);
+
+        binding.recyclerViewUser.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        binding.recyclerViewUser.addItemDecoration(dividerItemDecoration);
+
+        binding.recyclerViewUser.setHasFixedSize(true);
     }
 
     private void fetchUsers() {
@@ -114,10 +121,10 @@ public class UserFragment extends Fragment {
         viewModel.getUsersResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerUserResult>() {
             @Override
             public void onChanged(CustomerUserResult customerUserResult) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (customerUserResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewCustomerUsers.setVisibility(View.VISIBLE);
+                    binding.recyclerViewUser.setVisibility(View.VISIBLE);
 
                     String str = (customerUserResult.getCustomerUsers().length) + "";
                     StringBuilder stringBuilder = new StringBuilder();
@@ -138,7 +145,7 @@ public class UserFragment extends Fragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -146,7 +153,7 @@ public class UserFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -202,6 +209,6 @@ public class UserFragment extends Fragment {
     private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
         List<CustomerUserResult.CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
         UserAdapter adapter = new UserAdapter(getContext(), viewModel, customerUserInfoList, date);
-        binding.recyclerViewCustomerUsers.setAdapter(adapter);
+        binding.recyclerViewUser.setAdapter(adapter);
     }
 }

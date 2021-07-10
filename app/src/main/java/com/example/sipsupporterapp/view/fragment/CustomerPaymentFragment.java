@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -20,6 +21,7 @@ import com.example.sipsupporterapp.adapter.CustomerPaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerPaymentBinding;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
@@ -89,10 +91,16 @@ public class CustomerPaymentFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.recyclerViewDepositAmounts.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewDepositAmounts.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewDepositAmounts.getContext(),
-                DividerItemDecoration.VERTICAL));
+        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
+        binding.txtCustomerName.setText(customerName);
+
+        binding.recyclerViewCustomerPayment.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.customer_divider_recycler_view));
+        binding.recyclerViewCustomerPayment.addItemDecoration(dividerItemDecoration);
+
+        binding.recyclerViewCustomerPayment.setHasFixedSize(true);
     }
 
     private void handleEvents() {
@@ -114,7 +122,7 @@ public class CustomerPaymentFragment extends Fragment {
     private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
         List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
         CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, customerPaymentInfoList);
-        binding.recyclerViewDepositAmounts.setAdapter(adapter);
+        binding.recyclerViewCustomerPayment.setAdapter(adapter);
     }
 
     private void fetchCustomerPayments() {
@@ -136,7 +144,17 @@ public class CustomerPaymentFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (customerPaymentResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewDepositAmounts.setVisibility(View.VISIBLE);
+                    binding.recyclerViewCustomerPayment.setVisibility(View.VISIBLE);
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String listSize = String.valueOf(customerPaymentResult.getCustomerPayments().length);
+
+                    for (int i = 0; i < listSize.length(); i++) {
+                        stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
+                    }
+
+                    binding.txtCount.setText("تعداد مبالغ واریزی: " + stringBuilder.toString());
+
                     setupAdapter(customerPaymentResult.getCustomerPayments());
                 } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
