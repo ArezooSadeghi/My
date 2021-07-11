@@ -321,6 +321,17 @@ public class CaseFragment extends Fragment {
                 handleError(message);
             }
         });
+
+        viewModel.getPrintInvoiceClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
+            @Override
+            public void onChanged(CaseResult.CaseInfo caseInfo) {
+                CaseFragmentDirections.ActionMenuTasksToInvoiceFragment action = CaseFragmentDirections.actionMenuTasksToInvoiceFragment();
+                action.setCaseID(caseInfo.getCaseID());
+                action.setCustomerID(caseInfo.getCustomerID());
+                action.setCustomerName(caseInfo.getCustomerName());
+                NavHostFragment.findNavController(CaseFragment.this).navigate(action);
+            }
+        });
     }
 
     private void handleError(String message) {

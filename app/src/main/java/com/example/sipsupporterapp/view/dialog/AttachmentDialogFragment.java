@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,7 +90,6 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
 
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
 
         customerSupportID = getArguments().getInt(ARGS_CUSTOMER_SUPPORT_ID);
         customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
@@ -97,6 +97,9 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
 
         createViewModel();
+
+        serverData = viewModel.getServerData(centerName);
+
         setupObserver();
     }
 
@@ -136,7 +139,15 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     if (photoUri != null) {
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-                            Glide.with(getContext()).load(bitmap).into(binding.img);
+
+                            if (bitmap.getWidth() > bitmap.getHeight()) {
+                                Matrix matrixOne = new Matrix();
+                                matrixOne.postRotate(-90);
+                                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
+                                Glide.with(getContext()).load(bitmap).into(binding.img);
+                            } else {
+                                Glide.with(getContext()).load(bitmap).into(binding.img);
+                            }
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());
                         } finally {

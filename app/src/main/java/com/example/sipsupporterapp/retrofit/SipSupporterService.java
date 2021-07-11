@@ -13,6 +13,8 @@ import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
+import com.example.sipsupporterapp.model.InvoiceDetailsResult;
+import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ProductGroupResult;
@@ -190,4 +192,19 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CustomerResult> fetchCustomerInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
+
+    @GET("{path}")
+    Call<InvoiceResult> fetchInvoiceInfoByCaseID(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @POST("{path}")
+    Call<InvoiceResult> addInvoice(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceResult.InvoiceInfo invoiceInfo);
+
+    @GET("{path}")
+    Call<CaseProductResult> fetchCaseProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @POST("{path}")
+    Call<InvoiceDetailsResult> addInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo);
+
+    @GET("{path}")
+    Call<InvoiceDetailsResult> fetchInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceID") int invoiceID);
 }

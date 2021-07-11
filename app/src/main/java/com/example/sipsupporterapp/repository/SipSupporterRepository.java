@@ -22,6 +22,8 @@ import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
+import com.example.sipsupporterapp.model.InvoiceDetailsResult;
+import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ProductGroupResult;
@@ -42,6 +44,8 @@ import com.example.sipsupporterapp.retrofit.CustomerResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerSupportResultDeserializer;
 import com.example.sipsupporterapp.retrofit.CustomerUserResultDeserializer;
 import com.example.sipsupporterapp.retrofit.DateResultDeserializer;
+import com.example.sipsupporterapp.retrofit.InvoiceDetailsResultDeserializer;
+import com.example.sipsupporterapp.retrofit.InvoiceResultDeserializer;
 import com.example.sipsupporterapp.retrofit.NoConnectivityException;
 import com.example.sipsupporterapp.retrofit.PaymentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.PaymentSubjectResultDeserializer;
@@ -182,6 +186,16 @@ public class SipSupporterRepository {
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<InvoiceResult> invoiceInfoByCaseIDResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<InvoiceResult> addInvoiceResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<CaseProductResult> caseProductsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<InvoiceDetailsResult> addInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
 
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
@@ -331,6 +345,20 @@ public class SipSupporterRepository {
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CaseProductResult>() {
                 }.getType(), new CaseProductResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceInvoiceResult(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<InvoiceResult>() {
+                }.getType(), new InvoiceResultDeserializer(), context).create(SipSupporterService.class);
+    }
+
+    public void getSipSupporterServiceAddInvoiceDetailsResult(String baseUrl) {
+        RetrofitInstance.getNewBaseUrl(baseUrl);
+        sipSupporterService = RetrofitInstance
+                .getRI(new TypeToken<InvoiceDetailsResult>() {
+                }.getType(), new InvoiceDetailsResultDeserializer(), context).create(SipSupporterService.class);
     }
 
     public SingleLiveEvent<DateResult> getDateResultSingleLiveEvent() {
@@ -555,6 +583,26 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CaseProductResult> getDeleteCaseProductResultSingleLiveEvent() {
         return deleteCaseProductResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceResult> getInvoiceInfoByCaseIDResultSingleLiveEvent() {
+        return invoiceInfoByCaseIDResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceResult> getAddInvoiceResultSingleLiveEvent() {
+        return addInvoiceResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseProductResult> getCaseProductsResultSingleLiveEvent() {
+        return caseProductsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult> getAddInvoiceDetailsResultSingleLiveEvent() {
+        return addInvoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult> getInvoiceDetailsResultSingleLiveEvent() {
+        return invoiceDetailsResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2224,6 +2272,156 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchInvoiceInfoByCaseID(String path, String userLoginKey, int caseID) {
+        sipSupporterService.fetchInvoiceInfoByCaseID(path, userLoginKey, caseID).enqueue(new Callback<InvoiceResult>() {
+            @Override
+            public void onResponse(Call<InvoiceResult> call, Response<InvoiceResult> response) {
+                if (response.isSuccessful()) {
+                    invoiceInfoByCaseIDResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceResult invoiceResult = gson.fromJson(response.errorBody().string(), InvoiceResult.class);
+                        invoiceInfoByCaseIDResultSingleLiveEvent.setValue(invoiceResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void addInvoice(String path, String userLoginKey, InvoiceResult.InvoiceInfo invoiceInfo) {
+        sipSupporterService.addInvoice(path, userLoginKey, invoiceInfo).enqueue(new Callback<InvoiceResult>() {
+            @Override
+            public void onResponse(Call<InvoiceResult> call, Response<InvoiceResult> response) {
+                if (response.isSuccessful()) {
+                    addInvoiceResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceResult invoiceResult = gson.fromJson(response.errorBody().string(), InvoiceResult.class);
+                        addInvoiceResultSingleLiveEvent.setValue(invoiceResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCaseProducts(String path, String userLoginKey, int caseID) {
+        sipSupporterService.fetchCaseProducts(path, userLoginKey, caseID).enqueue(new Callback<CaseProductResult>() {
+            @Override
+            public void onResponse(Call<CaseProductResult> call, Response<CaseProductResult> response) {
+                if (response.isSuccessful()) {
+                    caseProductsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
+                        caseProductsResultSingleLiveEvent.setValue(caseProductResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseProductResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void addInvoiceDetails(String path, String userLoginKey, InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
+        sipSupporterService.addInvoiceDetails(path, userLoginKey, invoiceDetailsInfo).enqueue(new Callback<InvoiceDetailsResult>() {
+            @Override
+            public void onResponse(Call<InvoiceDetailsResult> call, Response<InvoiceDetailsResult> response) {
+                if (response.isSuccessful()) {
+                    addInvoiceDetailsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
+                        addInvoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchInvoiceDetails(String path, String userLoginKey, int invoiceID) {
+        sipSupporterService.fetchInvoiceDetails(path, userLoginKey, invoiceID).enqueue(new Callback<InvoiceDetailsResult>() {
+            @Override
+            public void onResponse(Call<InvoiceDetailsResult> call, Response<InvoiceDetailsResult> response) {
+                if (response.isSuccessful()) {
+                    invoiceDetailsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
+                        invoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

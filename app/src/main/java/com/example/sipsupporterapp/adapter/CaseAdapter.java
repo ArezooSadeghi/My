@@ -80,7 +80,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 3:

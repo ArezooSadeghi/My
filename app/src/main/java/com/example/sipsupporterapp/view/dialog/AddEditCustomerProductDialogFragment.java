@@ -215,7 +215,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent starter = ProductsContainerActivity.start(getContext());
+                Intent starter = ProductsContainerActivity.start(getContext(), false);
                 startActivity(starter);
             }
         });

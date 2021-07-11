@@ -42,7 +42,7 @@ public class TaskViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Integer> assignToOthersClicked = new SingleLiveEvent<>();
 
-    private SingleLiveEvent<Integer> printInvoiceClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult.CaseInfo> printInvoiceClicked = new SingleLiveEvent<>();
 
     private SingleLiveEvent<Integer> caseProductsClicked = new SingleLiveEvent<>();
 
@@ -136,7 +136,7 @@ public class TaskViewModel extends AndroidViewModel {
         return assignToOthersClicked;
     }
 
-    public SingleLiveEvent<Integer> getPrintInvoiceClicked() {
+    public SingleLiveEvent<CaseResult.CaseInfo> getPrintInvoiceClicked() {
         return printInvoiceClicked;
     }
 

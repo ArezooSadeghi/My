@@ -20,11 +20,13 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
     private Context context;
     private CaseProductViewModel viewModel;
     private List<CaseProductResult.CaseProductInfo> caseProductInfoList;
+    private boolean flag;
 
-    public CaseProductAdapter(Context context, CaseProductViewModel viewModel, List<CaseProductResult.CaseProductInfo> caseProductInfoList) {
+    public CaseProductAdapter(Context context, CaseProductViewModel viewModel, List<CaseProductResult.CaseProductInfo> caseProductInfoList, boolean flag) {
         this.context = context;
         this.viewModel = viewModel;
         this.caseProductInfoList = caseProductInfoList;
+        this.flag = flag;
     }
 
     @NonNull
@@ -45,14 +47,19 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
         holder.binding.checkBoxProductName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isChecked = holder.binding.checkBoxProductName.isChecked();
 
-                for (CaseProductResult.CaseProductInfo caseProductInfo : caseProductInfoList) {
-                    if (caseProductInfo.getProductID() == info.getProductID()) {
-                        caseProductInfo.setSelected(isChecked);
-                        viewModel.getUpdate().setValue(caseProductInfo);
-                        break;
+                if (!flag) {
+                    boolean isChecked = holder.binding.checkBoxProductName.isChecked();
+
+                    for (CaseProductResult.CaseProductInfo caseProductInfo : caseProductInfoList) {
+                        if (caseProductInfo.getProductID() == info.getProductID()) {
+                            caseProductInfo.setSelected(isChecked);
+                            viewModel.getUpdate().setValue(caseProductInfo);
+                            break;
+                        }
                     }
+                } else {
+                    viewModel.getItemClicked().setValue(info);
                 }
             }
         });

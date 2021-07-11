@@ -41,6 +41,18 @@
         android:label="PaymentFragment" />
 
     <fragment
+        android:id="@+id/newCaseProductFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.NewCaseProductFragment"
+        android:label="NewCaseProductFragment">
+
+        <argument
+            android:name="caseID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/menu_tasks"
         android:name="com.example.sipsupporterapp.view.fragment.CaseFragment"
         android:label="TaskFragment">
@@ -57,6 +69,10 @@
         <action
             android:id="@+id/action_menu_tasks_to_caseProductsFragment"
             app:destination="@id/caseProductsFragment" />
+
+        <action
+            android:id="@+id/action_menu_tasks_to_invoiceFragment"
+            app:destination="@id/invoiceFragment" />
 
     </fragment>
 
@@ -78,9 +94,47 @@
         android:label="AddEditCaseDialogFragment">
 
     </dialog>
+
     <fragment
         android:id="@+id/invoiceFragment"
         android:name="com.example.sipsupporterapp.view.fragment.InvoiceFragment"
-        android:label="InvoiceFragment" />
+        android:label="InvoiceFragment">
+
+        <argument
+            android:name="caseID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="customerID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="customerName"
+            android:defaultValue="null"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_invoiceFragment_to_newCaseProductFragment2"
+            app:destination="@id/newCaseProductFragment" />
+
+        <action
+            android:id="@+id/action_invoiceFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.ProductsFragment"
+        android:label="ProductsFragment">
+
+        <argument
+            android:name="flag"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+    </fragment>
 
 </navigation>

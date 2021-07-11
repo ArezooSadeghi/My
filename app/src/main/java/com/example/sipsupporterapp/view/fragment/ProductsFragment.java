@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +44,7 @@ import tellh.com.recyclertreeview_lib.TreeViewAdapter;
 public class ProductsFragment extends Fragment {
     private FragmentProductsBinding binding;
     private ProductsViewModel viewModel;
+    private boolean flag;
 
     private List<TreeNode> treeNodeList = new ArrayList<>();
     private List<ProductGroupResult.ProductGroupInfo> productGroupInfoList = new ArrayList<>();
@@ -51,9 +53,12 @@ public class ProductsFragment extends Fragment {
     private ServerData serverData;
     private String userLoginKey, centerName;
 
-    public static ProductsFragment newInstance() {
+    private static final String ARGS_FLAG = "flag";
+
+    public static ProductsFragment newInstance(boolean flag) {
         ProductsFragment fragment = new ProductsFragment();
         Bundle args = new Bundle();
+        args.putBoolean(ARGS_FLAG, flag);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,6 +66,8 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        flag = getArguments().getBoolean(ARGS_FLAG);
 
         createViewModel();
         initVariables();
@@ -205,7 +212,11 @@ public class ProductsFragment extends Fragment {
                     int productGroupID = getProductGroupID(productGroup);
                     PostProductGroupIDEvent event = new PostProductGroupIDEvent(productGroupID, productGroup);
                     EventBus.getDefault().postSticky(event);
-                    getActivity().finish();
+                    if (!flag) {
+                        getActivity().finish();
+                    } else {
+                        NavHostFragment.findNavController(ProductsFragment.this).navigate(R.id.invoiceFragment);
+                    }
                 }
                 return false;
             }
