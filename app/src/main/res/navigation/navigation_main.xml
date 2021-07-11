@@ -78,5 +78,9 @@
         android:label="AddEditCaseDialogFragment">
 
     </dialog>
+    <fragment
+        android:id="@+id/invoiceFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.InvoiceFragment"
+        android:label="InvoiceFragment" />
 
 </navigation>
