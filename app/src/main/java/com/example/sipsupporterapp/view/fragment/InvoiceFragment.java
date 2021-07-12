@@ -26,7 +26,9 @@ import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.dialog.EditInvoiceDetailsDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDeleteInvoiceDetailsDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
 
@@ -41,7 +43,7 @@ public class InvoiceFragment extends Fragment {
     private FragmentInvoiceBinding binding;
     private InvoiceViewModel viewModel;
     private ServerData serverData;
-    private int caseID, customerID, invoiceID;
+    private int caseID, customerID, invoiceID, invoiceDetailsID;
     private String centerName, userLoginKey, customerName;
 
     public static InvoiceFragment newInstance() {
@@ -103,7 +105,7 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(this).get(InvoiceViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
     }
 
     private void handleEvents() {
@@ -236,6 +238,51 @@ public class InvoiceFragment extends Fragment {
                 }
             }
         });
+
+        viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<InvoiceDetailsResult.InvoiceDetailsInfo>() {
+            @Override
+            public void onChanged(InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
+                EditInvoiceDetailsDialogFragment fragment = EditInvoiceDetailsDialogFragment.newInstance(invoiceDetailsInfo.getInvoiceDetailsID(), invoiceDetailsInfo.getInvoiceID(), invoiceDetailsInfo.getProductID(), invoiceDetailsInfo.getProductName(), invoiceDetailsInfo.getQTY(), invoiceDetailsInfo.getUnitPrice(), invoiceDetailsInfo.getDescription());
+                fragment.show(getParentFragmentManager(), EditInvoiceDetailsDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refresh) {
+                fetchInvoiceDetails();
+            }
+        });
+
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer invoiceDetails_ID) {
+                invoiceDetailsID = invoiceDetails_ID;
+                QuestionDeleteInvoiceDetailsDialogFragment fragment = QuestionDeleteInvoiceDetailsDialogFragment.newInstance("آیا می خواهید محصول موردنظر را حذف نمایید؟");
+                fragment.show(getParentFragmentManager(), QuestionDeleteInvoiceDetailsDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                deleteInvoiceDetails(invoiceDetailsID);
+            }
+        });
+
+        viewModel.getDeleteInvoiceDetailsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<InvoiceDetailsResult>() {
+            @Override
+            public void onChanged(InvoiceDetailsResult invoiceDetailsResult) {
+                if (invoiceDetailsResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("محصول موردنظر با موفقیت حذف شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    fetchInvoiceDetails();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceDetailsResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                }
+            }
+        });
     }
 
     @Override
@@ -278,7 +325,7 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void setupAdapter(InvoiceDetailsResult.InvoiceDetailsInfo[] invoiceDetailsInfoArray) {
-        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(getContext(), Arrays.asList(invoiceDetailsInfoArray));
+        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(getContext(), viewModel, Arrays.asList(invoiceDetailsInfoArray));
         binding.recyclerViewInvoiceDetails.setAdapter(adapter);
     }
 
@@ -293,5 +340,11 @@ public class InvoiceFragment extends Fragment {
         invoiceDetailsInfo.setDescription(binding.edTextProductDescription.getText().toString());
         invoiceDetailsInfo.setUnitPrice(Integer.valueOf(binding.edTextUnitPrice.getText().toString()));
         viewModel.addInvoiceDetails(path, userLoginKey, invoiceDetailsInfo);
+    }
+
+    private void deleteInvoiceDetails(int invoiceDetailsID) {
+        viewModel.getSipSupporterServiceAddInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/InvoiceDetails/Delete/";
+        viewModel.deleteInvoiceDetails(path, userLoginKey, invoiceDetailsID);
     }
 }

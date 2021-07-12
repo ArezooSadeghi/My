@@ -24,6 +24,18 @@ public class InvoiceViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent;
 
+    private SingleLiveEvent<InvoiceDetailsResult.InvoiceDetailsInfo> editClicked = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<InvoiceDetailsResult> editInvoiceDetailsResultSingleLiveEvent;
+
+    private SingleLiveEvent<InvoiceDetailsResult> deleteInvoiceDetailsResultSingleLiveEvent;
+
+    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
+
     public InvoiceViewModel(@NonNull Application application) {
         super(application);
 
@@ -38,6 +50,10 @@ public class InvoiceViewModel extends AndroidViewModel {
         productInfoResultSingleLiveEvent = repository.getProductInfoResultSingleLiveEvent();
 
         invoiceDetailsResultSingleLiveEvent = repository.getInvoiceDetailsResultSingleLiveEvent();
+
+        editInvoiceDetailsResultSingleLiveEvent = repository.getEditInvoiceDetailsResultSingleLiveEvent();
+
+        deleteInvoiceDetailsResultSingleLiveEvent = repository.getDeleteInvoiceDetailsResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<InvoiceResult> getInvoiceInfoByCaseIDResultSingleLiveEvent() {
@@ -58,6 +74,30 @@ public class InvoiceViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<InvoiceDetailsResult> getInvoiceDetailsResultSingleLiveEvent() {
         return invoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult.InvoiceDetailsInfo> getEditClicked() {
+        return editClicked;
+    }
+
+    public SingleLiveEvent<Integer> getDeleteClicked() {
+        return deleteClicked;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult> getEditInvoiceDetailsResultSingleLiveEvent() {
+        return editInvoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult> getDeleteInvoiceDetailsResultSingleLiveEvent() {
+        return deleteInvoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
+        return yesDeleteClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getRefresh() {
+        return refresh;
     }
 
     public ServerData getServerData(String centerName) {
@@ -94,5 +134,13 @@ public class InvoiceViewModel extends AndroidViewModel {
 
     public void fetchInvoiceDetails(String path, String userLoginKey, int invoiceID) {
         repository.fetchInvoiceDetails(path, userLoginKey, invoiceID);
+    }
+
+    public void editInvoiceDetails(String path, String userLoginKey, InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
+        repository.editInvoiceDetails(path, userLoginKey, invoiceDetailsInfo);
+    }
+
+    public void deleteInvoiceDetails(String path, String userLoginKey, int invoiceDetailsID) {
+        repository.deleteInvoiceDetails(path, userLoginKey, invoiceDetailsID);
     }
 }

@@ -197,6 +197,10 @@ public class SipSupporterRepository {
 
     private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<InvoiceDetailsResult> editInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<InvoiceDetailsResult> deleteInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
+
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
@@ -603,6 +607,14 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<InvoiceDetailsResult> getInvoiceDetailsResultSingleLiveEvent() {
         return invoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult> getEditInvoiceDetailsResultSingleLiveEvent() {
+        return editInvoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceDetailsResult> getDeleteInvoiceDetailsResultSingleLiveEvent() {
+        return deleteInvoiceDetailsResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2414,6 +2426,66 @@ public class SipSupporterRepository {
                         Gson gson = new Gson();
                         InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
                         invoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void editInvoiceDetails(String path, String userLoginKey, InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
+        sipSupporterService.editInvoiceDetails(path, userLoginKey, invoiceDetailsInfo).enqueue(new Callback<InvoiceDetailsResult>() {
+            @Override
+            public void onResponse(Call<InvoiceDetailsResult> call, Response<InvoiceDetailsResult> response) {
+                if (response.isSuccessful()) {
+                    editInvoiceDetailsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
+                        editInvoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void deleteInvoiceDetails(String path, String userLoginKey, int invoiceDetailsID) {
+        sipSupporterService.deleteInvoiceDetails(path, userLoginKey, invoiceDetailsID).enqueue(new Callback<InvoiceDetailsResult>() {
+            @Override
+            public void onResponse(Call<InvoiceDetailsResult> call, Response<InvoiceDetailsResult> response) {
+                if (response.isSuccessful()) {
+                    deleteInvoiceDetailsResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
+                        deleteInvoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }

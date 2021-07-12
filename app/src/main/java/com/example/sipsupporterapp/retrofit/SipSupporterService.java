@@ -207,4 +207,10 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<InvoiceDetailsResult> fetchInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceID") int invoiceID);
+
+    @PUT("{path}")
+    Call<InvoiceDetailsResult> editInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo);
+
+    @DELETE("{path}")
+    Call<InvoiceDetailsResult> deleteInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceDetailsID") int invoiceDetailsID);
 }

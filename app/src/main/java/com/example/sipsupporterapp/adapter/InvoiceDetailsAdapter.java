@@ -1,7 +1,10 @@
 package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,15 +14,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.InvoiceDetailsAdapterItemBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
+import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
+import com.skydoves.powermenu.OnMenuItemClickListener;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 
 import java.util.List;
 
 public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAdapter.InvoiceDetailsHolder> {
     private Context context;
+    private InvoiceViewModel viewModel;
     private List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList;
 
-    public InvoiceDetailsAdapter(Context context, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
+    public InvoiceDetailsAdapter(Context context, InvoiceViewModel viewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
         this.context = context;
+        this.viewModel = viewModel;
         this.invoiceDetailsInfoList = invoiceDetailsInfoList;
     }
 
@@ -36,6 +45,35 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
     @Override
     public void onBindViewHolder(@NonNull InvoiceDetailsHolder holder, int position) {
         holder.bindInvoiceDetailsInfo(invoiceDetailsInfoList.get(position));
+
+        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PowerMenu powerMenu = new PowerMenu.Builder(context)
+                        .addItem(new PowerMenuItem("ویرایش", R.drawable.new_edit))
+                        .addItem(new PowerMenuItem("حذف", R.drawable.new_delete))
+                        .setTextColor(Color.parseColor("#000000"))
+                        .setTextGravity(Gravity.RIGHT)
+                        .build();
+
+                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                    @Override
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
+                            case 0:
+                                viewModel.getEditClicked().setValue(invoiceDetailsInfoList.get(position));
+                                powerMenu.dismiss();
+                                break;
+                            case 1:
+                                viewModel.getDeleteClicked().setValue(invoiceDetailsInfoList.get(position).getInvoiceDetailsID());
+                                powerMenu.dismiss();
+                                break;
+                        }
+                    }
+                });
+                powerMenu.showAsDropDown(view);
+            }
+        });
     }
 
     @Override
