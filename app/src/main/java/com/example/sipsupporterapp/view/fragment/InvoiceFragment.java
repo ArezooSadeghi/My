@@ -27,12 +27,15 @@ import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
+import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class InvoiceFragment extends Fragment {
     private FragmentInvoiceBinding binding;
@@ -117,7 +120,12 @@ public class InvoiceFragment extends Fragment {
         binding.ivAddNewProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (binding.btnProductID.getText().toString().isEmpty()) {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("لطفا ابتدا محصول را انتخاب نمایید");
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                } else {
+                    addInvoiceDetails();
+                }
             }
         });
     }
@@ -183,8 +191,13 @@ public class InvoiceFragment extends Fragment {
                 if (productResult.getErrorCode().equals("0")) {
                     int QTY = Integer.valueOf(binding.edTextQTY.getText().toString());
                     int sum = (int) (QTY * productResult.getProducts()[0].getCost());
-                    binding.btnSum.setText(String.valueOf(sum));
-                    binding.edTextUnitPrice.setText(String.valueOf(productResult.getProducts()[0].getCost()));
+
+                    String currencyFormatOne = NumberFormat.getNumberInstance(Locale.US).format(sum);
+                    binding.btnSum.setText(currencyFormatOne);
+
+                    String currencyFormatTwo = NumberFormat.getNumberInstance(Locale.US).format(productResult.getProducts()[0].getCost());
+                    binding.edTextUnitPrice.setText(currencyFormatTwo);
+
                     binding.btnProductName.setText(productResult.getProducts()[0].getProductName());
                     binding.btnProductID.setText(String.valueOf(productResult.getProducts()[0].getProductID()));
                 } else {
@@ -198,7 +211,28 @@ public class InvoiceFragment extends Fragment {
             @Override
             public void onChanged(InvoiceDetailsResult invoiceDetailsResult) {
                 if (invoiceDetailsResult.getErrorCode().equals("0")) {
+                    long finalSumPrice = 0;
+                    for (InvoiceDetailsResult.InvoiceDetailsInfo info : invoiceDetailsResult.getInvoiceDetails()) {
+                        finalSumPrice += info.getUnitPrice();
+                    }
+
+                    String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(finalSumPrice);
+                    binding.btnSumPrice.setText(currencyFormat);
                     setupAdapter(invoiceDetailsResult.getInvoiceDetails());
+                }
+            }
+        });
+
+        viewModel.getAddInvoiceDetailsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<InvoiceDetailsResult>() {
+            @Override
+            public void onChanged(InvoiceDetailsResult invoiceDetailsResult) {
+                if (invoiceDetailsResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("محصول با موفقیت ثبت شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    fetchInvoiceDetails();
+                } else {
+                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceDetailsResult.getError());
+                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 }
             }
         });
@@ -252,6 +286,12 @@ public class InvoiceFragment extends Fragment {
         viewModel.getSipSupporterServiceAddInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/InvoiceDetails/Add/";
         InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult().new InvoiceDetailsInfo();
+        invoiceDetailsInfo.setInvoiceID(invoiceID);
+        invoiceDetailsInfo.setProductName(binding.btnProductName.getText().toString());
+        invoiceDetailsInfo.setQTY(Integer.valueOf(binding.edTextQTY.getText().toString()));
+        invoiceDetailsInfo.setProductID(Integer.valueOf(binding.btnProductID.getText().toString()));
+        invoiceDetailsInfo.setDescription(binding.edTextProductDescription.getText().toString());
+        invoiceDetailsInfo.setUnitPrice(Integer.valueOf(binding.edTextUnitPrice.getText().toString()));
         viewModel.addInvoiceDetails(path, userLoginKey, invoiceDetailsInfo);
     }
 }
