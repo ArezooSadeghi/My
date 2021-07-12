@@ -10,22 +10,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentQuestionDialogBinding;
-import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 
-public class QuestionDeleteInvoiceDetailsDialogFragment extends DialogFragment {
+import org.greenrobot.eventbus.EventBus;
+
+public class QuestionDialogFragment extends DialogFragment {
     private FragmentQuestionDialogBinding binding;
-    private InvoiceViewModel viewModel;
-
-    public static final String TAG = QuestionDeleteInvoiceDetailsDialogFragment.class.getSimpleName();
 
     private static final String ARGS_MESSAGE = "message";
 
-    public static QuestionDeleteInvoiceDetailsDialogFragment newInstance(String message) {
-        QuestionDeleteInvoiceDetailsDialogFragment fragment = new QuestionDeleteInvoiceDetailsDialogFragment();
+    public static final String TAG = QuestionDialogFragment.class.getSimpleName();
+
+    public static QuestionDialogFragment newInstance(String message) {
+        QuestionDialogFragment fragment = new QuestionDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_MESSAGE, message);
         fragment.setArguments(args);
@@ -35,8 +35,6 @@ public class QuestionDeleteInvoiceDetailsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        createViewModel();
     }
 
     @NonNull
@@ -62,27 +60,23 @@ public class QuestionDeleteInvoiceDetailsDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
-    }
-
     private void initViews() {
         String message = getArguments().getString(ARGS_MESSAGE);
         binding.txtMessage.setText(message);
     }
 
     private void handleEvents() {
-        binding.btnNo.setOnClickListener(new View.OnClickListener() {
+        binding.btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventBus.getDefault().post(new YesDeleteEvent(true));
                 dismiss();
             }
         });
 
-        binding.btnYes.setOnClickListener(new View.OnClickListener() {
+        binding.btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getYesDeleteClicked().setValue(true);
                 dismiss();
             }
         });

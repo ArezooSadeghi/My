@@ -121,7 +121,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         return updateImageListSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getYesDelete() {
+    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
         return yesDelete;
     }
 

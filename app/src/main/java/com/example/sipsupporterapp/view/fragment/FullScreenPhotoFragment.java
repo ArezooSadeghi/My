@@ -19,16 +19,18 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentFullScreenPhotoBinding;
 import com.example.sipsupporterapp.eventbus.DeleteEvent;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDeletePhotoDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDeletePhotoDialogFragment;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class FullScreenPhotoFragment extends Fragment {
     private FragmentFullScreenPhotoBinding binding;
@@ -96,8 +98,8 @@ public class FullScreenPhotoFragment extends Fragment {
         binding.imgViewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuestionDeletePhotoDialogFragment fragment = QuestionDeletePhotoDialogFragment.newInstance(getString(R.string.question_delete_photo_message));
-                fragment.show(getParentFragmentManager(), QuestionDeletePhotoDialogFragment.TAG);
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.question_delete_photo_message));
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
     }
@@ -118,16 +120,6 @@ public class FullScreenPhotoFragment extends Fragment {
     }
 
     private void setupObserver() {
-        viewModel.getYesDelete().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean yesDelete) {
-                if (binding.progressBarLoading.getVisibility() == View.INVISIBLE) {
-                    binding.progressBarLoading.setVisibility(View.VISIBLE);
-                }
-                deleteAttachment();
-            }
-        });
-
         viewModel.getDeleteAttachResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
@@ -182,5 +174,25 @@ public class FullScreenPhotoFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        if (binding.progressBarLoading.getVisibility() == View.INVISIBLE) {
+            binding.progressBarLoading.setVisibility(View.VISIBLE);
+        }
+        deleteAttachment();
     }
 }

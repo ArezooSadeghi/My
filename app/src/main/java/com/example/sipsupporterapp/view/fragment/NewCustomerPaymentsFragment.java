@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerPaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentNewCustomerPaymentsBinding;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -27,10 +28,13 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCustomerPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDeleteCustomerPaymentDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -199,17 +203,8 @@ public class NewCustomerPaymentsFragment extends Fragment {
             @Override
             public void onChanged(CustomerPaymentResult.CustomerPaymentInfo info) {
                 customerPaymentID = info.getCustomerPaymentID();
-                QuestionDeleteCustomerPaymentDialogFragment fragment = QuestionDeleteCustomerPaymentDialogFragment.newInstance(getString(R.string.delete_new_customer_payments_question_message));
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean okDeleteClicked) {
-                viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-                String path = "/api/v1/customerPayments/Delete/";
-                viewModel.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.delete_new_customer_payments_question_message));
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 
@@ -275,5 +270,28 @@ public class NewCustomerPaymentsFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteCustomerPayment();
+    }
+
+    private void deleteCustomerPayment() {
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/Delete/";
+        viewModel.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
     }
 }

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerProductAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerProductBinding;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
@@ -27,9 +28,12 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCustomerProductDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDeleteCustomerProductDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
 import java.util.List;
@@ -184,15 +188,8 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(Integer customer_ProductID) {
                 customerProductID = customer_ProductID;
-                QuestionDeleteCustomerProductDialogFragment fragment = QuestionDeleteCustomerProductDialogFragment.newInstance(getString(R.string.question_delete_customer_product_message));
-                fragment.show(getActivity().getSupportFragmentManager(), QuestionDeleteCustomerProductDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean yesDelete) {
-                deleteProduct();
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.question_delete_customer_product_message));
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 
@@ -263,5 +260,22 @@ public class CustomerProductFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteProduct();
     }
 }

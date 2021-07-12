@@ -20,6 +20,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CaseAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCaseBinding;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -30,7 +31,7 @@ import com.example.sipsupporterapp.view.dialog.AssignDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ChangeCaseTypeDialogFragment;
 import com.example.sipsupporterapp.view.dialog.CommentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDeleteTaskDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RegisterCaseResultDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.TaskViewModel;
@@ -113,6 +114,17 @@ public class CaseFragment extends Fragment {
         AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, customerName, 0, false, "");
         fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
         EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteCase();
+    }
+
+    private void deleteCase() {
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Case/Delete/";
+        viewModel.deleteCase(path, userLoginKey, caseID);
     }
 
     private void createViewModel() {
@@ -214,17 +226,8 @@ public class CaseFragment extends Fragment {
             @Override
             public void onChanged(Integer case_ID) {
                 caseID = case_ID;
-                QuestionDeleteTaskDialogFragment fragment = QuestionDeleteTaskDialogFragment.newInstance("آیا می خواهید کار مورد نظر را حذف کنید؟");
-                fragment.show(getParentFragmentManager(), QuestionDeleteTaskDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean yesDeleteClicked) {
-                viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
-                String path = "/api/v1/Case/Delete/";
-                viewModel.deleteCase(path, userLoginKey, caseID);
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید کار مورد نظر را حذف کنید؟");
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 

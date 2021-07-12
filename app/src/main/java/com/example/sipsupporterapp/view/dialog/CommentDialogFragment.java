@@ -19,11 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CommentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCommentDialogBinding;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.CommentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CommentViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
 
@@ -93,15 +97,8 @@ public class CommentDialogFragment extends DialogFragment {
             @Override
             public void onChanged(Integer comment_ID) {
                 commentID = comment_ID;
-                QuestionDeleteCommentDialogFragment fragment = QuestionDeleteCommentDialogFragment.newInstance("آیا می خواهید نظر خود را حذف کنید");
-                fragment.show(getParentFragmentManager(), QuestionDeleteCommentDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean yesDeleteClicked) {
-                deleteComment();
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید نظر خود را حذف کنید");
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 
@@ -222,5 +219,22 @@ public class CommentDialogFragment extends DialogFragment {
                 fragment.show(getParentFragmentManager(), AddEditCommentDialogFragment.TAG);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteComment();
     }
 }

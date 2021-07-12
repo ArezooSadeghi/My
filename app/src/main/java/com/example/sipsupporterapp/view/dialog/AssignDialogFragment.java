@@ -19,11 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.AssignAdapter;
 import com.example.sipsupporterapp.databinding.FragmentAssignDialogBinding;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.AssignViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
 
@@ -107,15 +111,8 @@ public class AssignDialogFragment extends DialogFragment {
             @Override
             public void onChanged(Integer assign_ID) {
                 assignID = assign_ID;
-                QuestionDeleteAssignDialogFragment fragment = QuestionDeleteAssignDialogFragment.newInstance("آیا می خواهید assign موردنظر را حذف کنید؟");
-                fragment.show(getParentFragmentManager(), QuestionDeleteAssignDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean yesDeleteClicked) {
-                deleteAssign();
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید assign موردنظر را حذف نمایید؟");
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 
@@ -229,5 +226,22 @@ public class AssignDialogFragment extends DialogFragment {
     private void deleteAssign() {
         String path = "/api/v1/Assign/Delete/";
         viewModel.deleteAssign(path, userLoginKey, assignID);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteAssign();
     }
 }

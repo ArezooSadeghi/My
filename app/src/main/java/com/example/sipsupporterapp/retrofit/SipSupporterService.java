@@ -202,11 +202,11 @@ public interface SipSupporterService {
     @GET("{path}")
     Call<CaseProductResult> fetchCaseProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
 
-    @POST("{path}")
-    Call<InvoiceDetailsResult> addInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo);
-
     @GET("{path}")
     Call<InvoiceDetailsResult> fetchInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceID") int invoiceID);
+
+    @POST("{path}")
+    Call<InvoiceDetailsResult> addInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo);
 
     @PUT("{path}")
     Call<InvoiceDetailsResult> editInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo);

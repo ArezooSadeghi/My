@@ -21,6 +21,7 @@ import com.example.sipsupporterapp.adapter.InvoiceDetailsAdapter;
 import com.example.sipsupporterapp.databinding.FragmentInvoiceBinding;
 import com.example.sipsupporterapp.eventbus.NavigateEvent;
 import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.ProductResult;
@@ -28,7 +29,7 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.dialog.EditInvoiceDetailsDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDeleteInvoiceDetailsDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
 
@@ -258,15 +259,8 @@ public class InvoiceFragment extends Fragment {
             @Override
             public void onChanged(Integer invoiceDetails_ID) {
                 invoiceDetailsID = invoiceDetails_ID;
-                QuestionDeleteInvoiceDetailsDialogFragment fragment = QuestionDeleteInvoiceDetailsDialogFragment.newInstance("آیا می خواهید محصول موردنظر را حذف نمایید؟");
-                fragment.show(getParentFragmentManager(), QuestionDeleteInvoiceDetailsDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                deleteInvoiceDetails(invoiceDetailsID);
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید محصول موردنظر را حذف نمایید؟");
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 
@@ -310,6 +304,11 @@ public class InvoiceFragment extends Fragment {
         fetchProductInfo(event.getProductGroupID());
         binding.edTextQTY.setText("1");
         EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteInvoiceDetails(invoiceDetailsID);
     }
 
     private void fetchProductInfo(int productGroupID) {

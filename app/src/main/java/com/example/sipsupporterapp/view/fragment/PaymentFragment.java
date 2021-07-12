@@ -20,6 +20,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.PaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPaymentBinding;
 import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
+import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -28,12 +29,13 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
-import com.example.sipsupporterapp.view.dialog.QuestionDeletePaymentDialogFragment;
+import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
 import java.util.List;
@@ -234,15 +236,8 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
                 paymentID = paymentInfo.getPaymentID();
-                QuestionDeletePaymentDialogFragment fragment = QuestionDeletePaymentDialogFragment.newInstance(getString(R.string.question_delete_cost_message));
-                fragment.show(getParentFragmentManager(), QuestionDeletePaymentDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getYesDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean yesDelete) {
-                deleteCost();
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.question_delete_cost_message));
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
 
@@ -304,5 +299,22 @@ public class PaymentFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteCost();
     }
 }
