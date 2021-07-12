@@ -52,9 +52,8 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
         }
 
         public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo info) {
-            binding.txtQTY.setText(String.valueOf(info.getQTY()));
             binding.txtProductDescription.setText(info.getDescription());
-            binding.txtProductID.setText(info.getProductID());
+            binding.txtProductID.setText(String.valueOf(info.getProductID()));
             binding.txtProductName.setText(info.getProductName());
         }
     }

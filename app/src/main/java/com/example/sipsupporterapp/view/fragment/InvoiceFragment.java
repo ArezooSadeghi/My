@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
@@ -69,9 +71,17 @@ public class InvoiceFragment extends Fragment {
                 false);
 
         handleEvents();
-        binding.recyclerViewInvoiceDetails.setLayoutManager(new LinearLayoutManager(getContext()));
+        initRecyclerView();
 
         return binding.getRoot();
+    }
+
+    private void initRecyclerView() {
+        binding.recyclerViewInvoiceDetails.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerViewInvoiceDetails.addItemDecoration(dividerItemDecoration);
     }
 
     @Override
