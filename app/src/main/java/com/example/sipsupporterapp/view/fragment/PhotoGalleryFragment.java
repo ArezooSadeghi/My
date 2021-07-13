@@ -148,7 +148,7 @@ public class PhotoGalleryFragment extends Fragment {
     @Subscribe(sticky = true)
     public void getDeleteEvent(DeleteEvent event) {
         String filePath = "";
-        File dir = new File(getContext().getExternalFilesDir(null), "Attachments");
+        File dir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Attachments");
         if (dir.exists()) {
             File[] files = dir.listFiles();
             for (File file : files) {
@@ -173,6 +173,7 @@ public class PhotoGalleryFragment extends Fragment {
             binding.progressBarLoading.setVisibility(View.INVISIBLE);
             binding.recyclerViewAttachmentFile.setVisibility(View.VISIBLE);
         }
+
         setupAdapter();
 
         EventBus.getDefault().removeStickyEvent(event);
