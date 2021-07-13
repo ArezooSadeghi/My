@@ -50,6 +50,7 @@
             android:id="@+id/img_question"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/chat"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="16dp"
             android:ellipsize="end"
             android:fontFamily="@font/iranyekanwebbold"
             android:lineSpacingMultiplier="1.2"
@@ -77,21 +78,21 @@
             android:id="@+id/img_answer"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/receptionist"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_question" />
+            app:layout_constraintTop_toBottomOf="@id/txt_question" />
 
         <TextView
             android:id="@+id/txt_user_full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
             android:fontFamily="@font/iranyekanwebbold"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/img_answer"
-            app:layout_constraintStart_toEndOf="@id/txt_answer"
             app:layout_constraintTop_toTopOf="@id/img_answer" />
 
         <TextView
