@@ -50,7 +50,7 @@ public class QuestionDialogFragment extends DialogFragment {
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext())
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 

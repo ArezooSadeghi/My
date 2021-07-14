@@ -67,51 +67,87 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_register_support"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#FE7F9C"
-                app:cardCornerRadius="15dp">
+                app:cardBackgroundColor="#696969"
+                app:cardCornerRadius="15dp"
+                app:strokeColor="@color/orange"
+                app:strokeWidth="1.5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/regular"
-                    android:text="ثبت پشتیبانی"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/register_support"
+                        app:tint="@color/white" />
 
-            <androidx.cardview.widget.CardView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/regular"
+                        android:text="ثبت پشتیبانی"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_support_history"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="32dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#73D9CF"
-                app:cardCornerRadius="15dp">
+                app:cardBackgroundColor="#696969"
+                app:cardCornerRadius="15dp"
+                app:strokeColor="@color/orange"
+                app:strokeWidth="1.5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/regular"
-                    android:text="سابقه پشتیبانی"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/support_history"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/regular"
+                        android:text="سابقه پشتیبانی"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
@@ -123,51 +159,87 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_customer_products"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#FFA500"
-                app:cardCornerRadius="15dp">
+                app:cardBackgroundColor="#696969"
+                app:cardCornerRadius="15dp"
+                app:strokeColor="@color/orange"
+                app:strokeWidth="1.5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/regular"
-                    android:text="لیست محصولات"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/product_list"
+                        app:tint="@color/white" />
 
-            <androidx.cardview.widget.CardView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/regular"
+                        android:text="لیست محصولات"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_customer_payments"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="32dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#E9CFEC"
-                app:cardCornerRadius="15dp">
+                app:cardBackgroundColor="#696969"
+                app:cardCornerRadius="15dp"
+                app:strokeColor="@color/orange"
+                app:strokeWidth="1.5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/regular"
-                    android:text="مبالغ واریزی"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/payments"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/regular"
+                        android:text="مبالغ واریزی"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
@@ -178,28 +250,46 @@
             android:layout_weight="1.5"
             android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_view_see_customer_call_information"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#7FFFD4"
-                app:cardCornerRadius="15dp">
+                app:cardBackgroundColor="#696969"
+                app:cardCornerRadius="15dp"
+                app:strokeColor="@color/orange"
+                app:strokeWidth="1.5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/regular"
-                    android:text="مشاهده اطلاعات تماس"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/call"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/regular"
+                        android:text="مشاهده اطلاعات تماس"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

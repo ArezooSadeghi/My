@@ -78,7 +78,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             }
         });
 
-        AlertDialog dialog = new AlertDialog.Builder(getContext()).setView(binding.getRoot()).create();
+        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog).setView(binding.getRoot()).create();
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);

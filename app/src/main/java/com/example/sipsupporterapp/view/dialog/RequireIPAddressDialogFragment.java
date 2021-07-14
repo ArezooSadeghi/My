@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.sipsupporterapp.R;
+
 public class RequireIPAddressDialogFragment extends DialogFragment {
 
     public static final String TAG = RequireIPAddressDialogFragment.class.getSimpleName();
@@ -30,7 +32,7 @@ public class RequireIPAddressDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext())
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setMessage("لطفا آدرس ip خود را وارد کنید")
                 .setPositiveButton("تایید", new DialogInterface.OnClickListener() {
                     @Override
