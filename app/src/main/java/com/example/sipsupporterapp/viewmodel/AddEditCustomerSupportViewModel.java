@@ -57,7 +57,7 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
     }
 
     public void fetchSupportEventsResult(String path, String userLoginKey) {
-        repository.fetchSupportEventsResult(path, userLoginKey);
+        repository.fetchSupportEvents(path, userLoginKey);
     }
 
     public void addCustomerSupport(String path, String userLoginKey, CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {

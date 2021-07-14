@@ -130,7 +130,7 @@ public class CustomerPaymentFragment extends Fragment {
     }
 
     private void fetchCustomerPayments() {
-        viewModel.getSipSupporterServiceCustomerPaymentsResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/ListByCustomer/";
         viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
     }

@@ -17,7 +17,6 @@ public class UserViewModel extends AndroidViewModel {
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> successfulRegisterCustomerUsersSingleLiveEvent = new SingleLiveEvent<>();
 
@@ -68,7 +67,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public void fetchUsers(String path, String userLoginKey, int customerID) {
-        repository.fetchUsers(path, userLoginKey, customerID);
+        repository.fetchCustomerUsers(path, userLoginKey, customerID);
     }
 
     public void fetchDate(String path, String userLoginKey) {

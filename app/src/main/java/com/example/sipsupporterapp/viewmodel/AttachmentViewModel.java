@@ -135,19 +135,19 @@ public class AttachmentViewModel extends AndroidViewModel {
     }
 
     public void fetchCustomerPaymentAttachments(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
-        mRepository.getAttachmentFilesViaCustomerPaymentID(path, userLoginKey, customerPaymentID, LoadFileData);
+        mRepository.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, LoadFileData);
     }
 
     public void fetchCustomerProductAttachments(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
-        mRepository.fetchFileWithCustomerProductID(path, userLoginKey, customerProductID, LoadFileData);
+        mRepository.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, LoadFileData);
     }
 
     public void fetchCustomerSupportAttachments(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
-        mRepository.fetchFileWithCustomerSupportID(path, userLoginKey, customerSupportID, LoadFileData);
+        mRepository.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, LoadFileData);
     }
 
     public void fetchAttachInfo(String path, String userLoginKey, int attachID, boolean loadFileData) {
-        mRepository.fetchWithAttachID(path, userLoginKey, attachID, loadFileData);
+        mRepository.fetchAttachInfo(path, userLoginKey, attachID, loadFileData);
     }
 
     public void deleteAttachment(String path, String userLoginKey, int attachID) {
@@ -155,6 +155,6 @@ public class AttachmentViewModel extends AndroidViewModel {
     }
 
     public void fetchPaymentAttachments(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
-        mRepository.fetchAttachmentsByPaymentID(path, userLoginKey, paymentID, LoadFileData);
+        mRepository.fetchPaymentAttachments(path, userLoginKey, paymentID, LoadFileData);
     }
 }

@@ -131,7 +131,7 @@ public class CustomerProductFragment extends Fragment {
     }
 
     private void fetchCustomerProducts() {
-        viewModel.getSipSupporterServiceCustomerProductsResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/List/";
         viewModel.fetchCustomerProducts(path, userLoginKey, customerID);
     }

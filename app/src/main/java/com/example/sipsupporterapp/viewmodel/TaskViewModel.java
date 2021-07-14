@@ -22,7 +22,6 @@ public class TaskViewModel extends AndroidViewModel {
     private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> changeCaseTypeClicked = new SingleLiveEvent<>();

@@ -88,7 +88,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
         paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
         description = getArguments().getString(ARGS_DESCRIPTION);

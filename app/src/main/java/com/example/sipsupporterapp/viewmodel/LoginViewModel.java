@@ -88,7 +88,7 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public void fetchUserResult(String path, UserResult.UserLoginParameter userLoginParameter) {
-        repository.fetchUserResult(path, userLoginParameter);
+        repository.login(path, userLoginParameter);
     }
 
     public List<ServerData> getServerDataList() {

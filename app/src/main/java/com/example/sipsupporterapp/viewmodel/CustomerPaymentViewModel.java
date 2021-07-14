@@ -97,7 +97,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     }
 
     public void fetchCustomerPaymentsResult(String path, String userLoginKey, int customerID) {
-        repository.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
+        repository.fetchCustomerPayments(path, userLoginKey, customerID);
     }
 
     public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {

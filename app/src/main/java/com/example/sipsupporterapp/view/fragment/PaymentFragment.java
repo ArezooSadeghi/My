@@ -152,7 +152,7 @@ public class PaymentFragment extends Fragment {
     }
 
     private void deleteCost() {
-        viewModel.getSipSupportServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Delete/";
         viewModel.deletePayment(path, userLoginKey, paymentID);
     }

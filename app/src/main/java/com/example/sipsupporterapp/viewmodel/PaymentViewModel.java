@@ -22,7 +22,6 @@ public class PaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent;
-
     private SingleLiveEvent<PaymentResult.PaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult.PaymentInfo> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult.PaymentInfo> seePaymentAttachmentsClicked = new SingleLiveEvent<>();
@@ -111,7 +110,7 @@ public class PaymentViewModel extends AndroidViewModel {
     }
 
     public void fetchPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
-        repository.fetchPaymentsListByBankAccounts(path, userLoginKey, bankAccountID);
+        repository.fetchPayments(path, userLoginKey, bankAccountID);
     }
 
     public void addPayment(String path, String userLoginKey, PaymentResult.PaymentInfo paymentInfo) {
@@ -127,6 +126,6 @@ public class PaymentViewModel extends AndroidViewModel {
     }
 
     public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
-        repository.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
+        repository.fetchPaymentInfo(path, userLoginKey, paymentSubjectID);
     }
 }

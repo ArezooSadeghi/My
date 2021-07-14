@@ -78,129 +78,63 @@ public class SipSupporterRepository {
     private static final String TAG = SipSupporterRepository.class.getSimpleName();
 
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<UserResult> changePasswordResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> customerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> customerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> customerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> paymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerUserResult> customerUsersResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<ProductResult> productsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<ProductResult> addProductResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> paymentsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<PaymentResult> paymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CommentResult> addCommentResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<UserResult> userLoginResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CommentResult> commentsByCaseIDResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<UserResult> usersResultSingleLiveEvent = new SingleLiveEvent<>();
-
+    private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult> paymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> customerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> customerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> customerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> paymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerUserResult> customerUsersResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CommentResult> addCommentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CommentResult> commentsByCaseIDResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<AssignResult> addAssignResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AssignResult> assignsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CaseProductResult> addCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceResult> invoiceInfoByCaseIDResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceResult> addInvoiceResultSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseProductResult> caseProductsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceDetailsResult> addInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceDetailsResult> editInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceDetailsResult> deleteInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
@@ -373,12 +307,16 @@ public class SipSupporterRepository {
         return customersResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<UserResult> getChangePasswordResultSingleLiveEvent() {
+        return changePasswordResultSingleLiveEvent;
+    }
+
     public SingleLiveEvent<UserResult> getUserLoginResultSingleLiveEvent() {
         return userLoginResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<UserResult> getChangePasswordResultSingleLiveEvent() {
-        return changePasswordResultSingleLiveEvent;
+    public SingleLiveEvent<UserResult> getUsersResultSingleLiveEvent() {
+        return usersResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
@@ -421,6 +359,10 @@ public class SipSupporterRepository {
         return deleteCustomerPaymentResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
+        return customerPaymentsByBankAccountResultSingleLiveEvent;
+    }
+
     public SingleLiveEvent<PaymentResult> getAddPaymentResultSingleLiveEvent() {
         return addPaymentResultSingleLiveEvent;
     }
@@ -433,8 +375,8 @@ public class SipSupporterRepository {
         return deletePaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
-        return bankAccountsResultSingleLiveEvent;
+    public SingleLiveEvent<PaymentResult> getPaymentsResultSingleLiveEvent() {
+        return paymentsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsResultSingleLiveEvent() {
@@ -449,16 +391,12 @@ public class SipSupporterRepository {
         return customerSupportAttachmentsResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<AttachResult> getAttachResultViaAttachIDSingleLiveEvent() {
+        return attachResultViaAttachIDSingleLiveEvent;
+    }
+
     public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
         return paymentAttachmentsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CustomerUserResult> getCustomerUsersResultSingleLiveEvent() {
-        return customerUsersResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
-        return supportEventsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
@@ -469,8 +407,12 @@ public class SipSupporterRepository {
         return deleteAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent() {
-        return productsResultSingleLiveEvent;
+    public SingleLiveEvent<CustomerUserResult> getCustomerUsersResultSingleLiveEvent() {
+        return customerUsersResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<SupportEventResult> getSupportEventsResultSingleLiveEvent() {
+        return supportEventsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<ProductResult> getProductInfoResultSingleLiveEvent() {
@@ -485,28 +427,8 @@ public class SipSupporterRepository {
         return paymentSubjectInfoResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<PaymentResult> getPaymentsResultSingleLiveEvent() {
-        return paymentsResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<AttachResult> getAttachResultViaAttachIDSingleLiveEvent() {
-        return attachResultViaAttachIDSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
-        return wrongIpAddressSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
-        return customerPaymentsByBankAccountResultSingleLiveEvent;
+    public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
+        return bankAccountsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<ProductGroupResult> getProductGroupsResultSingleLiveEvent() {
@@ -553,10 +475,6 @@ public class SipSupporterRepository {
         return editCommentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<UserResult> getUsersResultSingleLiveEvent() {
-        return usersResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<AssignResult> getAddAssignResultSingleLiveEvent() {
         return addAssignResultSingleLiveEvent;
     }
@@ -597,10 +515,6 @@ public class SipSupporterRepository {
         return addInvoiceResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CaseProductResult> getCaseProductsResultSingleLiveEvent() {
-        return caseProductsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<InvoiceDetailsResult> getAddInvoiceDetailsResultSingleLiveEvent() {
         return addInvoiceDetailsResultSingleLiveEvent;
     }
@@ -615,6 +529,18 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<InvoiceDetailsResult> getDeleteInvoiceDetailsResultSingleLiveEvent() {
         return deleteInvoiceDetailsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
+        return wrongIpAddressSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -712,7 +638,7 @@ public class SipSupporterRepository {
         database.delete(SipSupporterSchema.ServerDataTable.NAME, whereClause, whereArgs);
     }
 
-    public void fetchUserResult(String path, UserResult.UserLoginParameter userLoginParameter) {
+    public void login(String path, UserResult.UserLoginParameter userLoginParameter) {
         sipSupporterService.login(path, userLoginParameter).enqueue(new Callback<UserResult>() {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
@@ -833,7 +759,7 @@ public class SipSupporterRepository {
     }
 
 
-    public void fetchUsers(String path, String userLoginKey, int customerID) {
+    public void fetchCustomerUsers(String path, String userLoginKey, int customerID) {
         sipSupporterService.fetchCustomerUsers(path, userLoginKey, customerID).enqueue(new Callback<CustomerUserResult>() {
             @Override
             public void onResponse(Call<CustomerUserResult> call, Response<CustomerUserResult> response) {
@@ -864,7 +790,7 @@ public class SipSupporterRepository {
     }
 
 
-    public void fetchSupportEventsResult(String path, String userLoginKey) {
+    public void fetchSupportEvents(String path, String userLoginKey) {
         sipSupporterService.fetchSupportEvents(path, userLoginKey).enqueue(new Callback<SupportEventResult>() {
             @Override
             public void onResponse(Call<SupportEventResult> call, Response<SupportEventResult> response) {
@@ -963,36 +889,6 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
-    public void fetchCustomerProducts(String path, String userLoginKey) {
-        sipSupporterService.fetchProducts(path, userLoginKey).enqueue(new Callback<ProductResult>() {
-            @Override
-            public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
-                if (response.isSuccessful()) {
-                    productsResultSingleLiveEvent.setValue(response.body());
-                } else {
-                    try {
-                        Gson gson = new Gson();
-                        ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
-                        productsResultSingleLiveEvent.setValue(productResult);
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
@@ -1155,7 +1051,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchCustomerPaymentsResult(String path, String userLoginKey, int customerID) {
+    public void fetchCustomerPayments(String path, String userLoginKey, int customerID) {
         sipSupporterService.fetchCustomerPayments(path, userLoginKey, customerID).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
@@ -1185,7 +1081,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void getAttachmentFilesViaCustomerPaymentID(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
+    public void fetchCustomerPaymentAttachments(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
         sipSupporterService.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
@@ -1305,7 +1201,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchFileWithCustomerProductID(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
+    public void fetchCustomerProductAttachments(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
         sipSupporterService.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
@@ -1335,7 +1231,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchFileWithCustomerSupportID(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
+    public void fetchCustomerSupportAttachments(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
         sipSupporterService.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
@@ -1365,7 +1261,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchWithAttachID(String path, String userLoginKey, int attachID, boolean loadFileData) {
+    public void fetchAttachInfo(String path, String userLoginKey, int attachID, boolean loadFileData) {
         sipSupporterService.fetchAttachInfo(path, userLoginKey, attachID, loadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
@@ -1395,7 +1291,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchPaymentsListByBankAccounts(String path, String userLoginKey, int bankAccountID) {
+    public void fetchPayments(String path, String userLoginKey, int bankAccountID) {
         sipSupporterService.fetchPayments(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
@@ -1575,7 +1471,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchAttachmentsByPaymentID(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
+    public void fetchPaymentAttachments(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
         sipSupporterService.fetchPaymentAttachments(path, userLoginKey, paymentID, LoadFileData).enqueue(new Callback<AttachResult>() {
             @Override
             public void onResponse(Call<AttachResult> call, Response<AttachResult> response) {
@@ -1605,7 +1501,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
+    public void fetchPaymentInfo(String path, String userLoginKey, int paymentSubjectID) {
         sipSupporterService.fetchPaymentInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
