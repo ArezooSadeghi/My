@@ -90,7 +90,7 @@ public class PaymentSubjectFragment extends Fragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServicePaymentSubjects(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServicePaymentSubjectResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/paymentSubjects/List/";
         viewModel.fetchPaymentSubjects(path, userLoginKey);
     }

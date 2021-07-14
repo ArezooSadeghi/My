@@ -12,60 +12,37 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class AttachmentViewModel extends AndroidViewModel {
 
     private SipSupporterRepository mRepository;
-
-    private SingleLiveEvent<Boolean> requestPermission = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> allowPermission = new SingleLiveEvent<>();
-
     private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent;
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-
+    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID;
+    private SingleLiveEvent<Boolean> requestPermission = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> allowPermission = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mIsAttachAgainSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mYesAgainSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> mNoAgainSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
-
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
-
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
-
-    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent;
-
     private SingleLiveEvent<AttachResult> updateImageListSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> yesDelete = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
-
-    private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID;
-
     private SingleLiveEvent<String> finishWriteToStorage = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> photoClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Boolean> hideLoading = new SingleLiveEvent<>();
 
     public AttachmentViewModel(@NonNull Application application) {
         super(application);
 
         mRepository = SipSupporterRepository.getInstance(getApplication());
-
         attachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
-
         getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
-
         getAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getCustomerProductAttachmentsResultSingleLiveEvent();
-
         getAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getCustomerSupportAttachmentsResultSingleLiveEvent();
-
         attachResultViaAttachIDSingleLiveEvent = mRepository.getAttachResultViaAttachIDSingleLiveEvent();
-
         deleteAttachResultSingleLiveEvent = mRepository.getDeleteAttachResultSingleLiveEvent();
-
         attachmentListResultByPaymentID = mRepository.getPaymentAttachmentsResultSingleLiveEvent();
     }
 
@@ -119,10 +96,6 @@ public class AttachmentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<AttachResult> getUpdatePhotoGallerySingleLiveEvent() {
         return updateImageListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDelete;
     }
 
     public SingleLiveEvent<AttachResult> getDeleteAttachResultSingleLiveEvent() {

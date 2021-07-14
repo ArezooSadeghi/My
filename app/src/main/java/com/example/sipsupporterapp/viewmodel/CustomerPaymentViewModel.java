@@ -13,48 +13,29 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class CustomerPaymentViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent;
-
-    private SingleLiveEvent<Boolean> updateListAddCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-
+    private SingleLiveEvent<Boolean> updateListAddCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> DeleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
-
 
     public CustomerPaymentViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
-
         customerPaymentsResultSingleLiveEvent = repository.getCustomerPaymentsResultSingleLiveEvent();
-
         customerPaymentsByBankAccountResultSingleLiveEvent = repository.getCustomerPaymentsByBankAccountResultSingleLiveEvent();
-
         addCustomerPaymentResultSingleLiveEvent = repository.getAddCustomerPaymentResultSingleLiveEvent();
-
         editCustomerPaymentResultSingleLiveEvent = repository.getEditCustomerPaymentResultSingleLiveEvent();
-
         deleteCustomerPaymentResultSingleLiveEvent = repository.getDeleteCustomerPaymentResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }
@@ -83,20 +64,16 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return deleteCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getUpdateListAddCustomerPaymentSingleLiveEvent() {
-        return updateListAddCustomerPaymentSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDeleteClicked;
-    }
-
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
         return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateListAddCustomerPaymentSingleLiveEvent() {
+        return updateListAddCustomerPaymentSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getDeleteClicked() {
@@ -113,10 +90,6 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
 
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
-    }
-
-    public void getSipSupporterServiceCustomerPaymentsResult(String baseUrl) {
-        repository.getSipSupporterServiceCustomerPaymentResult(baseUrl);
     }
 
     public void getSipSupporterServiceCustomerPaymentResult(String baseUrl) {

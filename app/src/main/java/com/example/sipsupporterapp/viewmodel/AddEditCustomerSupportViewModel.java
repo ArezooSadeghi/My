@@ -13,11 +13,8 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class AddEditCustomerSupportViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent;
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
@@ -25,11 +22,8 @@ public class AddEditCustomerSupportViewModel extends AndroidViewModel {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         supportEventsResultSingleLiveEvent = repository.getSupportEventsResultSingleLiveEvent();
-
         addCustomerSupportResultSingleLiveEvent = repository.getAddCustomerSupportResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }

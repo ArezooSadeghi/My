@@ -14,64 +14,39 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class TaskViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
+    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Boolean> changeCaseTypeClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CaseResult.CaseInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Integer> registerCommentClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Integer> assignToOthersClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CaseResult.CaseInfo> printInvoiceClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<Integer> caseProductsClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent;
-
     private SingleLiveEvent<Boolean> navigateToCustomerFragment = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
     public TaskViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         caseTypesResultSingleLiveEvent = repository.getCaseTypesResultSingleLiveEvent();
-
         casesByCaseTypeResultSingleLiveEvent = repository.getCasesByCaseTypeResultSingleLiveEvent();
-
         addCaseResultSingleLiveEvent = repository.getAddCaseResultSingleLiveEvent();
-
         deleteCaseResultSingleLiveEvent = repository.getDeleteCaseResultSingleLiveEvent();
-
         editCaseResultSingleLiveEvent = repository.getEditCaseResultSingleLiveEvent();
-
         closeCaseResultSingleLiveEvent = repository.getCloseCaseResultSingleLiveEvent();
-
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
-
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
@@ -88,8 +63,32 @@ public class TaskViewModel extends AndroidViewModel {
         return addCaseResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<CaseResult> getDeleteCaseResultSingleLiveEvent() {
+        return deleteCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getEditCaseResultSingleLiveEvent() {
+        return editCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getCloseCaseResultSingleLiveEvent() {
+        return closeCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
+        return timeoutExceptionHappenSingleLiveEvent;
+    }
+
     public SingleLiveEvent<CaseResult.CaseInfo> getCaseFinishClicked() {
         return caseFinishClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getRefreshCaseFinishClicked() {
+        return refreshCaseFinishClicked;
     }
 
     public SingleLiveEvent<Boolean> getChangeCaseTypeClicked() {
@@ -104,32 +103,12 @@ public class TaskViewModel extends AndroidViewModel {
         return editClicked;
     }
 
-    public SingleLiveEvent<Integer> getRegisterCommentClicked() {
-        return registerCommentClicked;
-    }
-
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDeleteClicked;
-    }
-
-    public SingleLiveEvent<CaseResult> getDeleteCaseResultSingleLiveEvent() {
-        return deleteCaseResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CaseResult> getEditCaseResultSingleLiveEvent() {
-        return editCaseResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<Boolean> getRefresh() {
         return refresh;
     }
 
-    public SingleLiveEvent<CaseResult> getCloseCaseResultSingleLiveEvent() {
-        return closeCaseResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getRefreshCaseFinishClicked() {
-        return refreshCaseFinishClicked;
+    public SingleLiveEvent<Integer> getRegisterCommentClicked() {
+        return registerCommentClicked;
     }
 
     public SingleLiveEvent<Integer> getAssignToOthersClicked() {
@@ -152,20 +131,12 @@ public class TaskViewModel extends AndroidViewModel {
         return navigateToCustomerFragment;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceCaseTypes(String baseUrl) {
-        repository.getSipSupporterServiceCaseTypes(baseUrl);
+    public void getSipSupporterServiceCaseTypeResult(String baseUrl) {
+        repository.getSipSupporterServiceCaseTypeResult(baseUrl);
     }
 
     public void getSipSupporterServiceCasesByCaseType(String baseUrl) {

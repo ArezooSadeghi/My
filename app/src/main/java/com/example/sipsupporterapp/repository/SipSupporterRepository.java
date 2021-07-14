@@ -309,14 +309,14 @@ public class SipSupporterRepository {
                 }.getType(), new PaymentSubjectResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceProductGroups(String baseUrl) {
+    public void getSipSupporterServiceProductGroupResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<ProductGroupResult>() {
                 }.getType(), new ProductGroupResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceCaseTypes(String baseUrl) {
+    public void getSipSupporterServiceCaseTypeResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CaseTypeResult>() {
@@ -2344,36 +2344,6 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
-                } else {
-                    Log.e(TAG, t.getMessage(), t);
-                }
-            }
-        });
-    }
-
-    public void fetchCaseProducts(String path, String userLoginKey, int caseID) {
-        sipSupporterService.fetchCaseProducts(path, userLoginKey, caseID).enqueue(new Callback<CaseProductResult>() {
-            @Override
-            public void onResponse(Call<CaseProductResult> call, Response<CaseProductResult> response) {
-                if (response.isSuccessful()) {
-                    caseProductsResultSingleLiveEvent.setValue(response.body());
-                } else {
-                    try {
-                        Gson gson = new Gson();
-                        CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
-                        caseProductsResultSingleLiveEvent.setValue(caseProductResult);
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CaseProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

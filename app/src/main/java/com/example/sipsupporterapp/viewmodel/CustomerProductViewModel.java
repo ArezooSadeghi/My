@@ -13,47 +13,27 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class CustomerProductViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent;
-
     private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent;
-
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent;
-
-    private SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent;
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-
     private SingleLiveEvent<Boolean> dialogDismissed = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> seeCustomerProductAttachmentsClicked = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
 
     public CustomerProductViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         addCustomerProductResultSingleLiveEvent = repository.getAddCustomerProductResultSingleLiveEvent();
-
         editCustomerProductResultSingleLiveEvent = repository.getEditCustomerProductResultSingleLiveEvent();
-
         deleteCustomerProductResultSingleLiveEvent = repository.getDeleteCustomerProductResultSingleLiveEvent();
-
         customerProductsResultSingleLiveEvent = repository.getCustomerProductsResultSingleLiveEvent();
-
         productInfoResultSingleLiveEvent = repository.getProductInfoResultSingleLiveEvent();
-
-        getProductsResultSingleLiveEvent = repository.getProductsResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }
@@ -76,10 +56,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<ProductResult> getProductInfoResultSingleLiveEvent() {
         return productInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<ProductResult> getProductsResultSingleLiveEvent() {
-        return getProductsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
@@ -106,16 +82,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return seeCustomerProductAttachmentsClicked;
     }
 
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDeleteClicked;
-    }
-
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
-    }
-
-    public void getSipSupporterServiceProductsResult(String baseUrl) {
-        repository.getSipSupporterServiceProductResult(baseUrl);
     }
 
     public void getSipSupporterServiceCustomerProductResult(String baseUrl) {
@@ -124,14 +92,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public void getSipSupporterServiceProductResult(String baseUrl) {
         repository.getSipSupporterServiceProductResult(baseUrl);
-    }
-
-    public void getSipSupporterServiceCustomerProductsResult(String baseUrl) {
-        repository.getSipSupporterServiceCustomerProductResult(baseUrl);
-    }
-
-    public void fetchProducts(String path, String userLoginKey) {
-        repository.fetchCustomerProducts(path, userLoginKey);
     }
 
     public void addCustomerProduct(String path, String userLoginKey, CustomerProductResult.CustomerProductInfo customerProductInfo) {

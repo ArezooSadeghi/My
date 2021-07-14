@@ -12,47 +12,29 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class InvoiceViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<InvoiceResult> invoiceInfoByCaseIDResultSingleLiveEvent;
-
     private SingleLiveEvent<InvoiceResult> addInvoiceResultSingleLiveEvent;
-
     private SingleLiveEvent<InvoiceDetailsResult> addInvoiceDetailsResultSingleLiveEvent;
-
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent;
-
     private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent;
-
-    private SingleLiveEvent<InvoiceDetailsResult.InvoiceDetailsInfo> editClicked = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<InvoiceDetailsResult> editInvoiceDetailsResultSingleLiveEvent;
-
     private SingleLiveEvent<InvoiceDetailsResult> deleteInvoiceDetailsResultSingleLiveEvent;
-
-    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
-
+    private SingleLiveEvent<InvoiceDetailsResult.InvoiceDetailsInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
 
     public InvoiceViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         invoiceInfoByCaseIDResultSingleLiveEvent = repository.getInvoiceInfoByCaseIDResultSingleLiveEvent();
-
         addInvoiceResultSingleLiveEvent = repository.getAddInvoiceResultSingleLiveEvent();
-
         addInvoiceDetailsResultSingleLiveEvent = repository.getAddInvoiceDetailsResultSingleLiveEvent();
-
         productInfoResultSingleLiveEvent = repository.getProductInfoResultSingleLiveEvent();
-
         invoiceDetailsResultSingleLiveEvent = repository.getInvoiceDetailsResultSingleLiveEvent();
-
         editInvoiceDetailsResultSingleLiveEvent = repository.getEditInvoiceDetailsResultSingleLiveEvent();
-
         deleteInvoiceDetailsResultSingleLiveEvent = repository.getDeleteInvoiceDetailsResultSingleLiveEvent();
     }
 
@@ -76,14 +58,6 @@ public class InvoiceViewModel extends AndroidViewModel {
         return invoiceDetailsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<InvoiceDetailsResult.InvoiceDetailsInfo> getEditClicked() {
-        return editClicked;
-    }
-
-    public SingleLiveEvent<Integer> getDeleteClicked() {
-        return deleteClicked;
-    }
-
     public SingleLiveEvent<InvoiceDetailsResult> getEditInvoiceDetailsResultSingleLiveEvent() {
         return editInvoiceDetailsResultSingleLiveEvent;
     }
@@ -92,8 +66,12 @@ public class InvoiceViewModel extends AndroidViewModel {
         return deleteInvoiceDetailsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDeleteClicked;
+    public SingleLiveEvent<InvoiceDetailsResult.InvoiceDetailsInfo> getEditClicked() {
+        return editClicked;
+    }
+
+    public SingleLiveEvent<Integer> getDeleteClicked() {
+        return deleteClicked;
     }
 
     public SingleLiveEvent<Boolean> getRefresh() {

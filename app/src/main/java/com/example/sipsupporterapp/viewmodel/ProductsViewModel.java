@@ -12,9 +12,7 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class ProductsViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent;
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
@@ -22,9 +20,7 @@ public class ProductsViewModel extends AndroidViewModel {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         productGroupsResultSingleLiveEvent = repository.getProductGroupsResultSingleLiveEvent();
-
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
@@ -45,8 +41,8 @@ public class ProductsViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServiceProductGroups(String baseUrl) {
-        repository.getSipSupporterServiceProductGroups(baseUrl);
+    public void getSipSupporterServiceProductGroupResult(String baseUrl) {
+        repository.getSipSupporterServiceProductGroupResult(baseUrl);
     }
 
     public void fetchProductGroups(String path, String userLoginKey) {

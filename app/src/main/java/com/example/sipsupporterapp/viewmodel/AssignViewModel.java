@@ -11,51 +11,31 @@ import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class AssignViewModel extends AndroidViewModel {
-    private SipSupporterRepository repository;
 
-    private SingleLiveEvent<AssignResult.AssignInfo> editClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> registerCommentClicked = new SingleLiveEvent<>();
+    private SipSupporterRepository repository;
     private SingleLiveEvent<UserResult> usersResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> addAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> assignsResultSingleLiveEvent;
-    private SingleLiveEvent<Boolean> refreshAssigns = new SingleLiveEvent<>();
     private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent;
-    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<AssignResult.AssignInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> registerCommentClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refreshAssigns = new SingleLiveEvent<>();
 
     public AssignViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         usersResultSingleLiveEvent = repository.getUsersResultSingleLiveEvent();
-
         addAssignResultSingleLiveEvent = repository.getAddAssignResultSingleLiveEvent();
-
         assignsResultSingleLiveEvent = repository.getAssignsResultSingleLiveEvent();
-
         editAssignResultSingleLiveEvent = repository.getEditAssignResultSingleLiveEvent();
-
         deleteAssignResultSingleLiveEvent = repository.getDeleteAssignResultSingleLiveEvent();
-
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-    }
-
-    public SingleLiveEvent<AssignResult.AssignInfo> getEditClicked() {
-        return editClicked;
-    }
-
-    public SingleLiveEvent<Integer> getDeleteClicked() {
-        return deleteClicked;
-    }
-
-    public SingleLiveEvent<Boolean> getRegisterCommentClicked() {
-        return registerCommentClicked;
     }
 
     public SingleLiveEvent<UserResult> getUsersResultSingleLiveEvent() {
@@ -70,10 +50,6 @@ public class AssignViewModel extends AndroidViewModel {
         return assignsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getRefreshAssigns() {
-        return refreshAssigns;
-    }
-
     public SingleLiveEvent<AssignResult> getEditAssignResultSingleLiveEvent() {
         return editAssignResultSingleLiveEvent;
     }
@@ -82,16 +58,28 @@ public class AssignViewModel extends AndroidViewModel {
         return deleteAssignResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDeleteClicked;
-    }
-
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
         return noConnectionExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult.AssignInfo> getEditClicked() {
+        return editClicked;
+    }
+
+    public SingleLiveEvent<Integer> getDeleteClicked() {
+        return deleteClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getRegisterCommentClicked() {
+        return registerCommentClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getRefreshAssigns() {
+        return refreshAssigns;
     }
 
     public ServerData getServerData(String centerName) {
@@ -103,10 +91,6 @@ public class AssignViewModel extends AndroidViewModel {
     }
 
     public void getSipSupporterServiceAssignResult(String baseUrl) {
-        repository.getSipSupporterServiceAssignResult(baseUrl);
-    }
-
-    public void getSipSupporterServiceAssigns(String baseUrl) {
         repository.getSipSupporterServiceAssignResult(baseUrl);
     }
 

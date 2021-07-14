@@ -10,49 +10,28 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class CommentViewModel extends AndroidViewModel {
+
     private SipSupporterRepository repository;
-
-    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> yesDeleteClicked = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CommentResult.CommentInfo> editClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<CommentResult> commentsByCaseIDResultSingleLiveEvent;
-
     private SingleLiveEvent<CommentResult> addCommentResultSingleLiveEvent;
-
     private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent;
-
     private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent;
-
-    private SingleLiveEvent<Boolean> refreshComments = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CommentResult.CommentInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refreshComments = new SingleLiveEvent<>();
 
     public CommentViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         commentsByCaseIDResultSingleLiveEvent = repository.getCommentsByCaseIDResultSingleLiveEvent();
-
         addCommentResultSingleLiveEvent = repository.getAddCommentResultSingleLiveEvent();
-
         deleteCommentResultSingleLiveEvent = repository.getDeleteCommentResultSingleLiveEvent();
-
         editCommentResultSingleLiveEvent = repository.getEditCommentResultSingleLiveEvent();
-
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-    }
-
-    public SingleLiveEvent<Integer> getDeleteClicked() {
-        return deleteClicked;
-    }
-
-    public SingleLiveEvent<CommentResult.CommentInfo> getEditClicked() {
-        return editClicked;
     }
 
     public SingleLiveEvent<CommentResult> getCommentsByCaseIDResultSingleLiveEvent() {
@@ -61,14 +40,6 @@ public class CommentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CommentResult> getAddCommentResultSingleLiveEvent() {
         return addCommentResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<Boolean> getRefreshComments() {
-        return refreshComments;
-    }
-
-    public SingleLiveEvent<Boolean> getYesDeleteClicked() {
-        return yesDeleteClicked;
     }
 
     public SingleLiveEvent<CommentResult> getDeleteCommentResultSingleLiveEvent() {
@@ -87,15 +58,23 @@ public class CommentViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
+    public SingleLiveEvent<Integer> getDeleteClicked() {
+        return deleteClicked;
+    }
+
+    public SingleLiveEvent<CommentResult.CommentInfo> getEditClicked() {
+        return editClicked;
+    }
+
+    public SingleLiveEvent<Boolean> getRefreshComments() {
+        return refreshComments;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
 
     public void getSipSupporterServiceCommentResult(String baseUrl) {
-        repository.getSipSupporterServiceCommentResult(baseUrl);
-    }
-
-    public void getSipSupporterServiceAddComment(String baseUrl) {
         repository.getSipSupporterServiceCommentResult(baseUrl);
     }
 

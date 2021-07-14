@@ -110,7 +110,7 @@ public class ProductsFragment extends Fragment {
     }
 
     private void fetchProductGroups() {
-        viewModel.getSipSupporterServiceProductGroups(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceProductGroupResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/productGroup/ListWithProduct/";
         viewModel.fetchProductGroups(path, userLoginKey);
     }

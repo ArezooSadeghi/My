@@ -12,9 +12,7 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class ChangePasswordViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<UserResult> changedPasswordResultSingleLiveEvent;
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
 
@@ -22,9 +20,7 @@ public class ChangePasswordViewModel extends AndroidViewModel {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         changedPasswordResultSingleLiveEvent = repository.getChangePasswordResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }

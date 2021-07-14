@@ -132,7 +132,7 @@ public class CaseFragment extends Fragment {
     }
 
     private void fetchCaseTypes() {
-        viewModel.getSipSupporterServiceCaseTypes(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCaseTypeResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/caseType/List/";
         viewModel.fetchCaseTypes(path, userLoginKey);
     }

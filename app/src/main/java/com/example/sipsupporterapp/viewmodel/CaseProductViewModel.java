@@ -12,35 +12,23 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class CaseProductViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent;
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-
     private SingleLiveEvent<CaseProductResult> addCaseProductResultSingleLiveEvent;
     private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseProductResult.CaseProductInfo> update = new SingleLiveEvent<>();
-
-    private SingleLiveEvent<CaseProductResult> caseProductsResultSingleLiveEvent;
-
     private SingleLiveEvent<CaseProductResult.CaseProductInfo> itemClicked = new SingleLiveEvent<>();
 
     public CaseProductViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         caseProductsWithSelectedResultSingleLiveEvent = repository.getCaseProductsWithSelectedResultSingleLiveEvent();
-
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-
         addCaseProductResultSingleLiveEvent = repository.getAddCaseProductResultSingleLiveEvent();
         deleteCaseProductResultSingleLiveEvent = repository.getDeleteCaseProductResultSingleLiveEvent();
-
-        caseProductsResultSingleLiveEvent = repository.getCaseProductsResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseProductResult> getCaseProductsWithSelectedResultSingleLiveEvent() {
@@ -55,10 +43,6 @@ public class CaseProductViewModel extends AndroidViewModel {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CaseProductResult.CaseProductInfo> getUpdate() {
-        return update;
-    }
-
     public SingleLiveEvent<CaseProductResult> getAddCaseProductResultSingleLiveEvent() {
         return addCaseProductResultSingleLiveEvent;
     }
@@ -67,8 +51,8 @@ public class CaseProductViewModel extends AndroidViewModel {
         return deleteCaseProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CaseProductResult> getCaseProductsResultSingleLiveEvent() {
-        return caseProductsResultSingleLiveEvent;
+    public SingleLiveEvent<CaseProductResult.CaseProductInfo> getUpdate() {
+        return update;
     }
 
     public SingleLiveEvent<CaseProductResult.CaseProductInfo> getItemClicked() {
@@ -93,9 +77,5 @@ public class CaseProductViewModel extends AndroidViewModel {
 
     public void deleteCaseProduct(String path, String userLoginKey, int caseProductID) {
         repository.deleteCaseProduct(path, userLoginKey, caseProductID);
-    }
-
-    public void fetchCaseProducts(String path, String userLoginKey, int caseID) {
-        repository.fetchCaseProducts(path, userLoginKey, caseID);
     }
 }

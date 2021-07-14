@@ -12,9 +12,7 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class PaymentSubjectViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectsResultSingleLiveEvent;
-
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
 
@@ -22,9 +20,7 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         paymentSubjectsResultSingleLiveEvent = repository.getPaymentSubjectsResultSingleLiveEvent();
-
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
@@ -45,7 +41,7 @@ public class PaymentSubjectViewModel extends AndroidViewModel {
         return repository.getServerData(centerName);
     }
 
-    public void getSipSupporterServicePaymentSubjects(String userLoginKey) {
+    public void getSipSupporterServicePaymentSubjectResult(String userLoginKey) {
         repository.getSipSupporterServicePaymentSubjectResult(userLoginKey);
     }
 

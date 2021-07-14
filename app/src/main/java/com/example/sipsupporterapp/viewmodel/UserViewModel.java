@@ -13,27 +13,20 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class UserViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<CustomerUserResult> usersResultSingleLiveEvent;
-
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
-
-    private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
 
+    private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> successfulRegisterCustomerUsersSingleLiveEvent = new SingleLiveEvent<>();
 
     public UserViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         usersResultSingleLiveEvent = repository.getCustomerUsersResultSingleLiveEvent();
-
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }
@@ -46,16 +39,16 @@ public class UserViewModel extends AndroidViewModel {
         return dateResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Integer> getItemClicked() {
-        return itemClicked;
-    }
-
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
         return noConnectionExceptionHappenSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Integer> getItemClicked() {
+        return itemClicked;
     }
 
     public SingleLiveEvent<Boolean> getSuccessfulRegisterCustomerUsersSingleLiveEvent() {

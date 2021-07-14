@@ -15,30 +15,21 @@ import java.util.List;
 public class CustomerViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent;
-
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-
     private SingleLiveEvent<Boolean> showProgressBarSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
-
     private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
-
     private SingleLiveEvent<List<String>> navigateToAddEditCaseDialog = new SingleLiveEvent<>();
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         customersResultSingleLiveEvent = repository.getCustomersResultSingleLiveEvent();
-
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }

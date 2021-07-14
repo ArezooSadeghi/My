@@ -12,21 +12,16 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class CustomerSupportViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-
     private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent;
-
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionSingleLiveEvent;
-
     private SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> seeCustomerSupportAttachmentsClicked = new SingleLiveEvent<>();
 
     public CustomerSupportViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-
         customerSupportsResultSingleLiveEvent = repository.getCustomerSupportsResultSingleLiveEvent();
-
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }
@@ -47,12 +42,12 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return seeCustomerSupportAttachmentsClicked;
     }
 
-    public void getSipSupporterServiceCustomerSupportResult(String baseUrl) {
-        repository.getSipSupporterServiceCustomerSupportResult(baseUrl);
-    }
-
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
+    }
+
+    public void getSipSupporterServiceCustomerSupportResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerSupportResult(baseUrl);
     }
 
     public void fetchCustomerSupports(String path, String userLoginKey, int customerID) {

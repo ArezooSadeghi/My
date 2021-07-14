@@ -61,12 +61,6 @@ public interface SipSupporterService {
     @GET("{path}")
     Call<CustomerProductResult> fetchCustomerProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
 
-    @GET("{path}")
-    Call<ProductResult> fetchProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
-
-    @GET("{path}")
-    Call<ProductResult> fetchProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("productID") int productID);
-
     @POST("{path}")
     Call<CustomerProductResult> addCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CustomerProductResult.CustomerProductInfo customerProductInfo);
 
@@ -75,6 +69,12 @@ public interface SipSupporterService {
 
     @DELETE("{path}")
     Call<CustomerProductResult> deleteCustomerProduct(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID);
+
+    @GET("{path}")
+    Call<ProductResult> fetchProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey);
+
+    @GET("{path}")
+    Call<ProductResult> fetchProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("productID") int productID);
 
     @GET("{path}")
     Call<CustomerPaymentResult> fetchCustomerPayments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerID") int customerID);
@@ -198,9 +198,6 @@ public interface SipSupporterService {
 
     @POST("{path}")
     Call<InvoiceResult> addInvoice(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body InvoiceResult.InvoiceInfo invoiceInfo);
-
-    @GET("{path}")
-    Call<CaseProductResult> fetchCaseProducts(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
 
     @GET("{path}")
     Call<InvoiceDetailsResult> fetchInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceID") int invoiceID);
