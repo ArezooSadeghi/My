@@ -83,6 +83,8 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        createViewModel();
+
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
@@ -96,7 +98,6 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         paymentSubjectID = getArguments().getInt(ARGS_PAYMENT_SUBJECT_ID);
         paymentSubject = getArguments().getString(ARGS_PAYMENT_SUBJECT);
 
-        createViewModel();
         setupObserver();
     }
 
@@ -113,7 +114,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(),  R.style.CustomAlertDialog)
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 
@@ -167,7 +168,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                   handleError(paymentResult.getError());
+                    handleError(paymentResult.getError());
                 }
             }
         });
@@ -175,14 +176,14 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-               handleError(message);
+                handleError(message);
             }
         });
 
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-              handleError(message);
+                handleError(message);
             }
         });
 

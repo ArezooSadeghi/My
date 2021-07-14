@@ -110,6 +110,7 @@
             android:background="@color/black"
             android:layoutDirection="rtl"
             app:headerLayout="@layout/navigation_header"
+            app:itemTextAppearance="@style/RobotoTextViewStyle"
             app:itemTextColor="@color/white"
             app:menu="@menu/navigation_menu" />
 
