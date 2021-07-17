@@ -59,11 +59,7 @@ public class InvoiceFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceInvoiceResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        initVariables();
     }
 
     @Override
@@ -109,12 +105,20 @@ public class InvoiceFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(InvoiceViewModel.class);
     }
 
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceInvoiceResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
     private void handleEvents() {
         binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InvoiceFragmentDirections.ActionInvoiceFragmentToProductsFragment action =
-                        InvoiceFragmentDirections.actionInvoiceFragmentToProductsFragment();
+                InvoiceFragmentDirections.ActionInvoiceFragmentToProductsFragment action = InvoiceFragmentDirections.actionInvoiceFragmentToProductsFragment();
                 action.setFlag(true);
                 NavHostFragment.findNavController(InvoiceFragment.this).navigate(action);
             }
@@ -312,13 +316,11 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void fetchProductInfo(int productGroupID) {
-        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/products/Info/";
         viewModel.fetchProductInfo(path, userLoginKey, productGroupID);
     }
 
     private void fetchInvoiceDetails() {
-        viewModel.getSipSupporterServiceAddInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/InvoiceDetails/List/";
         viewModel.fetchInvoiceDetails(path, userLoginKey, invoiceID);
     }
@@ -329,7 +331,6 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void addInvoiceDetails() {
-        viewModel.getSipSupporterServiceAddInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/InvoiceDetails/Add/";
         InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult().new InvoiceDetailsInfo();
         invoiceDetailsInfo.setInvoiceID(invoiceID);
@@ -342,7 +343,6 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void deleteInvoiceDetails(int invoiceDetailsID) {
-        viewModel.getSipSupporterServiceAddInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/InvoiceDetails/Delete/";
         viewModel.deleteInvoiceDetails(path, userLoginKey, invoiceDetailsID);
     }

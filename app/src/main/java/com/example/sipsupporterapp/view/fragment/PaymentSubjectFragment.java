@@ -42,8 +42,10 @@ import tellh.com.recyclertreeview_lib.TreeViewAdapter;
 public class PaymentSubjectFragment extends Fragment {
     private FragmentPaymentSubjectBinding binding;
     private PaymentSubjectViewModel viewModel;
-    private List<TreeNode> treeNodeList = new ArrayList<>();
-    private List<PaymentSubjectResult.PaymentSubjectInfo> paymentSubjectInfoList = new ArrayList<>();
+    private ServerData serverData;
+    private String centerName, userLoginKey;
+    private List<TreeNode> treeNodeList;
+    private List<PaymentSubjectResult.PaymentSubjectInfo> paymentSubjectInfoList;
     private TreeViewAdapter adapter;
 
     public static PaymentSubjectFragment newInstance() {
@@ -58,6 +60,7 @@ public class PaymentSubjectFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
+        initVariables();
         fetchPaymentSubjects();
     }
 
@@ -86,11 +89,17 @@ public class PaymentSubjectFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(PaymentSubjectViewModel.class);
     }
 
-    private void fetchPaymentSubjects() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
+    private void initVariables() {
+        treeNodeList = new ArrayList<>();
+        paymentSubjectInfoList = new ArrayList<>();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServicePaymentSubjectResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
+    private void fetchPaymentSubjects() {
         String path = "/api/v1/paymentSubjects/List/";
         viewModel.fetchPaymentSubjects(path, userLoginKey);
     }

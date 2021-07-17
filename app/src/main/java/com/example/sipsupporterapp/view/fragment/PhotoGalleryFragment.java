@@ -50,10 +50,10 @@ public class PhotoGalleryFragment extends Fragment {
     private int customerSupportID, customerProductID, customerPaymentID, paymentID, index;
     private ServerData serverData;
     private PhotoGalleryAdapter adapter;
-    private List<String> oldFilePathList = new ArrayList<>();
-    private List<String> newFilePathList = new ArrayList<>();
-    private List<Integer> attachIDList = new ArrayList<>();
-    private String userLoginKey = "";
+    private List<String> oldFilePathList;
+    private List<String> newFilePathList;
+    private List<Integer> attachIDList;
+    private String centerName, userLoginKey;
 
     private static final int SPAN_COUNT_PHONE = 3;
     private static final int SPAN_COUNT_TABLET = 4;
@@ -85,17 +85,8 @@ public class PhotoGalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-
-        customerSupportID = getArguments().getInt(ARGS_CUSTOMER_SUPPORT_ID);
-        customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
-        customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
-        paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
-
         createViewModel();
-
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        serverData = viewModel.getServerData(centerName);
+        initVariables();
 
         if (hasWriteExternalStoragePermission()) {
             if (customerSupportID != 0) {
@@ -217,6 +208,22 @@ public class PhotoGalleryFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(AttachmentViewModel.class);
     }
 
+    private void initVariables() {
+        oldFilePathList = new ArrayList<>();
+        newFilePathList = new ArrayList<>();
+        attachIDList = new ArrayList<>();
+
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
+
+        customerSupportID = getArguments().getInt(ARGS_CUSTOMER_SUPPORT_ID);
+        customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
+        customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
+        paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
+    }
+
     private void initViews() {
         if (isTablet()) {
             binding.recyclerViewAttachmentFile.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_TABLET));
@@ -250,31 +257,26 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void fetchCustomerSupportAttachments() {
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerSupport/";
         viewModel.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, false);
     }
 
     private void fetchCustomerProductAttachments() {
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerProduct/";
         viewModel.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, false);
     }
 
     private void fetchCustomerPaymentAttachments() {
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerPayment/";
         viewModel.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, false);
     }
 
     private void fetchPaymentAttachments() {
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByPayment/";
         viewModel.fetchPaymentAttachments(path, userLoginKey, paymentID, false);
     }
 
     private void fetchAttachInfo(int attachID) {
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Info/";
         viewModel.fetchAttachInfo(path, userLoginKey, attachID, true);
     }

@@ -43,10 +43,7 @@ public class CustomerSearchFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
+        initVariables();
     }
 
     @Override
@@ -75,6 +72,13 @@ public class CustomerSearchFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
     }
 
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
     private void initViews() {
         binding.recyclerViewCustomer.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -94,7 +98,6 @@ public class CustomerSearchFragment extends Fragment {
     }
 
     private void fetchCustomer() {
-        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customers/search/";
         viewModel.fetchCustomers(path, userLoginKey, binding.edTextSearch.getText().toString());
     }

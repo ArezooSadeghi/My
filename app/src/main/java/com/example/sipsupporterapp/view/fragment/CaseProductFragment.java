@@ -20,16 +20,13 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CaseProductAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCaseProductBinding;
 import com.example.sipsupporterapp.model.CaseProductResult;
-import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CaseProductViewModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class CaseProductFragment extends Fragment {
     private FragmentCaseProductBinding binding;
@@ -37,7 +34,6 @@ public class CaseProductFragment extends Fragment {
     private String centerName, userLoginKey;
     private ServerData serverData;
     private int caseID;
-    private List<ProductResult.ProductInfo> productInfoList = new ArrayList<>();
 
     public static CaseProductFragment newInstance() {
         CaseProductFragment fragment = new CaseProductFragment();
@@ -51,11 +47,7 @@ public class CaseProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        initVariables();
 
         CaseProductFragmentArgs args = CaseProductFragmentArgs.fromBundle(getArguments());
         caseID = args.getCaseID();
@@ -84,6 +76,18 @@ public class CaseProductFragment extends Fragment {
         setupObserver();
     }
 
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(this).get(CaseProductViewModel.class);
+    }
+
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
     private void initViews() {
         binding.recyclerViewCaseProduct.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -92,12 +96,7 @@ public class CaseProductFragment extends Fragment {
         binding.recyclerViewCaseProduct.addItemDecoration(dividerItemDecoration);
     }
 
-    private void createViewModel() {
-        viewModel = new ViewModelProvider(this).get(CaseProductViewModel.class);
-    }
-
     private void fetchCaseProducts() {
-        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/CaseProduct/ListWithSelected/";
         viewModel.fetchCaseProductsWithSelected(path, userLoginKey, caseID);
     }
@@ -179,8 +178,8 @@ public class CaseProductFragment extends Fragment {
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
 
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 

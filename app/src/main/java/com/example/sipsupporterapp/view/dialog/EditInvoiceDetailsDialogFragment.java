@@ -133,7 +133,7 @@ public class EditInvoiceDetailsDialogFragment extends DialogFragment {
         String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceAddInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceInvoiceDetailsResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/InvoiceDetails/Edit/";
         viewModel.editInvoiceDetails(path, userLoginKey, invoiceDetailsInfo);
     }

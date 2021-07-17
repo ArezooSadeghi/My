@@ -60,11 +60,7 @@ public class PaymentFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchBankAccounts();
     }
 
@@ -90,8 +86,33 @@ public class PaymentFragment extends Fragment {
         setupObserver();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteCost();
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+    }
+
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
@@ -152,19 +173,16 @@ public class PaymentFragment extends Fragment {
     }
 
     private void deleteCost() {
-        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Delete/";
         viewModel.deletePayment(path, userLoginKey, paymentID);
     }
 
     private void fetchCostsByBankAccountID() {
-        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/ListByBankAccount/";
         viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     private void fetchBankAccounts() {
-        viewModel.getSipSupporterServiceBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/bankAccounts/List/";
         viewModel.fetchBankAccounts(path, userLoginKey);
     }
@@ -299,22 +317,5 @@ public class PaymentFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteCost();
     }
 }

@@ -292,7 +292,7 @@ public class SipSupporterRepository {
                 }.getType(), new InvoiceResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSipSupporterServiceAddInvoiceDetailsResult(String baseUrl) {
+    public void getSipSupporterServiceInvoiceDetailsResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<InvoiceDetailsResult>() {

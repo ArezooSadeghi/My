@@ -31,6 +31,8 @@ import java.util.Arrays;
 public class NewCaseProductFragment extends Fragment {
     private FragmentNewCaseProductBinding binding;
     private CaseProductViewModel viewModel;
+    private ServerData serverData;
+    private String centerName, userLoginKey;
     private int caseID;
 
     public static NewCaseProductFragment newInstance() {
@@ -45,6 +47,7 @@ public class NewCaseProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
+        initVariables();
     }
 
     @Override
@@ -75,15 +78,18 @@ public class NewCaseProductFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CaseProductViewModel.class);
     }
 
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
     private void initViews() {
         binding.recyclerViewNewCaseProduct.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void fetchCaseProducts() {
-        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        ServerData serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCaseProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/CaseProduct/ListWithSelected/";
         viewModel.fetchCaseProductsWithSelected(path, userLoginKey, caseID);
     }

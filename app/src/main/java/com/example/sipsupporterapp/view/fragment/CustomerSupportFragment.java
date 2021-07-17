@@ -54,12 +54,7 @@ public class CustomerSupportFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchCustomerSupports();
     }
 
@@ -88,6 +83,15 @@ public class CustomerSupportFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerSupportViewModel.class);
     }
 
+    private void initVariables() {
+        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
     @SuppressLint("ResourceAsColor")
     private void initView() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
@@ -104,13 +108,11 @@ public class CustomerSupportFragment extends Fragment {
 
     private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
         List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
-        CustomerSupportAdapter adapter = new CustomerSupportAdapter(
-                getContext(), viewModel, customerSupportInfoList);
+        CustomerSupportAdapter adapter = new CustomerSupportAdapter(getContext(), viewModel, customerSupportInfoList);
         binding.recyclerViewCustomerSupport.setAdapter(adapter);
     }
 
     private void fetchCustomerSupports() {
-        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerSupports/ListByCustomer/";
         viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
     }

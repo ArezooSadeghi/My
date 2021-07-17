@@ -46,8 +46,8 @@ public class NewCustomerPaymentsFragment extends Fragment {
     private ServerData serverData;
     private String centerName, userLoginKey;
     private int bankAccountID, customerPaymentID;
-    private List<String> bankAccountNames = new ArrayList<>();
-    private List<Integer> bankAccountIDs = new ArrayList<>();
+    private List<String> bankAccountNames;
+    private List<Integer> bankAccountIDs;
 
     public static NewCustomerPaymentsFragment newInstance() {
         NewCustomerPaymentsFragment fragment = new NewCustomerPaymentsFragment();
@@ -61,11 +61,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchBankAccounts();
     }
 
@@ -91,8 +87,35 @@ public class NewCustomerPaymentsFragment extends Fragment {
         setupObserver();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteCustomerPayment();
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
+    }
+
+    private void initVariables() {
+        bankAccountNames = new ArrayList<>();
+        bankAccountIDs = new ArrayList<>();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
@@ -144,13 +167,11 @@ public class NewCustomerPaymentsFragment extends Fragment {
 
     private void fetchCustomerPaymentsByBankAccount(int bankAccountID) {
         binding.progressBarLoading.setVisibility(binding.progressBarLoading.getVisibility() == View.GONE ? View.VISIBLE : View.VISIBLE);
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/CustomerPayments/ListByBankAccount/";
         viewModel.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     private void fetchBankAccounts() {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/BankAccounts/List/";
         viewModel.fetchBankAccounts(path, userLoginKey);
     }
@@ -267,30 +288,12 @@ public class NewCustomerPaymentsFragment extends Fragment {
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
 
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteCustomerPayment();
-    }
-
     private void deleteCustomerPayment() {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/Delete/";
         viewModel.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
     }

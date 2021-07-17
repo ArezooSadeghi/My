@@ -93,7 +93,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void setupSpinner() {
-        String lastValueSpinner = SipSupportSharedPreferences.getCenterName(getContext());
+        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
         List<ServerData> serverDataList = viewModel.getServerDataList();
         List<String> centerNameList = new ArrayList<>();
         for (ServerData serverData : serverDataList) {
@@ -102,13 +102,13 @@ public class LoginFragment extends Fragment {
 
         List<String> newCenterNameList = new ArrayList<>();
 
-        if (lastValueSpinner != null) {
-            for (String centerName : centerNameList) {
-                if (!centerName.equals(lastValueSpinner)) {
-                    newCenterNameList.add(centerName);
+        if (centerName != null) {
+            for (String center_Name : centerNameList) {
+                if (!center_Name.equals(center_Name)) {
+                    newCenterNameList.add(center_Name);
                 }
             }
-            newCenterNameList.add(0, lastValueSpinner);
+            newCenterNameList.add(0, centerName);
             binding.spinner.setItems(newCenterNameList);
 
         } else {
@@ -140,8 +140,7 @@ public class LoginFragment extends Fragment {
 
                         if (spinnerValue != null) {
                             ServerData serverData = viewModel.getServerData(spinnerValue);
-                            viewModel.getSipSupporterServiceUserResult(
-                                    serverData.getIpAddress() + ":" + serverData.getPort());
+                            viewModel.getSipSupporterServiceUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
                             String path = "/api/v1/users/Login/";
                             viewModel.fetchUserResult(path, userLoginParameter);
                             binding.loadingLayout.setVisibility(View.VISIBLE);
@@ -192,16 +191,13 @@ public class LoginFragment extends Fragment {
                 binding.imgBtnMore.setEnabled(true);
 
                 if (userResult.getErrorCode().equals("0")) {
-                    SipSupportSharedPreferences
-                            .setUserName(getContext(), binding.edTextUserName.getText().toString());
+                    SipSupportSharedPreferences.setUserName(getContext(), binding.edTextUserName.getText().toString());
                     SipSupportSharedPreferences.setCenterName(getContext(), spinnerValue);
                     binding.loadingLayout.setVisibility(View.GONE);
                     UserResult.UserInfo[] userInfoArray = userResult.getUsers();
                     if (userInfoArray.length != 0) {
-                        SipSupportSharedPreferences
-                                .setUserLoginKey(getContext(), userInfoArray[0].getUserLoginKey());
-                        SipSupportSharedPreferences
-                                .setUserFullName(getContext(), userInfoArray[0].getUserFullName());
+                        SipSupportSharedPreferences.setUserLoginKey(getContext(), userInfoArray[0].getUserLoginKey());
+                        SipSupportSharedPreferences.setUserFullName(getContext(), userInfoArray[0].getUserFullName());
 
                         Intent starter = MainActivity.start(getContext());
                         startActivity(starter);
@@ -238,8 +234,7 @@ public class LoginFragment extends Fragment {
                         binding.btnLogin.setEnabled(true);
                         binding.imgBtnMore.setEnabled(true);
 
-                        ErrorDialogFragment fragment = ErrorDialogFragment
-                                .newInstance(message);
+                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
                         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                     }
                 });

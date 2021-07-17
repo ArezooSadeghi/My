@@ -52,12 +52,9 @@ public class CustomerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchDate();
     }
 
@@ -95,8 +92,15 @@ public class CustomerFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerViewModel.class);
     }
 
-    private void fetchDate() {
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
+    private void fetchDate() {
         String path = "/api/v1/common/getDate/";
         viewModel.fetchDateResult(path, userLoginKey);
     }
@@ -186,7 +190,6 @@ public class CustomerFragment extends Fragment {
             @Override
             public void onChanged(String searchQuery) {
                 binding.progressBarLoading.setVisibility(View.VISIBLE);
-                viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
                 String path = "/api/v1/customers/search";
                 viewModel.fetchCustomers(path, userLoginKey, searchQuery);
             }
@@ -218,8 +221,8 @@ public class CustomerFragment extends Fragment {
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
 
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 }

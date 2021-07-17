@@ -57,12 +57,7 @@ public class UserFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         getDate();
     }
 
@@ -92,8 +87,17 @@ public class UserFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
-    private void getDate() {
+    private void initVariables() {
+        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
+    }
+
+    private void getDate() {
         String path = "/api/v1/common/getDate/";
         viewModel.fetchDate(path, userLoginKey);
     }
@@ -112,7 +116,6 @@ public class UserFragment extends Fragment {
     }
 
     private void fetchUsers() {
-        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerUsers/userList/";
         viewModel.fetchUsers(path, userLoginKey, customerID);
     }

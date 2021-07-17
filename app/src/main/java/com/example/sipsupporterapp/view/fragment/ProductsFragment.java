@@ -46,9 +46,9 @@ public class ProductsFragment extends Fragment {
     private ProductsViewModel viewModel;
     private boolean flag;
 
-    private List<TreeNode> treeNodeList = new ArrayList<>();
-    private List<ProductGroupResult.ProductGroupInfo> productGroupInfoList = new ArrayList<>();
-    private List<ProductResult.ProductInfo> productInfoList = new ArrayList<>();
+    private List<TreeNode> treeNodeList;
+    private List<ProductGroupResult.ProductGroupInfo> productGroupInfoList;
+    private List<ProductResult.ProductInfo> productInfoList;
     private TreeViewAdapter adapter;
     private ServerData serverData;
     private String userLoginKey, centerName;
@@ -100,9 +100,14 @@ public class ProductsFragment extends Fragment {
     }
 
     private void initVariables() {
+        treeNodeList = new ArrayList<>();
+        productGroupInfoList = new ArrayList<>();
+        productInfoList = new ArrayList<>();
+
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerDate(centerName);
+        viewModel.getSipSupporterServiceProductGroupResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void createViewModel() {
@@ -110,7 +115,6 @@ public class ProductsFragment extends Fragment {
     }
 
     private void fetchProductGroups() {
-        viewModel.getSipSupporterServiceProductGroupResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/productGroup/ListWithProduct/";
         viewModel.fetchProductGroups(path, userLoginKey);
     }

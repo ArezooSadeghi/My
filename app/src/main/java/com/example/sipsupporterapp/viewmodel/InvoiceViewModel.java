@@ -86,8 +86,8 @@ public class InvoiceViewModel extends AndroidViewModel {
         repository.getSipSupporterServiceInvoiceResult(baseUrl);
     }
 
-    public void getSipSupporterServiceAddInvoiceDetailsResult(String baseUrl) {
-        repository.getSipSupporterServiceAddInvoiceDetailsResult(baseUrl);
+    public void getSipSupporterServiceInvoiceDetailsResult(String baseUrl) {
+        repository.getSipSupporterServiceInvoiceDetailsResult(baseUrl);
     }
 
     public void getSipSupporterServiceProductResult(String baseUrl) {

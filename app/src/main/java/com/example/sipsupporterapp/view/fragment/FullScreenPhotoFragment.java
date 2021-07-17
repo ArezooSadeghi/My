@@ -53,11 +53,9 @@ public class FullScreenPhotoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createViewModel();
 
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
+        createViewModel();
+        initVariables();
     }
 
     @Override
@@ -82,8 +80,35 @@ public class FullScreenPhotoFragment extends Fragment {
         setupObserver();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        if (binding.progressBarLoading.getVisibility() == View.INVISIBLE) {
+            binding.progressBarLoading.setVisibility(View.VISIBLE);
+        }
+        deleteAttachment();
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(AttachmentViewModel.class);
+    }
+
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
@@ -114,7 +139,6 @@ public class FullScreenPhotoFragment extends Fragment {
 
     private void deleteAttachment() {
         int attachID = getArguments().getInt(ARGS_ATTACH_ID);
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Delete/";
         viewModel.deleteAttachment(path, userLoginKey, attachID);
     }
@@ -174,25 +198,5 @@ public class FullScreenPhotoFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        if (binding.progressBarLoading.getVisibility() == View.INVISIBLE) {
-            binding.progressBarLoading.setVisibility(View.VISIBLE);
-        }
-        deleteAttachment();
     }
 }

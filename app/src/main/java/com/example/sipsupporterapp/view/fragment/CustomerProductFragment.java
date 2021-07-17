@@ -59,13 +59,8 @@ public class CustomerProductFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchCustomerProducts();
     }
 
@@ -91,8 +86,34 @@ public class CustomerProductFragment extends Fragment {
         setupObserver();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getYesDeleteEvent(YesDeleteEvent event) {
+        deleteProduct();
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerProductViewModel.class);
+    }
+
+    private void initVariables() {
+        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
@@ -131,13 +152,11 @@ public class CustomerProductFragment extends Fragment {
     }
 
     private void fetchCustomerProducts() {
-        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/List/";
         viewModel.fetchCustomerProducts(path, userLoginKey, customerID);
     }
 
     private void deleteProduct() {
-        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerProducts/Delete/";
         viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
     }
@@ -260,22 +279,5 @@ public class CustomerProductFragment extends Fragment {
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);
         getActivity().finish();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteProduct();
     }
 }

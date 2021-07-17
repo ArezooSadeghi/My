@@ -50,8 +50,8 @@ public class CaseFragment extends Fragment {
     private ServerData serverData;
     private int caseTypeID, customerID, caseID;
     private String centerName, userLoginKey;
-    private List<String> caseTypes = new ArrayList<>();
-    private List<Integer> caseTypeIDs = new ArrayList<>();
+    private List<String> caseTypes;
+    private List<Integer> caseTypeIDs;
 
     public static CaseFragment newInstance() {
         CaseFragment fragment = new CaseFragment();
@@ -65,11 +65,7 @@ public class CaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchCaseTypes();
     }
 
@@ -122,7 +118,6 @@ public class CaseFragment extends Fragment {
     }
 
     private void deleteCase() {
-        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Case/Delete/";
         viewModel.deleteCase(path, userLoginKey, caseID);
     }
@@ -131,10 +126,16 @@ public class CaseFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
     }
 
-    private void fetchCaseTypes() {
+    private void initVariables() {
+        caseTypes = new ArrayList<>();
+        caseTypeIDs = new ArrayList<>();
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceCaseTypeResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/caseType/List/";
-        viewModel.fetchCaseTypes(path, userLoginKey);
+        viewModel.getSipSupporterServiceCasesByCaseType(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
@@ -142,6 +143,11 @@ public class CaseFragment extends Fragment {
         binding.recyclerViewCases.addItemDecoration(new DividerItemDecoration(
                 binding.recyclerViewCases.getContext(),
                 DividerItemDecoration.VERTICAL));
+    }
+
+    private void fetchCaseTypes() {
+        String path = "/api/v1/caseType/List/";
+        viewModel.fetchCaseTypes(path, userLoginKey);
     }
 
     private void handleEvents() {
@@ -372,7 +378,6 @@ public class CaseFragment extends Fragment {
     }
 
     private void fetchCasesByCaseType(int caseTypeID, String search, boolean showAll) {
-        viewModel.getSipSupporterServiceCasesByCaseType(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Case/List/";
         viewModel.fetchCasesByCaseType(path, userLoginKey, caseTypeID, search, showAll);
     }
