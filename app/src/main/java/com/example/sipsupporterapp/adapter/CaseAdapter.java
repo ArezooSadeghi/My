@@ -15,7 +15,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CaseAdapterItemBinding;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.utils.Converter;
-import com.example.sipsupporterapp.viewmodel.TaskViewModel;
+import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
@@ -25,12 +25,12 @@ import java.util.Random;
 
 public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     private Context context;
-    private TaskViewModel viewModel;
+    private CaseViewModel viewModel;
     private List<CaseResult.CaseInfo> caseInfoList;
 
     final Random random = new Random();
 
-    public CaseAdapter(Context context, TaskViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
+    public CaseAdapter(Context context, CaseViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
         this.context = context;
         this.viewModel = viewModel;
         this.caseInfoList = caseInfoList;
@@ -57,7 +57,8 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
                         .addItem(new PowerMenuItem("محصول های این case"))
-                        .addItem(new PowerMenuItem("امور حسابداری"))
+                        .addItem(new PowerMenuItem("ثبت مبالغ واریزی"))
+                        .addItem(new PowerMenuItem("لیست مبالغ واریزی"))
                         .addItem(new PowerMenuItem("صدور فاکتور", R.drawable.ic_file))
                         .addItem(new PowerMenuItem("به همکاران assign", R.drawable.user))
                         .addItem(new PowerMenuItem("ثبت comment", R.drawable.com))
@@ -79,27 +80,35 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 viewModel.getCaseProductsClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
                                 break;
+                            case 1:
+                                viewModel.getRegisterPaymentClicked().setValue(caseInfoList.get(position).getCustomerID());
+                                powerMenu.dismiss();
+                                break;
                             case 2:
-                                viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position));
+                                viewModel.getPaymentListClicked().setValue(caseInfoList.get(position).getCustomerID());
                                 powerMenu.dismiss();
                                 break;
                             case 3:
-                                viewModel.getAssignToOthersClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 4:
-                                viewModel.getRegisterCommentClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getAssignToOthersClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 5:
-                                viewModel.getEditClicked().setValue(caseInfoList.get(position));
+                                viewModel.getRegisterCommentClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 6:
-                                viewModel.getDeleteClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getEditClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                             case 7:
+                                viewModel.getDeleteClicked().setValue(caseInfoList.get(position).getCaseID());
+                                powerMenu.dismiss();
+                                break;
+                            case 8:
                                 viewModel.getCaseFinishClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;

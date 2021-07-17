@@ -27,6 +27,7 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCaseDialogFragment;
+import com.example.sipsupporterapp.view.dialog.AddEditCustomerPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.AssignDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ChangeCaseTypeDialogFragment;
 import com.example.sipsupporterapp.view.dialog.CommentDialogFragment;
@@ -34,7 +35,7 @@ import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RegisterCaseResultDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
-import com.example.sipsupporterapp.viewmodel.TaskViewModel;
+import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,7 +47,7 @@ import java.util.List;
 
 public class CaseFragment extends Fragment {
     private FragmentCaseBinding binding;
-    private TaskViewModel viewModel;
+    private CaseViewModel viewModel;
     private ServerData serverData;
     private int caseTypeID, customerID, caseID;
     private String centerName, userLoginKey;
@@ -123,7 +124,7 @@ public class CaseFragment extends Fragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CaseViewModel.class);
     }
 
     private void initVariables() {
@@ -338,6 +339,23 @@ public class CaseFragment extends Fragment {
                 action.setCaseID(caseInfo.getCaseID());
                 action.setCustomerID(caseInfo.getCustomerID());
                 action.setCustomerName(caseInfo.getCustomerName());
+                NavHostFragment.findNavController(CaseFragment.this).navigate(action);
+            }
+        });
+
+        viewModel.getRegisterPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer customerID) {
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", 0, 0, customerID, 0, 0, true);
+                fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getPaymentListClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer customerID) {
+                CaseFragmentDirections.ActionMenuTasksToCustomerPaymentFragment action = CaseFragmentDirections.actionMenuTasksToCustomerPaymentFragment();
+                action.setCustomerID(customerID);
                 NavHostFragment.findNavController(CaseFragment.this).navigate(action);
             }
         });

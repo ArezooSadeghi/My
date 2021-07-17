@@ -11,7 +11,7 @@ import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-public class TaskViewModel extends AndroidViewModel {
+public class CaseViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent;
@@ -34,8 +34,10 @@ public class TaskViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> caseProductsClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent;
     private SingleLiveEvent<Boolean> navigateToCustomerFragment = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> registerPaymentClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> paymentListClicked = new SingleLiveEvent<>();
 
-    public TaskViewModel(@NonNull Application application) {
+    public CaseViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
@@ -128,6 +130,14 @@ public class TaskViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Boolean> getNavigateToCustomerFragment() {
         return navigateToCustomerFragment;
+    }
+
+    public SingleLiveEvent<Integer> getRegisterPaymentClicked() {
+        return registerPaymentClicked;
+    }
+
+    public SingleLiveEvent<Integer> getPaymentListClicked() {
+        return paymentListClicked;
     }
 
     public ServerData getServerData(String centerName) {

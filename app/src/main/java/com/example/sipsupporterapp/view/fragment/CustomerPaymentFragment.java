@@ -151,8 +151,14 @@ public class CustomerPaymentFragment extends Fragment {
     }
 
     private void fetchCustomerPayments() {
+        CustomerPaymentFragmentArgs args = CustomerPaymentFragmentArgs.fromBundle(getArguments());
+        int customer_ID = args.getCustomerID();
         String path = "/api/v1/customerPayments/ListByCustomer/";
-        viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
+        if (customer_ID != 0) {
+            viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customer_ID);
+        } else {
+            viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
+        }
     }
 
     private void deleteCustomerPayment() {

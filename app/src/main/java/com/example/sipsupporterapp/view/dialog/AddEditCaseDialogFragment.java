@@ -24,7 +24,7 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.CustomerSearchContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.viewmodel.TaskViewModel;
+import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +35,7 @@ import java.util.List;
 
 public class AddEditCaseDialogFragment extends DialogFragment {
     private FragmentAddEditCaseDialogBinding binding;
-    private TaskViewModel viewModel;
+    private CaseViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey, textPriority;
     private int customerID, caseID;
@@ -108,7 +108,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CaseViewModel.class);
     }
 
     private void handleError(String message) {

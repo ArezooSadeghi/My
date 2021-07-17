@@ -20,7 +20,7 @@ import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.viewmodel.TaskViewModel;
+import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class RegisterCaseResultDialogFragment extends DialogFragment {
     private FragmentRegisterCaseResultDialogBinding binding;
-    private TaskViewModel viewModel;
+    private CaseViewModel viewModel;
     private ServerData serverData;
     private String textResultOk, centerName, userLoginKey;
 
@@ -86,7 +86,7 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CaseViewModel.class);
     }
 
     private void setupObserver() {

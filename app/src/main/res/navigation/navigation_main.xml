@@ -74,6 +74,10 @@
             android:id="@+id/action_menu_tasks_to_invoiceFragment"
             app:destination="@id/invoiceFragment" />
 
+        <action
+            android:id="@+id/action_menu_tasks_to_customerPaymentFragment"
+            app:destination="@id/customerPaymentFragment" />
+
     </fragment>
 
     <fragment
@@ -134,6 +138,18 @@
             android:name="flag"
             android:defaultValue="false"
             app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/customerPaymentFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.CustomerPaymentFragment"
+        android:label="CustomerPaymentFragment">
+
+        <argument
+            android:name="customerID"
+            android:defaultValue="0"
+            app:argType="integer" />
 
     </fragment>
 

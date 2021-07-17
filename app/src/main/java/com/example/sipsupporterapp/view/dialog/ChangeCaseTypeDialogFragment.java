@@ -19,14 +19,14 @@ import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.viewmodel.TaskViewModel;
+import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeCaseTypeDialogFragment extends DialogFragment {
     private FragmentChangeCaseTypeDialogBinding binding;
-    private TaskViewModel viewModel;
+    private CaseViewModel viewModel;
 
     private String centerName, userLoginKey;
     private ServerData serverData;
@@ -75,7 +75,7 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CaseViewModel.class);
     }
 
     private void fetchCaseTypes() {
