@@ -210,4 +210,7 @@ public interface SipSupporterService {
 
     @DELETE("{path}")
     Call<InvoiceDetailsResult> deleteInvoiceDetails(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceDetailsID") int invoiceDetailsID);
+
+    @GET("{path}")
+    Call<InvoiceResult> fetchInvoiceInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceID") int invoiceID);
 }

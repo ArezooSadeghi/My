@@ -15,6 +15,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.InvoiceDetailsAdapterItemBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
+import com.example.sipsupporterapp.viewmodel.PrintViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
@@ -24,11 +25,18 @@ import java.util.List;
 public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAdapter.InvoiceDetailsHolder> {
     private Context context;
     private InvoiceViewModel viewModel;
+    private PrintViewModel printViewModel;
     private List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList;
 
     public InvoiceDetailsAdapter(Context context, InvoiceViewModel viewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
         this.context = context;
         this.viewModel = viewModel;
+        this.invoiceDetailsInfoList = invoiceDetailsInfoList;
+    }
+
+    public InvoiceDetailsAdapter(Context context, PrintViewModel printViewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
+        this.context = context;
+        this.printViewModel = printViewModel;
         this.invoiceDetailsInfoList = invoiceDetailsInfoList;
     }
 

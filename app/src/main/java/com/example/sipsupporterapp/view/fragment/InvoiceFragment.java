@@ -1,5 +1,6 @@
 package com.example.sipsupporterapp.view.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -133,6 +135,16 @@ public class InvoiceFragment extends Fragment {
                 } else {
                     addInvoiceDetails();
                 }
+            }
+        });
+
+        binding.fabPrintInvoice.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+                InvoiceFragmentDirections.ActionInvoiceFragmentToPrintFragment action = InvoiceFragmentDirections.actionInvoiceFragmentToPrintFragment();
+                action.setInvoiceID(invoiceID);
+                NavHostFragment.findNavController(InvoiceFragment.this).navigate(action);
             }
         });
     }

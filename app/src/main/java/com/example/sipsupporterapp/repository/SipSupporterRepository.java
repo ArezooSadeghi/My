@@ -131,6 +131,7 @@ public class SipSupporterRepository {
     private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceResult> invoiceInfoByCaseIDResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceResult> addInvoiceResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<InvoiceResult> InvoiceInfoResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceDetailsResult> addInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceDetailsResult> editInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -541,6 +542,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
         return wrongIpAddressSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<InvoiceResult> getInvoiceInfoResultSingleLiveEvent() {
+        return InvoiceInfoResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2360,6 +2365,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchInvoiceInfo(String path, String userLoginKey, int invoiceID) {
+        sipSupporterService.fetchInvoiceInfo(path, userLoginKey, invoiceID).enqueue(new Callback<InvoiceResult>() {
+            @Override
+            public void onResponse(Call<InvoiceResult> call, Response<InvoiceResult> response) {
+                if (response.isSuccessful()) {
+                    InvoiceInfoResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        InvoiceResult invoiceResult = gson.fromJson(response.errorBody().string(), InvoiceResult.class);
+                        InvoiceInfoResultSingleLiveEvent.setValue(invoiceResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InvoiceResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

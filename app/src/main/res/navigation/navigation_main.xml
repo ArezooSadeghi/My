@@ -127,6 +127,10 @@
             android:id="@+id/action_invoiceFragment_to_productsFragment"
             app:destination="@id/productsFragment" />
 
+        <action
+            android:id="@+id/action_invoiceFragment_to_printFragment"
+            app:destination="@id/printFragment" />
+
     </fragment>
 
     <fragment
@@ -148,6 +152,18 @@
 
         <argument
             android:name="customerID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/printFragment"
+        android:name="com.example.sipsupporterapp.view.fragment.PrintFragment"
+        android:label="PrintFragment">
+
+        <argument
+            android:name="invoiceID"
             android:defaultValue="0"
             app:argType="integer" />
 
