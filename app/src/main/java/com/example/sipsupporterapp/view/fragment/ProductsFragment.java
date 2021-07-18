@@ -194,6 +194,12 @@ public class ProductsFragment extends Fragment {
                 String paymentSubject = Converter.letterConverter(productGroupInfo.getProductGroup());
                 TreeNode<Dir> dirNode = new TreeNode<>(new Dir(paymentSubject));
                 treeNode.addChild(dirNode);
+                for (int j = 0; j < productGroupInfo.getProducts().length; j++) {
+                    productInfoList.add(productGroupInfo.getProducts()[j]);
+                    String productName = Converter.letterConverter(productGroupInfo.getProducts()[j].getProductName());
+                    TreeNode<Dir> dirTreeNode = new TreeNode<>(new Dir(productName));
+                    dirNode.addChild(dirTreeNode);
+                }
                 addChild(dirNode, productGroupInfo.getProductGroupID());
             }
         }
