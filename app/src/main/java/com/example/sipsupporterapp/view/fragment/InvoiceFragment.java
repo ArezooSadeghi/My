@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -83,9 +82,7 @@ public class InvoiceFragment extends Fragment {
     private void initRecyclerView() {
         binding.recyclerViewInvoiceDetails.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerViewInvoiceDetails.addItemDecoration(dividerItemDecoration);
+        binding.recyclerViewInvoiceDetails.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
     @Override
@@ -129,7 +126,7 @@ public class InvoiceFragment extends Fragment {
         binding.ivAddNewProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (binding.btnProductID.getText().toString().isEmpty()) {
+                if (binding.txtProductID.getText().toString().isEmpty()) {
                     ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("لطفا ابتدا محصول را انتخاب نمایید");
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
                 } else {
@@ -166,9 +163,9 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void initViews(InvoiceResult.InvoiceInfo invoiceInfo) {
-        binding.btnInvoiceID.setText(String.valueOf(invoiceInfo.getInvoiceID()));
-        binding.btnInvoiceDate.setText(invoiceInfo.getInvoiceDate());
-        binding.btnCustomerName.setText(invoiceInfo.getCustomerName());
+        binding.txtInvoiceID.setText(String.valueOf(invoiceInfo.getInvoiceID()));
+        binding.txtInvoiceDate.setText(invoiceInfo.getInvoiceDate());
+        binding.txtCustomerName.setText(invoiceInfo.getCustomerName());
     }
 
     private void setupObserver() {
@@ -212,13 +209,13 @@ public class InvoiceFragment extends Fragment {
                     int sum = (int) (QTY * productResult.getProducts()[0].getCost());
 
                     String currencyFormatOne = NumberFormat.getNumberInstance(Locale.US).format(sum);
-                    binding.btnSum.setText(currencyFormatOne);
+                    binding.txtSum.setText(currencyFormatOne);
 
                     String currencyFormatTwo = NumberFormat.getNumberInstance(Locale.US).format(productResult.getProducts()[0].getCost());
                     binding.edTextUnitPrice.setText(currencyFormatTwo);
 
-                    binding.btnProductName.setText(productResult.getProducts()[0].getProductName());
-                    binding.btnProductID.setText(String.valueOf(productResult.getProducts()[0].getProductID()));
+                    binding.txtProductName.setText(productResult.getProducts()[0].getProductName());
+                    binding.txtProductID.setText(String.valueOf(productResult.getProducts()[0].getProductID()));
                 } else {
                     ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
                     fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
@@ -309,8 +306,8 @@ public class InvoiceFragment extends Fragment {
 
     @Subscribe(sticky = true)
     public void getNavigateEvent(NavigateEvent event) {
-        binding.btnProductName.setText(event.getCaseProductInfo().getProductName());
-        binding.btnProductID.setText(String.valueOf(event.getCaseProductInfo().getProductID()));
+        binding.txtProductName.setText(event.getCaseProductInfo().getProductName());
+        binding.txtProductID.setText(String.valueOf(event.getCaseProductInfo().getProductID()));
         binding.edTextUnitPrice.setText(String.valueOf(event.getCaseProductInfo()));
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -346,11 +343,14 @@ public class InvoiceFragment extends Fragment {
         String path = "/api/v1/InvoiceDetails/Add/";
         InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult().new InvoiceDetailsInfo();
         invoiceDetailsInfo.setInvoiceID(invoiceID);
-        invoiceDetailsInfo.setProductName(binding.btnProductName.getText().toString());
+        invoiceDetailsInfo.setProductName(binding.txtProductName.getText().toString());
         invoiceDetailsInfo.setQTY(Integer.valueOf(binding.edTextQTY.getText().toString()));
-        invoiceDetailsInfo.setProductID(Integer.valueOf(binding.btnProductID.getText().toString()));
+        invoiceDetailsInfo.setProductID(Integer.valueOf(binding.txtProductID.getText().toString()));
         invoiceDetailsInfo.setDescription(binding.edTextProductDescription.getText().toString());
-        invoiceDetailsInfo.setUnitPrice(Integer.valueOf(binding.edTextUnitPrice.getText().toString()));
+
+        String unitPrice = binding.edTextUnitPrice.getText().toString().replaceAll(",", "");
+        invoiceDetailsInfo.setUnitPrice(Integer.valueOf(unitPrice));
+
         viewModel.addInvoiceDetails(path, userLoginKey, invoiceDetailsInfo);
     }
 
