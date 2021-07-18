@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.print.PrintHelper;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
@@ -28,13 +29,15 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.PrintViewModel;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class PrintFragment extends Fragment {
     private FragmentPrintBinding binding;
     private PrintViewModel viewModel;
     private ServerData serverData;
-    private int invoiceID;
+    private int invoiceID, finalSum;
     private String centerName, userLoginKey;
 
     public static PrintFragment newInstance() {
@@ -68,7 +71,7 @@ public class PrintFragment extends Fragment {
 
         initViews();
 
-        binding.btnPrint.setOnClickListener(new View.OnClickListener() {
+        binding.ivPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ScrollView view = (ScrollView) binding.scrollView;
@@ -104,6 +107,8 @@ public class PrintFragment extends Fragment {
 
     private void initViews() {
         binding.recyclerViewInvoiceDetails.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        binding.recyclerViewInvoiceDetails.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
     private void fetchInvoiceInfo() {
@@ -120,8 +125,19 @@ public class PrintFragment extends Fragment {
         viewModel.getInvoiceDetailsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<InvoiceDetailsResult>() {
             @Override
             public void onChanged(InvoiceDetailsResult invoiceDetailsResult) {
+                binding.progressBarLoading.setVisibility(View.INVISIBLE);
                 if (invoiceDetailsResult.getErrorCode().equals("0")) {
+                    binding.recyclerViewInvoiceDetails.setVisibility(View.VISIBLE);
                     setupAdapter(invoiceDetailsResult.getInvoiceDetails());
+
+                    for (int i = 0; i < invoiceDetailsResult.getInvoiceDetails().length; i++) {
+                        int sum = ((invoiceDetailsResult.getInvoiceDetails()[i].getQTY() * invoiceDetailsResult.getInvoiceDetails()[i].getUnitPrice()) - invoiceDetailsResult.getInvoiceDetails()[i].getSumDiscountPrice());
+                        finalSum += sum;
+                    }
+
+                    binding.txtLbFinalSum.setVisibility(View.VISIBLE);
+                    String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(finalSum);
+                    binding.txtFinalSum.setText(currencyFormat);
                 } else if (invoiceDetailsResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {

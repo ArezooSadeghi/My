@@ -20,7 +20,9 @@ import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAdapter.InvoiceDetailsHolder> {
     private Context context;
@@ -53,6 +55,10 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
     @Override
     public void onBindViewHolder(@NonNull InvoiceDetailsHolder holder, int position) {
         holder.bindInvoiceDetailsInfo(invoiceDetailsInfoList.get(position));
+
+        if (printViewModel instanceof PrintViewModel) {
+            holder.binding.ivMore.setVisibility(View.INVISIBLE);
+        }
 
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +104,17 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
         }
 
         public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo info) {
-            binding.txtProductDescription.setText(info.getDescription());
-            binding.txtProductID.setText(String.valueOf(info.getProductID()));
             binding.txtProductName.setText(info.getProductName());
+            binding.txtQTY.setText(String.valueOf(info.getQTY()));
+            binding.txtUnitPrice.setText(getCurrencyFormat(info.getUnitPrice()));
+            binding.txtSumDiscountPrice.setText(getCurrencyFormat(info.getSumDiscountPrice()));
+
+            int sum = ((info.getQTY() * info.getUnitPrice()) - info.getSumDiscountPrice());
+            binding.txtSum.setText(getCurrencyFormat(sum));
+        }
+
+        public String getCurrencyFormat(int currency) {
+            return NumberFormat.getNumberInstance(Locale.US).format(currency);
         }
     }
 }
