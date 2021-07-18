@@ -24,7 +24,7 @@
     <item
         android:id="@+id/menu_payments"
         android:icon="@drawable/ic_payment"
-        android:title="پرداختی ها" />
+        android:title="هزینه ها" />
 
     <item
         android:id="@+id/menu_tasks"

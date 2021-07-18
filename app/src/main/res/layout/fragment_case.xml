@@ -13,6 +13,18 @@
         android:orientation="vertical"
         tools:context=".view.fragment.CaseFragment">
 
+        <CheckBox
+            android:id="@+id/check_box_show_all_cases"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/yekan"
+            android:text="نمایش همه کارها"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/spinner_case_types"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner_case_types"
             android:layout_width="0dp"
@@ -23,7 +35,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/check_box_show_all_cases"
             app:ms_arrow_tint="@color/black"
             app:ms_background_color="#838996"
             app:ms_padding_right="16dp" />

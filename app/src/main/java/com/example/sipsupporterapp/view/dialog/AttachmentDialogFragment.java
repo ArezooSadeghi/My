@@ -114,7 +114,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(),  R.style.CustomAlertDialog)
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 
@@ -138,15 +138,16 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     if (photoUri != null) {
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+                            Glide.with(getContext()).load(bitmap).into(binding.img);
 
-                            if (bitmap.getWidth() > bitmap.getHeight()) {
+                          /*  if (bitmap.getWidth() > bitmap.getHeight()) {
                                 Matrix matrixOne = new Matrix();
                                 matrixOne.postRotate(-90);
                                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
                                 Glide.with(getContext()).load(bitmap).into(binding.img);
                             } else {
                                 Glide.with(getContext()).load(bitmap).into(binding.img);
-                            }
+                            }*/
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());
                         } finally {

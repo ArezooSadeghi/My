@@ -32,7 +32,7 @@ public class RequireIPAddressDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(), R.style.CustomAlertDialog)
+                .Builder(getContext())
                 .setMessage("لطفا آدرس ip خود را وارد کنید")
                 .setPositiveButton("تایید", new DialogInterface.OnClickListener() {
                     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -160,7 +161,7 @@ public class CaseFragment extends Fragment {
                     if (caseType.equals(caseTypes.get(i))) {
                         caseTypeID = caseTypeIDs.get(i);
                         SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
-                        fetchCasesByCaseType(caseTypeIDs.get(i), "تست", true);
+                        fetchCasesByCaseType(caseTypeIDs.get(i), "", binding.checkBoxShowAllCases.isChecked());
                         break;
                     }
                 }
@@ -172,6 +173,13 @@ public class CaseFragment extends Fragment {
             public void onClick(View v) {
                 AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, 0, "", 0, false, "");
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+            }
+        });
+
+        binding.checkBoxShowAllCases.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                fetchCasesByCaseType(caseTypeID, "", isChecked);
             }
         });
     }
@@ -244,7 +252,7 @@ public class CaseFragment extends Fragment {
                 if (caseResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("حذف کار با موفقیت انجام شد");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    fetchCasesByCaseType(caseTypeID, "تست", true);
+                    fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -271,7 +279,7 @@ public class CaseFragment extends Fragment {
         viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean refresh) {
-                fetchCasesByCaseType(caseTypeID, "تست", true);
+                fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
             }
         });
 
@@ -286,7 +294,7 @@ public class CaseFragment extends Fragment {
         viewModel.getRefreshCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean refreshCaseFinish) {
-                fetchCasesByCaseType(caseTypeID, "تست", true);
+                fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
             }
         });
 
@@ -392,7 +400,7 @@ public class CaseFragment extends Fragment {
         binding.spinnerCaseTypes.setItems(caseTypes);
         caseTypeID = caseTypeIDs.get(0);
         SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
-        fetchCasesByCaseType(caseTypeIDs.get(0), "تست", true);
+        fetchCasesByCaseType(caseTypeIDs.get(0), "", binding.checkBoxShowAllCases.isChecked());
     }
 
     private void fetchCasesByCaseType(int caseTypeID, String search, boolean showAll) {
