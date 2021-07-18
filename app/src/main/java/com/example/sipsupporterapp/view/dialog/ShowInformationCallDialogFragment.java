@@ -1,6 +1,7 @@
 package com.example.sipsupporterapp.view.dialog;
 
 import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +28,11 @@ public class ShowInformationCallDialogFragment extends DialogFragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
 
     @NonNull
     @Override
@@ -46,7 +45,7 @@ public class ShowInformationCallDialogFragment extends DialogFragment {
 
         if (SipSupportSharedPreferences.getCustomerTel(getContext()) != null & !SipSupportSharedPreferences.getCustomerTel(getContext()).isEmpty()) {
 
-            binding.txtCallInformation.setText(SipSupportSharedPreferences.getCustomerTel(getContext()));
+            binding.txtCallNumber.setText(SipSupportSharedPreferences.getCustomerTel(getContext()));
             setListener();
 
             AlertDialog dialog = new AlertDialog
@@ -54,13 +53,17 @@ public class ShowInformationCallDialogFragment extends DialogFragment {
                     .setView(binding.getRoot())
                     .create();
 
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
 
             return dialog;
         } else {
 
-            binding.txtCallInformation.setText("اطلاعات تماس درج نشده است");
+            binding.txtCallNumber.setText("اطلاعات تماس درج نشده است");
             setListener();
 
             AlertDialog dialog = new AlertDialog
@@ -76,9 +79,8 @@ public class ShowInformationCallDialogFragment extends DialogFragment {
 
     }
 
-
     private void setListener() {
-        binding.imgClose.setOnClickListener(new View.OnClickListener() {
+        binding.btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

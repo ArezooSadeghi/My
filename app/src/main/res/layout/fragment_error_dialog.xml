@@ -10,8 +10,8 @@
         android:id="@+id/layoutDialogContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="ltr"
         android:layout_margin="20dp"
+        android:layoutDirection="ltr"
         android:padding="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
