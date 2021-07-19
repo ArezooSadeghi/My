@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#3A3B3B"
         android:orientation="vertical"
         tools:context=".view.fragment.CaseFragment">
 
@@ -20,7 +21,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/yekan"
             android:text="نمایش همه کارها"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@id/spinner_case_types"
             app:layout_constraintTop_toTopOf="parent" />

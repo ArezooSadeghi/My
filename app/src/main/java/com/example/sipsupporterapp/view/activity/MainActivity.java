@@ -81,9 +81,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 if (destination.getId() == R.id.menu_search) {
-                    binding.searchBarContainer.setVisibility(View.VISIBLE);
+                    binding.edTextSearch.setVisibility(View.VISIBLE);
+                    binding.btnSearch.setVisibility(View.VISIBLE);
                 } else {
-                    binding.searchBarContainer.setVisibility(View.INVISIBLE);
+                    binding.edTextSearch.setVisibility(View.INVISIBLE);
+                    binding.btnSearch.setVisibility(View.INVISIBLE);
                 }
             }
         });

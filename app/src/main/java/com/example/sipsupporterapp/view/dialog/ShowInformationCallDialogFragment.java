@@ -71,6 +71,10 @@ public class ShowInformationCallDialogFragment extends DialogFragment {
                     .setView(binding.getRoot())
                     .create();
 
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
 
