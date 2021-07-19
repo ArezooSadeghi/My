@@ -26,6 +26,7 @@
                 android:fontFamily="@font/regular"
                 android:maxLines="1"
                 android:textColor="@color/black"
+                android:backgroundTintMode="multiply"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

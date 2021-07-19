@@ -210,8 +210,7 @@ public class PaymentSubjectFragment extends Fragment {
                 DirectoryNodeBinder.DirectoryNodeHolder directoryNodeHolder = (DirectoryNodeBinder.DirectoryNodeHolder) holder;
                 final ImageView ivArrow = directoryNodeHolder.getIvArrow();
                 int rotateDegree = isExpand ? -90 : 90;
-                ivArrow.animate().rotationBy(rotateDegree)
-                        .start();
+                ivArrow.animate().rotationBy(rotateDegree).start();
             }
         });
     }
