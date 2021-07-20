@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CaseAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCaseBinding;
+import com.example.sipsupporterapp.eventbus.CaseTypesEvent;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
 import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.CaseResult;
@@ -189,6 +190,7 @@ public class CaseFragment extends Fragment {
             @Override
             public void onChanged(CaseTypeResult caseTypeResult) {
                 if (caseTypeResult.getErrorCode().equals("0")) {
+                    EventBus.getDefault().postSticky(new CaseTypesEvent(caseTypeResult));
                     setupSpinner(caseTypeResult.getCaseTypes());
                     CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());
                     customerID = args.getCustomerID();
@@ -229,10 +231,10 @@ public class CaseFragment extends Fragment {
             }
         });
 
-        viewModel.getChangeCaseTypeClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getChangeCaseTypeClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
             @Override
-            public void onChanged(Boolean changeCaseTypeClicked) {
-                ChangeCaseTypeDialogFragment fragment = ChangeCaseTypeDialogFragment.newInstance();
+            public void onChanged(CaseResult.CaseInfo caseInfo) {
+                ChangeCaseTypeDialogFragment fragment = ChangeCaseTypeDialogFragment.newInstance(caseInfo);
                 fragment.show(getParentFragmentManager(), ChangeCaseTypeDialogFragment.TAG);
             }
         });
@@ -367,6 +369,22 @@ public class CaseFragment extends Fragment {
                 NavHostFragment.findNavController(CaseFragment.this).navigate(action);
             }
         });
+
+        viewModel.getRefreshSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer case_TypeID) {
+                caseTypeID = case_TypeID;
+                fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
+                for (int i = 0; i < caseTypeIDs.size(); i++) {
+                    if (caseTypeIDs.get(i) == caseTypeID) {
+                        String caseType = caseTypes.get(i);
+                        caseTypes.remove(caseType);
+                        caseTypes.add(0, caseType);
+                        binding.spinnerCaseTypes.setItems(caseTypes);
+                    }
+                }
+            }
+        });
     }
 
     private void handleError(String message) {
@@ -397,8 +415,9 @@ public class CaseFragment extends Fragment {
             caseTypeIDs.add(i, caseTypeInfoArray[i].getCaseTypeID());
         }
 
-        binding.spinnerCaseTypes.setItems(caseTypes);
         caseTypeID = caseTypeIDs.get(0);
+        binding.spinnerCaseTypes.setItems(caseTypes);
+
         SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
         fetchCasesByCaseType(caseTypeIDs.get(0), "", binding.checkBoxShowAllCases.isChecked());
     }

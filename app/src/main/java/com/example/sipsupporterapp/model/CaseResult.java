@@ -1,5 +1,7 @@
 package com.example.sipsupporterapp.model;
 
+import java.io.Serializable;
+
 public class CaseResult {
 
     private String errorCode;
@@ -30,7 +32,7 @@ public class CaseResult {
         this.cases = cases;
     }
 
-    public class CaseInfo {
+    public class CaseInfo implements Serializable {
 
         private int caseID;
         private int caseTypeID;

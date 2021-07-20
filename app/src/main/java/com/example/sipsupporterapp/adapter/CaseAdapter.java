@@ -110,8 +110,8 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 viewModel.getCaseFinishClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
-                            case 7:
-                                viewModel.getChangeCaseTypeClicked().setValue(true);
+                            case 8:
+                                viewModel.getChangeCaseTypeClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
                                 break;
                         }

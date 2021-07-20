@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +16,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentChangeCaseTypeDialogBinding;
+import com.example.sipsupporterapp.eventbus.CaseTypesEvent;
+import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +34,20 @@ import java.util.List;
 public class ChangeCaseTypeDialogFragment extends DialogFragment {
     private FragmentChangeCaseTypeDialogBinding binding;
     private CaseViewModel viewModel;
+    private static final String ARGS_CASE_INFO = "caseInfo";
 
+    private int caseTypeID;
+    private List<String> caseTypes = new ArrayList<>();
+    private List<Integer> caseTypeIDs = new ArrayList<>();
     private String centerName, userLoginKey;
     private ServerData serverData;
 
     public static final String TAG = ChangeCaseTypeDialogFragment.class.getSimpleName();
 
-    public static ChangeCaseTypeDialogFragment newInstance() {
+    public static ChangeCaseTypeDialogFragment newInstance(CaseResult.CaseInfo caseTypeInfo) {
         ChangeCaseTypeDialogFragment fragment = new ChangeCaseTypeDialogFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARGS_CASE_INFO, caseTypeInfo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +75,8 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
                 null,
                 false);
 
+        handleEvents();
+
         AlertDialog dialog = new AlertDialog
                 .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
@@ -72,6 +86,55 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void getCaseTypesEvent(CaseTypesEvent event) {
+        setupSpinner(event.getCaseTypeResult().getCaseTypes());
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    private void handleEvents() {
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editCase();
+                viewModel.getRefreshSingleLiveEvent().setValue(caseTypeID);
+                dismiss();
+            }
+        });
+
+        binding.spinnerCaseTypes.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                String caseType = (String) item;
+                for (int i = 0; i < caseTypes.size(); i++) {
+                    if (caseType.equals(caseTypes.get(i))) {
+                        caseTypeID = caseTypeIDs.get(i);
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     private void createViewModel() {
@@ -84,20 +147,18 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         viewModel.fetchCaseTypes(path, userLoginKey);
     }
 
-    private void setupObserver() {
-        viewModel.getCaseTypesResultSingleLiveEvent().observe(this, new Observer<CaseTypeResult>() {
-            @Override
-            public void onChanged(CaseTypeResult caseTypeResult) {
-                if (caseTypeResult.getErrorCode().equals("0")) {
-                    setupSpinner(caseTypeResult.getCaseTypes());
-                } else if (caseTypeResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(caseTypeResult.getError());
-                }
-            }
-        });
+    private void editCase() {
+        String centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        String userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        ServerData serverData = viewModel.getServerData(centerName);
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Case/Edit/";
+        CaseResult.CaseInfo caseInfo = (CaseResult.CaseInfo) getArguments().getSerializable(ARGS_CASE_INFO);
+        caseInfo.setCaseTypeID(caseTypeID);
+        viewModel.editCase(path, userLoginKey, caseInfo);
+    }
 
+    private void setupObserver() {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
@@ -109,6 +170,20 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
             @Override
             public void onChanged(String message) {
                 handleError(message);
+            }
+        });
+
+        viewModel.getEditCaseResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("تغییر گروه با موفقیت انجام شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(caseResult.getError());
+                }
             }
         });
     }
@@ -136,10 +211,11 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
     }
 
     private void setupSpinner(CaseTypeResult.CaseTypeInfo[] caseTypeInfoArray) {
-        List<String> caseTypes = new ArrayList<>();
         for (int i = 0; i < caseTypeInfoArray.length; i++) {
-            caseTypes.add(caseTypeInfoArray[i].getCaseType());
+            caseTypes.add(i, caseTypeInfoArray[i].getCaseType());
+            caseTypeIDs.add(i, caseTypeInfoArray[i].getCaseTypeID());
         }
+        caseTypeID = caseTypeIDs.get(0);
         binding.spinnerCaseTypes.setItems(caseTypes);
     }
 }

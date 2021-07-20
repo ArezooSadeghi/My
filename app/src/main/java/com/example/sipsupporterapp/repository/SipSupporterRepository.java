@@ -112,6 +112,7 @@ public class SipSupporterRepository {
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseTypeResult> editCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -546,6 +547,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<InvoiceResult> getInvoiceInfoResultSingleLiveEvent() {
         return InvoiceInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseTypeResult> getEditCaseTypeResultSingleLiveEvent() {
+        return editCaseTypeResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2395,6 +2400,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void editCaseType(String path, String userLoginKey, CaseTypeResult.CaseTypeInfo caseTypeInfo) {
+        sipSupporterService.editCaseType(path, userLoginKey, caseTypeInfo).enqueue(new Callback<CaseTypeResult>() {
+            @Override
+            public void onResponse(Call<CaseTypeResult> call, Response<CaseTypeResult> response) {
+                if (response.isSuccessful()) {
+                    editCaseTypeResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CaseTypeResult caseTypeResult = gson.fromJson(response.errorBody().string(), CaseTypeResult.class);
+                        editCaseTypeResultSingleLiveEvent.setValue(caseTypeResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseTypeResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

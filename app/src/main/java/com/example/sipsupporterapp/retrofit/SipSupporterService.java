@@ -213,4 +213,7 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<InvoiceResult> fetchInvoiceInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("invoiceID") int invoiceID);
+
+    @PUT("{path}")
+    Call<CaseTypeResult> editCaseType(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseTypeResult.CaseTypeInfo caseTypeInfo);
 }

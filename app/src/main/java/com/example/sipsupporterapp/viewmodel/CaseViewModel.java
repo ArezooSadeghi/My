@@ -24,7 +24,7 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> changeCaseTypeClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseResult.CaseInfo> changeCaseTypeClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult.CaseInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
@@ -36,6 +36,8 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> navigateToCustomerFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> registerPaymentClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> paymentListClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CaseTypeResult> editCaseTypeResultSingleLiveEvent;
+    private SingleLiveEvent<Integer> refreshSingleLiveEvent = new SingleLiveEvent<>();
 
     public CaseViewModel(@NonNull Application application) {
         super(application);
@@ -50,6 +52,7 @@ public class CaseViewModel extends AndroidViewModel {
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        editCaseTypeResultSingleLiveEvent = repository.getEditCaseTypeResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
@@ -92,7 +95,7 @@ public class CaseViewModel extends AndroidViewModel {
         return refreshCaseFinishClicked;
     }
 
-    public SingleLiveEvent<Boolean> getChangeCaseTypeClicked() {
+    public SingleLiveEvent<CaseResult.CaseInfo> getChangeCaseTypeClicked() {
         return changeCaseTypeClicked;
     }
 
@@ -138,6 +141,14 @@ public class CaseViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Integer> getPaymentListClicked() {
         return paymentListClicked;
+    }
+
+    public SingleLiveEvent<CaseTypeResult> getEditCaseTypeResultSingleLiveEvent() {
+        return editCaseTypeResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Integer> getRefreshSingleLiveEvent() {
+        return refreshSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {
@@ -186,5 +197,9 @@ public class CaseViewModel extends AndroidViewModel {
 
     public void fetchCustomerInfo(String path, String userLoginKey, int customerID) {
         repository.fetchCustomerInfo(path, userLoginKey, customerID);
+    }
+
+    public void editCaseType(String path, String userLoginKey, CaseTypeResult.CaseTypeInfo caseTypeInfo) {
+        repository.editCaseType(path, userLoginKey, caseTypeInfo);
     }
 }
