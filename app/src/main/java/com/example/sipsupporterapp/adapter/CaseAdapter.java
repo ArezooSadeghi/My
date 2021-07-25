@@ -2,17 +2,23 @@ package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CaseAdapterItemBinding;
+import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
@@ -51,6 +57,30 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
         holder.bindCaseInfo(caseInfoList.get(position));
         int color = generateRandomColor();
         holder.binding.cardView.setCardBackgroundColor(color);
+
+        for (int i = 0; i < caseInfoList.get(position).getAssings().length; i++) {
+            AssignResult.AssignInfo assignInfo = caseInfoList.get(position).getAssings()[i];
+            LinearLayout linearLayout = new LinearLayout(context);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 50, 0);
+            RadioButton radioButtonSeen = new RadioButton(context);
+            RadioButton radioButtonFinish = new RadioButton(context);
+            radioButtonSeen.setText("seen");
+            radioButtonFinish.setText("finish");
+            radioButtonSeen.setChecked(assignInfo.isSeen());
+            radioButtonFinish.setChecked(assignInfo.isFinish());
+            radioButtonSeen.setLayoutParams(params);
+            TextView assignUserFullName = new TextView(context);
+            assignUserFullName.setTextColor(Color.BLACK);
+            assignUserFullName.setTextSize(12);
+            Typeface typeface = ResourcesCompat.getFont(context, R.font.regular);
+            assignUserFullName.setTypeface(typeface);
+            assignUserFullName.setText(assignInfo.getAssignUserFullName());
+            linearLayout.addView(radioButtonFinish);
+            linearLayout.addView(radioButtonSeen);
+            linearLayout.addView(assignUserFullName);
+            holder.binding.container.addView(linearLayout);
+        }
 
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +178,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             binding.txtCustomerName.setText(caseInfo.getCustomerName());
             binding.txtUserFullName.setText(Converter.letterConverter(caseInfo.getUserFullName()));
             binding.txtAddTime.setText(formatDate(caseInfo.getAddTime()));
+
         }
 
         private String formatDate(long addTime) {

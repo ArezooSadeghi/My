@@ -63,7 +63,7 @@ public class CaseResult {
         private String assignDescription;
 
         private CaseProductResult.CaseProductInfo[] caseProduct;
-        private AssignResult.AssignInfo[] assigns;
+        private AssignResult.AssignInfo[] assings;
 
         public int getCaseID() {
             return caseID;
@@ -285,8 +285,16 @@ public class CaseResult {
             return caseProduct;
         }
 
-        public AssignResult.AssignInfo[] getAssigns() {
-            return assigns;
+        public void setCaseProduct(CaseProductResult.CaseProductInfo[] caseProduct) {
+            this.caseProduct = caseProduct;
+        }
+
+        public AssignResult.AssignInfo[] getAssings() {
+            return assings;
+        }
+
+        public void setAssings(AssignResult.AssignInfo[] assings) {
+            this.assings = assings;
         }
     }
 }

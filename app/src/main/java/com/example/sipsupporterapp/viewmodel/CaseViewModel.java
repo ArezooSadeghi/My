@@ -36,7 +36,6 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<Boolean> navigateToCustomerFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> registerPaymentClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> paymentListClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CaseTypeResult> editCaseTypeResultSingleLiveEvent;
     private SingleLiveEvent<Integer> refreshSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> caseSearchQuery = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> addNewCaseClicked = new SingleLiveEvent<>();
@@ -54,7 +53,6 @@ public class CaseViewModel extends AndroidViewModel {
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        editCaseTypeResultSingleLiveEvent = repository.getEditCaseTypeResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
@@ -145,10 +143,6 @@ public class CaseViewModel extends AndroidViewModel {
         return paymentListClicked;
     }
 
-    public SingleLiveEvent<CaseTypeResult> getEditCaseTypeResultSingleLiveEvent() {
-        return editCaseTypeResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<Integer> getRefreshSingleLiveEvent() {
         return refreshSingleLiveEvent;
     }
@@ -207,9 +201,5 @@ public class CaseViewModel extends AndroidViewModel {
 
     public void fetchCustomerInfo(String path, String userLoginKey, int customerID) {
         repository.fetchCustomerInfo(path, userLoginKey, customerID);
-    }
-
-    public void editCaseType(String path, String userLoginKey, CaseTypeResult.CaseTypeInfo caseTypeInfo) {
-        repository.editCaseType(path, userLoginKey, caseTypeInfo);
     }
 }

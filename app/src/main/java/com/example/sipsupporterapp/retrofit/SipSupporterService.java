@@ -216,4 +216,7 @@ public interface SipSupporterService {
 
     @PUT("{path}")
     Call<CaseTypeResult> editCaseType(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body CaseTypeResult.CaseTypeInfo caseTypeInfo);
+
+    @GET("{path}")
+    Call<AssignResult> fetchAssignInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("assignID") int assignID);
 }

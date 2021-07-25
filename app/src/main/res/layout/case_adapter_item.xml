@@ -49,12 +49,25 @@
                     app:layout_constraintTop_toBottomOf="@id/txt_case_ID" />
 
                 <LinearLayout
+                    android:id="@+id/container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="right"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_description">
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/recycler_view_products_name_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="invisible"
-                    app:layout_constraintTop_toBottomOf="@id/txt_description">
+                    app:layout_constraintTop_toBottomOf="@id/container">
 
                     <View
                         android:id="@+id/view_separator_one"
