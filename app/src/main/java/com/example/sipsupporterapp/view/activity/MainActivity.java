@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private CustomerViewModel customerViewModel;
     private CaseViewModel caseViewModel;
+    private int destinationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +89,15 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                destinationID = destination.getId();
                 if (destination.getId() == R.id.menu_search) {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
+                    binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
                     binding.ivAddNewCase.setVisibility(View.GONE);
                 } else if (destination.getId() == R.id.menu_tasks) {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
+                    binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
                     binding.ivAddNewCase.setVisibility(View.VISIBLE);
                 } else {
@@ -108,8 +112,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
-                    caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    if (destinationID == R.id.menu_search) {
+                        customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    } else if (destinationID == R.id.menu_tasks) {
+                        caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    }
                     return true;
                 }
                 return false;
@@ -130,8 +137,11 @@ public class MainActivity extends AppCompatActivity {
         binding.btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
-                caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                if (destinationID == R.id.menu_search) {
+                    customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                } else if (destinationID == R.id.menu_tasks) {
+                    caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                }
             }
         });
 

@@ -217,6 +217,7 @@ public class CaseFragment extends Fragment {
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
+                    Log.d("Arezoo", caseResult.getError());
                     binding.progressBarLoading.setVisibility(View.GONE);
                     handleError(caseResult.getError());
                 }
@@ -419,9 +420,7 @@ public class CaseFragment extends Fragment {
         viewModel.getSeenAssignResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AssignResult>() {
             @Override
             public void onChanged(AssignResult assignResult) {
-                if (assignResult.getErrorCode().equals("0")) {
-                    Log.d("Arezoo", "Success");
-                }
+
             }
         });
     }
@@ -458,7 +457,8 @@ public class CaseFragment extends Fragment {
         binding.spinnerCaseTypes.setItems(caseTypes);
 
         SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
-        fetchCasesByCaseType(caseTypeIDs.get(0), "", binding.checkBoxShowAllCases.isChecked());
+        Log.d("Arezoo", caseTypeID + ":before");
+        fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
     }
 
     private void fetchCasesByCaseType(int caseTypeID, String search, boolean showAll) {
