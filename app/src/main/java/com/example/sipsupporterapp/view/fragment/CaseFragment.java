@@ -2,7 +2,6 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,7 @@ public class CaseFragment extends Fragment {
     private CaseViewModel viewModel;
     private ServerData serverData;
     private int caseTypeID, customerID, caseID;
-    private String centerName, userLoginKey;
+    private String centerName, userLoginKey, searchQuery;
     private List<String> caseTypes;
     private List<Integer> caseTypeIDs;
 
@@ -135,6 +134,8 @@ public class CaseFragment extends Fragment {
         caseTypes = new ArrayList<>();
         caseTypeIDs = new ArrayList<>();
 
+        searchQuery = "";
+
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
@@ -174,7 +175,7 @@ public class CaseFragment extends Fragment {
         binding.checkBoxShowAllCases.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                fetchCasesByCaseType(caseTypeID, "", isChecked);
+                fetchCasesByCaseType(caseTypeID, searchQuery, isChecked);
             }
         });
     }
@@ -217,7 +218,6 @@ public class CaseFragment extends Fragment {
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                    Log.d("Arezoo", caseResult.getError());
                     binding.progressBarLoading.setVisibility(View.GONE);
                     handleError(caseResult.getError());
                 }
@@ -255,7 +255,7 @@ public class CaseFragment extends Fragment {
                 if (caseResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("حذف کار با موفقیت انجام شد");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
+                    fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -282,7 +282,7 @@ public class CaseFragment extends Fragment {
         viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean refresh) {
-                fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
+                fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
             }
         });
 
@@ -297,7 +297,7 @@ public class CaseFragment extends Fragment {
         viewModel.getRefreshCaseFinishClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean refreshCaseFinish) {
-                fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
+                fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
             }
         });
 
@@ -375,7 +375,7 @@ public class CaseFragment extends Fragment {
             @Override
             public void onChanged(Integer case_TypeID) {
                 caseTypeID = case_TypeID;
-                fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
+                fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
                 for (int i = 0; i < caseTypeIDs.size(); i++) {
                     if (caseTypeIDs.get(i) == caseTypeID) {
                         String caseType = caseTypes.get(i);
@@ -390,6 +390,7 @@ public class CaseFragment extends Fragment {
         viewModel.getCaseSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String search) {
+                searchQuery = search;
                 String path = "/api/v1/Case/List/";
                 viewModel.fetchCasesByCaseType(path, userLoginKey, caseTypeID, search, binding.checkBoxShowAllCases.isChecked());
             }
@@ -457,8 +458,7 @@ public class CaseFragment extends Fragment {
         binding.spinnerCaseTypes.setItems(caseTypes);
 
         SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
-        Log.d("Arezoo", caseTypeID + ":before");
-        fetchCasesByCaseType(caseTypeID, "", binding.checkBoxShowAllCases.isChecked());
+        fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
     }
 
     private void fetchCasesByCaseType(int caseTypeID, String search, boolean showAll) {
