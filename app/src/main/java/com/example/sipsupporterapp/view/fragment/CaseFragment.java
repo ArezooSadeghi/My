@@ -169,14 +169,6 @@ public class CaseFragment extends Fragment {
             }
         });
 
-        binding.fabAddNewCase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, 0, "", 0, false, "");
-                fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
-            }
-        });
-
         binding.checkBoxShowAllCases.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -211,13 +203,19 @@ public class CaseFragment extends Fragment {
             @Override
             public void onChanged(CaseResult caseResult) {
                 if (caseResult.getErrorCode().equals("0")) {
-                    binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                    binding.recyclerViewCases.setVisibility(View.VISIBLE);
-                    setupAdapter(caseResult.getCases());
+                    binding.progressBarLoading.setVisibility(View.GONE);
+                    if (caseResult.getCases().length == 0) {
+                        binding.txtNoResult.setVisibility(View.VISIBLE);
+                        binding.recyclerViewCases.setVisibility(View.GONE);
+                    } else {
+                        binding.txtNoResult.setVisibility(View.GONE);
+                        binding.recyclerViewCases.setVisibility(View.VISIBLE);
+                        setupAdapter(caseResult.getCases());
+                    }
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                    binding.progressBarLoading.setVisibility(View.INVISIBLE);
+                    binding.progressBarLoading.setVisibility(View.GONE);
                     handleError(caseResult.getError());
                 }
             }
@@ -383,6 +381,22 @@ public class CaseFragment extends Fragment {
                         binding.spinnerCaseTypes.setItems(caseTypes);
                     }
                 }
+            }
+        });
+
+        viewModel.getCaseSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String search) {
+                String path = "/api/v1/Case/List/";
+                viewModel.fetchCasesByCaseType(path, userLoginKey, caseTypeID, search, binding.checkBoxShowAllCases.isChecked());
+            }
+        });
+
+        viewModel.getAddNewCaseClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean addNewCaseClicked) {
+                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, 0, "", 0, false, "");
+                fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
             }
         });
     }

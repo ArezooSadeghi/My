@@ -38,6 +38,8 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> paymentListClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseTypeResult> editCaseTypeResultSingleLiveEvent;
     private SingleLiveEvent<Integer> refreshSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> caseSearchQuery = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> addNewCaseClicked = new SingleLiveEvent<>();
 
     public CaseViewModel(@NonNull Application application) {
         super(application);
@@ -149,6 +151,14 @@ public class CaseViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Integer> getRefreshSingleLiveEvent() {
         return refreshSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getCaseSearchQuery() {
+        return caseSearchQuery;
+    }
+
+    public SingleLiveEvent<Boolean> getAddNewCaseClicked() {
+        return addNewCaseClicked;
     }
 
     public ServerData getServerData(String centerName) {

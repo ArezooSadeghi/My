@@ -186,7 +186,7 @@ public class CustomerFragment extends Fragment {
             }
         });
 
-        viewModel.getSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getCustomerSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String searchQuery) {
                 binding.progressBarLoading.setVisibility(View.VISIBLE);

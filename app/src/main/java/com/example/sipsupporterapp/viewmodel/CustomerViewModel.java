@@ -21,7 +21,7 @@ public class CustomerViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> showProgressBarSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> customerSearchQuery = new SingleLiveEvent<>();
     private SingleLiveEvent<List<String>> navigateToAddEditCaseDialog = new SingleLiveEvent<>();
 
     public CustomerViewModel(@NonNull Application application) {
@@ -58,8 +58,8 @@ public class CustomerViewModel extends AndroidViewModel {
         return itemClicked;
     }
 
-    public SingleLiveEvent<String> getSearchQuery() {
-        return searchQuery;
+    public SingleLiveEvent<String> getCustomerSearchQuery() {
+        return customerSearchQuery;
     }
 
     public SingleLiveEvent<List<String>> getNavigateToAddEditCaseDialog() {

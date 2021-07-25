@@ -2,7 +2,9 @@ package com.example.sipsupporterapp.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,12 +28,17 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.ActivityMainBinding;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 import com.google.android.material.navigation.NavigationView;
+import com.skydoves.powermenu.OnMenuItemClickListener;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private CustomerViewModel viewModel;
+    private CustomerViewModel customerViewModel;
+    private CaseViewModel caseViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        viewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
+        customerViewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
+        caseViewModel = new ViewModelProvider(this).get(CaseViewModel.class);
 
         handleEvents();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -83,9 +91,15 @@ public class MainActivity extends AppCompatActivity {
                 if (destination.getId() == R.id.menu_search) {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
                     binding.btnSearch.setVisibility(View.VISIBLE);
+                    binding.ivAddNewCase.setVisibility(View.GONE);
+                } else if (destination.getId() == R.id.menu_tasks) {
+                    binding.edTextSearch.setVisibility(View.VISIBLE);
+                    binding.btnSearch.setVisibility(View.VISIBLE);
+                    binding.ivAddNewCase.setVisibility(View.VISIBLE);
                 } else {
-                    binding.edTextSearch.setVisibility(View.INVISIBLE);
-                    binding.btnSearch.setVisibility(View.INVISIBLE);
+                    binding.edTextSearch.setVisibility(View.GONE);
+                    binding.btnSearch.setVisibility(View.GONE);
+                    binding.ivAddNewCase.setVisibility(View.GONE);
                 }
             }
         });
@@ -94,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    viewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
                     return true;
                 }
                 return false;
@@ -115,7 +130,33 @@ public class MainActivity extends AppCompatActivity {
         binding.btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
+            }
+        });
+
+        binding.ivAddNewCase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PowerMenu powerMenu = new PowerMenu.Builder(MainActivity.this)
+                        .addItem(new PowerMenuItem("افزودن case"))
+                        .setTextColor(Color.parseColor("#000000"))
+                        .setTextSize(14)
+                        .setTextGravity(Gravity.RIGHT)
+                        .build();
+
+                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                    @Override
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
+                            case 0:
+                                caseViewModel.getAddNewCaseClicked().setValue(true);
+                                powerMenu.dismiss();
+                                break;
+                        }
+                    }
+                });
+                powerMenu.showAsDropDown(view);
             }
         });
     }

@@ -18,7 +18,6 @@
             android:id="@+id/check_box_show_all_cases"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:fontFamily="@font/yekan"
             android:text="نمایش همه کارها"
             android:textColor="@color/white"
@@ -30,7 +29,9 @@
             android:id="@+id/spinner_case_types"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_margin="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="32dp"
             android:fontFamily="@font/iranyekanwebbold"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -61,15 +62,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_new_case"
+        <TextView
+            android:id="@+id/txt_no_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_add"
+            android:fontFamily="@font/regular"
+            android:text="@string/no_result_message"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

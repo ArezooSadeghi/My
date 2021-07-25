@@ -78,14 +78,6 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 viewModel.getCaseProductsClicked().setValue(caseInfoList.get(position).getCaseID());
                                 powerMenu.dismiss();
                                 break;
-                           /* case 1:
-                                viewModel.getRegisterPaymentClicked().setValue(caseInfoList.get(position).getCustomerID());
-                                powerMenu.dismiss();
-                                break;
-                            case 2:
-                                viewModel.getPaymentListClicked().setValue(caseInfoList.get(position).getCustomerID());
-                                powerMenu.dismiss();
-                                break;*/
                             case 1:
                                 viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position));
                                 powerMenu.dismiss();
@@ -156,23 +148,6 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             binding.txtCustomerName.setText(caseInfo.getCustomerName());
             binding.txtUserFullName.setText(Converter.letterConverter(caseInfo.getUserFullName()));
             binding.txtAddTime.setText(formatDate(caseInfo.getAddTime()));
-
-           /* if (caseInfo.getCaseProduct().length != 0) {
-                binding.recyclerViewProductsNameContainer.setVisibility(View.VISIBLE);
-
-                binding.recyclerViewProductsName.setLayoutManager(new LinearLayoutManager(context));
-                binding.recyclerViewProductsName.addItemDecoration(new DividerItemDecoration(
-                        binding.recyclerViewProductsName.getContext(),
-                        DividerItemDecoration.VERTICAL));
-
-                List<String> productNameList = new ArrayList<>();
-                for (CaseProductInfo caseProductInfo : caseInfo.getCaseProduct()) {
-                    productNameList.add(caseProductInfo.getProductName());
-                }
-
-                ProductAdapter adapter = new ProductAdapter(context, productNameList);
-                binding.recyclerViewProductsName.setAdapter(adapter);
-            }*/
         }
 
         private String formatDate(long addTime) {
