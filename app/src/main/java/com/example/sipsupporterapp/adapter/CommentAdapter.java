@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,10 +50,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("اصلاح", R.drawable.new_edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.new_delete))
+                        .addItem(new PowerMenuItem("اصلاح", R.drawable.edit))
+                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
                         .setTextColor(Color.parseColor("#000000"))
-                        .setTextSize(14)
+                        .setTextSize(12)
+                        .setIconSize(24)
+                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                         .setTextGravity(Gravity.RIGHT)
                         .build();
 

@@ -112,7 +112,6 @@ public class SipSupporterRepository {
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<CaseTypeResult> editCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -126,7 +125,8 @@ public class SipSupporterRepository {
     private SingleLiveEvent<AssignResult> assignsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<AssignResult> assignInfoResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AssignResult> seenAssignResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<AssignResult> finishAssignResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseProductResult> addCaseProductResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -550,12 +550,12 @@ public class SipSupporterRepository {
         return InvoiceInfoResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CaseTypeResult> getEditCaseTypeResultSingleLiveEvent() {
-        return editCaseTypeResultSingleLiveEvent;
+    public SingleLiveEvent<AssignResult> getSeenAssignResultSingleLiveEvent() {
+        return seenAssignResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<AssignResult> getAssignInfoResultSingleLiveEvent() {
-        return assignInfoResultSingleLiveEvent;
+    public SingleLiveEvent<AssignResult> getFinishAssignResultSingleLiveEvent() {
+        return finishAssignResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2416,17 +2416,17 @@ public class SipSupporterRepository {
         });
     }
 
-    public void editCaseType(String path, String userLoginKey, CaseTypeResult.CaseTypeInfo caseTypeInfo) {
-        sipSupporterService.editCaseType(path, userLoginKey, caseTypeInfo).enqueue(new Callback<CaseTypeResult>() {
+    public void seen(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
+        sipSupporterService.seen(path, userLoginKey, assignInfo).enqueue(new Callback<AssignResult>() {
             @Override
-            public void onResponse(Call<CaseTypeResult> call, Response<CaseTypeResult> response) {
+            public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
                 if (response.isSuccessful()) {
-                    editCaseTypeResultSingleLiveEvent.setValue(response.body());
+                    seenAssignResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
-                        CaseTypeResult caseTypeResult = gson.fromJson(response.errorBody().string(), CaseTypeResult.class);
-                        editCaseTypeResultSingleLiveEvent.setValue(caseTypeResult);
+                        AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
+                        seenAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
@@ -2434,7 +2434,7 @@ public class SipSupporterRepository {
             }
 
             @Override
-            public void onFailure(Call<CaseTypeResult> call, Throwable t) {
+            public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
@@ -2446,17 +2446,17 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchAssignInfo(String path, String userLoginKey, int assignID) {
-        sipSupporterService.fetchAssignInfo(path, userLoginKey, assignID).enqueue(new Callback<AssignResult>() {
+    public void finish(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
+        sipSupporterService.finish(path, userLoginKey, assignInfo).enqueue(new Callback<AssignResult>() {
             @Override
             public void onResponse(Call<AssignResult> call, Response<AssignResult> response) {
                 if (response.isSuccessful()) {
-                    assignInfoResultSingleLiveEvent.setValue(response.body());
+                    finishAssignResultSingleLiveEvent.setValue(response.body());
                 } else {
                     try {
                         Gson gson = new Gson();
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
-                        assignInfoResultSingleLiveEvent.setValue(assignResult);
+                        finishAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }

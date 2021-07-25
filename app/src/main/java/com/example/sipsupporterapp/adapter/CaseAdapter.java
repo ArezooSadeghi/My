@@ -7,8 +7,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,49 +54,68 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CaseHolder holder, int position) {
-        holder.bindCaseInfo(caseInfoList.get(position));
+        CaseResult.CaseInfo caseInfo = caseInfoList.get(position);
+        holder.bindCaseInfo(caseInfo);
         int color = generateRandomColor();
         holder.binding.cardView.setCardBackgroundColor(color);
 
-        for (int i = 0; i < caseInfoList.get(position).getAssings().length; i++) {
-            AssignResult.AssignInfo assignInfo = caseInfoList.get(position).getAssings()[i];
+        for (int i = 0; i < caseInfo.getAssings().length; i++) {
+            AssignResult.AssignInfo assignInfo = caseInfo.getAssings()[i];
             LinearLayout linearLayout = new LinearLayout(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 50, 0);
-            RadioButton radioButtonSeen = new RadioButton(context);
-            RadioButton radioButtonFinish = new RadioButton(context);
-            radioButtonSeen.setText("seen");
-            radioButtonFinish.setText("finish");
-            radioButtonSeen.setChecked(assignInfo.isSeen());
-            radioButtonFinish.setChecked(assignInfo.isFinish());
-            radioButtonSeen.setLayoutParams(params);
+            CheckBox checkBoxSeen = new CheckBox(context);
+            CheckBox checkBoxFinish = new CheckBox(context);
+            checkBoxSeen.setText("seen");
+            checkBoxFinish.setText("finish");
+            checkBoxSeen.setChecked(assignInfo.isSeen());
+            checkBoxFinish.setChecked(assignInfo.isFinish());
+            checkBoxSeen.setLayoutParams(params);
             TextView assignUserFullName = new TextView(context);
             assignUserFullName.setTextColor(Color.BLACK);
             assignUserFullName.setTextSize(12);
             Typeface typeface = ResourcesCompat.getFont(context, R.font.regular);
             assignUserFullName.setTypeface(typeface);
             assignUserFullName.setText(assignInfo.getAssignUserFullName());
-            linearLayout.addView(radioButtonFinish);
-            linearLayout.addView(radioButtonSeen);
+            linearLayout.addView(checkBoxFinish);
+            linearLayout.addView(checkBoxSeen);
             linearLayout.addView(assignUserFullName);
             holder.binding.container.addView(linearLayout);
+
+            checkBoxSeen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    assignInfo.setSeen(checkBoxSeen.isChecked());
+                    viewModel.getSeenClicked().setValue(assignInfo);
+                }
+            });
+
+            checkBoxFinish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    assignInfo.setFinish(checkBoxFinish.isChecked());
+                    viewModel.getSeenClicked().setValue(assignInfo);
+                }
+            });
         }
 
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("محصول های این case"))
-                        .addItem(new PowerMenuItem("صدور فاکتور", R.drawable.ic_file))
-                        .addItem(new PowerMenuItem("به همکاران assign", R.drawable.user))
-                        .addItem(new PowerMenuItem("ثبت comment", R.drawable.com))
-                        .addItem(new PowerMenuItem("اصلاح", R.drawable.new_edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.new_delete))
-                        .addItem(new PowerMenuItem("پایان کار"))
+                        .addItem(new PowerMenuItem("چاپ فاکتور", R.drawable.invoice_print))
+                        .addItem(new PowerMenuItem("assign", R.drawable.assign))
+                        .addItem(new PowerMenuItem("comment", R.drawable.comment))
+                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
+                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
+                        .addItem(new PowerMenuItem("پایان کار", R.drawable.case_finish))
                         .addItem(new PowerMenuItem("مشاهده", R.drawable.magnifier))
+                        .addItem(new PowerMenuItem("محصولات این case"))
                         .addItem(new PowerMenuItem("تغییر گروه"))
+                        .setIconSize(24)
                         .setTextColor(Color.parseColor("#000000"))
-                        .setTextSize(14)
+                        .setTextSize(12)
+                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                         .setTextGravity(Gravity.RIGHT)
                         .build();
 
@@ -105,35 +124,35 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                viewModel.getCaseProductsClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getPrintInvoiceClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getPrintInvoiceClicked().setValue(caseInfoList.get(position));
+                                viewModel.getAssignToOthersClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getAssignToOthersClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getRegisterCommentClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 3:
-                                viewModel.getRegisterCommentClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getEditClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
                             case 4:
-                                viewModel.getEditClicked().setValue(caseInfoList.get(position));
+                                viewModel.getDeleteClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 5:
-                                viewModel.getDeleteClicked().setValue(caseInfoList.get(position).getCaseID());
+                                viewModel.getCaseFinishClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
                             case 6:
-                                viewModel.getCaseFinishClicked().setValue(caseInfoList.get(position));
+                                viewModel.getCaseProductsClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
-                            case 8:
-                                viewModel.getChangeCaseTypeClicked().setValue(caseInfoList.get(position));
+                            case 7:
+                                viewModel.getChangeCaseTypeClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
                         }
@@ -178,7 +197,6 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             binding.txtCustomerName.setText(caseInfo.getCustomerName());
             binding.txtUserFullName.setText(Converter.letterConverter(caseInfo.getUserFullName()));
             binding.txtAddTime.setText(formatDate(caseInfo.getAddTime()));
-
         }
 
         private String formatDate(long addTime) {

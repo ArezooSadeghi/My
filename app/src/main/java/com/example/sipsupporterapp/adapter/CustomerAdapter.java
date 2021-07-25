@@ -68,9 +68,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         String date = customerInfo.getLastSeen().substring(0, 10);
 
         if (date != null && this.date != null && this.date.equals(date)) {
-            holder.binding.txtLastSeen.setTextColor(Color.parseColor("#ED9D0B"));
+            holder.binding.txtLastSeen.setTextColor(Color.parseColor("#FFFF00"));
+            holder.binding.txtCustomerName.setTextColor(Color.parseColor("#FFFFFF"));
         } else {
-            holder.binding.txtLastSeen.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.binding.txtLastSeen.setTextColor(Color.parseColor("#A0A0A0"));
+            holder.binding.txtCustomerName.setTextColor(Color.parseColor("#B8B8B8"));
         }
     }
 

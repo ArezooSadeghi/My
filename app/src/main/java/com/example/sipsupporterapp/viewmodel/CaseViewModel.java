@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.CustomerResult;
@@ -20,6 +21,8 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
+    private SingleLiveEvent<AssignResult> seenAssignResultSingleLiveEvent;
+    private SingleLiveEvent<AssignResult> finishAssignResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
@@ -39,6 +42,8 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> refreshSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> caseSearchQuery = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> addNewCaseClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<AssignResult.AssignInfo> seenClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<AssignResult.AssignInfo> finishClicked = new SingleLiveEvent<>();
 
     public CaseViewModel(@NonNull Application application) {
         super(application);
@@ -53,6 +58,8 @@ public class CaseViewModel extends AndroidViewModel {
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        seenAssignResultSingleLiveEvent = repository.getSeenAssignResultSingleLiveEvent();
+        finishAssignResultSingleLiveEvent = repository.getFinishAssignResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
@@ -155,6 +162,22 @@ public class CaseViewModel extends AndroidViewModel {
         return addNewCaseClicked;
     }
 
+    public SingleLiveEvent<AssignResult> getSeenAssignResultSingleLiveEvent() {
+        return seenAssignResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult> getFinishAssignResultSingleLiveEvent() {
+        return finishAssignResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AssignResult.AssignInfo> getSeenClicked() {
+        return seenClicked;
+    }
+
+    public SingleLiveEvent<AssignResult.AssignInfo> getFinishClicked() {
+        return finishClicked;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -173,6 +196,10 @@ public class CaseViewModel extends AndroidViewModel {
 
     public void getSupporterServiceCustomerResult(String baseUrl) {
         repository.getSupporterServiceCustomerResult(baseUrl);
+    }
+
+    public void getSipSupporterServiceAssignResult(String baseUrl) {
+        repository.getSipSupporterServiceAssignResult(baseUrl);
     }
 
     public void fetchCaseTypes(String path, String userLoginKey) {
@@ -201,5 +228,13 @@ public class CaseViewModel extends AndroidViewModel {
 
     public void fetchCustomerInfo(String path, String userLoginKey, int customerID) {
         repository.fetchCustomerInfo(path, userLoginKey, customerID);
+    }
+
+    public void seen(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
+        repository.seen(path, userLoginKey, assignInfo);
+    }
+
+    public void finish(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
+        repository.finish(path, userLoginKey, assignInfo);
     }
 }

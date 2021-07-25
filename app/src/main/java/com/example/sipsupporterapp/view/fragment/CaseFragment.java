@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.example.sipsupporterapp.databinding.FragmentCaseBinding;
 import com.example.sipsupporterapp.eventbus.CaseTypesEvent;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
 import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -399,6 +401,29 @@ public class CaseFragment extends Fragment {
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
             }
         });
+
+        viewModel.getSeenClicked().observe(getViewLifecycleOwner(), new Observer<AssignResult.AssignInfo>() {
+            @Override
+            public void onChanged(AssignResult.AssignInfo assignInfo) {
+                seen(assignInfo);
+            }
+        });
+
+        viewModel.getFinishClicked().observe(getViewLifecycleOwner(), new Observer<AssignResult.AssignInfo>() {
+            @Override
+            public void onChanged(AssignResult.AssignInfo assignInfo) {
+                finish(assignInfo);
+            }
+        });
+
+        viewModel.getSeenAssignResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AssignResult>() {
+            @Override
+            public void onChanged(AssignResult assignResult) {
+                if (assignResult.getErrorCode().equals("0")) {
+                    Log.d("Arezoo", "Success");
+                }
+            }
+        });
     }
 
     private void handleError(String message) {
@@ -444,5 +469,17 @@ public class CaseFragment extends Fragment {
     private void setupAdapter(CaseResult.CaseInfo[] caseInfoArray) {
         CaseAdapter adapter = new CaseAdapter(getContext(), viewModel, Arrays.asList(caseInfoArray));
         binding.recyclerViewCases.setAdapter(adapter);
+    }
+
+    private void seen(AssignResult.AssignInfo assignInfo) {
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Assign/Seen/";
+        viewModel.seen(path, userLoginKey, assignInfo);
+    }
+
+    private void finish(AssignResult.AssignInfo assignInfo) {
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Assign/Finish/";
+        viewModel.finish(path, userLoginKey, assignInfo);
     }
 }

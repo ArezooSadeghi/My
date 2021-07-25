@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,11 +51,13 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("اصلاح", R.drawable.new_edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.new_delete))
-                        .addItem(new PowerMenuItem("ثبت نظر"))
+                        .addItem(new PowerMenuItem("اصلاح", R.drawable.edit))
+                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
+                        .addItem(new PowerMenuItem("ثبت نظر", R.drawable.comment))
                         .setTextColor(Color.parseColor("#000000"))
-                        .setTextSize(14)
+                        .setTextSize(12)
+                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                        .setIconSize(24)
                         .setTextGravity(Gravity.RIGHT)
                         .build();
 
