@@ -1,7 +1,10 @@
 package com.example.sipsupporterapp.view.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,9 @@ import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
+import com.skydoves.powermenu.OnMenuItemClickListener;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -120,27 +126,54 @@ public class CustomerProductFragment extends Fragment {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
 
-        binding.recyclerViewCustomerProduct.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerViewCustomerProduct.addItemDecoration(dividerItemDecoration);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.recyclerViewCustomerProduct.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(true);
     }
 
     private void handleEvents() {
-        binding.fabAddNewCustomerProduct.setOnClickListener(new View.OnClickListener() {
+        binding.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PowerMenu powerMenu = new PowerMenu.Builder(getContext())
+                        .addItem(new PowerMenuItem("افزودن محصول جدید"))
+                        .setTextColor(Color.parseColor("#000000"))
+                        .setTextSize(12)
+                        .setIconSize(24)
+                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                        .setTextGravity(Gravity.RIGHT)
+                        .build();
+
+                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                    @Override
+                    public void onItemClick(int i, PowerMenuItem item) {
+                        switch (i) {
+                            case 0:
+                                AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
+                                        customerID,
+                                        "",
+                                        0,
+                                        false,
+                                        false,
+                                        0, 0, 0);
+                                fragment.show(getParentFragmentManager(), AddEditCustomerProductDialogFragment.TAG);
+                                powerMenu.dismiss();
+                                break;
+                        }
+                    }
+                });
+                powerMenu.showAsDropDown(view);
+            }
+        });
+
+        binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
-                        customerID,
-                        "",
-                        0,
-                        false,
-                        false,
-                        0, 0, 0);
-                fragment.show(getParentFragmentManager(), AddEditCustomerProductDialogFragment.TAG);
+                getActivity().onBackPressed();
             }
         });
     }
@@ -148,7 +181,7 @@ public class CustomerProductFragment extends Fragment {
     private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
         List<CustomerProductResult.CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
         CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, customerProductInfoList);
-        binding.recyclerViewCustomerProduct.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void fetchCustomerProducts() {
@@ -168,7 +201,7 @@ public class CustomerProductFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (productResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewCustomerProduct.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
 
                     StringBuilder stringBuilder = new StringBuilder();
                     String listSize = String.valueOf(productResult.getCustomerProducts().length);

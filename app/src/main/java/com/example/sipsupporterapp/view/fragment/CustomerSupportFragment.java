@@ -69,6 +69,7 @@ public class CustomerSupportFragment extends Fragment {
                 false);
 
         initView();
+        handleEvents();
 
         return binding.getRoot();
     }
@@ -97,19 +98,28 @@ public class CustomerSupportFragment extends Fragment {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
 
-        binding.recyclerViewCustomerSupport.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerViewCustomerSupport.addItemDecoration(dividerItemDecoration);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.recyclerViewCustomerSupport.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(true);
+    }
+
+    private void handleEvents() {
+        binding.ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
         List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
         CustomerSupportAdapter adapter = new CustomerSupportAdapter(getContext(), viewModel, customerSupportInfoList);
-        binding.recyclerViewCustomerSupport.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void fetchCustomerSupports() {
@@ -125,7 +135,7 @@ public class CustomerSupportFragment extends Fragment {
                         binding.progressBarLoading.setVisibility(View.GONE);
 
                         if (customerSupportResult.getErrorCode().equals("0")) {
-                            binding.recyclerViewCustomerSupport.setVisibility(View.VISIBLE);
+                            binding.recyclerView.setVisibility(View.VISIBLE);
 
                             StringBuilder stringBuilder = new StringBuilder();
                             String listSize = String.valueOf(customerSupportResult.getCustomerSupports().length);

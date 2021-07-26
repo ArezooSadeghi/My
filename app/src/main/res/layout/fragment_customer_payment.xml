@@ -7,95 +7,102 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#3A3B3B"
-        android:orientation="vertical"
         tools:context=".view.fragment.CustomerPaymentFragment">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tool_bar_customer_payment"
+            android:id="@+id/tool_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#3A3B3B">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/txt_customer_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="64dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="64dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/regular"
                     android:maxLines="1"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/txt_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:ellipsize="end"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/regular"
-                    android:maxLines="1"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_customer_name" />
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_more"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_more"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/ic_arrow_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
         <View
+            android:id="@+id/view_separator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#ED9D0B" />
+            android:background="#ED9D0B"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <ProgressBar
+            android:id="@+id/progress_bar_loading"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_separator" />
 
-            <ProgressBar
-                android:id="@+id/progress_bar_loading"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_customer_payment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="60dp"
-                android:visibility="gone" />
-
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottomAppBar"
-                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:backgroundTint="#ED9D0B" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_add_new_customer_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#FFFDD0"
-                android:src="@drawable/ic_add"
-                app:layout_anchor="@id/bottomAppBar"
-                app:rippleColor="#696969" />
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

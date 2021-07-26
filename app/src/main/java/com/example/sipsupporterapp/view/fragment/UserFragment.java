@@ -72,6 +72,7 @@ public class UserFragment extends Fragment {
                 false);
 
         initViews();
+        handleEvents();
         fetchUsers();
 
         return binding.getRoot();
@@ -106,13 +107,22 @@ public class UserFragment extends Fragment {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
 
-        binding.recyclerViewUser.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerViewUser.addItemDecoration(dividerItemDecoration);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.recyclerViewUser.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(true);
+    }
+
+    private void handleEvents() {
+        binding.ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private void fetchUsers() {
@@ -127,7 +137,7 @@ public class UserFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (customerUserResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewUser.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
 
                     String str = (customerUserResult.getCustomerUsers().length) + "";
                     StringBuilder stringBuilder = new StringBuilder();
@@ -212,6 +222,6 @@ public class UserFragment extends Fragment {
     private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
         List<CustomerUserResult.CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
         UserAdapter adapter = new UserAdapter(getContext(), viewModel, customerUserInfoList, date);
-        binding.recyclerViewUser.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 }
