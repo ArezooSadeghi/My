@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/title_success_bg"
                 android:padding="10dp"
-                android:text="خطا"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"

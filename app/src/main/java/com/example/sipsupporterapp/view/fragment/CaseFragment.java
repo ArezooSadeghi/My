@@ -119,12 +119,18 @@ public class CaseFragment extends Fragment {
 
     @Subscribe
     public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteCase();
+        try {
+            int newCaseID = Integer.valueOf(caseID);
+            deleteCase(newCaseID);
+        } catch (NumberFormatException e) {
+        }
     }
 
-    private void deleteCase() {
-        String path = "/api/v1/Case/Delete/";
-        viewModel.deleteCase(path, userLoginKey, caseID);
+    private void deleteCase(int caseID) {
+        if (caseID != 0) {
+            String path = "/api/v1/Case/Delete/";
+            viewModel.deleteCase(path, userLoginKey, caseID);
+        }
     }
 
     private void createViewModel() {

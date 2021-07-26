@@ -109,7 +109,6 @@ public class CommentDialogFragment extends DialogFragment {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("نظر شما با موفقیت حذف شد");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchComments();
-
                 } else if (commentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -204,19 +203,29 @@ public class CommentDialogFragment extends DialogFragment {
 
     private void setupAdapter(CommentResult.CommentInfo[] commentInfoArray) {
         if (commentInfoArray.length != 0) {
-            binding.txtNoComment.setVisibility(View.INVISIBLE);
+            binding.txtNoComment.setVisibility(View.GONE);
             binding.recyclerViewComments.setVisibility(View.VISIBLE);
             CommentAdapter adapter = new CommentAdapter(getContext(), viewModel, Arrays.asList(commentInfoArray));
             binding.recyclerViewComments.setAdapter(adapter);
+        } else {
+            binding.txtNoComment.setVisibility(View.VISIBLE);
+            binding.recyclerViewComments.setVisibility(View.GONE);
         }
     }
 
     private void handleEvents() {
-        binding.fabAddNewComment.setOnClickListener(new View.OnClickListener() {
+        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance(caseID, 0, "");
                 fragment.show(getParentFragmentManager(), AddEditCommentDialogFragment.TAG);
+            }
+        });
+
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
     }
