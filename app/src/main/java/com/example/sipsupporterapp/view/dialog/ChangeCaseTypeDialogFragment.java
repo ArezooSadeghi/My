@@ -32,10 +32,10 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
     private CaseViewModel viewModel;
 
     private int caseTypeID;
-    private List<String> caseTypes = new ArrayList<>();
-    private List<Integer> caseTypeIDs = new ArrayList<>();
     private String centerName, userLoginKey;
     private ServerData serverData;
+    private List<String> caseTypes = new ArrayList<>();
+    private List<Integer> caseTypeIDs = new ArrayList<>();
 
     public static final String TAG = ChangeCaseTypeDialogFragment.class.getSimpleName();
 
@@ -81,24 +81,6 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true)
-    public void getCaseTypesEvent(CaseTypesEvent event) {
-        setupSpinner(event.getCaseTypeResult().getCaseTypes());
-        EventBus.getDefault().removeStickyEvent(event);
-    }
-
     private void handleEvents() {
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,12 +115,6 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CaseViewModel.class);
     }
 
-    private void fetchCaseTypes() {
-        viewModel.getSipSupporterServiceCaseTypeResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/CaseType/List/";
-        viewModel.fetchCaseTypes(path, userLoginKey);
-    }
-
     private void setupSpinner(CaseTypeResult.CaseTypeInfo[] caseTypeInfoArray) {
         for (int i = 0; i < caseTypeInfoArray.length; i++) {
             caseTypes.add(i, caseTypeInfoArray[i].getCaseType());
@@ -146,5 +122,28 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         }
         caseTypeID = caseTypeIDs.get(0);
         binding.spinnerCaseTypes.setItems(caseTypes);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getEvent(CaseTypesEvent event) {
+        setupSpinner(event.getCaseTypeResult().getCaseTypes());
+    }
+
+    private void fetchCaseTypes() {
+        viewModel.getSipSupporterServiceCaseTypeResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/caseType/List/";
+        viewModel.fetchCaseTypes(path, userLoginKey);
     }
 }

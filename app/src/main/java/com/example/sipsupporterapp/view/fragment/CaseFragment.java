@@ -185,20 +185,24 @@ public class CaseFragment extends Fragment {
         viewModel.getCaseTypesResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CaseTypeResult>() {
             @Override
             public void onChanged(CaseTypeResult caseTypeResult) {
-                if (caseTypeResult.getErrorCode().equals("0")) {
-                    EventBus.getDefault().postSticky(new CaseTypesEvent(caseTypeResult));
-                    setupSpinner(caseTypeResult.getCaseTypes());
-                    CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());
-                    customerID = args.getCustomerID();
-                    if (customerID != 0) {
-                        int caseTypeID = SipSupportSharedPreferences.getCaseTypeID(getContext());
-                        AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, "", 0, false, "");
-                        fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+                if (caseTypeID == 0) {
+                    if (caseTypeResult.getErrorCode().equals("0")) {
+                        EventBus.getDefault().postSticky(new CaseTypesEvent(caseTypeResult));
+                        setupSpinner(caseTypeResult.getCaseTypes());
+                        CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());
+                        customerID = args.getCustomerID();
+                        if (customerID != 0) {
+                            int caseTypeID = SipSupportSharedPreferences.getCaseTypeID(getContext());
+                            AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, "", 0, false, "");
+                            fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+                        }
+                    } else if (caseTypeResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(caseTypeResult.getError());
                     }
-                } else if (caseTypeResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
                 } else {
-                    handleError(caseTypeResult.getError());
+                    EventBus.getDefault().post(new CaseTypesEvent(caseTypeResult));
                 }
             }
         });
@@ -440,8 +444,7 @@ public class CaseFragment extends Fragment {
                 if (caseResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("تغییر گروه با موفقیت انجام شد");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    //TODO
-                    fetchCasesByCaseType(caseResult.getCases()[0].getCaseTypeID(), searchQuery, binding.checkBoxShowAllCases.isChecked());
+                    fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
