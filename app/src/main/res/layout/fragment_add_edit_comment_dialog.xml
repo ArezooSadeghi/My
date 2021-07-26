@@ -50,22 +50,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:backgroundTint="@color/black"
                 android:fontFamily="@font/yekan"
-                android:text="بستن"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:text="انصراف"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:backgroundTint="#838996" />
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:backgroundTint="@color/black"
                 android:fontFamily="@font/yekan"
                 android:text="ضبط"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:backgroundTint="#838996" />
 
         </LinearLayout>
 

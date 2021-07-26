@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minHeight="400dp"
+        android:minHeight="300dp"
         tools:context=".view.dialog.CommentDialogFragment">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:foreground="?attr/selectableItemBackground"
-                android:text="ضبط"
+                android:text="ثبت نظر"
                 android:textColor="@color/black"
                 app:backgroundTint="#838996" />
 

@@ -69,7 +69,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             AssignResult.AssignInfo assignInfo = caseInfo.getAssings()[i];
             LinearLayout linearLayout = new LinearLayout(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 50, 0);
+            params.setMargins(50, 0, 0, 0);
             CheckBox checkBoxSeen = new CheckBox(context);
             CheckBox checkBoxFinish = new CheckBox(context);
 
@@ -89,13 +89,13 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             checkBoxFinish.setText("finish");
             checkBoxSeen.setChecked(assignInfo.isSeen());
             checkBoxFinish.setChecked(assignInfo.isFinish());
-            checkBoxSeen.setLayoutParams(params);
             TextView assignUserFullName = new TextView(context);
             assignUserFullName.setTextColor(Color.BLACK);
             assignUserFullName.setTextSize(12);
+            assignUserFullName.setLayoutParams(params);
             Typeface typeface = ResourcesCompat.getFont(context, R.font.regular);
             assignUserFullName.setTypeface(typeface);
-            assignUserFullName.setText(assignInfo.getAssignUserFullName());
+            assignUserFullName.setText(Converter.letterConverter(assignInfo.getAssignUserFullName()));
             linearLayout.addView(checkBoxFinish);
             linearLayout.addView(checkBoxSeen);
             linearLayout.addView(assignUserFullName);
@@ -220,6 +220,12 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             binding.txtCustomerName.setText(caseInfo.getCustomerName());
             binding.txtUserFullName.setText(Converter.letterConverter(caseInfo.getUserFullName()));
             binding.txtAddTime.setText(formatDate(caseInfo.getAddTime()));
+            if (caseInfo.getCommentCount() != 0) {
+                binding.badge.setVisibility(View.VISIBLE);
+                binding.badge.setBadgeValue(caseInfo.getCommentCount());
+            } else {
+                binding.badge.setVisibility(View.GONE);
+            }
         }
 
         private String formatDate(long addTime) {

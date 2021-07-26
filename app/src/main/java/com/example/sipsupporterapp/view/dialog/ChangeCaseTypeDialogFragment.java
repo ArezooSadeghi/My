@@ -17,6 +17,7 @@ import com.example.sipsupporterapp.databinding.FragmentChangeCaseTypeDialogBindi
 import com.example.sipsupporterapp.eventbus.CaseTypesEvent;
 import com.example.sipsupporterapp.model.CaseTypeResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -100,7 +101,7 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
         binding.spinnerCaseTypes.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                String caseType = (String) item;
+                String caseType = Converter.letterConverter((String) item);
                 for (int i = 0; i < caseTypes.size(); i++) {
                     if (caseType.equals(caseTypes.get(i))) {
                         caseTypeID = caseTypeIDs.get(i);
@@ -117,7 +118,7 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
 
     private void setupSpinner(CaseTypeResult.CaseTypeInfo[] caseTypeInfoArray) {
         for (int i = 0; i < caseTypeInfoArray.length; i++) {
-            caseTypes.add(i, caseTypeInfoArray[i].getCaseType());
+            caseTypes.add(i, Converter.letterConverter(caseTypeInfoArray[i].getCaseType()));
             caseTypeIDs.add(i, caseTypeInfoArray[i].getCaseTypeID());
         }
         caseTypeID = caseTypeIDs.get(0);

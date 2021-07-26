@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#838996"
+        android:background="#3A3B3B"
         tools:context=".view.fragment.LoginFragment">
 
         <TextView
@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32dp"
-            android:fontFamily="@font/iranyekanwebbold"
+            android:fontFamily="@font/yekan"
             android:text="@string/login_title"
-            android:textColor="#FFEA00"
+            android:textColor="@color/orange"
             android:textDirection="rtl"
             android:textSize="28sp" />
 
@@ -38,6 +38,7 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/iranyekanwebbold"
                 android:textColor="@color/black"
@@ -125,7 +126,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="#FFEA00"
+                android:backgroundTint="@color/orange"
                 android:gravity="center"
                 android:text="ورود"
                 android:textColor="@color/black"

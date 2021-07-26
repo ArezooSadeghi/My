@@ -61,34 +61,20 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/recycler_view_products_name_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="invisible"
-                    app:layout_constraintTop_toBottomOf="@id/container">
-
-                    <View
-                        android:id="@+id/view_separator_one"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/black" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_products_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <View
-                        android:id="@+id/view_separator_two"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@color/black" />
-
-                </LinearLayout>
+                <ru.nikartm.support.ImageBadgeView
+                    android:id="@+id/badge"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:padding="10dp"
+                    android:src="@drawable/badge"
+                    app:ibv_badgeLimitValue="false"
+                    app:ibv_badgeTextColor="@color/white"
+                    app:ibv_badgeTextSize="10sp"
+                    app:ibv_badgeTextStyle="bold"
+                    app:ibv_fixedBadgeRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/container" />
 
                 <ImageView
                     android:id="@+id/iv_more"
@@ -121,6 +107,7 @@
                     android:id="@+id/txt_user_full_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/titr"
@@ -128,20 +115,21 @@
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recycler_view_products_name_container" />
+                    app:layout_constraintTop_toBottomOf="@id/badge" />
 
                 <TextView
                     android:id="@+id/txt_add_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/titr"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recycler_view_products_name_container" />
+                    app:layout_constraintTop_toBottomOf="@id/badge" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
