@@ -105,19 +105,19 @@ public class UserFragment extends Fragment {
 
     private void initViews() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.txtCustomerName.setText(customerName);
+        binding.include.txtCustomerName.setText(customerName);
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.include.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        binding.include.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.recyclerView.setHasFixedSize(true);
+        binding.include.recyclerView.setHasFixedSize(true);
     }
 
     private void handleEvents() {
-        binding.ivBack.setOnClickListener(new View.OnClickListener() {
+        binding.include.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
@@ -134,10 +134,10 @@ public class UserFragment extends Fragment {
         viewModel.getUsersResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerUserResult>() {
             @Override
             public void onChanged(CustomerUserResult customerUserResult) {
-                binding.progressBarLoading.setVisibility(View.GONE);
+                binding.include.progressBarLoading.setVisibility(View.GONE);
 
                 if (customerUserResult.getErrorCode().equals("0")) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.include.recyclerView.setVisibility(View.VISIBLE);
 
                     String str = (customerUserResult.getCustomerUsers().length) + "";
                     StringBuilder stringBuilder = new StringBuilder();
@@ -145,7 +145,7 @@ public class UserFragment extends Fragment {
                     for (int i = 0; i < str.length(); i++) {
                         stringBuilder.append((char) ((int) str.charAt(i) - 48 + 1632));
                     }
-                    binding.txtCount.setText("تعداد کاربران: " + stringBuilder.toString());
+                    binding.include.txtCount.setText("تعداد کاربران: " + stringBuilder.toString());
                     setupAdapter(customerUserResult.getCustomerUsers());
                 } else if (customerUserResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -158,7 +158,7 @@ public class UserFragment extends Fragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
+                binding.include.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -166,7 +166,7 @@ public class UserFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
+                binding.include.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -222,6 +222,6 @@ public class UserFragment extends Fragment {
     private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
         List<CustomerUserResult.CustomerUserInfo> customerUserInfoList = Arrays.asList(customerUserInfoArray);
         UserAdapter adapter = new UserAdapter(getContext(), viewModel, customerUserInfoList, date);
-        binding.recyclerView.setAdapter(adapter);
+        binding.include.recyclerView.setAdapter(adapter);
     }
 }

@@ -96,19 +96,19 @@ public class CustomerSupportFragment extends Fragment {
     @SuppressLint("ResourceAsColor")
     private void initView() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.txtCustomerName.setText(customerName);
+        binding.include.txtCustomerName.setText(customerName);
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.include.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerView.addItemDecoration(dividerItemDecoration);
+        binding.include.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.recyclerView.setHasFixedSize(true);
+        binding.include.recyclerView.setHasFixedSize(true);
     }
 
     private void handleEvents() {
-        binding.ivBack.setOnClickListener(new View.OnClickListener() {
+        binding.include.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
@@ -119,7 +119,7 @@ public class CustomerSupportFragment extends Fragment {
     private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
         List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
         CustomerSupportAdapter adapter = new CustomerSupportAdapter(getContext(), viewModel, customerSupportInfoList);
-        binding.recyclerView.setAdapter(adapter);
+        binding.include.recyclerView.setAdapter(adapter);
     }
 
     private void fetchCustomerSupports() {
@@ -132,10 +132,10 @@ public class CustomerSupportFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), new Observer<CustomerSupportResult>() {
                     @Override
                     public void onChanged(CustomerSupportResult customerSupportResult) {
-                        binding.progressBarLoading.setVisibility(View.GONE);
+                        binding.include.progressBarLoading.setVisibility(View.GONE);
 
                         if (customerSupportResult.getErrorCode().equals("0")) {
-                            binding.recyclerView.setVisibility(View.VISIBLE);
+                            binding.include.recyclerView.setVisibility(View.VISIBLE);
 
                             StringBuilder stringBuilder = new StringBuilder();
                             String listSize = String.valueOf(customerSupportResult.getCustomerSupports().length);
@@ -144,7 +144,7 @@ public class CustomerSupportFragment extends Fragment {
                                 stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
                             }
 
-                            binding.txtCount.setText("تعداد پشتیبانی ها: " + stringBuilder.toString());
+                            binding.include.txtCount.setText("تعداد پشتیبانی ها: " + stringBuilder.toString());
                             setupAdapter(customerSupportResult.getCustomerSupports());
                         } else if (customerSupportResult.getErrorCode().equals("-9001")) {
                             ejectUser();
@@ -157,7 +157,7 @@ public class CustomerSupportFragment extends Fragment {
         viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
+                binding.include.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -165,7 +165,7 @@ public class CustomerSupportFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
+                binding.include.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
