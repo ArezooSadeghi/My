@@ -1,8 +1,11 @@
 package com.example.sipsupporterapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.CompoundButtonCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,8 +56,10 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                 false));
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull CaseHolder holder, int position) {
+        holder.binding.container.removeAllViews();
         CaseResult.CaseInfo caseInfo = caseInfoList.get(position);
         holder.bindCaseInfo(caseInfo);
         int color = generateRandomColor();
@@ -66,6 +72,19 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             params.setMargins(0, 0, 50, 0);
             CheckBox checkBoxSeen = new CheckBox(context);
             CheckBox checkBoxFinish = new CheckBox(context);
+
+            if (Build.VERSION.SDK_INT < 21) {
+                CompoundButtonCompat.setButtonTintList(checkBoxSeen, ColorStateList.valueOf(R.color.pink));
+            } else {
+                checkBoxSeen.setButtonTintList(ColorStateList.valueOf(R.color.pink));
+            }
+
+            if (Build.VERSION.SDK_INT < 21) {
+                CompoundButtonCompat.setButtonTintList(checkBoxFinish, ColorStateList.valueOf(R.color.pink));
+            } else {
+                checkBoxFinish.setButtonTintList(ColorStateList.valueOf(R.color.pink));
+            }
+
             checkBoxSeen.setText("seen");
             checkBoxFinish.setText("finish");
             checkBoxSeen.setChecked(assignInfo.isSeen());
@@ -85,16 +104,20 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             checkBoxSeen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    assignInfo.setSeen(checkBoxSeen.isChecked());
-                    viewModel.getSeenClicked().setValue(assignInfo);
+                    if (!checkBoxSeen.isChecked()) {
+                        assignInfo.setSeen(checkBoxSeen.isChecked());
+                        viewModel.getSeenClicked().setValue(assignInfo);
+                    }
                 }
             });
 
             checkBoxFinish.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    assignInfo.setFinish(checkBoxFinish.isChecked());
-                    viewModel.getSeenClicked().setValue(assignInfo);
+                    if (!checkBoxFinish.isChecked()) {
+                        assignInfo.setFinish(checkBoxFinish.isChecked());
+                        viewModel.getFinishClicked().setValue(assignInfo);
+                    }
                 }
             });
         }
@@ -147,11 +170,11 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 viewModel.getCaseFinishClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
-                            case 6:
+                            case 7:
                                 viewModel.getCaseProductsClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
-                            case 7:
+                            case 8:
                                 viewModel.getChangeCaseTypeClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;

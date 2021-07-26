@@ -54,6 +54,7 @@ public class CaseFragment extends Fragment {
     private ServerData serverData;
     private int caseTypeID, customerID, caseID;
     private String centerName, userLoginKey, searchQuery;
+    private CaseResult.CaseInfo caseInfo;
     private List<String> caseTypes;
     private List<Integer> caseTypeIDs;
 
@@ -234,8 +235,9 @@ public class CaseFragment extends Fragment {
 
         viewModel.getChangeCaseTypeClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
             @Override
-            public void onChanged(CaseResult.CaseInfo caseInfo) {
-                ChangeCaseTypeDialogFragment fragment = ChangeCaseTypeDialogFragment.newInstance(caseInfo);
+            public void onChanged(CaseResult.CaseInfo case_Info) {
+                caseInfo = case_Info;
+                ChangeCaseTypeDialogFragment fragment = ChangeCaseTypeDialogFragment.newInstance();
                 fragment.show(getParentFragmentManager(), ChangeCaseTypeDialogFragment.TAG);
             }
         });
@@ -418,10 +420,40 @@ public class CaseFragment extends Fragment {
             }
         });
 
+        viewModel.getFinishAssignResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AssignResult>() {
+            @Override
+            public void onChanged(AssignResult assignResult) {
+
+            }
+        });
+
         viewModel.getSeenAssignResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AssignResult>() {
             @Override
             public void onChanged(AssignResult assignResult) {
 
+            }
+        });
+
+        viewModel.getEditCaseResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("تغییر گروه با موفقیت انجام شد");
+                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    //TODO
+                    fetchCasesByCaseType(caseResult.getCases()[0].getCaseTypeID(), searchQuery, binding.checkBoxShowAllCases.isChecked());
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(caseResult.getError());
+                }
+            }
+        });
+
+        viewModel.getSaveClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer caseTypeID) {
+                editCase(caseTypeID);
             }
         });
     }
@@ -481,5 +513,11 @@ public class CaseFragment extends Fragment {
         viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/Assign/Finish/";
         viewModel.finish(path, userLoginKey, assignInfo);
+    }
+
+    private void editCase(int caseTypeID) {
+        String path = "/api/v1/Case/Edit/";
+        caseInfo.setCaseTypeID(caseTypeID);
+        viewModel.editCase(path, userLoginKey, caseInfo);
     }
 }
