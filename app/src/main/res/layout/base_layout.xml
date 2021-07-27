@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3A3B3B">
+        android:background="@color/dark_gray">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tool_bar"
@@ -82,7 +82,7 @@
             android:id="@+id/view_separator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#ED9D0B"
+            android:background="@color/orange"
             app:layout_constraintTop_toBottomOf="@id/tool_bar" />
 
         <ProgressBar

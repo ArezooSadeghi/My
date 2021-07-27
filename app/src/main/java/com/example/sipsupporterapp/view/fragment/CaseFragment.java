@@ -370,7 +370,7 @@ public class CaseFragment extends Fragment {
         viewModel.getRegisterPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer customerID) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", 0, 0, customerID, 0, 0, true);
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, customerID, 0, 0, 0, "");
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });

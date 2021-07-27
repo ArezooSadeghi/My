@@ -144,7 +144,7 @@ public class NewCustomerPaymentsFragment extends Fragment {
         binding.fabAddNewPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance("", 0, 0, 0, 0, bankAccountID, false);
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, 0, bankAccountID, 0, 0, "");
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });
@@ -257,8 +257,8 @@ public class NewCustomerPaymentsFragment extends Fragment {
 
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
-            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo info) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(info.getDescription(), info.getPrice(), info.getDatePayment(), info.getCustomerID(), info.getCustomerPaymentID(), info.getBankAccountID(), false);
+            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(customerPaymentInfo.getCustomerPaymentID(), customerPaymentInfo.getCustomerID(), customerPaymentInfo.getBankAccountID(), customerPaymentInfo.getDatePayment(), customerPaymentInfo.getPrice(), customerPaymentInfo.getDescription());
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });

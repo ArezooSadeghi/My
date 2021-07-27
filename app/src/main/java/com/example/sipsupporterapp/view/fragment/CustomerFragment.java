@@ -106,18 +106,18 @@ public class CustomerFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.recyclerViewCustomers.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerViewCustomers.addItemDecoration(dividerItemDecoration);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     private void setupAdapter(List<CustomerResult.CustomerInfo> customerInfoList) {
         CustomerAdapter adapter = new CustomerAdapter(
                 getContext(),
                 viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()), false);
-        binding.recyclerViewCustomers.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void setupObserver() {
@@ -127,7 +127,7 @@ public class CustomerFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (customerResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewCustomers.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
                     List<CustomerResult.CustomerInfo> customerInfoList = new ArrayList<>();
                     for (CustomerResult.CustomerInfo customerInfo : customerResult.getCustomers()) {
                         customerInfoList.add(customerInfo);

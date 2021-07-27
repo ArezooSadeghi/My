@@ -39,14 +39,12 @@ import ir.hamsaa.persiandatepicker.api.PersianPickerDate;
 import ir.hamsaa.persiandatepicker.api.PersianPickerListener;
 
 public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
-    public static final String ARGS_SHOW_SPINNER_BANK_ACCOUNTS = "showSpinnerBankAccounts";
     private FragmentAddEditCustomerPaymentDialogBinding binding;
     private CustomerPaymentViewModel viewModel;
 
     private ServerData serverData;
     private String description, lastValueSpinner, currentDate, centerName, userLoginKey;
     private long price;
-    private boolean showSpinnerBankAccounts;
     private int datePayment, customerID, customerPaymentID, bankAccountID, currentYear, currentMonth, currentDay;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
 
@@ -59,18 +57,15 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
     public static final String TAG = AddEditCustomerPaymentDialogFragment.class.getSimpleName();
 
-    public static AddEditCustomerPaymentDialogFragment newInstance(String description, long price, int datePayment, int customerID, int customerPaymentID, int bankAccountID, boolean showSpinnerBankAccounts) {
-        AddEditCustomerPaymentDialogFragment fragment = new AddEditCustomerPaymentDialogFragment();
+    public static AddEditCustomerPaymentDialogFragment newInstance(int customerPaymentID, int customerID, int bankAccountID, int datePayment, long price, String description) {
         Bundle args = new Bundle();
-
-        args.putString(ARGS_DESCRIPTION, description);
-        args.putLong(ARGS_PRICE, price);
-        args.putInt(ARGS_DATE_PAYMENT, datePayment);
-        args.putInt(ARGS_CUSTOMER_ID, customerID);
         args.putInt(ARGS_CUSTOMER_PAYMENT_ID, customerPaymentID);
+        args.putInt(ARGS_CUSTOMER_ID, customerID);
         args.putInt(ARGS_BANK_ACCOUNT_ID, bankAccountID);
-        args.putBoolean(ARGS_SHOW_SPINNER_BANK_ACCOUNTS, showSpinnerBankAccounts);
-
+        args.putInt(ARGS_DATE_PAYMENT, datePayment);
+        args.putLong(ARGS_PRICE, price);
+        args.putString(ARGS_DESCRIPTION, description);
+        AddEditCustomerPaymentDialogFragment fragment = new AddEditCustomerPaymentDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,14 +82,13 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
         bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
-        showSpinnerBankAccounts = getArguments().getBoolean(ARGS_SHOW_SPINNER_BANK_ACCOUNTS);
 
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
-        if (showSpinnerBankAccounts) {
+        if (customerID != 0) {
             fetchBankAccounts();
         }
         setObserver();
@@ -109,7 +103,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        if (showSpinnerBankAccounts) {
+        if (customerID != 0) {
             binding.spinnerBankAccountNames.setVisibility(View.VISIBLE);
         }
 
@@ -231,12 +225,9 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     }
 
     private void initViews() {
-        String customerName = SipSupportSharedPreferences.getCustomerName(getContext());
-        if (customerName != null) {
-            String customer_Name = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-            binding.txtCustomerName.setText(customer_Name);
-        } else {
-            binding.txtCustomerName.setVisibility(View.GONE);
+        if (customerID != 0) {
+            String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
+            binding.txtCustomerName.setText(customerName);
         }
 
         binding.edTextDescription.setText(description);
