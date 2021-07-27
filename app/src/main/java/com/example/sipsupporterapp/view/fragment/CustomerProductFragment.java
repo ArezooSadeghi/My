@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerProductAdapter;
-import com.example.sipsupporterapp.databinding.FragmentCustomerProductBinding;
+import com.example.sipsupporterapp.databinding.BaseLayoutBinding;
 import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -45,7 +45,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomerProductFragment extends Fragment {
-    private FragmentCustomerProductBinding binding;
+    private BaseLayoutBinding binding;
     private CustomerProductViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
@@ -76,7 +76,7 @@ public class CustomerProductFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_customer_product,
+                R.layout.base_layout,
                 container,
                 false);
 
@@ -123,22 +123,22 @@ public class CustomerProductFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.include.ivMore.setVisibility(View.VISIBLE);
+        binding.ivMore.setVisibility(View.VISIBLE);
 
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.include.txtCustomerName.setText(customerName);
+        binding.txtCustomerName.setText(customerName);
 
-        binding.include.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.include.recyclerView.addItemDecoration(dividerItemDecoration);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.include.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(true);
     }
 
     private void handleEvents() {
-        binding.include.ivMore.setOnClickListener(new View.OnClickListener() {
+        binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(getContext())
@@ -172,7 +172,7 @@ public class CustomerProductFragment extends Fragment {
             }
         });
 
-        binding.include.ivBack.setOnClickListener(new View.OnClickListener() {
+        binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
@@ -183,7 +183,7 @@ public class CustomerProductFragment extends Fragment {
     private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
         List<CustomerProductResult.CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
         CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, customerProductInfoList);
-        binding.include.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void fetchCustomerProducts() {
@@ -200,10 +200,10 @@ public class CustomerProductFragment extends Fragment {
         viewModel.getCustomerProductsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult productResult) {
-                binding.include.progressBarLoading.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (productResult.getErrorCode().equals("0")) {
-                    binding.include.recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
 
                     StringBuilder stringBuilder = new StringBuilder();
                     String listSize = String.valueOf(productResult.getCustomerProducts().length);
@@ -212,7 +212,7 @@ public class CustomerProductFragment extends Fragment {
                         stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
                     }
 
-                    binding.include.txtCount.setText("تعداد محصولات: " + stringBuilder.toString());
+                    binding.txtCount.setText("تعداد محصولات: " + stringBuilder.toString());
                     setupAdapter(productResult.getCustomerProducts());
                 } else if (productResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -225,7 +225,7 @@ public class CustomerProductFragment extends Fragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.include.progressBarLoading.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -233,7 +233,7 @@ public class CustomerProductFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.include.progressBarLoading.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });

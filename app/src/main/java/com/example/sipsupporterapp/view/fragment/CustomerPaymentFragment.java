@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerPaymentAdapter;
-import com.example.sipsupporterapp.databinding.FragmentCustomerPaymentBinding;
+import com.example.sipsupporterapp.databinding.BaseLayoutBinding;
 import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -45,7 +45,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomerPaymentFragment extends Fragment {
-    private FragmentCustomerPaymentBinding binding;
+    private BaseLayoutBinding binding;
     private CustomerPaymentViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
@@ -75,7 +75,7 @@ public class CustomerPaymentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_customer_payment,
+                R.layout.base_layout,
                 null,
                 false);
 
@@ -122,22 +122,22 @@ public class CustomerPaymentFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.include.ivMore.setVisibility(View.VISIBLE);
+        binding.ivMore.setVisibility(View.VISIBLE);
 
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.include.txtCustomerName.setText(customerName);
+        binding.txtCustomerName.setText(customerName);
 
-        binding.include.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.include.recyclerView.addItemDecoration(dividerItemDecoration);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
-        binding.include.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(true);
     }
 
     private void handleEvents() {
-        binding.include.ivMore.setOnClickListener(new View.OnClickListener() {
+        binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(getContext())
@@ -171,7 +171,7 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        binding.include.ivBack.setOnClickListener(new View.OnClickListener() {
+        binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
@@ -182,7 +182,7 @@ public class CustomerPaymentFragment extends Fragment {
     private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
         List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList = Arrays.asList(customerPaymentInfoArray);
         CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, customerPaymentInfoList);
-        binding.include.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void fetchCustomerPayments() {
@@ -205,10 +205,10 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getCustomerPaymentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                binding.include.progressBarLoading.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (customerPaymentResult.getErrorCode().equals("0")) {
-                    binding.include.recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
 
                     StringBuilder stringBuilder = new StringBuilder();
                     String listSize = String.valueOf(customerPaymentResult.getCustomerPayments().length);
@@ -217,7 +217,7 @@ public class CustomerPaymentFragment extends Fragment {
                         stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
                     }
 
-                    binding.include.txtCount.setText("تعداد مبالغ واریزی: " + stringBuilder.toString());
+                    binding.txtCount.setText("تعداد مبالغ واریزی: " + stringBuilder.toString());
 
                     setupAdapter(customerPaymentResult.getCustomerPayments());
                 } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
@@ -231,7 +231,7 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.include.progressBarLoading.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
@@ -239,7 +239,7 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                binding.include.progressBarLoading.setVisibility(View.GONE);
+                binding.progressBarLoading.setVisibility(View.GONE);
                 handleError(message);
             }
         });
