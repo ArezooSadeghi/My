@@ -45,7 +45,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private ServerData serverData;
     private String description, lastValueSpinner, currentDate, centerName, userLoginKey;
     private long price;
-    private int datePayment, customerID, customerPaymentID, bankAccountID, currentYear, currentMonth, currentDay;
+    private int datePayment, customerID, customerPaymentID, bankAccountID, currentYear, currentMonth, currentDay, caseID;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
 
     private static final String ARGS_DESCRIPTION = "description";
@@ -54,10 +54,11 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private static final String ARGS_CUSTOMER_ID = "customerID";
     private static final String ARGS_CUSTOMER_PAYMENT_ID = "customerPaymentID";
     private static final String ARGS_BANK_ACCOUNT_ID = "bankAccountID";
+    private static final String ARGS_CASE_ID = "caseID";
 
     public static final String TAG = AddEditCustomerPaymentDialogFragment.class.getSimpleName();
 
-    public static AddEditCustomerPaymentDialogFragment newInstance(int customerPaymentID, int customerID, int bankAccountID, int datePayment, long price, String description) {
+    public static AddEditCustomerPaymentDialogFragment newInstance(int customerPaymentID, int customerID, int bankAccountID, int datePayment, long price, String description, int caseID) {
         Bundle args = new Bundle();
         args.putInt(ARGS_CUSTOMER_PAYMENT_ID, customerPaymentID);
         args.putInt(ARGS_CUSTOMER_ID, customerID);
@@ -65,6 +66,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         args.putInt(ARGS_DATE_PAYMENT, datePayment);
         args.putLong(ARGS_PRICE, price);
         args.putString(ARGS_DESCRIPTION, description);
+        args.putInt(ARGS_CASE_ID, caseID);
         AddEditCustomerPaymentDialogFragment fragment = new AddEditCustomerPaymentDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -82,13 +84,14 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
         bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
+        caseID = getArguments().getInt(ARGS_CASE_ID);
 
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
         viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
 
-        if (customerID != 0) {
+        if (customerID != 0 || caseID != 0) {
             fetchBankAccounts();
         }
         setObserver();
@@ -103,7 +106,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        if (customerID != 0) {
+        if (customerID != 0 || caseID != 0) {
             binding.spinnerBankAccountNames.setVisibility(View.VISIBLE);
         }
 
@@ -230,6 +233,11 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             binding.txtCustomerName.setText(customerName);
         }
 
+        if (caseID != 0) {
+            String customerName = Converter.letterConverter(SipSupportSharedPreferences.getNewCustomerName(getContext()));
+            binding.txtCustomerName.setText(customerName);
+        }
+
         binding.edTextDescription.setText(description);
         binding.edTextDescription.setSelection(binding.edTextDescription.getText().length());
 
@@ -279,6 +287,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
                 customerPaymentInfo.setCustomerID(customerID);
                 customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
+
+                customerPaymentInfo.setCaseID(caseID);
 
                 if (customerPaymentID == 0) {
                     addCustomerPayment(customerPaymentInfo);

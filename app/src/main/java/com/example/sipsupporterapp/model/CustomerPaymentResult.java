@@ -29,11 +29,13 @@ public class CustomerPaymentResult {
     public void setCustomerPayments(CustomerPaymentInfo[] customerPayments) {
         this.customerPayments = customerPayments;
     }
+
     public class CustomerPaymentInfo {
 
         private int customerPaymentID;
         private int customerID;
         private int bankAccountID;
+        private int caseID;
         private int datePayment;
         private int userID;
         private int managerOkUserID;
@@ -192,6 +194,14 @@ public class CustomerPaymentResult {
 
         public void setManagerOkUserFullName(String managerOkUserFullName) {
             this.managerOkUserFullName = managerOkUserFullName;
+        }
+
+        public int getCaseID() {
+            return caseID;
+        }
+
+        public void setCaseID(int caseID) {
+            this.caseID = caseID;
         }
     }
 }

@@ -219,4 +219,10 @@ public interface SipSupporterService {
 
     @PUT("{path}")
     Call<AssignResult> finish(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body AssignResult.AssignInfo assignInfo);
+
+    @GET("{path}")
+    Call<CustomerPaymentResult> fetchCustomerPaymentsByCase(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @GET("{path}")
+    Call<CaseResult> fetchCaseInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
 }

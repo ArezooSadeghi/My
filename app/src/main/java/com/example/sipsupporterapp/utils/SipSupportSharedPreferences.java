@@ -10,6 +10,7 @@ public class SipSupportSharedPreferences {
     private static final String LAST_VALUE_SPINNER = "lastValueSpinner";
     private static final String LAST_SEARCH_QUERY = "lastSearchQuery";
     private static final String CUSTOMER_NAME = "customerName";
+    private static final String NEW_CUSTOMER_NAME = "newCustomerName";
     private static final String CUSTOMER_USER_ID = "customerUserID";
     private static final String USER_NAME = "userName";
     private static final String CUSTOMER_TEL = "customerTel";
@@ -66,6 +67,16 @@ public class SipSupportSharedPreferences {
     public static String getCustomerName(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(CUSTOMER_NAME, null);
+    }
+
+    public static void setNewCustomerName(Context context, String customerName) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        preferences.edit().putString(NEW_CUSTOMER_NAME, customerName).commit();
+    }
+
+    public static String getNewCustomerName(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(NEW_CUSTOMER_NAME, null);
     }
 
     public static void setCustomerUserId(Context context, int customerUserID) {

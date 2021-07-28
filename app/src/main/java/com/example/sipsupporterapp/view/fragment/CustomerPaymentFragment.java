@@ -154,7 +154,7 @@ public class CustomerPaymentFragment extends Fragment {
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, customerID, 0, 0, 0, "");
+                                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, customerID, 0, 0, 0, "", 0);
                                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
                                 powerMenu.dismiss();
                                 break;
@@ -273,7 +273,7 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(customerPaymentInfo.getCustomerPaymentID(), customerPaymentInfo.getCustomerID(), customerPaymentInfo.getBankAccountID(), customerPaymentInfo.getDatePayment(), customerPaymentInfo.getPrice(), customerPaymentInfo.getDescription());
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(customerPaymentInfo.getCustomerPaymentID(), customerPaymentInfo.getCustomerID(), customerPaymentInfo.getBankAccountID(), customerPaymentInfo.getDatePayment(), customerPaymentInfo.getPrice(), customerPaymentInfo.getDescription(), customerPaymentInfo.getCaseID());
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });

@@ -37,6 +37,11 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
         this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
+    public CustomerPaymentAdapter(Context context, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
+        this.context = context;
+        this.customerPaymentInfoList = customerPaymentInfoList;
+    }
+
     @NonNull
     @Override
     public CustomerPaymentInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

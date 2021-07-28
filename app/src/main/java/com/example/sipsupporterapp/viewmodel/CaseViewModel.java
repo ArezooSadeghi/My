@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
+import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
@@ -21,10 +22,12 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
+    private SingleLiveEvent<CaseResult> caseInfoResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> seenAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> finishAssignResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult.CaseInfo> changeCaseTypeClicked = new SingleLiveEvent<>();
@@ -37,7 +40,7 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> caseProductsClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent;
     private SingleLiveEvent<Boolean> navigateToCustomerFragment = new SingleLiveEvent<>();
-    private SingleLiveEvent<Integer> registerPaymentClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> addPaymentClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> paymentListClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> refreshSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<String> caseSearchQuery = new SingleLiveEvent<>();
@@ -61,6 +64,8 @@ public class CaseViewModel extends AndroidViewModel {
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         seenAssignResultSingleLiveEvent = repository.getSeenAssignResultSingleLiveEvent();
         finishAssignResultSingleLiveEvent = repository.getFinishAssignResultSingleLiveEvent();
+        customerPaymentsByCaseResultSingleLiveEvent = repository.getCustomerPaymentsByCaseResultSingleLiveEvent();
+        caseInfoResultSingleLiveEvent = repository.getCaseInfoResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<CaseTypeResult> getCaseTypesResultSingleLiveEvent() {
@@ -143,8 +148,8 @@ public class CaseViewModel extends AndroidViewModel {
         return navigateToCustomerFragment;
     }
 
-    public SingleLiveEvent<Integer> getRegisterPaymentClicked() {
-        return registerPaymentClicked;
+    public SingleLiveEvent<Integer> getAddPaymentClicked() {
+        return addPaymentClicked;
     }
 
     public SingleLiveEvent<Integer> getPaymentListClicked() {
@@ -183,6 +188,14 @@ public class CaseViewModel extends AndroidViewModel {
         return saveClicked;
     }
 
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByCaseResultSingleLiveEvent() {
+        return customerPaymentsByCaseResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getCaseInfoResultSingleLiveEvent() {
+        return caseInfoResultSingleLiveEvent;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -205,6 +218,10 @@ public class CaseViewModel extends AndroidViewModel {
 
     public void getSipSupporterServiceAssignResult(String baseUrl) {
         repository.getSipSupporterServiceAssignResult(baseUrl);
+    }
+
+    public void getSipSupporterServiceCustomerPaymentResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerPaymentResult(baseUrl);
     }
 
     public void fetchCaseTypes(String path, String userLoginKey) {
@@ -241,5 +258,13 @@ public class CaseViewModel extends AndroidViewModel {
 
     public void finish(String path, String userLoginKey, AssignResult.AssignInfo assignInfo) {
         repository.finish(path, userLoginKey, assignInfo);
+    }
+
+    public void fetchCustomerPaymentsByCase(String path, String userLoginKey, int caseID) {
+        repository.fetchCustomerPaymentsByCase(path, userLoginKey, caseID);
+    }
+
+    public void fetchCaseInfo(String path, String userLoginKey, int caseID) {
+        repository.fetchCaseInfo(path, userLoginKey, caseID);
     }
 }

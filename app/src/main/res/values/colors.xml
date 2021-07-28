@@ -13,8 +13,8 @@
     <color name="mdtp_accent_color_dark">#FDA625</color>
     <color name="light_yellow">#FFEA00</color>
     <color name="cream">#FFF8DC</color>
-    <color name="light_grey">#838996</color>
     <color name="orange">#ED9D0B</color>
     <color name="pink">#FFC0CB</color>
     <color name="dark_gray">#3A3B3B</color>
+    <color name="light_gray">#838996</color>
 </resources>

@@ -31,10 +31,10 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddEditCaseDialogFragment;
-import com.example.sipsupporterapp.view.dialog.AddEditCustomerPaymentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.AssignDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ChangeCaseTypeDialogFragment;
 import com.example.sipsupporterapp.view.dialog.CommentDialogFragment;
+import com.example.sipsupporterapp.view.dialog.CustomerPaymentByCaseDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RegisterCaseResultDialogFragment;
@@ -367,14 +367,6 @@ public class CaseFragment extends Fragment {
             }
         });
 
-        viewModel.getRegisterPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer customerID) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, customerID, 0, 0, 0, "");
-                fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
-            }
-        });
-
         viewModel.getPaymentListClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer customerID) {
@@ -464,6 +456,14 @@ public class CaseFragment extends Fragment {
             @Override
             public void onChanged(Integer caseTypeID) {
                 editCase(caseTypeID);
+            }
+        });
+
+        viewModel.getAddPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer caseID) {
+                CustomerPaymentByCaseDialogFragment fragment = CustomerPaymentByCaseDialogFragment.newInstance(caseID);
+                fragment.show(getParentFragmentManager(), CustomerPaymentByCaseDialogFragment.TAG);
             }
         });
     }
