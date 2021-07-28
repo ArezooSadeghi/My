@@ -24,6 +24,7 @@ import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
@@ -37,6 +38,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,7 +102,7 @@ public class PaymentFragment extends Fragment {
 
     @Subscribe
     public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteCost();
+        deleteCost(paymentID);
     }
 
     private void createViewModel() {
@@ -111,86 +113,88 @@ public class PaymentFragment extends Fragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.getSipSupporterServiceBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
-        binding.recyclerViewPayment.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerViewPayment.addItemDecoration(dividerItemDecoration);
-
-        binding.recyclerViewPayment.setHasFixedSize(true);
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private void handleEvents() {
-        binding.fabAddCost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(0, "", 0, 0, bankAccountID, 0, "");
-                fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
-            }
-        });
-
-        binding.spinnerBankAccountNames.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                lastValueSpinner = (String) item;
-                bankAccountID = bankAccountInfoArray[position].getBankAccountID();
-                fetchCostsByBankAccountID();
-            }
-        });
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
-    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
-        String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
-        for (int i = 0; i < bankAccountNameArray.length; i++) {
-            bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
-        }
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
 
-        if (bankAccountNameArray.length != 0) {
-            if (bankAccountID == 0) {
-                lastValueSpinner = bankAccountNameArray[0];
-                bankAccountID = bankAccountInfoArray[0].getBankAccountID();
-                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
-            } else {
-                for (int i = 0; i < bankAccountInfoArray.length; i++) {
-                    if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
-                        lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
-                        BankAccountResult.BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
-                        bankAccountID = bankAccountInfo.getBankAccountID();
-                        bankAccountNameArray[i] = bankAccountNameArray[0];
-                        bankAccountNameArray[0] = lastValueSpinner;
-                        bankAccountInfoArray[i] = bankAccountInfoArray[0];
-                        bankAccountInfoArray[0] = bankAccountInfo;
-                    }
-                }
-                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
-            }
-        }
-    }
-
-    private void deleteCost() {
-        String path = "/api/v1/payments/Delete/";
-        viewModel.deletePayment(path, userLoginKey, paymentID);
-    }
-
-    private void fetchCostsByBankAccountID() {
-        String path = "/api/v1/payments/ListByBankAccount/";
-        viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
-    }
-
-    private void fetchBankAccounts() {
-        String path = "/api/v1/bankAccounts/List/";
-        viewModel.fetchBankAccounts(path, userLoginKey);
+        Intent intent = LoginContainerActivity.start(getContext());
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void setupAdapter(PaymentResult.PaymentInfo[] paymentInfoArray) {
         List<PaymentResult.PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
         PaymentAdapter adapter = new PaymentAdapter(getContext(), viewModel, paymentInfoList);
-        binding.recyclerViewPayment.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
+        List<String> bankAccountNameList = new ArrayList<>();
+        for (int i = 0; i < bankAccountInfoArray.length; i++) {
+            bankAccountNameList.add(i, Converter.letterConverter(bankAccountInfoArray[i].getBankAccountName()));
+        }
+
+        bankAccountID = bankAccountInfoArray[0].getBankAccountID();
+        binding.spinner.setItems(bankAccountNameList);
+    }
+
+    private void deleteCost(int paymentID) {
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/Delete/";
+        viewModel.deletePayment(path, userLoginKey, paymentID);
+    }
+
+    private void fetchCostsByBankAccountID(int bankAccountID) {
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/ListByBankAccount/";
+        viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
+    }
+
+    private void fetchBankAccounts() {
+        viewModel.getSipSupporterServiceBankAccountResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/bankAccounts/List/";
+        viewModel.fetchBankAccounts(path, userLoginKey);
+    }
+
+    private void handleEvents() {
+      /*  binding.fabAddCost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(0, bankAccountID);
+                fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
+            }
+        });*/
+
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                bankAccountID = bankAccountInfoArray[position].getBankAccountID();
+                fetchCostsByBankAccountID(bankAccountID);
+            }
+        });
     }
 
     private void setupObserver() {
@@ -199,9 +203,11 @@ public class PaymentFragment extends Fragment {
             public void onChanged(BankAccountResult bankAccountResult) {
                 if (bankAccountResult.getErrorCode().equals("0")) {
                     EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
-                    bankAccountInfoArray = bankAccountResult.getBankAccounts();
-                    setupSpinner(bankAccountResult.getBankAccounts());
-                    fetchCostsByBankAccountID();
+                    if (bankAccountResult.getBankAccounts().length != 0) {
+                        bankAccountInfoArray = bankAccountResult.getBankAccounts();
+                        setupSpinner(bankAccountResult.getBankAccounts());
+                        fetchCostsByBankAccountID(bankAccountID);
+                    }
                 } else if (bankAccountResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -216,7 +222,7 @@ public class PaymentFragment extends Fragment {
                 binding.progressBarLoading.setVisibility(View.GONE);
 
                 if (paymentResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewPayment.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
                     setupAdapter(paymentResult.getPayments());
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -245,7 +251,7 @@ public class PaymentFragment extends Fragment {
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<PaymentResult.PaymentInfo>() {
             @Override
             public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
-                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(paymentInfo.getPaymentID(), paymentInfo.getDescription(), paymentInfo.getDatePayment(), paymentInfo.getPrice(), paymentInfo.getBankAccountID(), paymentInfo.getPaymentSubjectID(), paymentInfo.getPaymentSubject());
+                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(paymentInfo.getPaymentID(), paymentInfo.getBankAccountID());
                 fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
             }
         });
@@ -265,7 +271,7 @@ public class PaymentFragment extends Fragment {
                 if (paymentResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    fetchCostsByBankAccountID();
+                    fetchCostsByBankAccountID(bankAccountID);
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -292,30 +298,8 @@ public class PaymentFragment extends Fragment {
                 }
 
                 setupSpinner(bankAccountInfoArray);
-                fetchCostsByBankAccountID();
+                fetchCostsByBankAccountID(bankAccountID);
             }
         });
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
-        getActivity().finish();
     }
 }

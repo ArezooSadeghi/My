@@ -26,6 +26,7 @@ import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.PaymentSubjectResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PaymentSubjectContainerActivity;
@@ -37,6 +38,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
@@ -48,33 +51,22 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     private PaymentViewModel viewModel;
 
     private ServerData serverData;
-    private int paymentID, datePayment, paymentSubjectID, bankAccountID, currentYear, currentMonth, currentDay;
-    private String lastValueSpinner, description, paymentSubject, currentDate, centerName, userLoginKey;
+    private int paymentID, paymentSubjectID, bankAccountID, currentYear, currentMonth, currentDay;
+    private String currentDate, centerName, userLoginKey;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
     private long price;
+    private PaymentResult.PaymentInfo paymentInfo;
+    private PaymentSubjectResult.PaymentSubjectInfo paymentSubjectInfo;
 
     private static final String ARGS_PAYMENT_ID = "paymentID";
-    private static final String ARGS_DESCRIPTION = "description";
-    private static final String ARGS_DATE_PAYMENT = "datePayment";
-    private static final String ARGS_PRICE = "price";
     private static final String ARGS_BANK_ACCOUNT_ID = "bankAccountID";
-    private static final String ARGS_PAYMENT_SUBJECT_ID = "paymentSubjectID";
-    private static final String ARGS_PAYMENT_SUBJECT = "paymentSubject";
-
     public static final String TAG = AddEditPaymentDialogFragment.class.getSimpleName();
 
-    public static AddEditPaymentDialogFragment newInstance(int paymentID, String description, int datePayment, long price, int bankAccountID, int paymentSubjectID, String paymentSubject) {
+    public static AddEditPaymentDialogFragment newInstance(int paymentID, int bankAccountID) {
         AddEditPaymentDialogFragment fragment = new AddEditPaymentDialogFragment();
         Bundle args = new Bundle();
-
         args.putInt(ARGS_PAYMENT_ID, paymentID);
-        args.putString(ARGS_DESCRIPTION, description);
-        args.putInt(ARGS_DATE_PAYMENT, datePayment);
-        args.putLong(ARGS_PRICE, price);
         args.putInt(ARGS_BANK_ACCOUNT_ID, bankAccountID);
-        args.putInt(ARGS_PAYMENT_SUBJECT_ID, paymentSubjectID);
-        args.putString(ARGS_PAYMENT_SUBJECT, paymentSubject);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,21 +76,12 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-
-        paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
-        description = getArguments().getString(ARGS_DESCRIPTION);
-        datePayment = getArguments().getInt(ARGS_DATE_PAYMENT);
-        price = getArguments().getLong(ARGS_PRICE);
-        bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
-        paymentSubjectID = getArguments().getInt(ARGS_PAYMENT_SUBJECT_ID);
-        paymentSubject = getArguments().getString(ARGS_PAYMENT_SUBJECT);
-
+        initVariables();
         setupObserver();
+
+        if (paymentID > 0) {
+            fetchPaymentInfo(paymentID);
+        }
     }
 
     @NonNull
@@ -136,8 +119,54 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe(sticky = true)
+    public void getPaymentSubjectIDEvent(PostPaymentSubjectIDEvent event) {
+        paymentSubjectID = event.getPaymentSubjectID();
+        fetchPaymentSubjectInfo(paymentSubjectID);
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true)
+    public void getBankAccountResultEvent(PostBankAccountResultEvent event) {
+        bankAccountInfoArray = event.getBankAccountResult().getBankAccounts();
+        setupSpinner(bankAccountInfoArray);
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+    }
+
+    private void initVariables() {
+        paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
+        bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+    }
+
+    private void initViews() {
+        if (paymentInfo != null) {
+
+            if (paymentInfo.getDatePayment() != 0) {
+                String dateFormat = formatDate(paymentInfo.getDatePayment());
+                binding.btnDatePayment.setText(dateFormat);
+            } else {
+                binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
+            }
+
+            binding.edTextPrice.setText(String.valueOf(paymentInfo.getPrice()));
+            binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
+
+            binding.edTextDescription.setText(Converter.letterConverter(paymentInfo.getDescription()));
+            binding.edTextDescription.setSelection(binding.edTextDescription.getText().length());
+        } else {
+            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
+        }
+
+        if (paymentSubjectInfo != null) {
+            binding.btnDatePayment.setText(paymentSubjectInfo.getPaymentSubject());
+        }
     }
 
     private void setupObserver() {
@@ -190,8 +219,23 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         viewModel.getPaymentSubjectInfoResultSingleLiveEvent().observe(this, new Observer<PaymentSubjectResult>() {
             @Override
             public void onChanged(PaymentSubjectResult paymentSubjectResult) {
-                paymentSubject = paymentSubjectResult.getPaymentSubjects()[0].getParentPaymentSubject() + " " + paymentSubjectResult.getPaymentSubjects()[0].getPaymentSubject();
-                binding.btnWhat.setText(paymentSubject);
+                if (paymentSubjectResult.getErrorCode().equals("0")) {
+                    paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[0];
+                    initViews();
+                }
+                /*paymentSubject = paymentSubjectResult.getPaymentSubjects()[0].getParentPaymentSubject() + " " + paymentSubjectResult.getPaymentSubjects()[0].getPaymentSubject();
+                binding.btnWhat.setText(paymentSubject);*/
+            }
+        });
+
+        viewModel.getPaymentInfoResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
+            @Override
+            public void onChanged(PaymentResult paymentResult) {
+                if (paymentResult.getErrorCode().equals("0")) {
+                    paymentInfo = paymentResult.getPayments()[0];
+                    fetchPaymentSubjectInfo(paymentInfo.getPaymentSubjectID());
+                    initViews();
+                }
             }
         });
     }
@@ -219,53 +263,46 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
     }
 
     private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
-        String[] bankAccountNameArray = new String[bankAccountInfoArray.length];
+        List<String> bankAccountNameList = new ArrayList<>();
         for (int i = 0; i < bankAccountInfoArray.length; i++) {
-            bankAccountNameArray[i] = bankAccountInfoArray[i].getBankAccountName();
+            bankAccountNameList.add(i, Converter.letterConverter(bankAccountInfoArray[i].getBankAccountName()));
         }
-        if (bankAccountNameArray.length != 0) {
-            if (bankAccountID == 0) {
-                lastValueSpinner = bankAccountNameArray[0];
-                bankAccountID = bankAccountInfoArray[0].getBankAccountID();
-                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
-            } else {
-                for (int i = 0; i < bankAccountInfoArray.length; i++) {
-                    if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
-                        lastValueSpinner = bankAccountInfoArray[i].getBankAccountName();
-                        BankAccountResult.BankAccountInfo bankAccountInfo = bankAccountInfoArray[i];
-                        bankAccountID = bankAccountInfo.getBankAccountID();
-                        bankAccountNameArray[i] = bankAccountNameArray[0];
-                        bankAccountNameArray[0] = lastValueSpinner;
-                        bankAccountInfoArray[i] = bankAccountInfoArray[0];
-                        bankAccountInfoArray[0] = bankAccountInfo;
-                    }
-                }
-                binding.spinnerBankAccountNames.setItems(bankAccountNameArray);
-            }
-        }
-    }
 
-    private void initViews() {
-        binding.edTextDescription.setText(description);
-        binding.edTextDescription.setSelection(binding.edTextDescription.getText().length());
-
-        binding.btnWhat.setText(paymentSubject);
-
-        if (datePayment == 0) {
-            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
-        } else {
-            String dateFormat = formatDate();
-            binding.btnDatePayment.setText(dateFormat);
-        }
+        bankAccountID = bankAccountInfoArray[0].getBankAccountID();
+        binding.spinner.setItems(bankAccountNameList);
     }
 
     @NotNull
-    private String formatDate() {
+    private String formatDate(int datePayment) {
         String date = String.valueOf(datePayment);
         String year = date.substring(0, 4);
         String month = date.substring(4, 6);
         String day = date.substring(6);
         return year + "/" + month + "/" + day;
+    }
+
+    private void editCost(PaymentResult.PaymentInfo paymentInfo) {
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/Edit/";
+        viewModel.editPayment(path, userLoginKey, paymentInfo);
+    }
+
+    private void addCost(PaymentResult.PaymentInfo paymentInfo) {
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/Add/";
+        viewModel.addPayment(path, userLoginKey, paymentInfo);
+    }
+
+    private void fetchPaymentSubjectInfo(int paymentSubjectID) {
+        viewModel.getSipSupporterServicePaymentSubjectResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/paymentSubjects/Info/";
+        viewModel.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
+    }
+
+    private void fetchPaymentInfo(int paymentID) {
+        viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/payments/Info/";
+        viewModel.fetchPaymentInfo(path, userLoginKey, paymentID);
     }
 
     private void handleEvents() {
@@ -276,10 +313,10 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
+                String price = binding.edTextPrice.getText().toString().replaceAll(",", "");
 
                 if (paymentSubjectID == 0) {
                     ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.not_exist_payment_subject));
@@ -290,20 +327,14 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 } else {
                     PaymentResult.PaymentInfo paymentInfo = new PaymentResult().new PaymentInfo();
 
-                    String bankAccountName = lastValueSpinner;
-                    paymentInfo.setBankAccountName(bankAccountName);
-
-                    paymentInfo.setBankAccountID(bankAccountID);
-
                     String description = binding.edTextDescription.getText().toString();
                     paymentInfo.setDescription(description);
-
-                    paymentInfo.setPaymentSubject(paymentSubject);
 
                     paymentInfo.setPrice(Long.valueOf(price));
 
                     paymentInfo.setPaymentID(paymentID);
                     paymentInfo.setPaymentSubjectID(paymentSubjectID);
+                    paymentInfo.setBankAccountID(bankAccountID);
 
                     String date = binding.btnDatePayment.getText().toString().replaceAll("/", "");
                     paymentInfo.setDatePayment(Integer.valueOf(date));
@@ -341,17 +372,13 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                                 int month = persianPickerDate.getPersianMonth();
                                 int day = persianPickerDate.getPersianDay();
                                 if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
-                                    datePayment = Integer.parseInt(year + "0" + month + "0" + day);
-                                    binding.btnDatePayment.setText(formatDate());
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "0" + month + "0" + day)));
                                 } else if (String.valueOf(month).length() == 1) {
-                                    datePayment = Integer.parseInt(year + "0" + month + "" + day);
-                                    binding.btnDatePayment.setText(formatDate());
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "0" + month + "" + day)));
                                 } else if (String.valueOf(day).length() == 1) {
-                                    datePayment = Integer.parseInt(year + "" + month + "0" + day);
-                                    binding.btnDatePayment.setText(formatDate());
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "" + month + "0" + day)));
                                 } else {
-                                    datePayment = Integer.parseInt(year + "" + month + "" + day);
-                                    binding.btnDatePayment.setText(formatDate());
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "" + month + "" + day)));
                                 }
                             }
 
@@ -364,7 +391,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.btnShowSubjectPayment.setOnClickListener(new View.OnClickListener() {
+        binding.btnShowPaymentSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent starter = PaymentSubjectContainerActivity.start(getContext());
@@ -372,7 +399,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.edTextInvoicePrice.addTextChangedListener(new TextWatcher() {
+        binding.edTextPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -385,7 +412,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                binding.edTextInvoicePrice.removeTextChangedListener(this);
+                binding.edTextPrice.removeTextChangedListener(this);
                 try {
                     String text = editable.toString();
                     Long textToLong;
@@ -394,54 +421,20 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                     }
                     textToLong = Long.parseLong(text);
                     String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(textToLong);
-                    binding.edTextInvoicePrice.setText(currencyFormat);
-                    binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().length());
+                    binding.edTextPrice.setText(currencyFormat);
+                    binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
                 } catch (NumberFormatException exception) {
                     Log.e(TAG, exception.getMessage());
                 }
-                binding.edTextInvoicePrice.addTextChangedListener(this);
+                binding.edTextPrice.addTextChangedListener(this);
             }
         });
 
-        binding.edTextInvoicePrice.setText(String.valueOf(price));
-        binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().length());
-
-        binding.spinnerBankAccountNames.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                lastValueSpinner = (String) item;
                 bankAccountID = bankAccountInfoArray[position].getBankAccountID();
             }
         });
-    }
-
-    private void editCost(PaymentResult.PaymentInfo paymentInfo) {
-        String path = "/api/v1/payments/Edit/";
-        viewModel.editPayment(path, userLoginKey, paymentInfo);
-    }
-
-    private void addCost(PaymentResult.PaymentInfo paymentInfo) {
-        String path = "/api/v1/payments/Add/";
-        viewModel.addPayment(path, userLoginKey, paymentInfo);
-    }
-
-    private void fetchPaymentSubjectInfo(int paymentSubjectID) {
-        viewModel.getSipSupporterServicePaymentSubjectResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/paymentSubjects/Info/";
-        viewModel.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
-    }
-
-    @Subscribe(sticky = true)
-    public void getPaymentSubjectIDEvent(PostPaymentSubjectIDEvent event) {
-        paymentSubjectID = event.getPaymentSubjectID();
-        fetchPaymentSubjectInfo(paymentSubjectID);
-        EventBus.getDefault().removeStickyEvent(event);
-    }
-
-    @Subscribe(sticky = true)
-    public void getBankAccountResultEvent(PostBankAccountResultEvent event) {
-        bankAccountInfoArray = event.getBankAccountResult().getBankAccounts();
-        setupSpinner(bankAccountInfoArray);
-        EventBus.getDefault().removeStickyEvent(event);
     }
 }

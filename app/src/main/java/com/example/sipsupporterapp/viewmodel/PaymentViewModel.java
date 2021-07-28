@@ -19,6 +19,7 @@ public class PaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent;
     private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent;
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent;
+    private SingleLiveEvent<PaymentResult> paymentInfoResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent;
@@ -39,6 +40,7 @@ public class PaymentViewModel extends AndroidViewModel {
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
         paymentSubjectInfoResultSingleLiveEvent = repository.getPaymentSubjectInfoResultSingleLiveEvent();
+        paymentInfoResultSingleLiveEvent = repository.getPaymentInfoResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
@@ -89,6 +91,10 @@ public class PaymentViewModel extends AndroidViewModel {
         return updatingSingleLiveEvent;
     }
 
+    public SingleLiveEvent<PaymentResult> getPaymentInfoResultSingleLiveEvent() {
+        return paymentInfoResultSingleLiveEvent;
+    }
+
     public void getSipSupporterServiceBankAccountResult(String baseUrl) {
         repository.getSipSupporterServiceBankAccountResult(baseUrl);
     }
@@ -126,6 +132,10 @@ public class PaymentViewModel extends AndroidViewModel {
     }
 
     public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
-        repository.fetchPaymentInfo(path, userLoginKey, paymentSubjectID);
+        repository.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
+    }
+
+    public void fetchPaymentInfo(String path, String userLoginKey, int paymentID) {
+        repository.fetchPaymentInfo(path, userLoginKey, paymentID);
     }
 }

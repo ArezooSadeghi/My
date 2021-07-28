@@ -26,11 +26,6 @@
         android:label="ChangePasswordDialogFragment" />
 
     <fragment
-        android:id="@+id/menu_customer_payments"
-        android:name="com.example.sipsupporterapp.view.fragment.NewCustomerPaymentsFragment"
-        android:label="NewCustomerPaymentsFragment" />
-
-    <fragment
         android:id="@+id/menu_payments"
         android:name="com.example.sipsupporterapp.view.fragment.PaymentFragment"
         android:label="PaymentFragment" />

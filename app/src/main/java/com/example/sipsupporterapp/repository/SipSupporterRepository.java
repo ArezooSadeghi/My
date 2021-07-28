@@ -99,6 +99,7 @@ public class SipSupporterRepository {
     private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult> paymentsResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentResult> paymentInfoResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<AttachResult> customerProductAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<AttachResult> customerPaymentAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<AttachResult> customerSupportAttachmentsResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -571,6 +572,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentInfoResultSingleLiveEvent() {
         return customerPaymentInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<PaymentResult> getPaymentInfoResultSingleLiveEvent() {
+        return paymentInfoResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -1531,8 +1536,8 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchPaymentInfo(String path, String userLoginKey, int paymentSubjectID) {
-        sipSupporterService.fetchPaymentInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
+    public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
+        sipSupporterService.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID).enqueue(new Callback<PaymentSubjectResult>() {
             @Override
             public void onResponse(Call<PaymentSubjectResult> call, Response<PaymentSubjectResult> response) {
                 if (response.isSuccessful()) {
@@ -2570,6 +2575,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchPaymentInfo(String path, String userLoginKey, int paymentID) {
+        sipSupporterService.fetchPaymentInfo(path, userLoginKey, paymentID).enqueue(new Callback<PaymentResult>() {
+            @Override
+            public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
+                if (response.isSuccessful()) {
+                    paymentInfoResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
+                        paymentInfoResultSingleLiveEvent.setValue(paymentResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

@@ -116,7 +116,7 @@ public interface SipSupporterService {
     Call<PaymentResult> fetchPayments(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("bankAccountID") int bankAccountID);
 
     @GET("{path}")
-    Call<PaymentSubjectResult> fetchPaymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentSubjectID") int paymentSubjectID);
+    Call<PaymentSubjectResult> fetchPaymentSubjectInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentSubjectID") int paymentSubjectID);
 
     @POST("{path}")
     Call<PaymentResult> addPayment(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Body PaymentResult.PaymentInfo paymentInfo);
@@ -228,4 +228,7 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CustomerPaymentResult> fetchCustomerPaymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int customerPaymentID);
+
+    @GET("{path}")
+    Call<PaymentResult> fetchPaymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("paymentID") int paymentID);
 }

@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
                     binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
                     binding.ivAddNewCase.setVisibility(View.VISIBLE);
+                } else if (destination.getId() == R.id.menu_payments) {
+                    binding.edTextSearch.setVisibility(View.GONE);
+                    binding.btnSearch.setVisibility(View.GONE);
+                    binding.ivAddNewCase.setVisibility(View.VISIBLE);
                 } else {
                     binding.edTextSearch.setVisibility(View.GONE);
                     binding.btnSearch.setVisibility(View.GONE);
