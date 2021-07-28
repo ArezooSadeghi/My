@@ -94,6 +94,7 @@ public class SipSupporterRepository {
     private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByCaseResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentInfoResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult> addPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -164,7 +165,7 @@ public class SipSupporterRepository {
                 }.getType(), new UserResultDeserializer(), context).create(SipSupporterService.class);
     }
 
-    public void getSupporterServiceCustomerResult(String baseUrl) {
+    public void getSipSupporterServiceCustomerResult(String baseUrl) {
         RetrofitInstance.getNewBaseUrl(baseUrl);
         sipSupporterService = RetrofitInstance
                 .getRI(new TypeToken<CustomerResult>() {
@@ -566,6 +567,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CaseResult> getCaseInfoResultSingleLiveEvent() {
         return caseInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentInfoResultSingleLiveEvent() {
+        return customerPaymentInfoResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2535,6 +2540,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCustomerPaymentInfo(String path, String userLoginKey, int customerPaymentID) {
+        sipSupporterService.fetchCustomerPaymentInfo(path, userLoginKey, customerPaymentID).enqueue(new Callback<CustomerPaymentResult>() {
+            @Override
+            public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
+                if (response.isSuccessful()) {
+                    customerPaymentInfoResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
+                        customerPaymentInfoResultSingleLiveEvent.setValue(customerPaymentResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

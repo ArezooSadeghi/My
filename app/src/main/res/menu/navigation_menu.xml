@@ -17,11 +17,6 @@
         android:title="خروج از حساب کاربری" />
 
     <item
-        android:id="@+id/menu_customer_payments"
-        android:icon="@drawable/ic_customer_payment"
-        android:title="مبالغ واریزی مشتریان" />
-
-    <item
         android:id="@+id/menu_payments"
         android:icon="@drawable/ic_payment"
         android:title="هزینه ها" />

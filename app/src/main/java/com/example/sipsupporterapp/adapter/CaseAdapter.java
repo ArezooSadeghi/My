@@ -133,9 +133,9 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                         .addItem(new PowerMenuItem("حذف", R.drawable.remove))
                         .addItem(new PowerMenuItem("پایان کار", R.drawable.case_finish))
                         .addItem(new PowerMenuItem("مشاهده", R.drawable.magnifier))
+                        .addItem(new PowerMenuItem("ثبت مبالغ واریزی", R.drawable.payment))
                         .addItem(new PowerMenuItem("محصولات این case"))
                         .addItem(new PowerMenuItem("تغییر گروه"))
-                        .addItem(new PowerMenuItem("لیست مبالغ واریزی"))
                         .setIconSize(24)
                         .setTextColor(Color.parseColor("#000000"))
                         .setTextSize(12)
@@ -172,15 +172,15 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 powerMenu.dismiss();
                                 break;
                             case 7:
-                                viewModel.getCaseProductsClicked().setValue(caseInfo.getCaseID());
+                                viewModel.getAddPaymentClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 8:
-                                viewModel.getChangeCaseTypeClicked().setValue(caseInfo);
+                                viewModel.getCaseProductsClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();
                                 break;
                             case 9:
-                                viewModel.getAddPaymentClicked().setValue(caseInfo.getCaseID());
+                                viewModel.getChangeCaseTypeClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
                         }

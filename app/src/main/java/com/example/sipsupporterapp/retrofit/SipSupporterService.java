@@ -225,4 +225,7 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CaseResult> fetchCaseInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("caseID") int caseID);
+
+    @GET("{path}")
+    Call<CustomerPaymentResult> fetchCustomerPaymentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerPaymentID") int customerPaymentID);
 }

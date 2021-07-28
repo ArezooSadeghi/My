@@ -56,6 +56,8 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
     public void onBindViewHolder(@NonNull CustomerPaymentInfoHolder holder, int position) {
         holder.bindCustomerPaymentInfo(customerPaymentInfoList.get(position));
 
+        holder.binding.imgBtnMore.setVisibility(viewModel == null ? View.GONE : View.VISIBLE);
+
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

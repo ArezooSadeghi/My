@@ -71,7 +71,7 @@ public class CustomerViewModel extends AndroidViewModel {
     }
 
     public void getSupporterServiceCustomerResult(String baseUrl) {
-        repository.getSupporterServiceCustomerResult(baseUrl);
+        repository.getSipSupporterServiceCustomerResult(baseUrl);
     }
 
     public void getSipSupporterServiceDateResult(String baseUrl) {
