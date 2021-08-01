@@ -25,6 +25,28 @@
         android:name="com.example.sipsupporterapp.view.dialog.ChangePasswordDialogFragment"
         android:label="ChangePasswordDialogFragment" />
 
+    <dialog
+        android:id="@+id/menu_add_unknown_customer_payment"
+        android:name="com.example.sipsupporterapp.view.dialog.AddEditCustomerPaymentDialogFragment"
+        android:label="ChangePasswordDialogFragment">
+
+        <argument
+            android:name="customerPaymentID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="customerID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="caseID"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+    </dialog>
+
     <fragment
         android:id="@+id/menu_payments"
         android:name="com.example.sipsupporterapp.view.fragment.PaymentFragment"

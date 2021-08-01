@@ -367,7 +367,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
 
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
                         .setPositiveButtonString(getString(R.string.ok))
-                        .setNegativeButton(getString(R.string.close))
+                        .setNegativeButton(getString(R.string.cancel))
                         .setMinYear(1300)
                         .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
                         .setInitDate(currentYear, currentMonth, currentDay)

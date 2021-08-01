@@ -21,6 +21,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerPaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerPaymentByCaseDialogBinding;
 import com.example.sipsupporterapp.eventbus.RefreshEvent;
+import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -37,6 +38,7 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
     private CaseViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
+    private CaseResult.CaseInfo caseInfo;
     private int caseID;
 
     private static final String ARGS_CASE_ID = "caseID";
@@ -57,6 +59,7 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
         createViewModel();
         setupObserver();
         initVariables();
+        fetchCaseInfo(caseID);
         fetchCustomerPaymentsByCaseID(caseID);
     }
 
@@ -158,6 +161,12 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
         viewModel.fetchCustomerPaymentsByCase(path, userLoginKey, caseID);
     }
 
+    private void fetchCaseInfo(int caseID) {
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Case/Info/";
+        viewModel.fetchCaseInfo(path, userLoginKey, caseID);
+    }
+
     private void handleEvents() {
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,7 +178,7 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, 0, caseID);
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, caseInfo.getCustomerID(), caseInfo.getCaseID());
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });
@@ -187,6 +196,19 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
                     ejectUser();
                 } else {
                     handleError(customerPaymentResult.getError());
+                }
+            }
+        });
+
+        viewModel.getCaseInfoResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    caseInfo = caseResult.getCases()[0];
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(caseResult.getError());
                 }
             }
         });

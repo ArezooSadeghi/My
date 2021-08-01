@@ -103,6 +103,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
         handleEvents();
 
+        if (customerPaymentID == 0 && customerID == 0 && caseID == 0) {
+            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
+        }
+
         AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
@@ -339,26 +343,33 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult().new CustomerPaymentInfo();
-
-                String description = binding.edTextDescription.getText().toString();
-                customerPaymentInfo.setDescription(description);
-
                 String price = binding.edTextPrice.getText().toString().replaceAll(",", "");
-                customerPaymentInfo.setPrice(Long.valueOf(price));
 
-                String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "");
-                customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
-
-                customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
-                customerPaymentInfo.setCustomerID(customerID);
-                customerPaymentInfo.setCaseID(caseID);
-                customerPaymentInfo.setBankAccountID(bankAccountID);
-
-                if (customerPaymentID == 0) {
-                    addCustomerPayment(customerPaymentInfo);
+                if (customerID == 0 && (binding.edTextDescription.getText().toString().isEmpty() || binding.edTextDescription.getText().toString().length() <= 3)) {
+                    handleError(getString(R.string.length_description_message));
+                } else if (price.isEmpty() || Long.valueOf(price) == 0) {
+                    handleError(getString(R.string.empty_zero_price_message));
                 } else {
-                    editCustomerPayment(customerPaymentInfo);
+                    CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult().new CustomerPaymentInfo();
+
+                    String description = binding.edTextDescription.getText().toString();
+                    customerPaymentInfo.setDescription(description);
+
+                    customerPaymentInfo.setPrice(Long.valueOf(price));
+
+                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "");
+                    customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
+
+                    customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
+                    customerPaymentInfo.setCustomerID(customerID);
+                    customerPaymentInfo.setCaseID(caseID);
+                    customerPaymentInfo.setBankAccountID(bankAccountID);
+
+                    if (customerPaymentID == 0) {
+                        addCustomerPayment(customerPaymentInfo);
+                    } else {
+                        editCustomerPayment(customerPaymentInfo);
+                    }
                 }
             }
         });
@@ -372,8 +383,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 currentDay = Integer.parseInt(currentDate.substring(8));
 
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
-                        .setPositiveButtonString("تایید")
-                        .setNegativeButton("انصراف")
+                        .setPositiveButtonString(getString(R.string.ok))
+                        .setNegativeButton(getString(R.string.cancel))
                         .setMinYear(1300)
                         .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
                         .setInitDate(currentYear, currentMonth, currentDay)
