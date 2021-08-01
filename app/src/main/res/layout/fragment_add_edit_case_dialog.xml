@@ -46,7 +46,7 @@
             android:id="@+id/iv_more"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="8dp"
             android:src="@drawable/ic_more"
             app:layout_constraintBottom_toBottomOf="@id/btn_customer_name"
             app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:backgroundTint="@color/light_gray"
-                android:text="ثبت نظر"
+                android:text="ضبط"
                 android:textColor="@color/white" />
 
         </LinearLayout>
