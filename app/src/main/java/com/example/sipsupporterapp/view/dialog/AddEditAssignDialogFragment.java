@@ -131,7 +131,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
             }
         });
 
-        binding.spinnerAssignUserFullName.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 String userFullName = (String) item;
@@ -236,7 +236,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
             userIDs.add(i, userInfoArray[i].getUserID());
         }
         assignUserID = userIDs.get(0);
-        binding.spinnerAssignUserFullName.setItems(userFullNames);
+        binding.spinner.setItems(userFullNames);
     }
 
     private void fetchUsers() {

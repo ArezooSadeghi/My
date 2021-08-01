@@ -98,7 +98,7 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
             }
         });
 
-        binding.spinnerCaseTypes.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 String caseType = Converter.letterConverter((String) item);
@@ -122,7 +122,7 @@ public class ChangeCaseTypeDialogFragment extends DialogFragment {
             caseTypeIDs.add(i, caseTypeInfoArray[i].getCaseTypeID());
         }
         caseTypeID = caseTypeIDs.get(0);
-        binding.spinnerCaseTypes.setItems(caseTypes);
+        binding.spinner.setItems(caseTypes);
     }
 
     @Override

@@ -150,7 +150,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                     add(3, "خیلی مهم");
                 }};
                 textPriority = "کم";
-                binding.spinnerPriority.setItems(prioritiesZero);
+                binding.spinner.setItems(prioritiesZero);
                 break;
             case 1:
                 List<String> prioritiesOne = new ArrayList<String>() {{
@@ -160,7 +160,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                     add(3, "خیلی مهم");
                 }};
                 textPriority = "متوسط";
-                binding.spinnerPriority.setItems(prioritiesOne);
+                binding.spinner.setItems(prioritiesOne);
                 break;
             case 2:
                 List<String> prioritiesTwo = new ArrayList<String>() {{
@@ -170,7 +170,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                     add(3, "خیلی مهم");
                 }};
                 textPriority = "مهم";
-                binding.spinnerPriority.setItems(prioritiesTwo);
+                binding.spinner.setItems(prioritiesTwo);
                 break;
             case 3:
                 List<String> prioritiesThree = new ArrayList<String>() {{
@@ -180,7 +180,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                     add(3, "مهم");
                 }};
                 textPriority = "خیلی مهم";
-                binding.spinnerPriority.setItems(prioritiesThree);
+                binding.spinner.setItems(prioritiesThree);
                 break;
         }
     }
@@ -202,7 +202,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 caseInfo.setCaseID(caseID);
                 caseInfo.setCaseTypeID(caseTypeID);
                 caseInfo.setCustomerID(customerID);
-                caseInfo.setCustomerName(binding.edTextCustomerName.getText().toString());
+                caseInfo.setCustomerName(binding.btnCustomerName.getText().toString());
                 caseInfo.setDescription(binding.edTextDescription.getText().toString());
                 caseInfo.setShare(binding.checkBoxShare.isChecked());
 
@@ -241,7 +241,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
             }
         });
 
-        binding.spinnerPriority.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 textPriority = (String) item;
@@ -294,7 +294,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
             public void onChanged(CustomerResult customerResult) {
                 if (customerResult.getErrorCode().equals("0")) {
                     String customerName = Converter.letterConverter(customerResult.getCustomers()[0].getCustomerName());
-                    binding.edTextCustomerName.setText(customerName);
+                    binding.btnCustomerName.setText(customerName);
                 } else if (customerResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {

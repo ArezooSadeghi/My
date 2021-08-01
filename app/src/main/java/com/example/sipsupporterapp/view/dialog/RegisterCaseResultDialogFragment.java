@@ -153,7 +153,7 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
             add(1, "نتیجه قابل قبول است");
         }};
         textResultOk = caseResultListZero.get(0);
-        binding.spinnerCaseResult.setItems(caseResultListZero);
+        binding.spinner.setItems(caseResultListZero);
 
         boolean resultOk = getArguments().getBoolean(ARGS_RESULT_OK);
         if (resultOk) {
@@ -162,12 +162,12 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
                 add(1, "نتیجه مورد تایید نیست");
             }};
             textResultOk = caseResultListOne.get(0);
-            binding.spinnerCaseResult.setItems(caseResultListOne);
+            binding.spinner.setItems(caseResultListOne);
         }
     }
 
     private void handleEvents() {
-        binding.spinnerCaseResult.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 textResultOk = (String) item;

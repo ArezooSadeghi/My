@@ -116,7 +116,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(),  R.style.CustomAlertDialog)
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 
@@ -161,7 +161,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         binding.edTextInvoicePrice.setText(String.valueOf(invoicePrice));
         binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().length());
 
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (binding.btnProductName.getText().toString().isEmpty()) {
@@ -200,7 +200,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     customerProductInfo.setInvoicePayment(paymentPrice);
                     customerProductInfo.setFinish(finish);
 
-                    String date = binding.btnDateExpiration.getText().toString().replaceAll("/", "");
+                    String date = binding.btnExpireDate.getText().toString().replaceAll("/", "");
                     customerProductInfo.setExpireDate(Long.valueOf(date));
 
                     if (customerProductID == 0) {
@@ -227,10 +227,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             }
         });
 
-        binding.btnDateExpiration.setOnClickListener(new View.OnClickListener() {
+        binding.btnExpireDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentDate = binding.btnDateExpiration.getText().toString();
+                currentDate = binding.btnExpireDate.getText().toString();
                 currentYear = Integer.parseInt(currentDate.substring(0, 4));
                 currentMonth = Integer.parseInt(currentDate.substring(5, 7));
                 currentDay = Integer.parseInt(currentDate.substring(8));
@@ -252,16 +252,16 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                                 int day = persianPickerDate.getPersianDay();
                                 if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
                                     expireDate = Long.parseLong(year + "0" + month + "0" + day);
-                                    binding.btnDateExpiration.setText(formatDate());
+                                    binding.btnExpireDate.setText(formatDate());
                                 } else if (String.valueOf(month).length() == 1) {
                                     expireDate = Integer.parseInt(year + "0" + month + "" + day);
-                                    binding.btnDateExpiration.setText(formatDate());
+                                    binding.btnExpireDate.setText(formatDate());
                                 } else if (String.valueOf(day).length() == 1) {
                                     expireDate = Integer.parseInt(year + "" + month + "0" + day);
-                                    binding.btnDateExpiration.setText(formatDate());
+                                    binding.btnExpireDate.setText(formatDate());
                                 } else {
                                     expireDate = Integer.parseInt(year + "" + month + "" + day);
-                                    binding.btnDateExpiration.setText(formatDate());
+                                    binding.btnExpireDate.setText(formatDate());
                                 }
                             }
 
@@ -298,9 +298,9 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
         if (expireDate != 0) {
             String dateFormat = formatDate();
-            binding.btnDateExpiration.setText(dateFormat);
+            binding.btnExpireDate.setText(dateFormat);
         } else {
-            binding.btnDateExpiration.setText(SipSupportSharedPreferences.getDate(getContext()));
+            binding.btnExpireDate.setText(SipSupportSharedPreferences.getDate(getContext()));
         }
 
         if (finish) {
@@ -382,7 +382,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
-               handleError(message);
+                handleError(message);
             }
         });
 

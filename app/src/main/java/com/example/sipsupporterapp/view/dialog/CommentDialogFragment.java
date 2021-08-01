@@ -195,26 +195,26 @@ public class CommentDialogFragment extends DialogFragment {
     }
 
     private void initViews() {
-        binding.recyclerViewComments.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewComments.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewComments.getContext(),
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(
+                binding.recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL));
     }
 
     private void setupAdapter(CommentResult.CommentInfo[] commentInfoArray) {
         if (commentInfoArray.length != 0) {
-            binding.txtNoComment.setVisibility(View.GONE);
-            binding.recyclerViewComments.setVisibility(View.VISIBLE);
+            binding.txtEmpty.setVisibility(View.GONE);
+            binding.recyclerView.setVisibility(View.VISIBLE);
             CommentAdapter adapter = new CommentAdapter(getContext(), viewModel, Arrays.asList(commentInfoArray));
-            binding.recyclerViewComments.setAdapter(adapter);
+            binding.recyclerView.setAdapter(adapter);
         } else {
-            binding.txtNoComment.setVisibility(View.VISIBLE);
-            binding.recyclerViewComments.setVisibility(View.GONE);
+            binding.txtEmpty.setVisibility(View.VISIBLE);
+            binding.recyclerView.setVisibility(View.GONE);
         }
     }
 
     private void handleEvents() {
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+        binding.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddEditCommentDialogFragment fragment = AddEditCommentDialogFragment.newInstance(caseID, 0, "");

@@ -79,7 +79,7 @@ public class AssignDialogFragment extends DialogFragment {
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(),  R.style.CustomAlertDialog)
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 
@@ -198,28 +198,35 @@ public class AssignDialogFragment extends DialogFragment {
     }
 
     private void initViews() {
-        binding.recyclerViewAssigns.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewAssigns.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewAssigns.getContext(),
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(
+                binding.recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL));
     }
 
     private void handleEvents() {
-        binding.fabAddNewAssign.setOnClickListener(new View.OnClickListener() {
+        binding.btnAssign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddEditAssignDialogFragment fragment = AddEditAssignDialogFragment.newInstance(0, caseID, "");
                 fragment.show(getParentFragmentManager(), AddEditAssignDialogFragment.TAG);
             }
         });
+
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     private void setupAdapter(AssignResult.AssignInfo[] assignInfoArray) {
         if (assignInfoArray.length != 0) {
-            binding.txtNoAssign.setVisibility(View.INVISIBLE);
-            binding.recyclerViewAssigns.setVisibility(View.VISIBLE);
+            binding.txtEmpty.setVisibility(View.INVISIBLE);
+            binding.recyclerView.setVisibility(View.VISIBLE);
             AssignAdapter adapter = new AssignAdapter(getContext(), viewModel, Arrays.asList(assignInfoArray));
-            binding.recyclerViewAssigns.setAdapter(adapter);
+            binding.recyclerView.setAdapter(adapter);
         }
     }
 

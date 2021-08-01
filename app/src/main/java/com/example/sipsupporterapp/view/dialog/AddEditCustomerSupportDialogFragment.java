@@ -100,7 +100,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
             }
         });
 
-        binding.btnOk.setOnClickListener(new View.OnClickListener() {
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (binding.edTextAnswer.getText().toString().isEmpty() || binding.edTextQuestion.getText().toString().isEmpty()) {

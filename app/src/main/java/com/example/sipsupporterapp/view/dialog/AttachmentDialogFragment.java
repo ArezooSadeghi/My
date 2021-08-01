@@ -114,7 +114,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(), R.style.CustomAlertDialog)
+                .Builder(getContext())
                 .setView(binding.getRoot())
                 .create();
 

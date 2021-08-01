@@ -12,40 +12,44 @@
 
         <TextView
             android:id="@+id/txt_assign_user_full_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
+            android:ellipsize="end"
             android:fontFamily="@font/yekan"
-            android:text="آرزو صادقی"
-            android:textColor="@color/black"
+            android:maxLines="1"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_more"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_description"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:fontFamily="@font/regular"
-            android:text="لطفا موارد ذکر شده را برسی کنید"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_assign_user_full_name" />
 
         <ImageView
+            android:id="@+id/iv_more"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:id="@+id/iv_more"
             android:src="@drawable/ic_more"
-            app:tint="@color/black" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,32 +59,67 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_description">
 
-            <CheckBox
-                android:id="@+id/check_box_seen"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/titr"
-                android:text="مشاهده توسط کاربر"
-                android:textColor="@color/black" />
+                android:gravity="right"
+                android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/check_box_finish"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/titr"
-                android:text="وضعیت پایان یافتن"
-                android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="مشاهده توسط کاربر"
+                    android:textColor="@color/white" />
 
-            <CheckBox
-                android:id="@+id/check_box_seen_assigner"
-                android:layout_width="wrap_content"
+                <CheckBox
+                    android:id="@+id/check_box_seen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/titr"
-                android:text="مشاهده توسط کاربر گیرنده کار"
-                android:textColor="@color/black" />
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="وضعیت پایان یافتن"
+                    android:textColor="@color/white" />
+
+                <CheckBox
+                    android:id="@+id/check_box_finish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="مشاهده توسط کاربر گیرنده کار"
+                    android:textColor="@color/white" />
+
+                <CheckBox
+                    android:id="@+id/check_box_seen_assigner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

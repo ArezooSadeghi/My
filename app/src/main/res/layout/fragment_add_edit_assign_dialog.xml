@@ -13,7 +13,7 @@
         tools:context=".view.dialog.AddEditAssignDialogFragment">
 
         <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner_assign_user_full_name"
+            android:id="@+id/spinner"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_margin="32dp"
@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:ms_arrow_tint="@color/black"
-            app:ms_background_color="#fff8dc"
+            app:ms_background_color="@color/light_gray"
             app:ms_padding_right="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -35,24 +35,25 @@
             android:layout_height="200dp"
             android:layout_margin="32dp"
             android:hint="توضیحات"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="#696969"
-            app:hintTextColor="@color/black"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner_assign_user_full_name">
+            app:layout_constraintTop_toBottomOf="@id/spinner">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ed_text_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:maxLines="1"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textCursorDrawable="@drawable/custom_cursor"
                 android:textDirection="rtl" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -68,22 +69,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:backgroundTint="@color/black"
-                android:fontFamily="@font/yekan"
-                android:text="بستن"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:backgroundTint="@color/light_gray"
+                android:text="انصراف"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:backgroundTint="@color/black"
-                android:fontFamily="@font/yekan"
+                android:backgroundTint="@color/light_gray"
                 android:text="ضبط"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

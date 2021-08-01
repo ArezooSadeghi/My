@@ -10,19 +10,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutDirection="rtl"
         tools:context=".view.dialog.AddEditCustomerPaymentDialogFragment">
 
         <TextView
             android:id="@+id/txt_customer_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
             android:ellipsize="end"
             android:fontFamily="@font/regular"
-            android:gravity="center"
-            android:maxLines="2"
-            android:textColor="@color/black"
+            android:maxLines="1"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,22 +42,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_customer_name"
             app:ms_arrow_tint="@color/black"
-            app:ms_background_color="#838996"
+            app:ms_background_color="@color/light_gray"
             app:ms_dropdown_max_height="150dp"
             app:ms_padding_right="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/description_container"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:hint="توضیحات"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="#696969"
-            app:hintTextColor="#696969"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spinner">
@@ -65,8 +65,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ed_text_description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
                 android:textCursorDrawable="@drawable/custom_cursor"
                 android:textDirection="rtl" />
 
@@ -81,9 +81,9 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:hint="مبلغ واریزی(به ریال)"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="#696969"
-            app:hintTextColor="#696969"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/description_container">
@@ -91,36 +91,35 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ed_text_price"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/yekan"
                 android:inputType="number"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textCursorDrawable="@drawable/custom_cursor"
                 android:textDirection="rtl" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_date_payment"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:fontFamily="@font/yekan"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/price_container" />
+            app:layout_constraintTop_toBottomOf="@id/price_container"
+            app:strokeColor="@color/black" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:layoutDirection="ltr"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,21 +130,19 @@
                 android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:backgroundTint="#838996"
-                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginRight="16dp"
+                android:backgroundTint="@color/light_gray"
                 android:text="انصراف"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:backgroundTint="#838996"
-                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginLeft="16dp"
+                android:backgroundTint="@color/light_gray"
                 android:text="ضبط"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

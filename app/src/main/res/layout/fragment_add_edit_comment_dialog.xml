@@ -19,9 +19,9 @@
             android:layout_height="200dp"
             android:layout_margin="32dp"
             android:hint="توضیحات"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="#696969"
-            app:hintTextColor="@color/black"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -29,12 +29,13 @@
                 android:id="@+id/ed_text_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textCursorDrawable="@drawable/custom_cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -50,22 +51,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:fontFamily="@font/yekan"
+                android:backgroundTint="@color/light_gray"
                 android:text="انصراف"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:backgroundTint="#838996" />
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:fontFamily="@font/yekan"
-                android:text="ضبط"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:backgroundTint="#838996" />
+                android:backgroundTint="@color/light_gray"
+                android:text="ثبت نظر"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
