@@ -134,21 +134,21 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             binding.edTextDescription.setText(Converter.letterConverter(customerPaymentInfo.getDescription()));
             binding.edTextDescription.setSelection(binding.edTextDescription.getText().length());
 
-            binding.edTextCustomerPayment.setText(String.valueOf(customerPaymentInfo.getPrice()));
-            binding.edTextCustomerPayment.setSelection(binding.edTextCustomerPayment.getText().length());
+            binding.edTextPrice.setText(String.valueOf(customerPaymentInfo.getPrice()));
+            binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
 
             if (customerPaymentInfo.getDatePayment() != 0) {
                 String dateFormat = formatDate(customerPaymentInfo.getDatePayment());
-                binding.btnDepositDate.setText(dateFormat);
+                binding.btnDatePayment.setText(dateFormat);
             } else {
-                binding.btnDepositDate.setText(SipSupportSharedPreferences.getDate(getContext()));
+                binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
             }
         } else if (customerInfo != null) {
             binding.txtCustomerName.setText(Converter.letterConverter(customerInfo.getCustomerName()));
-            binding.btnDepositDate.setText(SipSupportSharedPreferences.getDate(getContext()));
+            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
         } else if (caseInfo != null) {
             binding.txtCustomerName.setText(Converter.letterConverter(caseInfo.getCustomerName()));
-            binding.btnDepositDate.setText(SipSupportSharedPreferences.getDate(getContext()));
+            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
             customerID = caseInfo.getCustomerID();
         }
     }
@@ -191,7 +191,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         }
 
         bankAccountID = bankAccountInfoArray[0].getBankAccountID();
-        binding.spinnerBankAccountNames.setItems(bankAccountNameList);
+        binding.spinner.setItems(bankAccountNameList);
     }
 
     private void fetchCustomerPaymentInfo(int customerPaymentID) {
@@ -336,7 +336,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult().new CustomerPaymentInfo();
@@ -344,10 +344,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 String description = binding.edTextDescription.getText().toString();
                 customerPaymentInfo.setDescription(description);
 
-                String price = binding.edTextCustomerPayment.getText().toString().replaceAll(",", "");
+                String price = binding.edTextPrice.getText().toString().replaceAll(",", "");
                 customerPaymentInfo.setPrice(Long.valueOf(price));
 
-                String datePayment = binding.btnDepositDate.getText().toString().replaceAll("/", "");
+                String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "");
                 customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
 
                 customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
@@ -363,10 +363,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.btnDepositDate.setOnClickListener(new View.OnClickListener() {
+        binding.btnDatePayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentDate = binding.btnDepositDate.getText().toString();
+                currentDate = binding.btnDatePayment.getText().toString();
                 currentYear = Integer.parseInt(currentDate.substring(0, 4));
                 currentMonth = Integer.parseInt(currentDate.substring(5, 7));
                 currentDay = Integer.parseInt(currentDate.substring(8));
@@ -387,13 +387,13 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                                 int month = persianPickerDate.getPersianMonth();
                                 int day = persianPickerDate.getPersianDay();
                                 if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
-                                    binding.btnDepositDate.setText(formatDate(Integer.parseInt(year + "0" + month + "0" + day)));
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "0" + month + "0" + day)));
                                 } else if (String.valueOf(month).length() == 1) {
-                                    binding.btnDepositDate.setText(formatDate(Integer.parseInt(year + "0" + month + "" + day)));
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "0" + month + "" + day)));
                                 } else if (String.valueOf(day).length() == 1) {
-                                    binding.btnDepositDate.setText(formatDate(Integer.parseInt(year + "" + month + "0" + day)));
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "" + month + "0" + day)));
                                 } else {
-                                    binding.btnDepositDate.setText(formatDate(Integer.parseInt(year + "" + month + "" + day)));
+                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "" + month + "" + day)));
                                 }
                             }
 
@@ -406,7 +406,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.edTextCustomerPayment.addTextChangedListener(new TextWatcher() {
+        binding.edTextPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -419,7 +419,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                binding.edTextCustomerPayment.removeTextChangedListener(this);
+                binding.edTextPrice.removeTextChangedListener(this);
                 try {
                     String text = editable.toString();
                     Long textToLong;
@@ -428,16 +428,16 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     }
                     textToLong = Long.parseLong(text);
                     String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(textToLong);
-                    binding.edTextCustomerPayment.setText(currencyFormat);
-                    binding.edTextCustomerPayment.setSelection(binding.edTextCustomerPayment.getText().length());
+                    binding.edTextPrice.setText(currencyFormat);
+                    binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
                 } catch (NumberFormatException exception) {
                     Log.e(TAG, exception.getMessage());
                 }
-                binding.edTextCustomerPayment.addTextChangedListener(this);
+                binding.edTextPrice.addTextChangedListener(this);
             }
         });
 
-        binding.spinnerBankAccountNames.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 bankAccountID = bankAccountInfoArray[position].getBankAccountID();

@@ -30,6 +30,7 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
+import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private CustomerViewModel customerViewModel;
     private CaseViewModel caseViewModel;
+    private PaymentViewModel paymentViewModel;
     private int destinationID;
 
     @Override
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         customerViewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
         caseViewModel = new ViewModelProvider(this).get(CaseViewModel.class);
+        paymentViewModel = new ViewModelProvider(this).get(PaymentViewModel.class);
 
         handleEvents();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -152,20 +155,36 @@ public class MainActivity extends AppCompatActivity {
         binding.ivAddNewCase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PowerMenu powerMenu = new PowerMenu.Builder(MainActivity.this)
-                        .addItem(new PowerMenuItem("افزودن case"))
-                        .setTextColor(Color.parseColor("#000000"))
-                        .setTextSize(14)
-                        .setTextGravity(Gravity.RIGHT)
-                        .build();
+                PowerMenu powerMenu = null;
+                if (destinationID == R.id.menu_payments) {
+                    powerMenu = new PowerMenu.Builder(MainActivity.this)
+                            .addItem(new PowerMenuItem("افزودن هزینه"))
+                            .setTextColor(Color.parseColor("#000000"))
+                            .setTextSize(14)
+                            .setTextGravity(Gravity.RIGHT)
+                            .build();
+                } else if (destinationID == R.id.menu_tasks) {
+                    powerMenu = new PowerMenu.Builder(MainActivity.this)
+                            .addItem(new PowerMenuItem("افزودن case"))
+                            .setTextColor(Color.parseColor("#000000"))
+                            .setTextSize(14)
+                            .setTextGravity(Gravity.RIGHT)
+                            .build();
+                }
 
+                PowerMenu finalPowerMenu = powerMenu;
                 powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
                     @Override
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                caseViewModel.getAddNewCaseClicked().setValue(true);
-                                powerMenu.dismiss();
+                                if (destinationID == R.id.menu_payments) {
+                                    paymentViewModel.getAddNewPaymentClicked().setValue(true);
+
+                                } else if (destinationID == R.id.menu_tasks) {
+                                    caseViewModel.getAddNewCaseClicked().setValue(true);
+                                }
+                                finalPowerMenu.dismiss();
                                 break;
                         }
                     }

@@ -46,7 +46,7 @@ public class PaymentFragment extends Fragment {
     private FragmentPaymentBinding binding;
     private PaymentViewModel viewModel;
     private ServerData serverData;
-    private String lastValueSpinner, centerName, userLoginKey;
+    private String centerName, userLoginKey;
     private int paymentID, bankAccountID;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
 
@@ -167,7 +167,7 @@ public class PaymentFragment extends Fragment {
         viewModel.deletePayment(path, userLoginKey, paymentID);
     }
 
-    private void fetchCostsByBankAccountID(int bankAccountID) {
+    private void fetchPaymentsByBankAccount(int bankAccountID) {
         viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/ListByBankAccount/";
         viewModel.fetchPaymentsByBankAccount(path, userLoginKey, bankAccountID);
@@ -180,19 +180,11 @@ public class PaymentFragment extends Fragment {
     }
 
     private void handleEvents() {
-      /*  binding.fabAddCost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(0, bankAccountID);
-                fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
-            }
-        });*/
-
         binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 bankAccountID = bankAccountInfoArray[position].getBankAccountID();
-                fetchCostsByBankAccountID(bankAccountID);
+                fetchPaymentsByBankAccount(bankAccountID);
             }
         });
     }
@@ -206,7 +198,7 @@ public class PaymentFragment extends Fragment {
                     if (bankAccountResult.getBankAccounts().length != 0) {
                         bankAccountInfoArray = bankAccountResult.getBankAccounts();
                         setupSpinner(bankAccountResult.getBankAccounts());
-                        fetchCostsByBankAccountID(bankAccountID);
+                        fetchPaymentsByBankAccount(bankAccountID);
                     }
                 } else if (bankAccountResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -232,22 +224,6 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
-        });
-
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<PaymentResult.PaymentInfo>() {
             @Override
             public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
@@ -269,9 +245,9 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(PaymentResult paymentResult) {
                 if (paymentResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_cost_message));
+                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_payment_message));
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    fetchCostsByBankAccountID(bankAccountID);
+                    fetchPaymentsByBankAccount(bankAccountID);
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -288,17 +264,35 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getUpdatingSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Integer bankAccountID) {
-                for (int i = 0; i < bankAccountInfoArray.length; i++) {
-                    if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
-                        PaymentFragment.this.bankAccountID = bankAccountID;
-                    }
+            public void onChanged(Integer _bankAccountID) {
+                if (bankAccountID == _bankAccountID) {
+                    fetchPaymentsByBankAccount(_bankAccountID);
                 }
+            }
+        });
 
-                setupSpinner(bankAccountInfoArray);
-                fetchCostsByBankAccountID(bankAccountID);
+        viewModel.getAddNewPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean addNewPaymentClicked) {
+                AddEditPaymentDialogFragment fragment = AddEditPaymentDialogFragment.newInstance(0, bankAccountID);
+                fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
+            }
+        });
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                handleError(message);
             }
         });
     }

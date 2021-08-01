@@ -1326,7 +1326,7 @@ public class SipSupporterRepository {
         });
     }
 
-    public void fetchPayments(String path, String userLoginKey, int bankAccountID) {
+    public void fetchPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
         sipSupporterService.fetchPayments(path, userLoginKey, bankAccountID).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {

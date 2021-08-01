@@ -49,12 +49,10 @@ import ir.hamsaa.persiandatepicker.api.PersianPickerListener;
 public class AddEditPaymentDialogFragment extends DialogFragment {
     private FragmentAddEditPaymentDialogBinding binding;
     private PaymentViewModel viewModel;
-
     private ServerData serverData;
-    private int paymentID, paymentSubjectID, bankAccountID, currentYear, currentMonth, currentDay;
+    private int paymentID, bankAccountID, currentYear, currentMonth, currentDay, index;
     private String currentDate, centerName, userLoginKey;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
-    private long price;
     private PaymentResult.PaymentInfo paymentInfo;
     private PaymentSubjectResult.PaymentSubjectInfo paymentSubjectInfo;
 
@@ -121,8 +119,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
 
     @Subscribe(sticky = true)
     public void getPaymentSubjectIDEvent(PostPaymentSubjectIDEvent event) {
-        paymentSubjectID = event.getPaymentSubjectID();
-        fetchPaymentSubjectInfo(paymentSubjectID);
+        fetchPaymentSubjectInfo(event.getPaymentSubjectID());
         EventBus.getDefault().removeStickyEvent(event);
     }
 
@@ -140,6 +137,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
         bankAccountID = getArguments().getInt(ARGS_BANK_ACCOUNT_ID);
 
+        index = -1;
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
@@ -165,18 +163,28 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         }
 
         if (paymentSubjectInfo != null) {
-            binding.btnDatePayment.setText(paymentSubjectInfo.getPaymentSubject());
+            binding.btnPaymentSubject.setText(paymentSubjectInfo.getParentPaymentSubject() != null ? paymentSubjectInfo.getParentPaymentSubject() + "(" + paymentSubjectInfo.getPaymentSubject() + ")" : paymentSubjectInfo.getPaymentSubject());
         }
     }
 
     private void setupObserver() {
+        viewModel.getPaymentInfoResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
+            @Override
+            public void onChanged(PaymentResult paymentResult) {
+                if (paymentResult.getErrorCode().equals("0")) {
+                    paymentInfo = paymentResult.getPayments()[0];
+                    fetchPaymentSubjectInfo(paymentInfo.getPaymentSubjectID());
+                    initViews();
+                }
+            }
+        });
+
         viewModel.getAddPaymentResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
             @Override
             public void onChanged(PaymentResult paymentResult) {
                 if (paymentResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
+                    showSuccessDialog(getString(R.string.success_add_edit_payment_message));
+                    viewModel.getRefresh().setValue(paymentResult.getPayments()[0].getBankAccountID());
                     dismiss();
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -190,14 +198,23 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             @Override
             public void onChanged(PaymentResult paymentResult) {
                 if (paymentResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_cost_message));
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getUpdatingSingleLiveEvent().setValue(paymentResult.getPayments()[0].getBankAccountID());
+                    showSuccessDialog(getString(R.string.success_add_edit_payment_message));
+                    viewModel.getRefresh().setValue(paymentResult.getPayments()[0].getBankAccountID());
                     dismiss();
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
                     handleError(paymentResult.getError());
+                }
+            }
+        });
+
+        viewModel.getPaymentSubjectInfoResultSingleLiveEvent().observe(this, new Observer<PaymentSubjectResult>() {
+            @Override
+            public void onChanged(PaymentSubjectResult paymentSubjectResult) {
+                if (paymentSubjectResult.getErrorCode().equals("0")) {
+                    paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[0];
+                    initViews();
                 }
             }
         });
@@ -215,29 +232,11 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 handleError(message);
             }
         });
+    }
 
-        viewModel.getPaymentSubjectInfoResultSingleLiveEvent().observe(this, new Observer<PaymentSubjectResult>() {
-            @Override
-            public void onChanged(PaymentSubjectResult paymentSubjectResult) {
-                if (paymentSubjectResult.getErrorCode().equals("0")) {
-                    paymentSubjectInfo = paymentSubjectResult.getPaymentSubjects()[0];
-                    initViews();
-                }
-                /*paymentSubject = paymentSubjectResult.getPaymentSubjects()[0].getParentPaymentSubject() + " " + paymentSubjectResult.getPaymentSubjects()[0].getPaymentSubject();
-                binding.btnWhat.setText(paymentSubject);*/
-            }
-        });
-
-        viewModel.getPaymentInfoResultSingleLiveEvent().observe(this, new Observer<PaymentResult>() {
-            @Override
-            public void onChanged(PaymentResult paymentResult) {
-                if (paymentResult.getErrorCode().equals("0")) {
-                    paymentInfo = paymentResult.getPayments()[0];
-                    fetchPaymentSubjectInfo(paymentInfo.getPaymentSubjectID());
-                    initViews();
-                }
-            }
-        });
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
     }
 
     private void handleError(String message) {
@@ -264,11 +263,23 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
 
     private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
         List<String> bankAccountNameList = new ArrayList<>();
-        for (int i = 0; i < bankAccountInfoArray.length; i++) {
-            bankAccountNameList.add(i, Converter.letterConverter(bankAccountInfoArray[i].getBankAccountName()));
+        if (bankAccountID != 0) {
+            for (int i = 0; i < bankAccountInfoArray.length; i++) {
+                if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
+                    index = i;
+                    continue;
+                } else {
+                    bankAccountNameList.add(bankAccountInfoArray[i].getBankAccountName());
+                }
+            }
+        } else {
+            for (int i = 0; i < bankAccountInfoArray.length; i++) {
+                bankAccountNameList.add(bankAccountInfoArray[i].getBankAccountName());
+            }
         }
-
-        bankAccountID = bankAccountInfoArray[0].getBankAccountID();
+        if (index != -1) {
+            bankAccountNameList.add(0, bankAccountInfoArray[index].getBankAccountName());
+        }
         binding.spinner.setItems(bankAccountNameList);
     }
 
@@ -281,13 +292,13 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         return year + "/" + month + "/" + day;
     }
 
-    private void editCost(PaymentResult.PaymentInfo paymentInfo) {
+    private void editPayment(PaymentResult.PaymentInfo paymentInfo) {
         viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Edit/";
         viewModel.editPayment(path, userLoginKey, paymentInfo);
     }
 
-    private void addCost(PaymentResult.PaymentInfo paymentInfo) {
+    private void addPayment(PaymentResult.PaymentInfo paymentInfo) {
         viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Add/";
         viewModel.addPayment(path, userLoginKey, paymentInfo);
@@ -318,12 +329,10 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 String price = binding.edTextPrice.getText().toString().replaceAll(",", "");
 
-                if (paymentSubjectID == 0) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.not_exist_payment_subject));
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                } else if (Long.valueOf(price) == 0) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.zero_price));
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                if (paymentSubjectInfo == null && paymentID == 0) {
+                    handleError(getString(R.string.determine_payment_subject_message));
+                } else if (price.isEmpty() || Long.valueOf(price) == 0) {
+                    handleError(getString(R.string.empty_zero_price_message));
                 } else {
                     PaymentResult.PaymentInfo paymentInfo = new PaymentResult().new PaymentInfo();
 
@@ -333,16 +342,16 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                     paymentInfo.setPrice(Long.valueOf(price));
 
                     paymentInfo.setPaymentID(paymentID);
-                    paymentInfo.setPaymentSubjectID(paymentSubjectID);
+                    paymentInfo.setPaymentSubjectID(paymentSubjectInfo.getPaymentSubjectID());
                     paymentInfo.setBankAccountID(bankAccountID);
 
                     String date = binding.btnDatePayment.getText().toString().replaceAll("/", "");
                     paymentInfo.setDatePayment(Integer.valueOf(date));
 
                     if (paymentID == 0) {
-                        addCost(paymentInfo);
+                        addPayment(paymentInfo);
                     } else {
-                        editCost(paymentInfo);
+                        editPayment(paymentInfo);
                     }
                 }
             }
@@ -357,8 +366,8 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 currentDay = Integer.parseInt(currentDate.substring(8));
 
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
-                        .setPositiveButtonString("تایید")
-                        .setNegativeButton("انصراف")
+                        .setPositiveButtonString(getString(R.string.ok))
+                        .setNegativeButton(getString(R.string.close))
                         .setMinYear(1300)
                         .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
                         .setInitDate(currentYear, currentMonth, currentDay)

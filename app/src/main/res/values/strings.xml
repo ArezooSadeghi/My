@@ -8,7 +8,6 @@
     <string name="login_title">App پشتیبانی</string>
     <string name="search_item_title">جستجو</string>
     <string name="center_name_hint">لطفا نام مرکز را وارد کنید</string>
-    <string name="ok">تایید</string>
     <string name="cancel">انصراف</string>
     <string name="timeout_exception_happen_message">اتصال به اینترنت با خطا مواجه شد</string>
     <string name="success_register_cost_message">ثبت برداشتی موفقیت آمیز بود</string>
@@ -47,4 +46,10 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="success_add_edit_payment_message">ثبت پرداختی موفقیت آمیز بود</string>
+    <string name="determine_payment_subject_message">لطفا مشخص کنید پرداخت در چه زمینه ای صورت گرفته است</string>
+    <string name="empty_zero_price_message">مبلغ پرداختی نباید خالی یا صفر باشد</string>
+    <string name="ok">تایید</string>
+    <string name="close">انصراف</string>
+    <string name="success_delete_payment_message">حذف پرداختی موفقیت آمیز بود</string>
 </resources>
