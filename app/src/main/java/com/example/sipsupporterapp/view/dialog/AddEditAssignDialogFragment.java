@@ -165,7 +165,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
                 if (assignResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("موفقیت آمیز بود Assign");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefreshAssigns().setValue(true);
+                    viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (assignResult.getErrorCode().equals("0")) {
                     ejectUser();
@@ -182,7 +182,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
                 if (assignResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("موفقیت آمیز بود Assign");
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefreshAssigns().setValue(true);
+                    viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (assignResult.getErrorCode().equals("-9001")) {
                     ejectUser();

@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentSuccessDialogBinding;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.UserViewModel;
 
 public class SuccessAddEditCustomerSupportDialogFragment extends DialogFragment {
@@ -79,7 +78,7 @@ public class SuccessAddEditCustomerSupportDialogFragment extends DialogFragment 
         binding.btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getSuccessfulRegisterCustomerUsersSingleLiveEvent().setValue(true);
+                viewModel.getCloseClicked().setValue(true);
                 dismiss();
             }
         });

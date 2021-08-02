@@ -133,7 +133,7 @@ public class AssignDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getRegisterCommentClicked().observe(this, new Observer<Boolean>() {
+        viewModel.getAddClicked().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean registerCommentClicked) {
                 //TODO
@@ -153,7 +153,7 @@ public class AssignDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getRefreshAssigns().observe(this, new Observer<Boolean>() {
+        viewModel.getRefresh().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean refreshAssigns) {
                 fetchAssigns();

@@ -196,7 +196,7 @@ public class PhotoGalleryFragment extends Fragment {
                     return;
                 }
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    viewModel.getAllowCameraPermissionSingleLiveEvent().setValue(true);
+                    viewModel.getAllowPermission().setValue(true);
                 } else {
                     handleError(getString(R.string.no_access_camera_permission_message));
                 }
@@ -370,7 +370,7 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void setupObserver() {
-        viewModel.getCustomerSupportAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
+        viewModel.getAttachmentsByCustomerSupportResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
@@ -383,7 +383,7 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getCustomerProductAttachmentsSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
+        viewModel.getAttachmentsByCustomerProductResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
@@ -396,7 +396,7 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getCustomerPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
+        viewModel.getAttachmentsByCustomerPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
@@ -409,7 +409,7 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getPaymentAttachmentsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
+        viewModel.getAttachmentsByPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
@@ -467,7 +467,7 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 handleError(message);
@@ -494,14 +494,14 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getRequestCameraPermission().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getRequestPermission().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean requestCameraPermission) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA_PERMISSION);
             }
         });
 
-        viewModel.getUpdatePhotoGallerySingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getAttachs().length != 0) {

@@ -74,7 +74,7 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getRegisterCommentClicked().setValue(true);
+                                viewModel.getAddClicked().setValue(true);
                                 powerMenu.dismiss();
                                 break;
                         }

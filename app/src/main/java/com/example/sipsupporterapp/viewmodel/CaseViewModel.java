@@ -16,18 +16,18 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class CaseViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-    private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> casesByCaseTypeResultSingleLiveEvent;
-    private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent;
-    private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent;
-    private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent;
-    private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> caseInfoResultSingleLiveEvent;
+    private SingleLiveEvent<CaseResult> addCaseResultSingleLiveEvent;
+    private SingleLiveEvent<CaseResult> editCaseResultSingleLiveEvent;
+    private SingleLiveEvent<CaseResult> deleteCaseResultSingleLiveEvent;
+    private SingleLiveEvent<CaseResult> closeCaseResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> seenAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> finishAssignResultSingleLiveEvent;
+    private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent;
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByCaseResultSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByCaseResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult.CaseInfo> changeCaseTypeClicked = new SingleLiveEvent<>();

@@ -80,7 +80,7 @@ public class SuccessAttachDialogFragment extends DialogFragment {
         binding.btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.getShowAttachAgainDialog().setValue(true);
+                viewModel.getAttachAgainClicked().setValue(true);
                 dismiss();
             }
         });

@@ -75,11 +75,11 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                 false);
 
         binding.edTextCenterName.setText(centerName);
-        binding.edTextIpAddress.setText(ipAddress);
+        binding.edTextIp.setText(ipAddress);
         binding.edTextPort.setText(port);
 
         binding.edTextCenterName.setSelection(binding.edTextCenterName.getText().length());
-        binding.edTextIpAddress.setSelection(binding.edTextIpAddress.getText().length());
+        binding.edTextIp.setSelection(binding.edTextIp.getText().length());
         binding.edTextPort.setSelection(binding.edTextPort.getText().length());
 
         setListener();
@@ -94,12 +94,12 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
 
 
     private void setListener() {
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 flag = false;
                 String centerName = binding.edTextCenterName.getText().toString();
-                String ipAddress = binding.edTextIpAddress.getText().toString();
+                String ipAddress = binding.edTextIp.getText().toString();
                 String port = binding.edTextPort.getText().toString();
 
                 if (centerName.isEmpty() || ipAddress.isEmpty() || port.isEmpty()) {
@@ -158,13 +158,13 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == 0 || actionId == EditorInfo.IME_ACTION_DONE) {
-                    binding.edTextIpAddress.requestFocus();
+                    binding.edTextIp.requestFocus();
                 }
                 return false;
             }
         });
 
-        binding.edTextIpAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.edTextIp.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

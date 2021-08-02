@@ -21,12 +21,12 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.viewmodel.AddEditCustomerSupportViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 public class AddEditCustomerSupportDialogFragment extends DialogFragment {
     private FragmentAddEditCustomerSupportDialogBinding binding;
-    private AddEditCustomerSupportViewModel viewModel;
+    private CustomerSupportViewModel viewModel;
 
     private int customerID, supportEventID;
     private ServerData serverData;
@@ -72,7 +72,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(),  R.style.CustomAlertDialog)
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 
@@ -83,7 +83,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
     }
 
     private void createViewModel() {
-        viewModel = new ViewModelProvider(this).get(AddEditCustomerSupportViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CustomerSupportViewModel.class);
     }
 
     private void fetchSupportEvents() {

@@ -154,7 +154,7 @@ public class CustomerSupportFragment extends Fragment {
                     }
                 });
 
-        viewModel.getNoConnectionExceptionSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {
                 binding.progressBarLoading.setVisibility(View.GONE);

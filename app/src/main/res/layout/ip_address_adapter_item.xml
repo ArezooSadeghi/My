@@ -17,7 +17,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textDirection="anyRtl"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,35 +30,35 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
             android:textDirection="anyRtl"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_center_name" />
 
         <ImageView
-            android:id="@+id/img_edit"
+            android:id="@+id/iv_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_edit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+            app:tint="@color/white" />
 
         <ImageView
-            android:id="@+id/img_delete"
+            android:id="@+id/iv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_edit"
-            app:tint="@color/black" />
+            app:layout_constraintTop_toBottomOf="@id/iv_edit"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -271,9 +271,9 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void addAttachment(AttachResult.AttachInfo attachInfo) {
-        viewModel.getSipSupporterServiceForAddAttachment(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Add/";
-        viewModel.addAttachment(path, userLoginKey, attachInfo);
+        viewModel.attach(path, userLoginKey, attachInfo);
     }
 
     private String convertBitmapToBase64() {
@@ -311,7 +311,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void requestCameraPermission() {
-        viewModel.getRequestCameraPermission().setValue(true);
+        viewModel.getRequestPermission().setValue(true);
     }
 
     private void openCamera() {
@@ -336,7 +336,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void setupObserver() {
-        viewModel.getAllowCameraPermissionSingleLiveEvent().observe(this, new Observer<Boolean>() {
+        viewModel.getAllowPermission().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean allowCameraPermission) {
                 openCamera();
@@ -347,7 +347,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
             @Override
             public void onChanged(AttachResult attachResult) {
                 if (attachResult.getErrorCode().equals("0")) {
-                    viewModel.getUpdatePhotoGallerySingleLiveEvent().setValue(attachResult);
+                    viewModel.getRefresh().setValue(attachResult);
 
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);
                     binding.imgClose.setEnabled(true);
@@ -379,7 +379,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 binding.imgMore.setEnabled(true);
             }
         });
-        viewModel.getShowAttachAgainDialog().observe(this, new Observer<Boolean>() {
+        viewModel.getAttachAgainClicked().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean showAttachAgainDialog) {
                 AttachAgainDialogFragment fragment = AttachAgainDialogFragment.newInstance(getString(R.string.question_attach_again));
@@ -387,14 +387,14 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
             }
         });
 
-        viewModel.getNoAttachAgain().observe(this, new Observer<Boolean>() {
+        viewModel.getNoClicked().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean noAttachAgain) {
                 dismiss();
             }
         });
 
-        viewModel.getYesAttachAgain().observe(this, new Observer<Boolean>() {
+        viewModel.getYesClicked().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean yesAttachAgain) {
                 photoUri = null;

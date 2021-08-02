@@ -17,16 +17,15 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent;
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent;
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentInfoResultSingleLiveEvent;
     private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent;
     private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent;
     private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent;
-    private SingleLiveEvent<CustomerPaymentResult> customerPaymentInfoResultSingleLiveEvent;
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> caseInfoResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> updateListAddCustomerPaymentSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> DeleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
@@ -37,15 +36,14 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
         customerPaymentsResultSingleLiveEvent = repository.getCustomerPaymentsResultSingleLiveEvent();
-        customerPaymentsByBankAccountResultSingleLiveEvent = repository.getCustomerPaymentsByBankAccountResultSingleLiveEvent();
+        customerPaymentInfoResultSingleLiveEvent = repository.getCustomerPaymentInfoResultSingleLiveEvent();
         addCustomerPaymentResultSingleLiveEvent = repository.getAddCustomerPaymentResultSingleLiveEvent();
         editCustomerPaymentResultSingleLiveEvent = repository.getEditCustomerPaymentResultSingleLiveEvent();
         deleteCustomerPaymentResultSingleLiveEvent = repository.getDeleteCustomerPaymentResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        customerPaymentInfoResultSingleLiveEvent = repository.getCustomerPaymentInfoResultSingleLiveEvent();
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
         caseInfoResultSingleLiveEvent = repository.getCaseInfoResultSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
@@ -56,8 +54,8 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return customerPaymentsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
-        return customerPaymentsByBankAccountResultSingleLiveEvent;
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentInfoResultSingleLiveEvent() {
+        return customerPaymentInfoResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerPaymentResult> getAddCustomerPaymentResultSingleLiveEvent() {
@@ -72,6 +70,14 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return deleteCustomerPaymentResultSingleLiveEvent;
     }
 
+    public SingleLiveEvent<CustomerResult> getCustomerInfoResultSingleLiveEvent() {
+        return customerInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CaseResult> getCaseInfoResultSingleLiveEvent() {
+        return caseInfoResultSingleLiveEvent;
+    }
+
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
@@ -81,7 +87,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<Boolean> getRefresh() {
-        return updateListAddCustomerPaymentSingleLiveEvent;
+        return refresh;
     }
 
     public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getDeleteClicked() {
@@ -94,18 +100,6 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getSeeCustomerPaymentAttachmentsClicked() {
         return seeCustomerPaymentAttachmentsClicked;
-    }
-
-    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentInfoResultSingleLiveEvent() {
-        return customerPaymentInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CustomerResult> getCustomerInfoResultSingleLiveEvent() {
-        return customerInfoResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<CaseResult> getCaseInfoResultSingleLiveEvent() {
-        return caseInfoResultSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {
@@ -126,10 +120,6 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
 
     public void fetchCustomerPaymentsResult(String path, String userLoginKey, int customerID) {
         repository.fetchCustomerPayments(path, userLoginKey, customerID);
-    }
-
-    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
-        repository.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 
     public void fetchBankAccounts(String path, String userLoginKey) {

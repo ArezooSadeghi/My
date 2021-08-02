@@ -13,14 +13,14 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 public class CustomerProductViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
+    private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent;
-    private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent;
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> dialogDismissed = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> closeClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> seeCustomerProductAttachmentsClicked = new SingleLiveEvent<>();
@@ -29,13 +29,17 @@ public class CustomerProductViewModel extends AndroidViewModel {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
+        customerProductsResultSingleLiveEvent = repository.getCustomerProductsResultSingleLiveEvent();
         addCustomerProductResultSingleLiveEvent = repository.getAddCustomerProductResultSingleLiveEvent();
         editCustomerProductResultSingleLiveEvent = repository.getEditCustomerProductResultSingleLiveEvent();
         deleteCustomerProductResultSingleLiveEvent = repository.getDeleteCustomerProductResultSingleLiveEvent();
-        customerProductsResultSingleLiveEvent = repository.getCustomerProductsResultSingleLiveEvent();
         productInfoResultSingleLiveEvent = repository.getProductInfoResultSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+    }
+
+    public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
+        return customerProductsResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerProductResult> getAddCustomerProductResultSingleLiveEvent() {
@@ -50,10 +54,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return deleteCustomerProductResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
-        return customerProductsResultSingleLiveEvent;
-    }
-
     public SingleLiveEvent<ProductResult> getProductInfoResultSingleLiveEvent() {
         return productInfoResultSingleLiveEvent;
     }
@@ -66,8 +66,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getDialogDismissed() {
-        return dialogDismissed;
+    public SingleLiveEvent<Boolean> getCloseClicked() {
+        return closeClicked;
     }
 
     public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getEditClicked() {

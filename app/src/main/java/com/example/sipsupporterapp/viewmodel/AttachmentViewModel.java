@@ -11,22 +11,22 @@ import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class AttachmentViewModel extends AndroidViewModel {
 
-    private SipSupporterRepository mRepository;
+    private SipSupporterRepository repository;
+    private SingleLiveEvent<AttachResult> attachmentsByCustomerPaymentResultSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachmentsByCustomerProductResultSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachmentsByCustomerSupportResultSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachmentsByPaymentResultSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> attachInfoResultSingleLiveEvent;
     private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent;
+    private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
-    private SingleLiveEvent<AttachResult> getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
-    private SingleLiveEvent<AttachResult> attachResultViaAttachIDSingleLiveEvent;
-    private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
-    private SingleLiveEvent<AttachResult> attachmentListResultByPaymentID;
     private SingleLiveEvent<Boolean> requestPermission = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> allowPermission = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> mIsAttachAgainSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> mYesAgainSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> mNoAgainSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<AttachResult> updateImageListSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> attachAgainClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> yesClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> noClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<AttachResult> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<String> finishWriteToStorage = new SingleLiveEvent<>();
     private SingleLiveEvent<String> photoClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> hideLoading = new SingleLiveEvent<>();
@@ -34,76 +34,76 @@ public class AttachmentViewModel extends AndroidViewModel {
     public AttachmentViewModel(@NonNull Application application) {
         super(application);
 
-        mRepository = SipSupporterRepository.getInstance(getApplication());
-        attachResultSingleLiveEvent = mRepository.getAttachResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = mRepository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = mRepository.getTimeoutExceptionHappenSingleLiveEvent();
-        getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent = mRepository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
-        getAttachmentFilesViaCustomerProductIDSingleLiveEvent = mRepository.getCustomerProductAttachmentsResultSingleLiveEvent();
-        getAttachmentFilesViaCustomerSupportIDSingleLiveEvent = mRepository.getCustomerSupportAttachmentsResultSingleLiveEvent();
-        attachResultViaAttachIDSingleLiveEvent = mRepository.getAttachResultViaAttachIDSingleLiveEvent();
-        deleteAttachResultSingleLiveEvent = mRepository.getDeleteAttachResultSingleLiveEvent();
-        attachmentListResultByPaymentID = mRepository.getPaymentAttachmentsResultSingleLiveEvent();
+        repository = SipSupporterRepository.getInstance(getApplication());
+        attachmentsByCustomerPaymentResultSingleLiveEvent = repository.getCustomerPaymentAttachmentsResultSingleLiveEvent();
+        attachmentsByCustomerProductResultSingleLiveEvent = repository.getCustomerProductAttachmentsResultSingleLiveEvent();
+        attachmentsByCustomerSupportResultSingleLiveEvent = repository.getCustomerSupportAttachmentsResultSingleLiveEvent();
+        attachmentsByPaymentResultSingleLiveEvent = repository.getPaymentAttachmentsResultSingleLiveEvent();
+        attachInfoResultSingleLiveEvent = repository.getAttachResultViaAttachIDSingleLiveEvent();
+        attachResultSingleLiveEvent = repository.getAttachResultSingleLiveEvent();
+        deleteAttachResultSingleLiveEvent = repository.getDeleteAttachResultSingleLiveEvent();
+        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
-    public SingleLiveEvent<Boolean> getRequestCameraPermission() {
-        return requestPermission;
+    public SingleLiveEvent<AttachResult> getAttachmentsByCustomerPaymentResultSingleLiveEvent() {
+        return attachmentsByCustomerPaymentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getAllowCameraPermissionSingleLiveEvent() {
-        return allowPermission;
+    public SingleLiveEvent<AttachResult> getAttachmentsByCustomerProductResultSingleLiveEvent() {
+        return attachmentsByCustomerProductResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AttachResult> getAttachmentsByCustomerSupportResultSingleLiveEvent() {
+        return attachmentsByCustomerSupportResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AttachResult> getAttachmentsByPaymentResultSingleLiveEvent() {
+        return attachmentsByPaymentResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<AttachResult> getAttachInfoResultSingleLiveEvent() {
+        return attachInfoResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<AttachResult> getAttachResultSingleLiveEvent() {
         return attachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<AttachResult> getDeleteAttachResultSingleLiveEvent() {
+        return deleteAttachResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
         return timeoutExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getShowAttachAgainDialog() {
-        return mIsAttachAgainSingleLiveEvent;
+    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
+        return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getYesAttachAgain() {
-        return mYesAgainSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getRequestPermission() {
+        return requestPermission;
     }
 
-    public SingleLiveEvent<Boolean> getNoAttachAgain() {
-        return mNoAgainSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getAllowPermission() {
+        return allowPermission;
     }
 
-    public SingleLiveEvent<AttachResult> getCustomerPaymentAttachmentsResultSingleLiveEvent() {
-        return getAttachmentFilesViaCustomerPaymentIDSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getAttachAgainClicked() {
+        return attachAgainClicked;
     }
 
-    public SingleLiveEvent<AttachResult> getCustomerProductAttachmentsSingleLiveEvent() {
-        return getAttachmentFilesViaCustomerProductIDSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getYesClicked() {
+        return yesClicked;
     }
 
-    public SingleLiveEvent<AttachResult> getCustomerSupportAttachmentsResultSingleLiveEvent() {
-        return getAttachmentFilesViaCustomerSupportIDSingleLiveEvent;
+    public SingleLiveEvent<Boolean> getNoClicked() {
+        return noClicked;
     }
 
-    public SingleLiveEvent<AttachResult> getAttachInfoResultSingleLiveEvent() {
-        return attachResultViaAttachIDSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<AttachResult> getUpdatePhotoGallerySingleLiveEvent() {
-        return updateImageListSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<AttachResult> getDeleteAttachResultSingleLiveEvent() {
-        return deleteAttachResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<AttachResult> getPaymentAttachmentsResultSingleLiveEvent() {
-        return attachmentListResultByPaymentID;
+    public SingleLiveEvent<AttachResult> getRefresh() {
+        return refresh;
     }
 
     public SingleLiveEvent<String> getFinishWriteToStorage() {
@@ -119,42 +119,38 @@ public class AttachmentViewModel extends AndroidViewModel {
     }
 
     public ServerData getServerData(String centerName) {
-        return mRepository.getServerData(centerName);
-    }
-
-    public void getSipSupporterServiceForAddAttachment(String baseUrl) {
-        mRepository.getSipSupporterServiceAttachResult(baseUrl);
+        return repository.getServerData(centerName);
     }
 
     public void getSipSupporterServiceAttachResult(String baseUrl) {
-        mRepository.getSipSupporterServiceAttachResult(baseUrl);
+        repository.getSipSupporterServiceAttachResult(baseUrl);
     }
 
-    public void addAttachment(String path, String userLoginKey, AttachResult.AttachInfo attachInfo) {
-        mRepository.attach(path, userLoginKey, attachInfo);
+    public void attach(String path, String userLoginKey, AttachResult.AttachInfo attachInfo) {
+        repository.attach(path, userLoginKey, attachInfo);
     }
 
     public void fetchCustomerPaymentAttachments(String path, String userLoginKey, int customerPaymentID, boolean LoadFileData) {
-        mRepository.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, LoadFileData);
+        repository.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, LoadFileData);
     }
 
     public void fetchCustomerProductAttachments(String path, String userLoginKey, int customerProductID, boolean LoadFileData) {
-        mRepository.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, LoadFileData);
+        repository.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, LoadFileData);
     }
 
     public void fetchCustomerSupportAttachments(String path, String userLoginKey, int customerSupportID, boolean LoadFileData) {
-        mRepository.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, LoadFileData);
-    }
-
-    public void fetchAttachInfo(String path, String userLoginKey, int attachID, boolean loadFileData) {
-        mRepository.fetchAttachInfo(path, userLoginKey, attachID, loadFileData);
-    }
-
-    public void deleteAttachment(String path, String userLoginKey, int attachID) {
-        mRepository.deleteAttach(path, userLoginKey, attachID);
+        repository.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, LoadFileData);
     }
 
     public void fetchPaymentAttachments(String path, String userLoginKey, int paymentID, boolean LoadFileData) {
-        mRepository.fetchPaymentAttachments(path, userLoginKey, paymentID, LoadFileData);
+        repository.fetchPaymentAttachments(path, userLoginKey, paymentID, LoadFileData);
+    }
+
+    public void fetchAttachInfo(String path, String userLoginKey, int attachID, boolean loadFileData) {
+        repository.fetchAttachInfo(path, userLoginKey, attachID, loadFileData);
+    }
+
+    public void deleteAttachment(String path, String userLoginKey, int attachID) {
+        repository.deleteAttach(path, userLoginKey, attachID);
     }
 }

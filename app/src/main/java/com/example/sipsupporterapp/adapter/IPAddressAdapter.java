@@ -45,14 +45,14 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
         ServerData serverData = serverDataList.get(position);
         holder.bindServerData(serverData);
 
-        holder.binding.imgDelete.setOnClickListener(new View.OnClickListener() {
+        holder.binding.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewModel.getDeleteIPAddressListSingleLiveEvent().setValue(serverData);
             }
         });
 
-        holder.binding.imgEdit.setOnClickListener(new View.OnClickListener() {
+        holder.binding.ivEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewModel.getUpdateIPAddressListSingleLiveEvent().setValue(serverData);

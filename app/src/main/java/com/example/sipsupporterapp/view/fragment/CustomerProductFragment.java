@@ -277,7 +277,7 @@ public class CustomerProductFragment extends Fragment {
             }
         });
 
-        viewModel.getDialogDismissed().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getCloseClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean dialogDismissed) {
                 fetchCustomerProducts();
