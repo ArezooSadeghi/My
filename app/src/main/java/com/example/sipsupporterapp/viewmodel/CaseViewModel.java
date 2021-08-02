@@ -48,6 +48,7 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<AssignResult.AssignInfo> seenClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<AssignResult.AssignInfo> finishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> saveClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> seeCommentClicked = new SingleLiveEvent<>();
 
     public CaseViewModel(@NonNull Application application) {
         super(application);
@@ -194,6 +195,10 @@ public class CaseViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CaseResult> getCaseInfoResultSingleLiveEvent() {
         return caseInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Integer> getSeeCommentClicked() {
+        return seeCommentClicked;
     }
 
     public ServerData getServerData(String centerName) {

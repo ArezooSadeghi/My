@@ -189,6 +189,13 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                 powerMenu.showAsDropDown(view);
             }
         });
+
+        holder.binding.badge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.getSeeCommentClicked().setValue(caseInfo.getCaseID());
+            }
+        });
     }
 
     public int generateRandomColor() {

@@ -466,6 +466,14 @@ public class CaseFragment extends Fragment {
                 fragment.show(getParentFragmentManager(), CustomerPaymentByCaseDialogFragment.TAG);
             }
         });
+
+        viewModel.getSeeCommentClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer caseID) {
+                CommentDialogFragment fragment = CommentDialogFragment.newInstance(caseID);
+                fragment.show(getParentFragmentManager(), CommentDialogFragment.TAG);
+            }
+        });
     }
 
     private void handleError(String message) {
