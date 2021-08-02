@@ -52,9 +52,9 @@
         android:name="com.example.sipsupporterapp.view.fragment.PaymentFragment"
         android:label="PaymentFragment" />
 
-    <fragment
+    <dialog
         android:id="@+id/menu_setting"
-        android:name="com.example.sipsupporterapp.view.fragment.SettingFragment"
+        android:name="com.example.sipsupporterapp.view.dialog.SettingDialogFragment"
         android:label="SettingFragment" />
 
     <fragment
