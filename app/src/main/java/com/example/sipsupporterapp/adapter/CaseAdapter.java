@@ -171,6 +171,10 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                                 viewModel.getCaseFinishClicked().setValue(caseInfo);
                                 powerMenu.dismiss();
                                 break;
+                            case 6:
+                                viewModel.getSeeClicked().setValue(caseInfo.getCaseID());
+                                powerMenu.dismiss();
+                                break;
                             case 7:
                                 viewModel.getAddPaymentClicked().setValue(caseInfo.getCaseID());
                                 powerMenu.dismiss();

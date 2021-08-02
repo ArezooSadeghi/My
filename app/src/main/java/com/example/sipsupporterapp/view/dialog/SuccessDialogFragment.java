@@ -19,7 +19,6 @@ public class SuccessDialogFragment extends DialogFragment {
     private FragmentSuccessDialogBinding binding;
 
     private static final String ARGS_MESSAGE = "message";
-
     public static final String TAG = SuccessDialogFragment.class.getSimpleName();
 
     public static SuccessDialogFragment newInstance(String message) {

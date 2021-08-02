@@ -38,6 +38,7 @@ import com.example.sipsupporterapp.view.dialog.CustomerPaymentByCaseDialogFragme
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.QuestionDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RegisterCaseResultDialogFragment;
+import com.example.sipsupporterapp.view.dialog.SeeDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -472,6 +473,14 @@ public class CaseFragment extends Fragment {
             public void onChanged(Integer caseID) {
                 CommentDialogFragment fragment = CommentDialogFragment.newInstance(caseID);
                 fragment.show(getParentFragmentManager(), CommentDialogFragment.TAG);
+            }
+        });
+
+        viewModel.getSeeClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer caseID) {
+                SeeDialogFragment fragment = SeeDialogFragment.newInstance(caseID);
+                fragment.show(getParentFragmentManager(), SeeDialogFragment.TAG);
             }
         });
     }
