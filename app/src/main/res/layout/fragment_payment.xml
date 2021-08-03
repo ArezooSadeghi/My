@@ -21,7 +21,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:fontFamily="@font/iranyekanwebbold"
+            android:fontFamily="@font/iran_yekan_bold"
             android:textColor="@color/black"
             android:textDirection="rtl"
             android:textSize="16sp"
