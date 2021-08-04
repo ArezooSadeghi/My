@@ -201,7 +201,7 @@ public class UserFragment extends Fragment {
             }
         });
 
-        viewModel.getCloseClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isSuccessfulRegister) {
                 Intent starter = MainActivity.start(getContext());

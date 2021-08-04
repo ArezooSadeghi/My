@@ -18,7 +18,7 @@ public class UserViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> closeClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
 
     public UserViewModel(@NonNull Application application) {
         super(application);
@@ -50,8 +50,8 @@ public class UserViewModel extends AndroidViewModel {
         return itemClicked;
     }
 
-    public SingleLiveEvent<Boolean> getCloseClicked() {
-        return closeClicked;
+    public SingleLiveEvent<Boolean> getRefresh() {
+        return refresh;
     }
 
     public ServerData getServerData(String centerName) {

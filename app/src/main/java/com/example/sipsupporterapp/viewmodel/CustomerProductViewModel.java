@@ -21,9 +21,9 @@ public class CustomerProductViewModel extends AndroidViewModel {
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> closeClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> seeCustomerProductAttachmentsClicked = new SingleLiveEvent<>();
 
     public CustomerProductViewModel(@NonNull Application application) {
@@ -42,6 +42,10 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
         return customerProductsResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerProductResult> getCustomerProductInfoResultSingleLiveEvent() {
+        return customerProductInfoResultSingleLiveEvent;
     }
 
     public SingleLiveEvent<CustomerProductResult> getAddCustomerProductResultSingleLiveEvent() {
@@ -69,23 +73,19 @@ public class CustomerProductViewModel extends AndroidViewModel {
     }
 
     public SingleLiveEvent<Boolean> getRefresh() {
-        return closeClicked;
-    }
-
-    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getEditClicked() {
-        return editClicked;
+        return refresh;
     }
 
     public SingleLiveEvent<Integer> getDeleteClicked() {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getSeeCustomerProductAttachmentsClicked() {
-        return seeCustomerProductAttachmentsClicked;
+    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getEditClicked() {
+        return editClicked;
     }
 
-    public SingleLiveEvent<CustomerProductResult> getCustomerProductInfoResultSingleLiveEvent() {
-        return customerProductInfoResultSingleLiveEvent;
+    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getSeeCustomerProductAttachmentsClicked() {
+        return seeCustomerProductAttachmentsClicked;
     }
 
     public ServerData getServerData(String centerName) {

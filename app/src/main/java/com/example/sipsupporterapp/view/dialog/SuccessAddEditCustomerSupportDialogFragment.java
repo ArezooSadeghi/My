@@ -79,7 +79,7 @@ public class SuccessAddEditCustomerSupportDialogFragment extends DialogFragment 
         binding.btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getCloseClicked().setValue(true);
+                viewModel.getRefresh().setValue(true);
                 dismiss();
             }
         });
