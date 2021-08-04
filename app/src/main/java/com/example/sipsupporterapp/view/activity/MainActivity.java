@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (destinationID == R.id.menu_search) {
-                        customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                        customerViewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
                     } else if (destinationID == R.id.menu_tasks) {
                         caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
                     }
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (destinationID == R.id.menu_search) {
-                    customerViewModel.getCustomerSearchQuery().setValue(binding.edTextSearch.getText().toString());
+                    customerViewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
                 } else if (destinationID == R.id.menu_tasks) {
                     caseViewModel.getCaseSearchQuery().setValue(binding.edTextSearch.getText().toString());
                 }

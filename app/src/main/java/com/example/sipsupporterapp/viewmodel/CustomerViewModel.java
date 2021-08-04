@@ -10,8 +10,6 @@ import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
-import java.util.List;
-
 public class CustomerViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
@@ -19,10 +17,8 @@ public class CustomerViewModel extends AndroidViewModel {
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Boolean> showProgressBarSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> customerSearchQuery = new SingleLiveEvent<>();
-    private SingleLiveEvent<List<String>> navigateToAddEditCaseDialog = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
@@ -50,20 +46,12 @@ public class CustomerViewModel extends AndroidViewModel {
         return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getShowProgressBarSingleLiveEvent() {
-        return showProgressBarSingleLiveEvent;
-    }
-
     public SingleLiveEvent<Integer> getItemClicked() {
         return itemClicked;
     }
 
-    public SingleLiveEvent<String> getCustomerSearchQuery() {
-        return customerSearchQuery;
-    }
-
-    public SingleLiveEvent<List<String>> getNavigateToAddEditCaseDialog() {
-        return navigateToAddEditCaseDialog;
+    public SingleLiveEvent<String> getSearchQuery() {
+        return searchQuery;
     }
 
     public ServerData getServerData(String centerName) {
@@ -82,7 +70,7 @@ public class CustomerViewModel extends AndroidViewModel {
         repository.fetchCustomers(path, userLoginKey, customerName);
     }
 
-    public void fetchDateResult(String path, String userLoginKey) {
+    public void fetchDate(String path, String userLoginKey) {
         repository.fetchDate(path, userLoginKey);
     }
 }

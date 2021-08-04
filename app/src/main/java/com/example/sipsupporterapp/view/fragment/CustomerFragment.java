@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCustomerBinding;
-import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -30,10 +29,7 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class CustomerFragment extends Fragment {
     private FragmentCustomerBinding binding;
@@ -41,13 +37,6 @@ public class CustomerFragment extends Fragment {
     private ServerData serverData;
     private String centerName, userLoginKey;
     private boolean flag;
-
-    public static CustomerFragment newInstance() {
-        CustomerFragment fragment = new CustomerFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,13 +59,6 @@ public class CustomerFragment extends Fragment {
 
         initViews();
 
-        if (SipSupportSharedPreferences.getLastSearchQuery(getContext()) != null) {
-            binding.progressBarLoading.setVisibility(View.VISIBLE);
-            viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
-            String path = "/api/v1/customers/";
-            viewModel.fetchCustomers(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), SipSupportSharedPreferences.getLastSearchQuery(getContext()));
-        }
-
         return binding.getRoot();
     }
 
@@ -96,28 +78,53 @@ public class CustomerFragment extends Fragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
-    }
-
-    private void fetchDate() {
-        String path = "/api/v1/common/getDate/";
-        viewModel.fetchDateResult(path, userLoginKey);
     }
 
     private void initViews() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private void setupAdapter(List<CustomerResult.CustomerInfo> customerInfoList) {
-        CustomerAdapter adapter = new CustomerAdapter(
-                getContext(),
-                viewModel, customerInfoList, SipSupportSharedPreferences.getDate(getContext()), false);
+    private void setupAdapter(CustomerResult.CustomerInfo[] customerInfoArray) {
+        binding.txtEmpty.setVisibility(customerInfoArray.length == 0 ? View.VISIBLE : View.GONE);
+        String date = SipSupportSharedPreferences.getDate(getContext());
+        CustomerAdapter adapter = new CustomerAdapter(getContext(), viewModel, Arrays.asList(customerInfoArray), date);
         binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void fetchDate() {
+        viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/common/getDate/";
+        viewModel.fetchDate(path, userLoginKey);
+    }
+
+    private void fetchCustomers(String searchQuery) {
+        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customers/search";
+        viewModel.fetchCustomers(path, userLoginKey, searchQuery);
     }
 
     private void setupObserver() {
@@ -128,11 +135,7 @@ public class CustomerFragment extends Fragment {
 
                 if (customerResult.getErrorCode().equals("0")) {
                     binding.recyclerView.setVisibility(View.VISIBLE);
-                    List<CustomerResult.CustomerInfo> customerInfoList = new ArrayList<>();
-                    for (CustomerResult.CustomerInfo customerInfo : customerResult.getCustomers()) {
-                        customerInfoList.add(customerInfo);
-                    }
-                    setupAdapter(customerInfoList);
+                    setupAdapter(customerResult.getCustomers());
                 } else if (customerResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -168,69 +171,24 @@ public class CustomerFragment extends Fragment {
                     Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
                     startActivity(starter);
                 }
-              /*  if (isCase) {
-                    CustomerFragmentDirections.ActionMenuSearchToMenuTasks action =
-                            CustomerFragmentDirections.actionMenuSearchToMenuTasks();
-                    action.setCustomerID(customerID);
-                    NavHostFragment.findNavController(CustomerFragment.this).navigate(action);
-                } else {
-                    Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
-                    startActivity(starter);
-                }*/
             }
         });
 
         viewModel.getDateResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<DateResult>() {
             @Override
             public void onChanged(DateResult dateResult) {
-                SipSupportSharedPreferences.setDate(getContext(), dateResult.getDate());
+                if (dateResult.getErrorCode().equals("0")) {
+                    SipSupportSharedPreferences.setDate(getContext(), dateResult.getDate());
+                }
             }
         });
 
-        viewModel.getShowProgressBarSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                binding.progressBarLoading.setVisibility(View.VISIBLE);
-            }
-        });
-
-        viewModel.getCustomerSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String searchQuery) {
                 binding.progressBarLoading.setVisibility(View.VISIBLE);
-                String path = "/api/v1/customers/search";
-                viewModel.fetchCustomers(path, userLoginKey, searchQuery);
+                fetchCustomers(searchQuery);
             }
         });
-
-        viewModel.getNavigateToAddEditCaseDialog().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
-            @Override
-            public void onChanged(List<String> list) {
-                EventBus.getDefault().postSticky(new PostCustomerIDEvent(Integer.valueOf(list.get(0)), list.get(1)));
-                NavHostFragment.findNavController(CustomerFragment.this).navigate(R.id.menu_tasks);
-            }
-        });
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent starter = LoginContainerActivity.start(getContext());
-        startActivity(starter);
-        getActivity().finish();
     }
 }

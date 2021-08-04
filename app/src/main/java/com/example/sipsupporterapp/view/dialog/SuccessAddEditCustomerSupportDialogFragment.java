@@ -22,6 +22,7 @@ public class SuccessAddEditCustomerSupportDialogFragment extends DialogFragment 
     private UserViewModel viewModel;
 
     private static final String ARGS_MESSAGE = "message";
+    public static final String TAG = AddEditCustomerSupportDialogFragment.class.getSimpleName();
 
     public static SuccessAddEditCustomerSupportDialogFragment newInstance(String message) {
         SuccessAddEditCustomerSupportDialogFragment fragment = new SuccessAddEditCustomerSupportDialogFragment();

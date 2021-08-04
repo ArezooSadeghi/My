@@ -66,7 +66,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Boolean> getCloseClicked() {
+    public SingleLiveEvent<Boolean> getRefresh() {
         return closeClicked;
     }
 

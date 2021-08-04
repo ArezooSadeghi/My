@@ -24,17 +24,18 @@ import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddEditCustomerSupportDialogFragment extends DialogFragment {
     private FragmentAddEditCustomerSupportDialogBinding binding;
     private CustomerSupportViewModel viewModel;
-
-    private int customerID, supportEventID;
     private ServerData serverData;
-    private String lastValueSpinner, centerName, userLoginKey;
+    private String centerName, userLoginKey;
     private SupportEventResult.SupportEventInfo[] supportEventArray;
+    private int customerID, supportEventID;
 
     private static final String ARGS_CUSTOMER_ID = "customerID";
-
     public static final String TAG = AddEditCustomerSupportDialogFragment.class.getSimpleName();
 
     public static AddEditCustomerSupportDialogFragment newInstance(int customerID) {
@@ -50,14 +51,9 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-
+        initVariables();
         fetchSupportEvents();
-        setupObservable();
+        setupObserver();
     }
 
     @NonNull
@@ -86,10 +82,59 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(this).get(CustomerSupportViewModel.class);
     }
 
+    private void initVariables() {
+        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+    }
+
+    private void setupSpinner(SupportEventResult.SupportEventInfo[] supportEventInfoArray) {
+        List<String> supportEventList = new ArrayList<>();
+        for (int i = 0; i < supportEventInfoArray.length; i++) {
+            supportEventList.add(i, supportEventInfoArray[i].getSupportEvent());
+        }
+
+        supportEventID = supportEventInfoArray[0].getSupportEventID();
+        binding.spinner.setItems(supportEventList);
+    }
+
+    private void showSuccessDialog(String message) {
+        SuccessAddEditCustomerSupportDialogFragment fragment = SuccessAddEditCustomerSupportDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessAddEditCustomerSupportDialogFragment.TAG);
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
     private void fetchSupportEvents() {
         viewModel.getSipSupporterServiceSupportEventResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/supportEvents/List/";
         viewModel.fetchSupportEventsResult(path, userLoginKey);
+    }
+
+    private void addCustomerSupport(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
+        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerSupports/AddWithAnswer/";
+        viewModel.addCustomerSupport(path, userLoginKey, customerSupportInfo);
     }
 
     private void handleEvents() {
@@ -104,14 +149,18 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (binding.edTextAnswer.getText().toString().isEmpty() || binding.edTextQuestion.getText().toString().isEmpty()) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(getString(R.string.fill_required_fields));
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(getString(R.string.fill_required_fields));
                 } else {
                     int customerUserID = SipSupportSharedPreferences.getCustomerUserId(getContext());
                     String question = binding.edTextQuestion.getText().toString();
                     String answer = binding.edTextAnswer.getText().toString();
-                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult().new CustomerSupportInfo(supportEventID, customerID, customerUserID, question, answer);
-                    addSupport(customerSupportInfo);
+                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult().new CustomerSupportInfo();
+                    customerSupportInfo.setSupportEventID(supportEventID);
+                    customerSupportInfo.setCustomerID(customerID);
+                    customerSupportInfo.setCustomerUserID(customerUserID);
+                    customerSupportInfo.setQuestion(question);
+                    customerSupportInfo.setAnswer(answer);
+                    addCustomerSupport(customerSupportInfo);
                 }
             }
         });
@@ -119,13 +168,12 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                lastValueSpinner = (String) item;
                 supportEventID = supportEventArray[position].getSupportEventID();
             }
         });
     }
 
-    private void setupObservable() {
+    private void setupObserver() {
         viewModel.getSupportEventsResultSingleLiveEvent().observe(this, new Observer<SupportEventResult>() {
             @Override
             public void onChanged(SupportEventResult supportEventResult) {
@@ -144,8 +192,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
             @Override
             public void onChanged(CustomerSupportResult customerSupportResult) {
                 if (customerSupportResult.getErrorCode().equals("0")) {
-                    SuccessAddEditCustomerSupportDialogFragment fragment = SuccessAddEditCustomerSupportDialogFragment.newInstance("ثبت پشتیبانی موفقیت آمیز بود");
-                    fragment.show(getParentFragmentManager(), "ok");
+                    showSuccessDialog(getString(R.string.success_add_customer_support_message));
                     dismiss();
                 } else if (customerSupportResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -168,60 +215,5 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
                 handleError(message);
             }
         });
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
-        getActivity().finish();
-    }
-
-    private void setupSpinner(SupportEventResult.SupportEventInfo[] supportEvents) {
-        String[] supportEventArray = new String[supportEvents.length];
-        for (int i = 0; i < supportEventArray.length; i++) {
-            supportEventArray[i] = supportEvents[i].getSupportEvent();
-        }
-        if (supportEventArray.length != 0) {
-            if (supportEventID == 0) {
-                lastValueSpinner = supportEventArray[0];
-                supportEventID = supportEvents[0].getSupportEventID();
-                binding.spinner.setItems(supportEventArray);
-            } else {
-                for (int i = 0; i < supportEvents.length; i++) {
-                    if (supportEvents[i].getSupportEventID() == supportEventID) {
-                        lastValueSpinner = supportEvents[i].getSupportEvent();
-                        SupportEventResult.SupportEventInfo supportEvent = supportEvents[i];
-                        supportEventID = supportEvent.getSupportEventID();
-                        supportEventArray[i] = supportEventArray[0];
-                        supportEventArray[0] = lastValueSpinner;
-                        supportEvents[i] = supportEvents[0];
-                        supportEvents[0] = supportEvent;
-                    }
-                }
-                binding.spinner.setItems(supportEventArray);
-            }
-        }
-    }
-
-    private void addSupport(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
-        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerSupports/AddWithAnswer/";
-        viewModel.addCustomerSupport(path, userLoginKey, customerSupportInfo);
     }
 }

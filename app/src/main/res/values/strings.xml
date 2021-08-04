@@ -53,4 +53,8 @@
     <string name="success_delete_payment_message">حذف پرداختی موفقیت آمیز بود</string>
     <string name="length_description_message">\"توضیحات باید بیشتر از چهار حرف باشد \"</string>
     <string name="success_add_edit_case_message">کار با موفقیت ثبت شد</string>
+    <string name="delete_question_customer_payment_message">آیا میخواهید واریزی مربوطه را حذف کنید؟</string>
+    <string name="delete_customer_payment_message">واریزی با موفقیت حذف شد</string>
+    <string name="delete_question_customer_product_message">آیا میخواهید محصول مربوطه را حذف کنید؟</string>
+    <string name="success_add_customer_support_message">ثبت پشتیبانی موفقیت آمیز بود</string>
 </resources>

@@ -46,14 +46,6 @@ public class CustomerSupportResult {
         private String answer;
         private String answerRegTime;
 
-        public CustomerSupportInfo(int supportEventID, int customerID, int customerUserID, String question, String answer) {
-            this.supportEventID = supportEventID;
-            this.customerID = customerID;
-            this.customerUserID = customerUserID;
-            this.question = question;
-            this.answer = answer;
-        }
-
         public int getCustomerSupportID() {
             return customerSupportID;
         }

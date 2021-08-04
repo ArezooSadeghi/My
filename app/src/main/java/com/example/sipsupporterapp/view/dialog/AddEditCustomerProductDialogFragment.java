@@ -336,7 +336,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 if (customerProductResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getCloseClicked().setValue(true);
+                    viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (customerProductResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -369,7 +369,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 if (customerProductResult.getErrorCode().equals("0")) {
                     SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_register_customer_product_message));
                     fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getCloseClicked().setValue(true);
+                    viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (customerProductResult.getErrorCode().equals("-9001")) {
                     ejectUser();

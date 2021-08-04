@@ -25,14 +25,12 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     private CustomerViewModel viewModel;
     private List<CustomerResult.CustomerInfo> customerInfoList;
     private String date;
-    private boolean flag;
 
-    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String date, boolean flag) {
+    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String date) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerInfoList = customerInfoList;
         this.date = date;
-        this.flag = flag;
     }
 
     @NonNull

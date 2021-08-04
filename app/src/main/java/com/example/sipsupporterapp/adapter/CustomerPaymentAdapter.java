@@ -81,7 +81,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteClicked().setValue(customerPaymentInfoList.get(position));
+                                viewModel.getDeleteClicked().setValue(customerPaymentInfoList.get(position).getCustomerPaymentID());
                                 powerMenu.dismiss();
                                 break;
                             case 2:

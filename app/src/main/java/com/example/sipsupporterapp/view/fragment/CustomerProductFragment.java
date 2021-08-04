@@ -42,7 +42,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class CustomerProductFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -67,7 +66,7 @@ public class CustomerProductFragment extends Fragment {
 
         createViewModel();
         initVariables();
-        fetchCustomerProducts();
+        fetchCustomerProducts(customerID);
     }
 
     @Override
@@ -105,8 +104,8 @@ public class CustomerProductFragment extends Fragment {
     }
 
     @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteProduct();
+    public void getDeleteEvent(YesDeleteEvent event) {
+        deleteCustomerProduct(customerProductID);
     }
 
     private void createViewModel() {
@@ -115,26 +114,63 @@ public class CustomerProductFragment extends Fragment {
 
     private void initVariables() {
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
         binding.ivMore.setVisibility(View.VISIBLE);
-
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
+    }
 
-        binding.recyclerView.setHasFixedSize(true);
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
+        binding.txtEmpty.setVisibility(customerProductInfoArray.length == 0 ? View.VISIBLE : View.GONE);
+        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, Arrays.asList(customerProductInfoArray));
+        binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void fetchCustomerProducts(int customerID) {
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerProducts/List/";
+        viewModel.fetchCustomerProducts(path, userLoginKey, customerID);
+    }
+
+    private void deleteCustomerProduct(int customerProductID) {
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerProducts/Delete/";
+        viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
     }
 
     private void handleEvents() {
@@ -180,39 +216,15 @@ public class CustomerProductFragment extends Fragment {
         });
     }
 
-    private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
-        List<CustomerProductResult.CustomerProductInfo> customerProductInfoList = Arrays.asList(customerProductInfoArray);
-        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, customerProductInfoList);
-        binding.recyclerView.setAdapter(adapter);
-    }
-
-    private void fetchCustomerProducts() {
-        String path = "/api/v1/customerProducts/List/";
-        viewModel.fetchCustomerProducts(path, userLoginKey, customerID);
-    }
-
-    private void deleteProduct() {
-        String path = "/api/v1/customerProducts/Delete/";
-        viewModel.deleteCustomerProduct(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerProductID);
-    }
-
     private void setupObserver() {
         viewModel.getCustomerProductsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult productResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-
                 if (productResult.getErrorCode().equals("0")) {
                     binding.recyclerView.setVisibility(View.VISIBLE);
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String listSize = String.valueOf(productResult.getCustomerProducts().length);
-
-                    for (int i = 0; i < listSize.length(); i++) {
-                        stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
-                    }
-
-                    binding.txtCount.setText("تعداد محصولات: " + stringBuilder.toString());
+                    String count = Converter.numberConverter(String.valueOf(productResult.getCustomerProducts().length));
+                    binding.txtCount.setText("تعداد محصولات: " + count);
                     setupAdapter(productResult.getCustomerProducts());
                 } else if (productResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -240,9 +252,9 @@ public class CustomerProductFragment extends Fragment {
 
         viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Integer customer_ProductID) {
-                customerProductID = customer_ProductID;
-                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.question_delete_customer_product_message));
+            public void onChanged(Integer customer_Product_ID) {
+                customerProductID = customer_Product_ID;
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.delete_question_customer_product_message));
                 fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
@@ -251,9 +263,8 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
                 if (customerProductResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_customer_product));
-                    fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-                    fetchCustomerProducts();
+                    showSuccessDialog(getString(R.string.success_delete_customer_product));
+                    fetchCustomerProducts(customerID);
                 } else if (customerProductResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -277,10 +288,10 @@ public class CustomerProductFragment extends Fragment {
             }
         });
 
-        viewModel.getCloseClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean dialogDismissed) {
-                fetchCustomerProducts();
+                fetchCustomerProducts(customerID);
             }
         });
 
@@ -292,27 +303,5 @@ public class CustomerProductFragment extends Fragment {
                         startActivity(starter);
                     }
                 });
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
-        getActivity().finish();
     }
 }

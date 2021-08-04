@@ -1,6 +1,5 @@
 package com.example.sipsupporterapp.view.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class CustomerSupportFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -55,7 +53,7 @@ public class CustomerSupportFragment extends Fragment {
 
         createViewModel();
         initVariables();
-        fetchCustomerSupports();
+        fetchCustomerSupports(customerID);
     }
 
     @Override
@@ -86,25 +84,18 @@ public class CustomerSupportFragment extends Fragment {
 
     private void initVariables() {
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
-    @SuppressLint("ResourceAsColor")
     private void initView() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
-
-        binding.recyclerView.setHasFixedSize(true);
     }
 
     private void handleEvents() {
@@ -117,12 +108,34 @@ public class CustomerSupportFragment extends Fragment {
     }
 
     private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
-        List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList = Arrays.asList(customerSupportInfoArray);
-        CustomerSupportAdapter adapter = new CustomerSupportAdapter(getContext(), viewModel, customerSupportInfoList);
+        binding.txtEmpty.setVisibility(customerSupportInfoArray.length == 0 ? View.VISIBLE : View.GONE);
+        CustomerSupportAdapter adapter = new CustomerSupportAdapter(getContext(), viewModel, Arrays.asList(customerSupportInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 
-    private void fetchCustomerSupports() {
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void fetchCustomerSupports(int customerID) {
+        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerSupports/ListByCustomer/";
         viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
     }
@@ -133,18 +146,10 @@ public class CustomerSupportFragment extends Fragment {
                     @Override
                     public void onChanged(CustomerSupportResult customerSupportResult) {
                         binding.progressBarLoading.setVisibility(View.GONE);
-
                         if (customerSupportResult.getErrorCode().equals("0")) {
                             binding.recyclerView.setVisibility(View.VISIBLE);
-
-                            StringBuilder stringBuilder = new StringBuilder();
-                            String listSize = String.valueOf(customerSupportResult.getCustomerSupports().length);
-
-                            for (int i = 0; i < listSize.length(); i++) {
-                                stringBuilder.append((char) ((int) listSize.charAt(i) - 48 + 1632));
-                            }
-
-                            binding.txtCount.setText("تعداد پشتیبانی ها: " + stringBuilder.toString());
+                            String count = Converter.numberConverter(String.valueOf(customerSupportResult.getCustomerSupports().length));
+                            binding.txtCount.setText("تعداد پشتیبانی ها: " + count);
                             setupAdapter(customerSupportResult.getCustomerSupports());
                         } else if (customerSupportResult.getErrorCode().equals("-9001")) {
                             ejectUser();
@@ -182,27 +187,5 @@ public class CustomerSupportFragment extends Fragment {
                 startActivity(starter);
             }
         });
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
-        getActivity().finish();
     }
 }

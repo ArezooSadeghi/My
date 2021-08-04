@@ -26,7 +26,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> DeleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> DeleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
 
@@ -90,7 +90,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return refresh;
     }
 
-    public SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> getDeleteClicked() {
+    public SingleLiveEvent<Integer> getDeleteClicked() {
         return DeleteClicked;
     }
 
