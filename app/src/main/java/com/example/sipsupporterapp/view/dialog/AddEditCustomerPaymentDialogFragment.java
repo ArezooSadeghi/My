@@ -137,7 +137,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             binding.edTextPrice.setText(String.valueOf(customerPaymentInfo.getPrice()));
             binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
             if (customerPaymentInfo.getDatePayment() != 0) {
-                String dateFormat = formatDate(customerPaymentInfo.getDatePayment());
+                String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
                 binding.btnDatePayment.setText(dateFormat);
             } else {
                 binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
@@ -150,14 +150,6 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
             customerID = caseInfo.getCustomerID();
         }
-    }
-
-    private String formatDate(int datePayment) {
-        String date = String.valueOf(datePayment);
-        String year = date.substring(0, 4);
-        String month = date.substring(4, 6);
-        String day = date.substring(6);
-        return year + "/" + month + "/" + day;
     }
 
     private void showSuccessDialog(String message) {
@@ -292,13 +284,13 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                                 int month = persianPickerDate.getPersianMonth();
                                 int day = persianPickerDate.getPersianDay();
                                 if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
-                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "0" + month + "0" + day)));
+                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "0" + month + "0" + day));
                                 } else if (String.valueOf(month).length() == 1) {
-                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "0" + month + "" + day)));
+                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "0" + month + "" + day));
                                 } else if (String.valueOf(day).length() == 1) {
-                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "" + month + "0" + day)));
+                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "" + month + "0" + day));
                                 } else {
-                                    binding.btnDatePayment.setText(formatDate(Integer.parseInt(year + "" + month + "" + day)));
+                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "" + month + "" + day));
                                 }
                             }
 

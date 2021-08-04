@@ -24,13 +24,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     private Context context;
     private CustomerViewModel viewModel;
     private List<CustomerResult.CustomerInfo> customerInfoList;
-    private String date;
+    private String _date;
 
-    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String date) {
+    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String _date) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerInfoList = customerInfoList;
-        this.date = date;
+        this._date = _date;
     }
 
     @NonNull
@@ -58,7 +58,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
         String date = customerInfo.getLastSeen().substring(0, 10);
 
-        if (date != null && this.date != null && this.date.equals(date)) {
+        if (_date.equals(date)) {
             holder.binding.txtLastSeen.setTextColor(Color.parseColor("#FFFF00"));
             holder.binding.txtCustomerName.setTextColor(Color.parseColor("#FFFFFF"));
         } else {
@@ -84,10 +84,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             binding.txtCity.setVisibility(!customerInfo.getCity().isEmpty() ? View.VISIBLE : View.GONE);
             String city = Converter.letterConverter(customerInfo.getCity());
             binding.txtCity.setText(city);
-
             binding.txtLastSeen.setVisibility(!customerInfo.getLastSeen().isEmpty() ? View.VISIBLE : View.GONE);
             binding.txtLastSeen.setText(customerInfo.getLastSeen());
-
             String customerName = Converter.letterConverter(customerInfo.getCustomerName());
             binding.txtCustomerName.setText(customerName);
             binding.txtCustomerID.setText(String.valueOf(customerInfo.getCustomerID()));

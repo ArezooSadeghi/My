@@ -47,15 +47,8 @@ public class PaymentFragment extends Fragment {
     private PaymentViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
-    private int paymentID, bankAccountID;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
-
-    public static PaymentFragment newInstance() {
-        PaymentFragment fragment = new PaymentFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private int paymentID, bankAccountID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,8 +94,8 @@ public class PaymentFragment extends Fragment {
     }
 
     @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteCost(paymentID);
+    public void getDeleteEvent(YesDeleteEvent event) {
+        deletePayment(paymentID);
     }
 
     private void createViewModel() {
@@ -117,10 +110,14 @@ public class PaymentFragment extends Fragment {
 
     private void initViews() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
     }
 
     private void handleError(String message) {
@@ -139,9 +136,8 @@ public class PaymentFragment extends Fragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 
@@ -161,7 +157,7 @@ public class PaymentFragment extends Fragment {
         binding.spinner.setItems(bankAccountNameList);
     }
 
-    private void deleteCost(int paymentID) {
+    private void deletePayment(int paymentID) {
         viewModel.getSipSupporterServicePaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/payments/Delete/";
         viewModel.deletePayment(path, userLoginKey, paymentID);
@@ -232,11 +228,11 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<PaymentResult.PaymentInfo>() {
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(PaymentResult.PaymentInfo paymentInfo) {
-                paymentID = paymentInfo.getPaymentID();
-                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.question_delete_cost_message));
+            public void onChanged(Integer payment_ID) {
+                paymentID = payment_ID;
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.delete_question_payment_message));
                 fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
@@ -245,8 +241,7 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onChanged(PaymentResult paymentResult) {
                 if (paymentResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(getString(R.string.success_delete_payment_message));
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    showSuccessDialog(getString(R.string.success_delete_payment_message));
                     fetchPaymentsByBankAccount(bankAccountID);
                 } else if (paymentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -280,6 +275,7 @@ public class PaymentFragment extends Fragment {
                 fragment.show(getParentFragmentManager(), AddEditPaymentDialogFragment.TAG);
             }
         });
+
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String message) {

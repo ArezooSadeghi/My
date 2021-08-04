@@ -34,9 +34,9 @@ import java.util.Arrays;
 public class AssignDialogFragment extends DialogFragment {
     private FragmentAssignDialogBinding binding;
     private AssignViewModel viewModel;
-    private int caseID, assignID;
     private ServerData serverData;
     private String centerName, userLoginKey;
+    private int caseID, assignID;
 
     private static final String ARGS_CASE_ID = "caseID";
     public static final String TAG = AssignDialogFragment.class.getSimpleName();
@@ -53,16 +53,9 @@ public class AssignDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        caseID = getArguments().getInt(ARGS_CASE_ID);
-
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
-
-        fetchAssigns();
+        initVariables();
+        fetchAssigns(caseID);
         setupObserver();
     }
 
@@ -89,90 +82,44 @@ public class AssignDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getDeleteEvent(YesDeleteEvent event) {
+        deleteAssign(assignID);
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(AssignViewModel.class);
     }
 
-    private void fetchAssigns() {
-        String path = "/api/v1/Assign/List/";
-        viewModel.fetchAssigns(path, userLoginKey, caseID);
+    private void initVariables() {
+        caseID = getArguments().getInt(ARGS_CASE_ID);
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
     }
 
-    private void setupObserver() {
-        viewModel.getEditClicked().observe(this, new Observer<AssignResult.AssignInfo>() {
-            @Override
-            public void onChanged(AssignResult.AssignInfo assignInfo) {
-                AddEditAssignDialogFragment fragment = AddEditAssignDialogFragment.newInstance(assignInfo.getAssignID(), assignInfo.getCaseID(), assignInfo.getDescription());
-                fragment.show(getParentFragmentManager(), AddEditAssignDialogFragment.TAG);
-            }
-        });
+    private void initViews() {
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(
+                binding.recyclerView.getContext(),
+                DividerItemDecoration.VERTICAL));
+    }
 
-        viewModel.getDeleteClicked().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer assign_ID) {
-                assignID = assign_ID;
-                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید assign موردنظر را حذف نمایید؟");
-                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
-            }
-        });
-
-        viewModel.getDeleteAssignResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
-            @Override
-            public void onChanged(AssignResult assignResult) {
-                if (assignResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("assign موردنظر با موفقیت حذف شد");
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    fetchAssigns();
-                    dismiss();
-                } else if (assignResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(assignResult.getError());
-                    dismiss();
-                }
-            }
-        });
-
-        viewModel.getAddClicked().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean registerCommentClicked) {
-                //TODO
-            }
-        });
-
-        viewModel.getAssignsResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
-            @Override
-            public void onChanged(AssignResult assignResult) {
-                if (assignResult.getErrorCode().equals("0")) {
-                    setupAdapter(assignResult.getAssigns());
-                } else if (assignResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(assignResult.getError());
-                }
-            }
-        });
-
-        viewModel.getRefresh().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean refreshAssigns) {
-                fetchAssigns();
-            }
-        });
-
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void handleError(String message) {
@@ -191,24 +138,34 @@ public class AssignDialogFragment extends DialogFragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 
-    private void initViews() {
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerView.getContext(),
-                DividerItemDecoration.VERTICAL));
+    private void setupAdapter(AssignResult.AssignInfo[] assignInfoArray) {
+        binding.txtEmpty.setVisibility(assignInfoArray.length == 0 ? View.VISIBLE : View.GONE);
+        AssignAdapter adapter = new AssignAdapter(getContext(), viewModel, Arrays.asList(assignInfoArray));
+        binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void deleteAssign(int assignID) {
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Assign/Delete/";
+        viewModel.deleteAssign(path, userLoginKey, assignID);
+    }
+
+    private void fetchAssigns(int caseID) {
+        viewModel.getSipSupporterServiceAssignResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Assign/List/";
+        viewModel.fetchAssigns(path, userLoginKey, caseID);
     }
 
     private void handleEvents() {
         binding.btnAssign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddEditAssignDialogFragment fragment = AddEditAssignDialogFragment.newInstance(0, caseID, "");
+                AddEditAssignDialogFragment fragment = AddEditAssignDialogFragment.newInstance(0, caseID);
                 fragment.show(getParentFragmentManager(), AddEditAssignDialogFragment.TAG);
             }
         });
@@ -221,34 +178,76 @@ public class AssignDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupAdapter(AssignResult.AssignInfo[] assignInfoArray) {
-        if (assignInfoArray.length != 0) {
-            binding.txtEmpty.setVisibility(View.INVISIBLE);
-            binding.recyclerView.setVisibility(View.VISIBLE);
-            AssignAdapter adapter = new AssignAdapter(getContext(), viewModel, Arrays.asList(assignInfoArray));
-            binding.recyclerView.setAdapter(adapter);
-        }
-    }
+    private void setupObserver() {
+        viewModel.getEditClicked().observe(this, new Observer<AssignResult.AssignInfo>() {
+            @Override
+            public void onChanged(AssignResult.AssignInfo assignInfo) {
+                AddEditAssignDialogFragment fragment = AddEditAssignDialogFragment.newInstance(assignInfo.getAssignID(), assignInfo.getCaseID());
+                fragment.show(getParentFragmentManager(), AddEditAssignDialogFragment.TAG);
+            }
+        });
 
-    private void deleteAssign() {
-        String path = "/api/v1/Assign/Delete/";
-        viewModel.deleteAssign(path, userLoginKey, assignID);
-    }
+        viewModel.getDeleteClicked().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer assign_ID) {
+                assignID = assign_ID;
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.delete_question_assign_message));
+                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
+            }
+        });
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
+        viewModel.getDeleteAssignResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
+            @Override
+            public void onChanged(AssignResult assignResult) {
+                if (assignResult.getErrorCode().equals("0")) {
+                    showSuccessDialog(getString(R.string.success_delete_assign_message));
+                    fetchAssigns(caseID);
+                    dismiss();
+                } else if (assignResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(assignResult.getError());
+                    dismiss();
+                }
+            }
+        });
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
+        viewModel.getAssignsResultSingleLiveEvent().observe(this, new Observer<AssignResult>() {
+            @Override
+            public void onChanged(AssignResult assignResult) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                if (assignResult.getErrorCode().equals("0")) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    setupAdapter(assignResult.getAssigns());
+                } else if (assignResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(assignResult.getError());
+                }
+            }
+        });
 
-    @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
-        deleteAssign();
+        viewModel.getRefresh().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refreshAssigns) {
+                fetchAssigns(caseID);
+            }
+        });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                handleError(message);
+            }
+        });
     }
 }

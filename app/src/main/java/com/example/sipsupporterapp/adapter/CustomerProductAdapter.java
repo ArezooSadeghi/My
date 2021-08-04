@@ -52,8 +52,6 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
         CustomerProductResult.CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
         holder.bindCustomerProducts(customerProductInfo);
 
-        int customerProductID = customerProductInfo.getCustomerProductID();
-
         holder.binding.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,7 +75,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteClicked().setValue(customerProductID);
+                                viewModel.getDeleteClicked().setValue(customerProductInfo.getCustomerProductID());
                                 powerMenu.dismiss();
                                 break;
                             case 2:
@@ -105,34 +103,23 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
             this.binding = binding;
         }
 
-        public void bindCustomerProducts(CustomerProductResult.CustomerProductInfo info) {
-            String productName = Converter.letterConverter(info.getProductName());
+        public void bindCustomerProducts(CustomerProductResult.CustomerProductInfo customerProductInfo) {
+            String productName = Converter.letterConverter(customerProductInfo.getProductName());
             binding.txtProductName.setText(productName);
-            if (!info.getDescription().isEmpty()) {
+
+            if (!customerProductInfo.getDescription().isEmpty()) {
                 binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.letterConverter(info.getDescription());
+                String description = Converter.letterConverter(customerProductInfo.getDescription());
                 binding.txtDescription.setText(description);
             }
 
-            String userFullName = Converter.letterConverter(info.getUserFullName());
+            String userFullName = Converter.letterConverter(customerProductInfo.getUserFullName());
             binding.txtUserName.setText(userFullName);
-
             NumberFormat formatter = new DecimalFormat("#,###");
-            String formattedNumber = formatter.format(info.getInvoicePrice());
-
+            String formattedNumber = formatter.format(customerProductInfo.getInvoicePrice());
             binding.txtInvoicePrice.setText(formattedNumber + "تومان");
-
-            if (info.isFinish()) {
-                binding.checkBoxFinish.setChecked(true);
-            } else {
-                binding.checkBoxFinish.setChecked(false);
-            }
-
-            if (info.isInvoicePayment()) {
-                binding.checkBoxInvoicePayment.setChecked(true);
-            } else {
-                binding.checkBoxInvoicePayment.setChecked(false);
-            }
+            binding.checkBoxFinish.setChecked(customerProductInfo.isFinish());
+            binding.checkBoxInvoicePayment.setChecked(customerProductInfo.isInvoicePayment());
         }
     }
 }

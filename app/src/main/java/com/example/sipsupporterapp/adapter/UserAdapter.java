@@ -23,13 +23,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
     private Context context;
     private UserViewModel viewModel;
     private List<CustomerUserResult.CustomerUserInfo> customerUserInfoList;
-    private String date;
+    private String _date;
 
-    public UserAdapter(Context context, UserViewModel viewModel, List<CustomerUserResult.CustomerUserInfo> customerUserInfoList, String date) {
+    public UserAdapter(Context context, UserViewModel viewModel, List<CustomerUserResult.CustomerUserInfo> customerUserInfoList, String _date) {
         this.context = context;
         this.viewModel = viewModel;
         this.customerUserInfoList = customerUserInfoList;
-        this.date = date;
+        this._date = _date;
     }
 
     @NonNull
@@ -44,15 +44,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
 
     @Override
     public void onBindViewHolder(@NonNull CustomerUsersHolder holder, int position) {
-        holder.bindCustomerSupportInfo(customerUserInfoList.get(position));
+        CustomerUserResult.CustomerUserInfo customerUserInfo = customerUserInfoList.get(position);
+        holder.bindCustomerSupportInfo(customerUserInfo);
         String date = customerUserInfoList.get(position).getLastSeen().substring(0, 10);
-        if (this.date != null) {
-            if (this.date.equals(date)) {
-                holder.binding.imgUserStatus.setImageResource(R.drawable.user_online);
-            } else {
-                holder.binding.imgUserStatus.setImageResource(R.drawable.offline_user);
-            }
+
+        if (_date.equals(date)) {
+            holder.binding.imgUserStatus.setImageResource(R.drawable.online_user);
+        } else {
+            holder.binding.imgUserStatus.setImageResource(R.drawable.offline_user);
         }
+
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,13 +62,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
             }
         });
 
-        String str = (position + 1) + "";
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (int i = 0; i < str.length(); i++) {
-            stringBuilder.append((char) ((int) str.charAt(i) - 48 + 1632));
-        }
-        holder.binding.txtRow.setText(stringBuilder.toString());
+        String rowNumber = Converter.numberConverter((position + 1) + "");
+        holder.binding.txtRow.setText(rowNumber);
     }
 
     @Override

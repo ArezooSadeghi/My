@@ -27,20 +27,18 @@ public class AddEditCommentDialogFragment extends DialogFragment {
     private CommentViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
+    private CommentResult.CommentInfo commentInfo;
+    private int commentID, caseID;
 
-    private static final String ARGS_CASE_ID = "caseID";
     private static final String ARGS_COMMENT_ID = "commentID";
-    private static final String ARGS_COMMENT = "comment";
+    private static final String ARGS_CASE_ID = "caseID";
     public static final String TAG = AddEditCommentDialogFragment.class.getSimpleName();
 
-    public static AddEditCommentDialogFragment newInstance(int caseID, int commentID, String comment) {
+    public static AddEditCommentDialogFragment newInstance(int commentID, int caseID) {
         AddEditCommentDialogFragment fragment = new AddEditCommentDialogFragment();
         Bundle args = new Bundle();
-
-        args.putInt(ARGS_CASE_ID, caseID);
         args.putInt(ARGS_COMMENT_ID, commentID);
-        args.putString(ARGS_COMMENT, comment);
-
+        args.putInt(ARGS_CASE_ID, caseID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,13 +48,12 @@ public class AddEditCommentDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         createViewModel();
-
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-
+        initVariables();
         setupObserver();
+
+        if (commentID > 0) {
+            fetchCommentInfo(commentID);
+        }
     }
 
     @NonNull
@@ -68,7 +65,6 @@ public class AddEditCommentDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        initViews();
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
@@ -86,14 +82,96 @@ public class AddEditCommentDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CommentViewModel.class);
     }
 
+    private void initVariables() {
+        commentID = getArguments().getInt(ARGS_COMMENT_ID);
+        caseID = getArguments().getInt(ARGS_CASE_ID);
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+    }
+
+    private void initViews() {
+        binding.edTextComment.setText(commentInfo.getComment());
+    }
+
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void addComment(CommentResult.CommentInfo commentInfo) {
+        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Comment/Add/";
+        viewModel.addComment(path, userLoginKey, commentInfo);
+    }
+
+    private void editComment(CommentResult.CommentInfo commentInfo) {
+        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/comment/Edit/";
+        viewModel.editComment(path, userLoginKey, commentInfo);
+    }
+
+    private void fetchCommentInfo(int commentID) {
+        viewModel.getSipSupporterServiceCommentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/comment/Info/";
+        viewModel.fetchCommentInfo(path, userLoginKey, commentID);
+    }
+
+    private void handleEvents() {
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (commentInfo == null) {
+                    commentInfo = new CommentResult().new CommentInfo();
+                    commentInfo.setCaseID(caseID);
+                }
+
+                commentInfo.setComment(binding.edTextComment.getText().toString());
+
+                if (commentID == 0) {
+                    addComment(commentInfo);
+                } else {
+                    editComment(commentInfo);
+                }
+            }
+        });
+    }
+
     private void setupObserver() {
         viewModel.getAddCommentResultSingleLiveEvent().observe(this, new Observer<CommentResult>() {
             @Override
             public void onChanged(CommentResult commentResult) {
                 if (commentResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("نظر شما با موفقیت ثبت شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefreshComments().setValue(true);
+                    showSuccessDialog(getString(R.string.success_add_edit_comment_message));
+                    viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (commentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -108,9 +186,8 @@ public class AddEditCommentDialogFragment extends DialogFragment {
             @Override
             public void onChanged(CommentResult commentResult) {
                 if (commentResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("نظر شما با موفقیت ثبت شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-                    viewModel.getRefreshComments().setValue(true);
+                    showSuccessDialog(getString(R.string.success_add_edit_comment_message));
+                    viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (commentResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -133,71 +210,15 @@ public class AddEditCommentDialogFragment extends DialogFragment {
                 handleError(message);
             }
         });
-    }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
-        getActivity().finish();
-    }
-
-    private void initViews() {
-        String comment = getArguments().getString(ARGS_COMMENT);
-        binding.edTextComment.setText(comment);
-    }
-
-    private void handleEvents() {
-        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+        viewModel.getCommentInfoResultSingleLiveEvent().observe(this, new Observer<CommentResult>() {
             @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CommentResult.CommentInfo commentInfo = new CommentResult().new CommentInfo();
-                commentInfo.setComment(binding.edTextComment.getText().toString());
-
-                int caseID = getArguments().getInt(ARGS_CASE_ID);
-                commentInfo.setCaseID(caseID);
-
-                int commentID = getArguments().getInt(ARGS_COMMENT_ID);
-                commentInfo.setCommentID(commentID);
-
-                if (commentID == 0) {
-                    addComment(commentInfo);
-                } else {
-                    editComment(commentInfo);
+            public void onChanged(CommentResult commentResult) {
+                if (commentResult.getErrorCode().equals("0")) {
+                    commentInfo = commentResult.getComments()[0];
+                    initViews();
                 }
             }
         });
-    }
-
-    private void addComment(CommentResult.CommentInfo commentInfo) {
-        String path = "/api/v1/Comment/Add/";
-        viewModel.addComment(path, userLoginKey, commentInfo);
-    }
-
-    private void editComment(CommentResult.CommentInfo commentInfo) {
-        String path = "/api/v1/comment/Edit/";
-        viewModel.editComment(path, userLoginKey, commentInfo);
     }
 }

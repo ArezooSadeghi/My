@@ -62,5 +62,16 @@ public class Converter {
             return false;
         }
     }
+
+    public static String dateFormat(String date) {
+        if (date.length() == 8) {
+            String year = date.substring(0, 4);
+            String month = date.substring(4, 6);
+            String day = date.substring(6);
+            return year + "/" + month + "/" + day;
+        } else {
+            return "";
+        }
+    }
 }
 

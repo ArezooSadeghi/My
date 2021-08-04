@@ -91,19 +91,16 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerSupportResult.CustomerSupportInfo info) {
-            String question = Converter.letterConverter(info.getQuestion());
+        public void bindCustomerSupportInfo(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
+            String question = Converter.letterConverter(customerSupportInfo.getQuestion());
             binding.txtQuestion.setText(question);
-            String answer = Converter.letterConverter(info.getAnswer());
+            String answer = Converter.letterConverter(customerSupportInfo.getAnswer());
             binding.txtAnswer.setText(answer);
-            String userFullName = Converter.letterConverter(info.getUserFullName());
+            String userFullName = Converter.letterConverter(customerSupportInfo.getUserFullName());
             binding.txtUserFullName.setText(userFullName + " :");
-
-            String customerSupportID = String.valueOf(info.getCustomerSupportID());
+            String customerSupportID = String.valueOf(customerSupportInfo.getCustomerSupportID());
             binding.txtCustomerSupportID.setText(customerSupportID);
-
-            binding.txtRegTime.setText(info.getRegTime());
-
+            binding.txtRegTime.setText(customerSupportInfo.getRegTime());
         }
     }
 }

@@ -14,6 +14,7 @@ public class AssignViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<AssignResult> assignsResultSingleLiveEvent;
+    private SingleLiveEvent<AssignResult> assignInfoResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> addAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent;
@@ -30,6 +31,7 @@ public class AssignViewModel extends AndroidViewModel {
 
         repository = SipSupporterRepository.getInstance(getApplication());
         assignsResultSingleLiveEvent = repository.getAssignsResultSingleLiveEvent();
+        assignInfoResultSingleLiveEvent = repository.getAssignInfoResultSingleLiveEvent();
         addAssignResultSingleLiveEvent = repository.getAddAssignResultSingleLiveEvent();
         editAssignResultSingleLiveEvent = repository.getEditAssignResultSingleLiveEvent();
         deleteAssignResultSingleLiveEvent = repository.getDeleteAssignResultSingleLiveEvent();
@@ -82,6 +84,10 @@ public class AssignViewModel extends AndroidViewModel {
         return refresh;
     }
 
+    public SingleLiveEvent<AssignResult> getAssignInfoResultSingleLiveEvent() {
+        return assignInfoResultSingleLiveEvent;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -112,5 +118,9 @@ public class AssignViewModel extends AndroidViewModel {
 
     public void deleteAssign(String path, String userLoginKey, int assignID) {
         repository.deleteAssign(path, userLoginKey, assignID);
+    }
+
+    public void fetchAssignInfo(String path, String userLoginKey, int assignID) {
+        repository.fetchAssignInfo(path, userLoginKey, assignID);
     }
 }

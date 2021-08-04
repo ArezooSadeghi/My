@@ -139,7 +139,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             binding.edTextInvoicePrice.setText(String.valueOf(customerProductInfo.getInvoicePrice()));
 
             if (customerProductInfo.getExpireDate() != 0) {
-                String dateFormat = formatDate(customerProductInfo.getExpireDate());
+                String dateFormat = Converter.dateFormat(String.valueOf(customerProductInfo.getExpireDate()));
                 binding.btnExpireDate.setText(dateFormat);
             } else {
                 binding.btnExpireDate.setText(SipSupportSharedPreferences.getDate(getContext()));
@@ -155,14 +155,6 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         } else {
             binding.btnExpireDate.setText(SipSupportSharedPreferences.getDate(getContext()));
         }
-    }
-
-    private String formatDate(long expireDate) {
-        String date = String.valueOf(expireDate);
-        String year = date.substring(0, 4);
-        String month = date.substring(4, 6);
-        String day = date.substring(6);
-        return year + "/" + month + "/" + day;
     }
 
     private void showSuccessDialog(String message) {
@@ -317,13 +309,13 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                                 int month = persianPickerDate.getPersianMonth();
                                 int day = persianPickerDate.getPersianDay();
                                 if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
-                                    binding.btnExpireDate.setText(formatDate(Long.parseLong(year + "0" + month + "0" + day)));
+                                    binding.btnExpireDate.setText(Converter.dateFormat(year + "0" + month + "0" + day));
                                 } else if (String.valueOf(month).length() == 1) {
-                                    binding.btnExpireDate.setText(formatDate(Integer.parseInt(year + "0" + month + "" + day)));
+                                    binding.btnExpireDate.setText(Converter.dateFormat(year + "0" + month + "" + day));
                                 } else if (String.valueOf(day).length() == 1) {
-                                    binding.btnExpireDate.setText(formatDate(Integer.parseInt(year + "" + month + "0" + day)));
+                                    binding.btnExpireDate.setText(Converter.dateFormat(year + "" + month + "0" + day));
                                 } else {
-                                    binding.btnExpireDate.setText(formatDate(Integer.parseInt(year + "" + month + "" + day)));
+                                    binding.btnExpireDate.setText(Converter.dateFormat(year + "" + month + "" + day));
                                 }
                             }
 

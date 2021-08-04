@@ -93,7 +93,7 @@ public class FullScreenPhotoFragment extends Fragment {
     }
 
     @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
+    public void getDeleteEvent(YesDeleteEvent event) {
         if (binding.progressBarLoading.getVisibility() == View.INVISIBLE) {
             binding.progressBarLoading.setVisibility(View.VISIBLE);
         }
@@ -108,7 +108,6 @@ public class FullScreenPhotoFragment extends Fragment {
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
     }
 
     private void initViews() {
@@ -117,6 +116,42 @@ public class FullScreenPhotoFragment extends Fragment {
         if (bitmap != null) {
             binding.imgViewFullScreen.setImage(ImageSource.bitmap(bitmap));
         }
+    }
+
+    private void showSuccessDialog(String message) {
+        SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
+    }
+
+    private void handleError(String message) {
+        if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
+            binding.progressBarLoading.setVisibility(View.INVISIBLE);
+        }
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void deleteAttachment() {
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        int attachID = getArguments().getInt(ARGS_ATTACH_ID);
+        String path = "/api/v1/attach/Delete/";
+        viewModel.deleteAttachment(path, userLoginKey, attachID);
     }
 
     private void handleEvents() {
@@ -129,20 +164,6 @@ public class FullScreenPhotoFragment extends Fragment {
         });
     }
 
-    private void handleError(String message) {
-        if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-            binding.progressBarLoading.setVisibility(View.INVISIBLE);
-        }
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void deleteAttachment() {
-        int attachID = getArguments().getInt(ARGS_ATTACH_ID);
-        String path = "/api/v1/attach/Delete/";
-        viewModel.deleteAttachment(path, userLoginKey, attachID);
-    }
-
     private void setupObserver() {
         viewModel.getDeleteAttachResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
             @Override
@@ -152,13 +173,10 @@ public class FullScreenPhotoFragment extends Fragment {
                 }
 
                 if (attachResult.getErrorCode().equals("0")) {
-
                     if (attachResult.getAttachs().length != 0) {
                         int attachID = attachResult.getAttachs()[0].getAttachID();
                         EventBus.getDefault().postSticky(new DeleteEvent(attachID));
-
-                        SuccessDeletePhotoDialogFragment fragment = SuccessDeletePhotoDialogFragment.newInstance(getString(R.string.success_delete_photo_message));
-                        fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
+                        showSuccessDialog(getString(R.string.success_delete_photo_message));
                     }
                 } else if (attachResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -181,22 +199,5 @@ public class FullScreenPhotoFragment extends Fragment {
                 handleError(message);
             }
         });
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
-        getActivity().finish();
     }
 }

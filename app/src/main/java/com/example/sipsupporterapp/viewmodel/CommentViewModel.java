@@ -13,6 +13,7 @@ public class CommentViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<CommentResult> commentsByCaseIDResultSingleLiveEvent;
+    private SingleLiveEvent<CommentResult> commentInfoResultSingleLiveEvent;
     private SingleLiveEvent<CommentResult> addCommentResultSingleLiveEvent;
     private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent;
     private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent;
@@ -27,6 +28,7 @@ public class CommentViewModel extends AndroidViewModel {
 
         repository = SipSupporterRepository.getInstance(getApplication());
         commentsByCaseIDResultSingleLiveEvent = repository.getCommentsByCaseIDResultSingleLiveEvent();
+        commentInfoResultSingleLiveEvent = repository.getCommentInfoResultSingleLiveEvent();
         addCommentResultSingleLiveEvent = repository.getAddCommentResultSingleLiveEvent();
         deleteCommentResultSingleLiveEvent = repository.getDeleteCommentResultSingleLiveEvent();
         editCommentResultSingleLiveEvent = repository.getEditCommentResultSingleLiveEvent();
@@ -34,7 +36,7 @@ public class CommentViewModel extends AndroidViewModel {
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
-    public SingleLiveEvent<CommentResult> getCommentsByCaseIDResultSingleLiveEvent() {
+    public SingleLiveEvent<CommentResult> getCommentsByCaseResultSingleLiveEvent() {
         return commentsByCaseIDResultSingleLiveEvent;
     }
 
@@ -66,8 +68,12 @@ public class CommentViewModel extends AndroidViewModel {
         return editClicked;
     }
 
-    public SingleLiveEvent<Boolean> getRefreshComments() {
+    public SingleLiveEvent<Boolean> getRefresh() {
         return refreshComments;
+    }
+
+    public SingleLiveEvent<CommentResult> getCommentInfoResultSingleLiveEvent() {
+        return commentInfoResultSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {
@@ -92,5 +98,9 @@ public class CommentViewModel extends AndroidViewModel {
 
     public void editComment(String path, String userLoginKey, CommentResult.CommentInfo commentInfo) {
         repository.editComment(path, userLoginKey, commentInfo);
+    }
+
+    public void fetchCommentInfo(String path, String userLoginKey, int commentID) {
+        repository.fetchCommentInfo(path, userLoginKey, commentID);
     }
 }

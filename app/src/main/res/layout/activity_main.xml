@@ -59,15 +59,16 @@
                     android:paddingLeft="20dp"
                     app:backgroundTint="#5F6D7A"
                     app:layout_constraintBottom_toBottomOf="@id/ed_text_search"
-                    app:layout_constraintStart_toEndOf="@id/iv_add_new_case"
+                    app:layout_constraintStart_toEndOf="@id/iv_add"
                     app:layout_constraintTop_toTopOf="@id/ed_text_search" />
 
                 <ImageView
-                    android:id="@+id/iv_add_new_case"
+                    android:id="@+id/iv_add"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="16dp"
                     android:src="@drawable/ic_more"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/ed_text_search"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ed_text_search"

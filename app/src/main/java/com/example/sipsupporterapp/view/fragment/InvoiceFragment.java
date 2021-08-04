@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -45,15 +46,8 @@ public class InvoiceFragment extends Fragment {
     private FragmentInvoiceBinding binding;
     private InvoiceViewModel viewModel;
     private ServerData serverData;
-    private int caseID, customerID, invoiceID, invoiceDetailsID;
     private String centerName, userLoginKey, customerName;
-
-    public static InvoiceFragment newInstance() {
-        InvoiceFragment fragment = new InvoiceFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private int caseID, customerID, invoiceID, invoiceDetailsID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,8 +75,9 @@ public class InvoiceFragment extends Fragment {
 
     private void initRecyclerView() {
         binding.recyclerViewInvoiceDetails.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        binding.recyclerViewInvoiceDetails.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerViewInvoiceDetails.addItemDecoration(dividerItemDecoration);
     }
 
     @Override

@@ -47,7 +47,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
 
     @Override
     public void onBindViewHolder(@NonNull PaymentHolder holder, int position) {
-        holder.bindPaymentInfo(paymentInfoList.get(position));
+        PaymentResult.PaymentInfo paymentInfo = paymentInfoList.get(position);
+        holder.bindPaymentInfo(paymentInfo);
 
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,15 +69,15 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                viewModel.getEditClicked().setValue(paymentInfoList.get(position));
+                                viewModel.getEditClicked().setValue(paymentInfo);
                                 powerMenu.dismiss();
                                 break;
                             case 1:
-                                viewModel.getDeleteClicked().setValue(paymentInfoList.get(position));
+                                viewModel.getDeleteClicked().setValue(paymentInfo.getPaymentID());
                                 powerMenu.dismiss();
                                 break;
                             case 2:
-                                viewModel.getSeePaymentAttachmentsClicked().setValue(paymentInfoList.get(position));
+                                viewModel.getSeePaymentAttachmentsClicked().setValue(paymentInfo);
                                 powerMenu.dismiss();
                                 break;
                         }
@@ -110,16 +111,9 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                 binding.txtDescription.setText(description);
             }
 
-            if (info.getDatePayment() != 0) {
-                String date = String.valueOf(info.getDatePayment());
-                String year = date.substring(0, 4);
-                String month = date.substring(4, 6);
-                String day = date.substring(6);
-                String dateFormat = year + "/" + month + "/" + day;
-                binding.txtDatePayment.setText(dateFormat);
-            } else {
-                binding.txtDatePayment.setText(info.getDatePayment() + "");
-            }
+            String dateFormat = Converter.dateFormat(String.valueOf(info.getDatePayment()));
+            binding.txtDatePayment.setText(dateFormat);
+
         }
     }
 }

@@ -28,7 +28,7 @@
     <string name="success_delete_customer_product">حذف محصول موفقیت آمیز بود</string>
     <string name="success_change_password">رمز عبور با موفقیت تغییر کرد</string>
     <string name="question_delete_photo_message">آیا می خواهید فایل مربوطه را حذف کنید؟</string>
-    <string name="success_delete_photo_message">فایل با موفقیت حذف شد</string>
+    <string name="success_delete_photo_message">حذف عکس موفقیت آمیز بود</string>
     <string name="not_exist_payment_subject">لطفا مشخص کنید پرداخت در چه زمینه ای صورت گرفته است</string>
     <string name="zero_price">مبلغ پرداختی نباید صفر باشد</string>
     <string name="not_exist_server">سرور موجود نمی باشد</string>
@@ -59,4 +59,10 @@
     <string name="success_add_customer_support_message">ثبت پشتیبانی موفقیت آمیز بود</string>
     <string name="success_add_edit_customer_payment_message">ثبت واریزی موفقیت آمیز بود</string>
     <string name="select_product_message">لطفا محصول را انتخاب نمایید</string>
+    <string name="delete_question_payment_message">آیا میخواهید پرداختی موردنظر را حذف کنید؟</string>
+    <string name="success_add_edit_assign_message">موفقیت آمیز بود Assign</string>
+    <string name="delete_question_assign_message">آیا می خواهید assign مربوطه را حذف نمایید؟</string>
+    <string name="success_delete_assign_message">حذف Assign موفقیت آمیز بود</string>
+    <string name="delete_question_comment_dialog">آیا می خواهید نظر مربوطه را حذف کنید</string>
+    <string name="success_add_edit_comment_message">ثبت نظر موفقیت آمیز بود</string>
 </resources>

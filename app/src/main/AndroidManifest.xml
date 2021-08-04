@@ -36,10 +36,6 @@
             android:name=".view.activity.PaymentSubjectContainerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.PaymentContainerActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".view.activity.CustomerPaymentContainerActivity"
             android:screenOrientation="portrait" />
         <activity

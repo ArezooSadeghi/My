@@ -54,10 +54,9 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
 
     @Override
     public void onBindViewHolder(@NonNull CustomerPaymentInfoHolder holder, int position) {
-        holder.bindCustomerPaymentInfo(customerPaymentInfoList.get(position));
-
+        CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = customerPaymentInfoList.get(position);
+        holder.bindCustomerPaymentInfo(customerPaymentInfo);
         holder.binding.imgBtnMore.setVisibility(viewModel == null ? View.GONE : View.VISIBLE);
-
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,24 +108,16 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             this.binding = binding;
         }
 
-        public void bindCustomerPaymentInfo(CustomerPaymentResult.CustomerPaymentInfo info) {
-            String bankAccountName = Converter.letterConverter(info.getBankAccountName());
+        public void bindCustomerPaymentInfo(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
+            String bankAccountName = Converter.letterConverter(customerPaymentInfo.getBankAccountName());
             binding.txtBankAccountName.setText(bankAccountName);
-            binding.txtBankAccountNo.setText(info.getBankAccountNO());
-            String bankName = Converter.letterConverter(info.getBankName());
+            binding.txtBankAccountNo.setText(customerPaymentInfo.getBankAccountNO());
+            String bankName = Converter.letterConverter(customerPaymentInfo.getBankName());
             binding.txtBankName.setText(bankName);
-
-            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(info.getPrice());
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
             binding.txtPrice.setText(currencyFormat + "تومان");
-
-            if (info.getDatePayment() != 0) {
-                String date = String.valueOf(info.getDatePayment());
-                String year = date.substring(0, 4);
-                String month = date.substring(4, 6);
-                String day = date.substring(6);
-                String dateFormat = year + "/" + month + "/" + day;
-                binding.txtDatePayment.setText(dateFormat);
-            }
+            String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
+            binding.txtDatePayment.setText(dateFormat);
         }
     }
 }

@@ -97,20 +97,20 @@ public class MainActivity extends AppCompatActivity {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
                     binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
-                    binding.ivAddNewCase.setVisibility(View.GONE);
+                    binding.ivAdd.setVisibility(View.GONE);
                 } else if (destination.getId() == R.id.menu_tasks) {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
                     binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
-                    binding.ivAddNewCase.setVisibility(View.VISIBLE);
+                    binding.ivAdd.setVisibility(View.VISIBLE);
                 } else if (destination.getId() == R.id.menu_payments) {
                     binding.edTextSearch.setVisibility(View.GONE);
                     binding.btnSearch.setVisibility(View.GONE);
-                    binding.ivAddNewCase.setVisibility(View.VISIBLE);
+                    binding.ivAdd.setVisibility(View.VISIBLE);
                 } else {
                     binding.edTextSearch.setVisibility(View.GONE);
                     binding.btnSearch.setVisibility(View.GONE);
-                    binding.ivAddNewCase.setVisibility(View.GONE);
+                    binding.ivAdd.setVisibility(View.GONE);
                 }
             }
         });
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.ivAddNewCase.setOnClickListener(new View.OnClickListener() {
+        binding.ivAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = null;

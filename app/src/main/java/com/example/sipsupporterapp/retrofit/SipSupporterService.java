@@ -234,4 +234,10 @@ public interface SipSupporterService {
 
     @GET("{path}")
     Call<CustomerProductResult> fetchCustomerProductInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("customerProductID") int customerProductID);
+
+    @GET("{path}")
+    Call<AssignResult> fetchAssignInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("assignID") int assignID);
+
+    @GET("{path}")
+    Call<CommentResult> fetchCommentInfo(@Path("path") String path, @Header("userLoginKey") String userLoginKey, @Query("commentID") int commentID);
 }
