@@ -54,12 +54,12 @@ public class CaseFragment extends Fragment {
     private FragmentCaseBinding binding;
     private CaseViewModel viewModel;
     private ServerData serverData;
-    private int caseTypeID, customerID, caseID;
     private String centerName, userLoginKey, searchQuery;
     private CaseResult.CaseInfo caseInfo;
     private List<String> caseTypes;
     private List<Integer> caseTypeIDs;
     private AddEditCaseDialogFragment fragment;
+    private int caseTypeID, customerID, caseID;
 
     public static CaseFragment newInstance() {
         CaseFragment fragment = new CaseFragment();
@@ -114,7 +114,6 @@ public class CaseFragment extends Fragment {
     @Subscribe(sticky = true)
     public void getCustomerID(PostCustomerIDEvent event) {
         customerID = event.getCustomerID();
-        String customerName = event.getCustomerName();
         AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID);
         fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
         EventBus.getDefault().removeStickyEvent(event);
