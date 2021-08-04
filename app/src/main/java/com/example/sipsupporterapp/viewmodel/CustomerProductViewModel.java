@@ -14,6 +14,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent;
+    private SingleLiveEvent<CustomerProductResult> customerProductInfoResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent;
@@ -30,6 +31,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
         repository = SipSupporterRepository.getInstance(getApplication());
         customerProductsResultSingleLiveEvent = repository.getCustomerProductsResultSingleLiveEvent();
+        customerProductInfoResultSingleLiveEvent = repository.getCustomerProductInfoResultSingleLiveEvent();
         addCustomerProductResultSingleLiveEvent = repository.getAddCustomerProductResultSingleLiveEvent();
         editCustomerProductResultSingleLiveEvent = repository.getEditCustomerProductResultSingleLiveEvent();
         deleteCustomerProductResultSingleLiveEvent = repository.getDeleteCustomerProductResultSingleLiveEvent();
@@ -82,6 +84,10 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return seeCustomerProductAttachmentsClicked;
     }
 
+    public SingleLiveEvent<CustomerProductResult> getCustomerProductInfoResultSingleLiveEvent() {
+        return customerProductInfoResultSingleLiveEvent;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -112,5 +118,9 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public void fetchCustomerProducts(String path, String userLoginKey, int customerID) {
         repository.fetchCustomerProducts(path, userLoginKey, customerID);
+    }
+
+    public void fetchCustomerProductInfo(String path, String userLoginKey, int customerProductID) {
+        repository.fetchCustomerProductInfo(path, userLoginKey, customerProductID);
     }
 }

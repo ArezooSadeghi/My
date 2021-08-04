@@ -24,7 +24,7 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="@font/iran_yekan_bold"
+                android:fontFamily="@font/regular"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ed_text_question"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/custom_cursor"
                     android:textDirection="rtl" />
@@ -79,7 +79,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ed_text_answer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/custom_cursor"
                     android:textDirection="rtl" />
@@ -87,11 +87,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
-                android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,7 +103,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:backgroundTint="@color/light_gray"
-                    android:foreground="?attr/selectableItemBackground"
                     android:text="انصراف"
                     android:textColor="@color/white" />
 

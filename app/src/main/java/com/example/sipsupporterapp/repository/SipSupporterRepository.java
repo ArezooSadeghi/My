@@ -88,6 +88,7 @@ public class SipSupporterRepository {
     private SingleLiveEvent<CustomerProductResult> addCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerProductResult> customerProductInfoResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult> addCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult> editCustomerPaymentResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -576,6 +577,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<PaymentResult> getPaymentInfoResultSingleLiveEvent() {
         return paymentInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<CustomerProductResult> getCustomerProductInfoResultSingleLiveEvent() {
+        return customerProductInfoResultSingleLiveEvent;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -2605,6 +2610,36 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                } else if (t instanceof SocketTimeoutException) {
+                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                } else {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            }
+        });
+    }
+
+    public void fetchCustomerProductInfo(String path, String userLoginKey, int customerProductID) {
+        sipSupporterService.fetchCustomerProductInfo(path, userLoginKey, customerProductID).enqueue(new Callback<CustomerProductResult>() {
+            @Override
+            public void onResponse(Call<CustomerProductResult> call, Response<CustomerProductResult> response) {
+                if (response.isSuccessful()) {
+                    customerProductInfoResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
+                        customerProductInfoResultSingleLiveEvent.setValue(customerProductResult);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {

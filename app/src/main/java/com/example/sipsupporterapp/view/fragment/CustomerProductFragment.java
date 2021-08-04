@@ -191,13 +191,7 @@ public class CustomerProductFragment extends Fragment {
                     public void onItemClick(int i, PowerMenuItem item) {
                         switch (i) {
                             case 0:
-                                AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
-                                        customerID,
-                                        "",
-                                        0,
-                                        false,
-                                        false,
-                                        0, 0, 0);
+                                AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(0, customerID);
                                 fragment.show(getParentFragmentManager(), AddEditCustomerProductDialogFragment.TAG);
                                 powerMenu.dismiss();
                                 break;
@@ -276,14 +270,7 @@ public class CustomerProductFragment extends Fragment {
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult.CustomerProductInfo>() {
             @Override
             public void onChanged(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-                AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(
-                        customerID,
-                        customerProductInfo.getDescription(),
-                        customerProductInfo.getInvoicePrice(),
-                        customerProductInfo.isInvoicePayment(),
-                        customerProductInfo.isFinish(),
-                        customerProductInfo.getExpireDate(),
-                        customerProductInfo.getCustomerProductID(), customerProductInfo.getProductID());
+                AddEditCustomerProductDialogFragment fragment = AddEditCustomerProductDialogFragment.newInstance(customerProductInfo.getCustomerProductID(), customerProductInfo.getCustomerID());
                 fragment.show(getActivity().getSupportFragmentManager(), AddEditCustomerProductDialogFragment.TAG);
             }
         });
