@@ -24,7 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SipSupporterApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activity.CustomerSearchContainerActivity"></activity>
         <activity android:name=".view.activity.MainActivity" />
         <activity android:name=".view.activity.ProductsContainerActivity" />
         <activity

@@ -50,6 +50,7 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> saveClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> seeCommentClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> seeClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> moreClicked = new SingleLiveEvent<>();
 
     public CaseViewModel(@NonNull Application application) {
         super(application);
@@ -206,6 +207,10 @@ public class CaseViewModel extends AndroidViewModel {
         return seeClicked;
     }
 
+    public SingleLiveEvent<Boolean> getMoreClicked() {
+        return moreClicked;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -230,8 +235,8 @@ public class CaseViewModel extends AndroidViewModel {
         repository.getSipSupporterServiceAssignResult(baseUrl);
     }
 
-    public void getSipSupporterServiceCustomerPaymentResult(String baseUrl) {
-        repository.getSipSupporterServiceCustomerPaymentResult(baseUrl);
+    public void getSipSupporterServiceCustomerResult(String baseUrl) {
+        repository.getSipSupporterServiceCustomerResult(baseUrl);
     }
 
     public void fetchCaseTypes(String path, String userLoginKey) {

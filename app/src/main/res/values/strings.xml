@@ -52,4 +52,5 @@
     <string name="ok">تایید</string>
     <string name="success_delete_payment_message">حذف پرداختی موفقیت آمیز بود</string>
     <string name="length_description_message">\"توضیحات باید بیشتر از چهار حرف باشد \"</string>
+    <string name="success_add_edit_case_message">کار با موفقیت ثبت شد</string>
 </resources>

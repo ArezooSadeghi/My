@@ -10,10 +10,9 @@
         android:label="CustomerFragment">
 
         <argument
-            android:name="isCase"
+            android:name="flag"
             android:defaultValue="false"
             app:argType="boolean" />
-
         <action
             android:id="@+id/action_menu_search_to_menu_tasks"
             app:destination="@id/menu_tasks" />
@@ -74,10 +73,6 @@
         android:name="com.example.sipsupporterapp.view.fragment.CaseFragment"
         android:label="TaskFragment">
 
-        <action
-            android:id="@+id/action_menu_tasks_to_menu_search"
-            app:destination="@id/menu_search" />
-
         <argument
             android:name="customerID"
             android:defaultValue="0"
@@ -94,6 +89,9 @@
         <action
             android:id="@+id/action_menu_tasks_to_customerPaymentFragment"
             app:destination="@id/customerPaymentFragment" />
+        <action
+            android:id="@+id/action_menu_tasks_to_menu_search"
+            app:destination="@id/menu_search" />
 
     </fragment>
 

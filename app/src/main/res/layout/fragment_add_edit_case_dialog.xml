@@ -75,20 +75,53 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner"
-            android:layout_width="110dp"
-            android:layout_height="50dp"
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="@font/iran_yekan_bold"
-            android:textColor="@color/black"
-            android:textSize="14sp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/check_box_share"
-            app:ms_arrow_tint="@color/black"
-            app:ms_background_color="@color/light_gray"
-            app:ms_padding_right="16dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/check_box_share">
+
+            <RadioButton
+                android:id="@+id/radio_btn_very_important"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="خیلی مهم"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_important"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="مهم"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="متوسط"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="کم"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </RadioGroup>
 
         <TextView
             android:id="@+id/txt_share"
@@ -121,7 +154,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner">
+            app:layout_constraintTop_toBottomOf="@id/radio_group">
 
             <Button
                 android:id="@+id/btn_cancel"

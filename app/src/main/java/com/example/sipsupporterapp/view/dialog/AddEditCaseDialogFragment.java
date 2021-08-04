@@ -16,52 +16,34 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCaseDialogBinding;
-import com.example.sipsupporterapp.eventbus.CustomerSearchEvent;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
-import com.example.sipsupporterapp.view.activity.CustomerSearchContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
-import com.jaredrummler.materialspinner.MaterialSpinner;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddEditCaseDialogFragment extends DialogFragment {
     private FragmentAddEditCaseDialogBinding binding;
     private CaseViewModel viewModel;
     private ServerData serverData;
-    private String centerName, userLoginKey, textPriority;
-    private int customerID, caseID;
+    private String centerName, userLoginKey;
+    private CaseResult.CaseInfo caseInfo;
+    private CustomerResult.CustomerInfo customerInfo;
+    private int caseID, caseTypeID, customerID;
 
     private static final String ARGS_CASE_ID = "caseID";
-    private static final String ARGS_CUSTOMER_ID = "CustomerID";
-    private static final String ARGS_CUSTOMER_NAME = "CustomerName";
     private static final String ARGS_CASE_TYPE_ID = "caseTypeID";
-    private static final String ARGS_PRIORITY = "priority";
-    private static final String ARGS_SHARE = "share";
-    private static final String ARGS_DESCRIPTION = "description";
-
+    private static final String ARGS_CUSTOMER_ID = "CustomerID";
     public static final String TAG = AddEditCaseDialogFragment.class.getSimpleName();
 
-    public static AddEditCaseDialogFragment newInstance(int caseID, int caseTypeID, int customerID, String customerName, int priority, boolean share, String description) {
+    public static AddEditCaseDialogFragment newInstance(int caseID, int caseTypeID, int customerID) {
         AddEditCaseDialogFragment fragment = new AddEditCaseDialogFragment();
         Bundle args = new Bundle();
-
         args.putInt(ARGS_CASE_ID, caseID);
         args.putInt(ARGS_CASE_TYPE_ID, caseTypeID);
         args.putInt(ARGS_CUSTOMER_ID, customerID);
-        args.putString(ARGS_CUSTOMER_NAME, customerName);
-        args.putInt(ARGS_PRIORITY, priority);
-        args.putBoolean(ARGS_SHARE, share);
-        args.putString(ARGS_DESCRIPTION, description);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,15 +54,13 @@ public class AddEditCaseDialogFragment extends DialogFragment {
 
         createViewModel();
         setupObserver();
+        initVariables();
 
-        centerName = SipSupportSharedPreferences.getCenterName(getContext());
-        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
-        serverData = viewModel.getServerData(centerName);
-        viewModel.getSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-
+        if (caseID > 0) {
+            fetchCaseInfo(caseID);
+        }
         if (customerID != 0) {
-            fetchCustomerInfo();
+            fetchCustomerInfo(customerID);
         }
     }
 
@@ -93,7 +73,6 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        initViews();
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
@@ -111,9 +90,45 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CaseViewModel.class);
     }
 
+    private void initVariables() {
+        caseID = getArguments().getInt(ARGS_CASE_ID);
+        caseTypeID = getArguments().getInt(ARGS_CASE_TYPE_ID);
+        customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
+
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+    }
+
+    private void initViews() {
+        binding.edTextDescription.setText(caseInfo.getDescription());
+
+        binding.checkBoxShare.setChecked(caseInfo.isShare());
+
+        switch (caseInfo.getPriority()) {
+            case 0:
+                binding.radioBtnLow.setChecked(true);
+                break;
+            case 1:
+                binding.radioBtnMedium.setChecked(true);
+                break;
+            case 2:
+                binding.radioBtnImportant.setChecked(true);
+                break;
+            case 3:
+                binding.radioBtnVeryImportant.setChecked(true);
+                break;
+        }
+    }
+
     private void handleError(String message) {
         ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
     }
 
     private void ejectUser() {
@@ -133,56 +148,28 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         getActivity().finish();
     }
 
-    private void initViews() {
-        String description = getArguments().getString(ARGS_DESCRIPTION);
-        binding.edTextDescription.setText(description);
+    private void addCase(CaseResult.CaseInfo caseInfo) {
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/case/Add/";
+        viewModel.addCase(path, userLoginKey, caseInfo);
+    }
 
-        boolean share = getArguments().getBoolean(ARGS_SHARE);
-        binding.checkBoxShare.setChecked(share);
+    private void editCase(CaseResult.CaseInfo caseInfo) {
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Case/Edit/";
+        viewModel.editCase(path, userLoginKey, caseInfo);
+    }
 
-        int priority = getArguments().getInt(ARGS_PRIORITY);
-        switch (priority) {
-            case 0:
-                List<String> prioritiesZero = new ArrayList<String>() {{
-                    add(0, "کم");
-                    add(1, "متوسط");
-                    add(2, "مهم");
-                    add(3, "خیلی مهم");
-                }};
-                textPriority = "کم";
-                binding.spinner.setItems(prioritiesZero);
-                break;
-            case 1:
-                List<String> prioritiesOne = new ArrayList<String>() {{
-                    add(0, "متوسط");
-                    add(1, "کم");
-                    add(2, "مهم");
-                    add(3, "خیلی مهم");
-                }};
-                textPriority = "متوسط";
-                binding.spinner.setItems(prioritiesOne);
-                break;
-            case 2:
-                List<String> prioritiesTwo = new ArrayList<String>() {{
-                    add(0, "مهم");
-                    add(1, "کم");
-                    add(2, "متوسط");
-                    add(3, "خیلی مهم");
-                }};
-                textPriority = "مهم";
-                binding.spinner.setItems(prioritiesTwo);
-                break;
-            case 3:
-                List<String> prioritiesThree = new ArrayList<String>() {{
-                    add(0, "خیلی مهم");
-                    add(1, "کم");
-                    add(2, "متوسط");
-                    add(3, "مهم");
-                }};
-                textPriority = "خیلی مهم";
-                binding.spinner.setItems(prioritiesThree);
-                break;
-        }
+    private void fetchCaseInfo(int caseID) {
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/case/Info/";
+        viewModel.fetchCaseInfo(path, userLoginKey, caseID);
+    }
+
+    private void fetchCustomerInfo(int customerID) {
+        viewModel.getSipSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customers/Info/";
+        viewModel.fetchCustomerInfo(path, userLoginKey, customerID);
     }
 
     private void handleEvents() {
@@ -197,38 +184,26 @@ public class AddEditCaseDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 CaseResult.CaseInfo caseInfo = new CaseResult().new CaseInfo();
-                int caseID = getArguments().getInt(ARGS_CASE_ID);
-                int caseTypeID = getArguments().getInt(ARGS_CASE_TYPE_ID);
                 caseInfo.setCaseID(caseID);
                 caseInfo.setCaseTypeID(caseTypeID);
                 caseInfo.setCustomerID(customerID);
                 caseInfo.setCustomerName(binding.btnCustomerName.getText().toString());
                 caseInfo.setDescription(binding.edTextDescription.getText().toString());
                 caseInfo.setShare(binding.checkBoxShare.isChecked());
-
-                switch (textPriority) {
-                    case "کم":
-                        caseInfo.setPriority(0);
-                        break;
-                    case "متوسط":
-                        caseInfo.setPriority(1);
-                        break;
-                    case "مهم":
-                        caseInfo.setPriority(2);
-                        break;
-                    case "خیلی مهم":
-                        caseInfo.setPriority(3);
-                        break;
+                if (binding.radioBtnLow.isChecked()) {
+                    caseInfo.setPriority(0);
+                } else if (binding.radioBtnMedium.isChecked()) {
+                    caseInfo.setPriority(1);
+                } else if (binding.radioBtnImportant.isChecked()) {
+                    caseInfo.setPriority(2);
+                } else if (binding.radioBtnVeryImportant.isChecked()) {
+                    caseInfo.setPriority(3);
                 }
 
                 if (caseID == 0) {
-                    viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
-                    String path = "/api/v1/case/Add/";
-                    viewModel.addCase(path, userLoginKey, caseInfo);
+                    addCase(caseInfo);
                 } else {
-                    viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
-                    String path = "/api/v1/Case/Edit/";
-                    viewModel.editCase(path, userLoginKey, caseInfo);
+                    editCase(caseInfo);
                 }
             }
         });
@@ -236,31 +211,42 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent starter = CustomerSearchContainerActivity.start(getContext());
-                startActivity(starter);
+                viewModel.getMoreClicked().setValue(true);
+                dismiss();
             }
         });
-
-        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                textPriority = (String) item;
-            }
-        });
-    }
-
-    private void fetchCustomerInfo() {
-        String path = "/api/v1/customers/Info/";
-        viewModel.fetchCustomerInfo(path, userLoginKey, customerID);
     }
 
     private void setupObserver() {
+        viewModel.getCustomerInfoResultSingleLiveEvent().observe(this, new Observer<CustomerResult>() {
+            @Override
+            public void onChanged(CustomerResult customerResult) {
+                if (customerResult.getErrorCode().equals("0")) {
+                    customerInfo = customerResult.getCustomers()[0];
+                    binding.btnCustomerName.setText(Converter.letterConverter(customerInfo.getCustomerName()));
+                }
+            }
+        });
+
+        viewModel.getCaseInfoResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult.getErrorCode().equals("0")) {
+                    caseInfo = caseResult.getCases()[0];
+                    initViews();
+                } else if (caseResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(caseResult.getError());
+                }
+            }
+        });
+
         viewModel.getAddCaseResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
             @Override
             public void onChanged(CaseResult caseResult) {
                 if (caseResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("کار با موفقیت افزوده شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    showSuccessDialog(getString(R.string.success_add_edit_case_message));
                     viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (caseResult.getErrorCode().equals("-9001")) {
@@ -276,8 +262,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
             @Override
             public void onChanged(CaseResult caseResult) {
                 if (caseResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("کار با موفقیت افزوده شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    showSuccessDialog(getString(R.string.success_add_edit_case_message));
                     viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else if (caseResult.getErrorCode().equals("-9001")) {
@@ -285,20 +270,6 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 } else {
                     handleError(caseResult.getError());
                     dismiss();
-                }
-            }
-        });
-
-        viewModel.getCustomerInfoResultSingleLiveEvent().observe(this, new Observer<CustomerResult>() {
-            @Override
-            public void onChanged(CustomerResult customerResult) {
-                if (customerResult.getErrorCode().equals("0")) {
-                    String customerName = Converter.letterConverter(customerResult.getCustomers()[0].getCustomerName());
-                    binding.btnCustomerName.setText(customerName);
-                } else if (customerResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(customerResult.getError());
                 }
             }
         });
@@ -316,24 +287,5 @@ public class AddEditCaseDialogFragment extends DialogFragment {
                 handleError(message);
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true)
-    public void getCustomerSearchEvent(CustomerSearchEvent event) {
-        customerID = event.getCustomerID();
-        fetchCustomerInfo();
-        EventBus.getDefault().removeStickyEvent(event);
     }
 }

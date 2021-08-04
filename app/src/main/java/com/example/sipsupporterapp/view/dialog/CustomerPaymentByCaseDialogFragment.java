@@ -156,7 +156,7 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
     }
 
     private void fetchCustomerPaymentsByCaseID(int caseID) {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        viewModel.getSipSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/customerPayments/ListByCase/";
         viewModel.fetchCustomerPaymentsByCase(path, userLoginKey, caseID);
     }

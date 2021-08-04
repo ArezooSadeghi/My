@@ -12,13 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerAdapterItemBinding;
-import com.example.sipsupporterapp.eventbus.CustomerSearchEvent;
 import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -55,13 +52,9 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (flag) {
-                    EventBus.getDefault().postSticky(new CustomerSearchEvent(customerInfo.getCustomerID()));
-                } else {
-                    viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
-                    SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
-                    SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
-                }
+                viewModel.getItemClicked().setValue(customerInfo.getCustomerID());
+                SipSupportSharedPreferences.setCustomerName(context, customerInfo.getCustomerName());
+                SipSupportSharedPreferences.setCustomerTel(context, customerInfo.getTel());
             }
         });
 
@@ -89,14 +82,17 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             this.binding = binding;
         }
 
-        public void bindCustomerInfo(CustomerResult.CustomerInfo info) {
-            String city = Converter.letterConverter(info.getCity());
+        public void bindCustomerInfo(CustomerResult.CustomerInfo customerInfo) {
+            binding.txtCity.setVisibility(!customerInfo.getCity().isEmpty() ? View.VISIBLE : View.GONE);
+            String city = Converter.letterConverter(customerInfo.getCity());
             binding.txtCity.setText(city);
-            binding.txtLastSeen.setText(info.getLastSeen());
 
-            String customerName = Converter.letterConverter(info.getCustomerName());
+            binding.txtLastSeen.setVisibility(!customerInfo.getLastSeen().isEmpty() ? View.VISIBLE : View.GONE);
+            binding.txtLastSeen.setText(customerInfo.getLastSeen());
+
+            String customerName = Converter.letterConverter(customerInfo.getCustomerName());
             binding.txtCustomerName.setText(customerName);
-            binding.txtCustomerID.setText(String.valueOf(info.getCustomerID()));
+            binding.txtCustomerID.setText(String.valueOf(customerInfo.getCustomerID()));
         }
     }
 }

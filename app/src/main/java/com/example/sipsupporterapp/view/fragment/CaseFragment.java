@@ -59,6 +59,7 @@ public class CaseFragment extends Fragment {
     private CaseResult.CaseInfo caseInfo;
     private List<String> caseTypes;
     private List<Integer> caseTypeIDs;
+    private AddEditCaseDialogFragment fragment;
 
     public static CaseFragment newInstance() {
         CaseFragment fragment = new CaseFragment();
@@ -114,7 +115,7 @@ public class CaseFragment extends Fragment {
     public void getCustomerID(PostCustomerIDEvent event) {
         customerID = event.getCustomerID();
         String customerName = event.getCustomerName();
-        AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, customerName, 0, false, "");
+        AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID);
         fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -199,11 +200,6 @@ public class CaseFragment extends Fragment {
                         setupSpinner(caseTypeResult.getCaseTypes());
                         CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());
                         customerID = args.getCustomerID();
-                        if (customerID != 0) {
-                            int caseTypeID = SipSupportSharedPreferences.getCaseTypeID(getContext());
-                            AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID, "", 0, false, "");
-                            fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
-                        }
                     } else if (caseTypeResult.getErrorCode().equals("-9001")) {
                         ejectUser();
                     } else {
@@ -281,14 +277,10 @@ public class CaseFragment extends Fragment {
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
             @Override
             public void onChanged(CaseResult.CaseInfo caseInfo) {
-                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(
+                fragment = AddEditCaseDialogFragment.newInstance(
                         caseInfo.getCaseID(),
                         caseInfo.getCaseTypeID(),
-                        caseInfo.getCustomerID(),
-                        caseInfo.getCustomerName(),
-                        caseInfo.getPriority(),
-                        caseInfo.isShare(),
-                        caseInfo.getDescription());
+                        caseInfo.getCustomerID());
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
             }
         });
@@ -332,13 +324,11 @@ public class CaseFragment extends Fragment {
             }
         });
 
-        viewModel.getNavigateToCustomerFragment().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        viewModel.getMoreClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean navigateToCustomerFragment) {
-                SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
-                CaseFragmentDirections.ActionMenuTasksToMenuSearch action =
-                        CaseFragmentDirections.actionMenuTasksToMenuSearch();
-                action.setIsCase(true);
+            public void onChanged(Boolean moreClicked) {
+                CaseFragmentDirections.ActionMenuTasksToMenuSearch action = CaseFragmentDirections.actionMenuTasksToMenuSearch();
+                action.setFlag(true);
                 NavHostFragment.findNavController(CaseFragment.this).navigate(action);
             }
         });
@@ -405,7 +395,7 @@ public class CaseFragment extends Fragment {
         viewModel.getAddNewCaseClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean addNewCaseClicked) {
-                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, 0, "", 0, false, "");
+                AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, 0);
                 fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
             }
         });
@@ -442,9 +432,12 @@ public class CaseFragment extends Fragment {
             @Override
             public void onChanged(CaseResult caseResult) {
                 if (caseResult.getErrorCode().equals("0")) {
-                    SuccessDialogFragment fragment = SuccessDialogFragment.newInstance("تغییر گروه با موفقیت انجام شد");
-                    fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+                    SuccessDialogFragment successFragment = SuccessDialogFragment.newInstance(getString(R.string.success_add_edit_case_message));
+                    successFragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
+                    if (fragment.getShowsDialog()) {
+                        fragment.dismiss();
+                    }
                 } else if (caseResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -518,6 +511,13 @@ public class CaseFragment extends Fragment {
 
         SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
         fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
+
+        CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());
+        int customerID = args.getCustomerID();
+        if (customerID != 0) {
+            AddEditCaseDialogFragment fragment = AddEditCaseDialogFragment.newInstance(0, caseTypeID, customerID);
+            fragment.show(getParentFragmentManager(), AddEditCaseDialogFragment.TAG);
+        }
     }
 
     private void fetchCasesByCaseType(int caseTypeID, String search, boolean showAll) {

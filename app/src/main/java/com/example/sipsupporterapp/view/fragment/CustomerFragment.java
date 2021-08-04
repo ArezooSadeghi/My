@@ -40,7 +40,7 @@ public class CustomerFragment extends Fragment {
     private CustomerViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
-    private boolean isCase;
+    private boolean flag;
 
     public static CustomerFragment newInstance() {
         CustomerFragment fragment = new CustomerFragment();
@@ -84,7 +84,7 @@ public class CustomerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         CustomerFragmentArgs args = CustomerFragmentArgs.fromBundle(getArguments());
-        isCase = args.getIsCase();
+        flag = args.getFlag();
         setupObserver();
     }
 
@@ -160,7 +160,15 @@ public class CustomerFragment extends Fragment {
         viewModel.getItemClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer customerID) {
-                if (isCase) {
+                if (flag) {
+                    CustomerFragmentDirections.ActionMenuSearchToMenuTasks action = CustomerFragmentDirections.actionMenuSearchToMenuTasks();
+                    action.setCustomerID(customerID);
+                    NavHostFragment.findNavController(CustomerFragment.this).navigate(action);
+                } else {
+                    Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
+                    startActivity(starter);
+                }
+              /*  if (isCase) {
                     CustomerFragmentDirections.ActionMenuSearchToMenuTasks action =
                             CustomerFragmentDirections.actionMenuSearchToMenuTasks();
                     action.setCustomerID(customerID);
@@ -168,7 +176,7 @@ public class CustomerFragment extends Fragment {
                 } else {
                     Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
                     startActivity(starter);
-                }
+                }*/
             }
         });
 
