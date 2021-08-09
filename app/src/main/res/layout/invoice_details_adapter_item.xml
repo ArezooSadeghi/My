@@ -12,130 +12,85 @@
 
         <TextView
             android:id="@+id/txt_product_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
             android:fontFamily="@font/titr"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:text="sghgjhh"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/container"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_lb_QTY"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="@font/regular"
-            android:text="تعداد:"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_product_name" />
-
-        <TextView
-            android:id="@+id/txt_QTY"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:fontFamily="@font/regular"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_lb_QTY"
-            app:layout_constraintEnd_toStartOf="@id/txt_lb_QTY"
-            app:layout_constraintTop_toTopOf="@id/txt_lb_QTY" />
-
-        <TextView
-            android:id="@+id/txt_lb_unit_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="@font/regular"
-            android:text="مبلغ واحد:"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_lb_QTY" />
-
-        <TextView
-            android:id="@+id/txt_unit_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:fontFamily="@font/regular"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_lb_unit_price"
-            app:layout_constraintEnd_toStartOf="@id/txt_lb_unit_price"
-            app:layout_constraintTop_toTopOf="@id/txt_lb_unit_price" />
-
-        <TextView
-            android:id="@+id/txt_lb_sum_discount_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="@font/regular"
-            android:text="جمع تخفیف:"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_lb_unit_price" />
-
-        <TextView
-            android:id="@+id/txt_sum_discount_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:fontFamily="@font/regular"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_lb_sum_discount_price"
-            app:layout_constraintEnd_toStartOf="@id/txt_lb_sum_discount_price"
-            app:layout_constraintTop_toTopOf="@id/txt_lb_sum_discount_price" />
-
-        <TextView
-            android:id="@+id/txt_lb_sum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/regular"
-            android:text="جمع:"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_lb_sum_discount_price" />
-
-        <TextView
-            android:id="@+id/txt_sum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:fontFamily="@font/regular"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_lb_sum"
-            app:layout_constraintEnd_toStartOf="@id/txt_lb_sum"
-            app:layout_constraintTop_toTopOf="@id/txt_lb_sum" />
-
-        <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_more"
+            android:orientation="horizontal"
+            android:weightSum="5.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_product_name"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/txt_QTY"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txt_unit_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1.5"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txt_sum_discount_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txt_sum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1.5"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.5"
+                android:src="@drawable/ic_more"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_product_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -107,14 +107,14 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
             this.binding = binding;
         }
 
-        public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo info) {
-            binding.txtProductName.setText(info.getProductName());
-            binding.txtQTY.setText(String.valueOf(info.getQTY()));
-            binding.txtUnitPrice.setText(getCurrencyFormat(info.getUnitPrice()));
-            binding.txtSumDiscountPrice.setText(getCurrencyFormat(info.getSumDiscountPrice()));
+        public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
+            binding.txtProductName.setText(invoiceDetailsInfo.getProductName());
+            binding.txtQTY.setText("تعداد:" + invoiceDetailsInfo.getQTY());
+            binding.txtUnitPrice.setText("مبلغ واحد:" + getCurrencyFormat(invoiceDetailsInfo.getUnitPrice()));
+            binding.txtSumDiscountPrice.setText("جمع تخفیف:" + getCurrencyFormat(invoiceDetailsInfo.getSumDiscountPrice()));
 
-            int sum = ((info.getQTY() * info.getUnitPrice()) - info.getSumDiscountPrice());
-            binding.txtSum.setText(getCurrencyFormat(sum));
+            int sum = ((invoiceDetailsInfo.getQTY() * invoiceDetailsInfo.getUnitPrice()) - invoiceDetailsInfo.getSumDiscountPrice());
+            binding.txtSum.setText("جمع:" + getCurrencyFormat(sum));
         }
 
         public String getCurrencyFormat(int currency) {

@@ -1,12 +1,12 @@
 package com.example.sipsupporterapp.view.fragment;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +14,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.InvoiceDetailsAdapter;
+import com.example.sipsupporterapp.adapter.PrintDocumentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPrintBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
@@ -74,13 +74,16 @@ public class PrintFragment extends Fragment {
         binding.ivPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrollView view = (ScrollView) binding.scrollView;
-                view.setDrawingCacheEnabled(true);
-                view.buildDrawingCache();
-                Bitmap bitmap = view.getDrawingCache();
+                /*Bitmap bitmap = getBitmapFromView(binding.scrollView, binding.scrollView.getChildAt(0).getHeight(), binding.scrollView.getChildAt(0).getWidth());*/
+                PrintManager printManager = (PrintManager) getActivity().getSystemService(Context.PRINT_SERVICE);
+                String jobName = getActivity().getString(R.string.app_name) +
+                        " Document";
 
-                PrintHelper printHelper = new PrintHelper(getActivity());
-                printHelper.printBitmap("Print", bitmap);
+                printManager.print(jobName, new
+                                PrintDocumentAdapter(getContext(), binding.recyclerViewInvoiceDetails),
+                        null);
+               /* PrintHelper printHelper = new PrintHelper(getActivity());
+                printHelper.printBitmap("Print", bitmap);*/
             }
         });
 
@@ -180,9 +183,8 @@ public class PrintFragment extends Fragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 
@@ -190,4 +192,17 @@ public class PrintFragment extends Fragment {
         InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(getContext(), viewModel, Arrays.asList(invoiceDetailsInfoArray));
         binding.recyclerViewInvoiceDetails.setAdapter(adapter);
     }
+
+    /*private Bitmap getBitmapFromView(View view, int height, int width) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null) {
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(Color.WHITE);
+        }
+        view.draw(canvas);
+        return bitmap;
+    }*/
 }
