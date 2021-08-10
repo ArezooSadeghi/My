@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
-import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerSupportDialogBinding;
+import com.example.sipsupporterapp.databinding.FragmentAddCustomerSupportDialogBinding;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.SupportEventResult;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddEditCustomerSupportDialogFragment extends DialogFragment {
-    private FragmentAddEditCustomerSupportDialogBinding binding;
+    private FragmentAddCustomerSupportDialogBinding binding;
     private CustomerSupportViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey;
@@ -61,7 +61,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(getContext()),
-                R.layout.fragment_add_edit_customer_support_dialog,
+                R.layout.fragment_add_customer_support_dialog,
                 null,
                 false);
 

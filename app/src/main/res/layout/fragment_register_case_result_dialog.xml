@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutDirection="ltr"
         tools:context=".view.dialog.RegisterCaseResultDialogFragment">
 
         <com.jaredrummler.materialspinner.MaterialSpinner
@@ -46,7 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
-                android:textCursorDrawable="@drawable/custom_cursor" />
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textDirection="rtl" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_gray"
+        android:layoutDirection="ltr"
         android:minHeight="300dp"
         tools:context=".view.dialog.CustomerPaymentByCaseDialogFragment">
 

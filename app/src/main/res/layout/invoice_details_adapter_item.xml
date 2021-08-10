@@ -19,7 +19,6 @@
             android:ellipsize="end"
             android:fontFamily="@font/titr"
             android:textColor="@color/black"
-            android:text="sghgjhh"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/container"

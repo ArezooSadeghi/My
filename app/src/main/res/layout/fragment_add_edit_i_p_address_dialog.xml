@@ -61,8 +61,7 @@
                 android:layout_height="match_parent"
                 android:maxLines="1"
                 android:textColor="@color/white"
-                android:textCursorDrawable="@drawable/custom_cursor"
-                android:textDirection="rtl" />
+                android:textCursorDrawable="@drawable/custom_cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,8 +88,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/white"
-                android:textCursorDrawable="@drawable/custom_cursor"
-                android:textDirection="anyRtl" />
+                android:textCursorDrawable="@drawable/custom_cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
