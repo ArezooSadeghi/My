@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
@@ -58,7 +59,7 @@ public class IPAddressListDialogFragment extends DialogFragment {
 
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext(), R.style.CustomAlertDialog)
+                .Builder(getContext())
                 .setView(binding.getRoot())
                 .create();
 
@@ -75,14 +76,12 @@ public class IPAddressListDialogFragment extends DialogFragment {
         return dialog;
     }
 
-
     private void initRecyclerView() {
         binding.recyclerViewIpAddress.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewIpAddress.addItemDecoration(new DividerItemDecoration(
-                binding.recyclerViewIpAddress.getContext(),
-                DividerItemDecoration.VERTICAL));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider));
+        binding.recyclerViewIpAddress.addItemDecoration(dividerItemDecoration);
     }
-
 
     private void setupAdapter() {
         List<ServerData> serverDataList = viewModel.getServerDataList();

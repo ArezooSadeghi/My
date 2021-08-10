@@ -137,6 +137,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             binding.edTextDescription.setSelection(binding.edTextDescription.getText().toString().length());
             binding.btnProductName.setText(customerProductInfo.getProductName());
             binding.edTextInvoicePrice.setText(String.valueOf(customerProductInfo.getInvoicePrice()));
+            binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().toString().length());
 
             if (customerProductInfo.getExpireDate() != 0) {
                 String dateFormat = Converter.dateFormat(String.valueOf(customerProductInfo.getExpireDate()));
