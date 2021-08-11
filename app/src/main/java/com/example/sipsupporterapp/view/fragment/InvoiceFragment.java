@@ -199,7 +199,9 @@ public class InvoiceFragment extends Fragment {
             public void onChanged(InvoiceResult invoiceResult) {
                 if (invoiceResult.getErrorCode().equals("0")) {
                     if (invoiceResult.getInvoices().length == 0) {
-                        addInvoice();
+                        if (customerID > 0) {
+                            addInvoice();
+                        }
                     } else {
                         invoiceID = invoiceResult.getInvoices()[0].getInvoiceID();
                         fetchInvoiceDetails();
