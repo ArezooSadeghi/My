@@ -52,6 +52,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
 
     private int customerSupportID, customerProductID, customerPaymentID, paymentID, numberOfRotate;
     private Uri photoUri;
+    private File photoFile;
     private Bitmap bitmap;
 
     private static final int REQUEST_CODE_TAKE_PHOTO = 0;
@@ -114,7 +115,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
-                .Builder(getContext())
+                .Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
                 .create();
 
@@ -135,24 +136,25 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_TAKE_PHOTO:
-                    if (photoUri != null) {
-                        try {
-                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-                            Glide.with(getContext()).load(bitmap).into(binding.img);
+                    photoUri = FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile);
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+                        binding.ivEmptyGallery.setVisibility(View.GONE);
+                        binding.ivPhoto.setVisibility(View.VISIBLE);
+                        Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
 
-                          /*  if (bitmap.getWidth() > bitmap.getHeight()) {
-                                Matrix matrixOne = new Matrix();
-                                matrixOne.postRotate(-90);
-                                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
-                                Glide.with(getContext()).load(bitmap).into(binding.img);
-                            } else {
-                                Glide.with(getContext()).load(bitmap).into(binding.img);
-                            }*/
-                        } catch (IOException e) {
-                            Log.e(TAG, e.getMessage());
-                        } finally {
-                            getActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        if (bitmap.getWidth() > bitmap.getHeight()) {
+                            Matrix matrixOne = new Matrix();
+                            matrixOne.postRotate(-90);
+                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
+                        } else {
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
                         }
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    } finally {
+                        getActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     }
                     break;
                 case REQUEST_CODE_PICK_PHOTO:
@@ -160,7 +162,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     if (photoUri != null) {
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-                            Glide.with(getContext()).load(bitmap).into(binding.img);
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -177,22 +179,22 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
 
 
     private void handleEvents() {
-        binding.imgMore.setOnClickListener(this);
-        binding.imgRotate.setOnClickListener(this);
-        binding.imgCamera.setOnClickListener(this);
-        binding.imgSend.setOnClickListener(this);
+        binding.fabRotate.setOnClickListener(this);
+        binding.fabCamera.setOnClickListener(this);
+        binding.fabMore.setOnClickListener(this);
+        binding.ivSend.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_more:
+            case R.id.fab_more:
                 Intent starter = new Intent();
                 starter.setType("image/*");
                 starter.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(starter, getString(R.string.select_photo_title)), REQUEST_CODE_PICK_PHOTO);
                 break;
-            case R.id.img_rotate:
+            case R.id.fab_rotate:
                 if (photoUri == null) {
                     handleError(getString(R.string.no_choose_any_file));
                 } else {
@@ -201,43 +203,42 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                             Matrix matrixOne = new Matrix();
                             matrixOne.postRotate(90);
                             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
-                            Glide.with(getContext()).load(bitmap).into(binding.img);
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
                             numberOfRotate++;
                             break;
                         case 1:
                             Matrix matrixTwo = new Matrix();
                             matrixTwo.postRotate(180);
                             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixTwo, true);
-                            Glide.with(getContext()).load(bitmap).into(binding.img);
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
                             numberOfRotate++;
                             break;
                         case 2:
                             Matrix matrixThree = new Matrix();
                             matrixThree.postRotate(270);
                             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixThree, true);
-                            Glide.with(getContext()).load(bitmap).into(binding.img);
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
                             numberOfRotate = 0;
                             break;
                     }
                 }
                 break;
-            case R.id.img_camera:
+            case R.id.fab_camera:
                 if (hasCameraPermission()) {
                     openCamera();
                 } else {
                     requestCameraPermission();
                 }
                 break;
-            case R.id.img_send:
+            case R.id.iv_send:
                 if (photoUri == null) {
                     handleError(getString(R.string.no_choose_any_file));
                 } else {
                     binding.progressBarLoading.setVisibility(View.VISIBLE);
-                    binding.imgMore.setEnabled(false);
-                    binding.imgRotate.setEnabled(false);
-                    binding.imgCamera.setEnabled(false);
-                    binding.imgSend.setEnabled(false);
-                    binding.imgClose.setEnabled(false);
+                    binding.fabMore.setEnabled(false);
+                    binding.fabRotate.setEnabled(false);
+                    binding.fabCamera.setEnabled(false);
+                    binding.ivSend.setEnabled(false);
                     binding.edTextDescription.setEnabled(false);
 
                     String base64 = convertBitmapToBase64();
@@ -263,9 +264,6 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                         }
                     }).start();
                 }
-                break;
-            case R.id.img_close:
-                dismiss();
                 break;
         }
     }
@@ -295,11 +293,10 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
 
     private void handleError(String message) {
         binding.progressBarLoading.setVisibility(View.GONE);
-        binding.imgMore.setEnabled(true);
-        binding.imgRotate.setEnabled(true);
-        binding.imgCamera.setEnabled(true);
-        binding.imgSend.setEnabled(true);
-        binding.imgClose.setEnabled(true);
+        binding.fabMore.setEnabled(true);
+        binding.fabRotate.setEnabled(true);
+        binding.fabCamera.setEnabled(true);
+        binding.ivSend.setEnabled(true);
         binding.edTextDescription.setEnabled(true);
 
         ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
@@ -322,14 +319,13 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 dir.mkdirs();
             }
             String name = "img_" + new Date().getTime() + ".jpg";
-            File photoFile = new File(dir, name);
+            photoFile = new File(dir, name);
             if (photoFile != null) {
-                photoUri = FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile);
                 List<ResolveInfo> activities = getActivity().getPackageManager().queryIntentActivities(starterCamera, PackageManager.MATCH_DEFAULT_ONLY);
                 for (ResolveInfo activity : activities) {
-                    getActivity().grantUriPermission(activity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    getActivity().grantUriPermission(activity.activityInfo.packageName, FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }
-                starterCamera.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                starterCamera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile));
                 startActivityForResult(starterCamera, REQUEST_CODE_TAKE_PHOTO);
             }
         }
@@ -350,12 +346,11 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     viewModel.getRefresh().setValue(attachResult);
 
                     binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                    binding.imgClose.setEnabled(true);
-                    binding.imgSend.setEnabled(true);
-                    binding.imgCamera.setEnabled(true);
+                    binding.ivSend.setEnabled(true);
+                    binding.fabCamera.setEnabled(true);
                     binding.edTextDescription.setEnabled(true);
-                    binding.imgRotate.setEnabled(true);
-                    binding.imgMore.setEnabled(true);
+                    binding.fabRotate.setEnabled(true);
+                    binding.fabMore.setEnabled(true);
 
                     SuccessAttachDialogFragment fragment = SuccessAttachDialogFragment.newInstance(getString(R.string.success_attach_message));
                     fragment.show(getParentFragmentManager(), SuccessAttachDialogFragment.TAG);
@@ -371,12 +366,11 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
             @Override
             public void onChanged(Boolean hideLoading) {
                 binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                binding.imgClose.setEnabled(true);
-                binding.imgSend.setEnabled(true);
-                binding.imgCamera.setEnabled(true);
+                binding.ivSend.setEnabled(true);
+                binding.fabCamera.setEnabled(true);
                 binding.edTextDescription.setEnabled(true);
-                binding.imgRotate.setEnabled(true);
-                binding.imgMore.setEnabled(true);
+                binding.fabRotate.setEnabled(true);
+                binding.fabMore.setEnabled(true);
             }
         });
         viewModel.getAttachAgainClicked().observe(this, new Observer<Boolean>() {
@@ -403,7 +397,8 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     bitmap = null;
                 }
                 System.gc();
-                binding.img.setImageResource(0);
+                binding.ivPhoto.setVisibility(View.GONE);
+                binding.ivEmptyGallery.setVisibility(View.VISIBLE);
                 binding.edTextDescription.setText("");
             }
         });
@@ -420,9 +415,8 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 }

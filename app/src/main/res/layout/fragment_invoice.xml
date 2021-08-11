@@ -10,7 +10,8 @@
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/dark_gray">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -18,119 +19,80 @@
             tools:context=".view.fragment.InvoiceFragment">
 
             <TextView
-                android:id="@+id/txt_lb_invoice_ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:fontFamily="@font/regular"
-                android:text="شماره:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/txt_invoice_ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:fontFamily="@font/yekan"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_lb_invoice_ID"
-                app:layout_constraintEnd_toStartOf="@id/txt_lb_invoice_ID"
-                app:layout_constraintTop_toTopOf="@id/txt_lb_invoice_ID" />
-
-            <TextView
-                android:id="@+id/txt_lb_invoice_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/regular"
-                android:text="تاریخ:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_invoice_ID"
-                app:layout_constraintEnd_toStartOf="@id/txt_invoice_ID"
-                app:layout_constraintTop_toTopOf="@id/txt_invoice_ID" />
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_invoice_date" />
 
             <TextView
                 android:id="@+id/txt_invoice_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:fontFamily="@font/yekan"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_lb_invoice_date"
-                app:layout_constraintEnd_toStartOf="@id/txt_lb_invoice_date"
-                app:layout_constraintTop_toTopOf="@id/txt_lb_invoice_date" />
-
-            <TextView
-                android:id="@+id/txt_lb_customer_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/regular"
-                android:text="نام مشتری:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_lb_invoice_ID" />
+                app:layout_constraintTop_toBottomOf="@id/txt_customer_name" />
 
             <TextView
                 android:id="@+id/txt_customer_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/yekan"
+                android:fontFamily="@font/regular"
                 android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_lb_customer_name"
-                app:layout_constraintEnd_toStartOf="@id/txt_lb_customer_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/txt_lb_customer_name" />
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/description_container"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="توضیحات"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="#696969"
-                app:hintTextColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/txt_lb_customer_name">
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_invoice_ID">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ed_text_description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/custom_cursor"
-                    android:textDirection="rtl" />
+                    android:textDirection="rtl"
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/iv_more"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/ic_more"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/description_container"
-                app:tint="@color/black" />
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/txt_lb_product_ID"
@@ -139,8 +101,8 @@
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/regular"
                 android:text="کد:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_product_ID"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txt_product_ID" />
@@ -152,9 +114,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="4dp"
-                android:fontFamily="@font/yekan"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@id/txt_lb_product_ID"
                 app:layout_constraintTop_toBottomOf="@id/iv_more" />
 
@@ -167,7 +129,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/txt_product_ID"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txt_product_ID"
-                app:tint="@color/black" />
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/txt_lb_product_name"
@@ -176,8 +138,8 @@
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/regular"
                 android:text="نام:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_product_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txt_product_name" />
@@ -192,8 +154,8 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
                 android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@id/txt_lb_product_name"
                 app:layout_constraintTop_toBottomOf="@id/txt_product_ID" />
 
@@ -206,9 +168,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="8dp"
                 android:hint="تعداد"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="#696969"
-                app:hintTextColor="@color/black"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_lb_product_name">
 
@@ -217,9 +179,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/regular"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/custom_cursor"
-                    android:textDirection="rtl" />
+                    android:textDirection="rtl"
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -232,9 +195,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="8dp"
                 android:hint="مبلغ"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="#696969"
-                app:hintTextColor="@color/black"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/QTY_container">
 
@@ -243,9 +206,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/regular"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/custom_cursor"
-                    android:textDirection="rtl" />
+                    android:textDirection="rtl"
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -256,8 +220,8 @@
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/regular"
                 android:text="جمع:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_sum"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txt_sum" />
@@ -272,8 +236,8 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
                 android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@id/txt_lb_sum"
                 app:layout_constraintTop_toBottomOf="@id/unit_price_container" />
 
@@ -286,9 +250,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="8dp"
                 android:hint="توضیحات محصول"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="#696969"
-                app:hintTextColor="@color/black"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_lb_sum">
 
@@ -296,9 +260,10 @@
                     android:id="@+id/ed_text_product_description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textCursorDrawable="@drawable/custom_cursor"
-                    android:textDirection="rtl" />
+                    android:textDirection="rtl"
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -330,11 +295,11 @@
                         android:layout_marginLeft="32dp"
                         android:layout_marginRight="16dp"
                         android:layout_weight="1.5"
-                        android:backgroundTint="#FFBF00"
+                        android:backgroundTint="@color/orange"
                         android:fontFamily="@font/regular"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/txt_lb_sum_price"
@@ -345,7 +310,7 @@
                         android:layout_weight="0.5"
                         android:fontFamily="@font/regular"
                         android:text="جمع کل:"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -363,11 +328,11 @@
                         android:layout_marginLeft="32dp"
                         android:layout_marginRight="16dp"
                         android:layout_weight="1.5"
-                        android:backgroundTint="#FFBF00"
+                        android:backgroundTint="@color/orange"
                         android:fontFamily="@font/regular"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/txt_lb_VAT"
@@ -378,7 +343,7 @@
                         android:layout_weight="0.5"
                         android:fontFamily="@font/regular"
                         android:text="ارزش افزوده:"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@id/btn_VAT"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -399,11 +364,11 @@
                         android:layout_marginLeft="32dp"
                         android:layout_marginRight="16dp"
                         android:layout_weight="1.5"
-                        android:backgroundTint="#FFBF00"
+                        android:backgroundTint="@color/orange"
                         android:fontFamily="@font/regular"
                         android:text="0"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/txt_lb_final_sum_price"
@@ -414,7 +379,7 @@
                         android:layout_weight="0.5"
                         android:fontFamily="@font/regular"
                         android:text="جمع نهایی:"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -427,6 +392,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
+                android:backgroundTint="@color/light_gray"
                 android:src="@drawable/ic_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

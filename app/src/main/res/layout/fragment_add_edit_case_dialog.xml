@@ -128,12 +128,11 @@
             android:id="@+id/txt_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:fontFamily="@font/regular"
             android:text="اشتراک"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/check_box_share"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/check_box_share" />

@@ -9,179 +9,139 @@
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/dark_gray">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txt_lb_sell_invoice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:fontFamily="@font/titr"
-                android:text="فاکتور فروش"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/iv_print"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_print"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
-            <TextView
-                android:id="@+id/txt_lb_customer_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:fontFamily="@font/yekan"
-                android:text="نام مشتری:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_lb_sell_invoice" />
-
-            <TextView
-                android:id="@+id/txt_customer_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:fontFamily="@font/yekan"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_lb_customer_name"
-                app:layout_constraintEnd_toStartOf="@id/txt_lb_customer_name"
-                app:layout_constraintTop_toTopOf="@id/txt_lb_customer_name" />
-
-            <TextView
-                android:id="@+id/txt_lb_invoice_ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:fontFamily="@font/yekan"
-                android:text="شماره:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_lb_customer_name" />
-
-            <TextView
-                android:id="@+id/txt_invoice_ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:fontFamily="@font/yekan"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_lb_invoice_ID"
-                app:layout_constraintEnd_toStartOf="@id/txt_lb_invoice_ID"
-                app:layout_constraintTop_toTopOf="@id/txt_lb_invoice_ID" />
-
-            <TextView
-                android:id="@+id/txt_lb_invoice_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:fontFamily="@font/yekan"
-                android:text="تاریخ:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/txt_invoice_ID"
-                app:layout_constraintTop_toTopOf="@id/txt_invoice_ID" />
-
-            <TextView
-                android:id="@+id/txt_invoice_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:fontFamily="@font/yekan"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toStartOf="@id/txt_lb_invoice_date"
-                app:layout_constraintTop_toTopOf="@id/txt_lb_invoice_date" />
-
-            <TextView
-                android:id="@+id/txt_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:fontFamily="@font/regular"
-                android:text="احتراما بدینوسیله شرح خدمات و کالاهای ارائه شده بحضور شما ارائه می شود"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_invoice_date" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_invoice_details"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:visibility="invisible"
-                app:layout_constraintTop_toBottomOf="@id/txt_description" />
+                android:layout_height="match_parent"
+                android:background="@color/dark_gray">
 
-            <ProgressBar
-                android:id="@+id/progress_bar_loading"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_description" />
+                <TextView
+                    android:id="@+id/txt_lb_sell_invoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="@font/regular"
+                    android:text="فاکتور فروش"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/iv_logo" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="32dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view_invoice_details">
+                <TextView
+                    android:id="@+id/txt_customer_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="@font/regular"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_lb_sell_invoice" />
+
+                <TextView
+                    android:id="@+id/txt_invoice_ID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="@font/regular"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_invoice_date" />
+
+                <TextView
+                    android:id="@+id/txt_invoice_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="@font/regular"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_customer_name" />
+
+                <TextView
+                    android:id="@+id/txt_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="@font/regular"
+                    android:text="احتراما بدینوسیله شرح خدمات و کالاهای ارائه شده بحضور شما ارائه می شود"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_invoice_ID" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toBottomOf="@id/txt_description" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_loading"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_description" />
 
                 <TextView
                     android:id="@+id/txt_final_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:fontFamily="@font/titr"
-                    android:textColor="@color/black"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:fontFamily="@font/regular"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@id/txt_lb_final_sum"
-                    app:layout_constraintEnd_toStartOf="@id/txt_lb_final_sum"
-                    app:layout_constraintTop_toTopOf="@id/txt_lb_final_sum" />
-
-                <TextView
-                    android:id="@+id/txt_lb_final_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/titr"
-                    android:text="جمع نهایی:"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recycler_view_invoice_details" />
+                    app:layout_constraintTop_toBottomOf="@id/recycler_view" />
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/logo"
+                    app:layout_constraintEnd_toStartOf="@id/txt_lb_sell_invoice"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
     </ScrollView>
 

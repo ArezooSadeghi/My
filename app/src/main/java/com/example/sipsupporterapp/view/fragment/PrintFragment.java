@@ -1,29 +1,30 @@
 package com.example.sipsupporterapp.view.fragment;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.print.PrintHelper;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.InvoiceDetailsAdapter;
-import com.example.sipsupporterapp.adapter.PrintDocumentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPrintBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -74,16 +75,12 @@ public class PrintFragment extends Fragment {
         binding.ivPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Bitmap bitmap = getBitmapFromView(binding.scrollView, binding.scrollView.getChildAt(0).getHeight(), binding.scrollView.getChildAt(0).getWidth());*/
-                PrintManager printManager = (PrintManager) getActivity().getSystemService(Context.PRINT_SERVICE);
-                String jobName = getActivity().getString(R.string.app_name) +
-                        " Document";
-
-                printManager.print(jobName, new
-                                PrintDocumentAdapter(getContext(), binding.recyclerViewInvoiceDetails),
-                        null);
-               /* PrintHelper printHelper = new PrintHelper(getActivity());
-                printHelper.printBitmap("Print", bitmap);*/
+                binding.container.setDrawingCacheEnabled(true);
+                binding.container.buildDrawingCache();
+                Bitmap bitmap = binding.container.getDrawingCache();
+                PrintHelper printHelper = new PrintHelper(getActivity());
+                printHelper.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                printHelper.printBitmap("Print", bitmap);
             }
         });
 
@@ -109,9 +106,10 @@ public class PrintFragment extends Fragment {
     }
 
     private void initViews() {
-        binding.recyclerViewInvoiceDetails.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        binding.recyclerViewInvoiceDetails.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     private void fetchInvoiceInfo() {
@@ -130,7 +128,7 @@ public class PrintFragment extends Fragment {
             public void onChanged(InvoiceDetailsResult invoiceDetailsResult) {
                 binding.progressBarLoading.setVisibility(View.INVISIBLE);
                 if (invoiceDetailsResult.getErrorCode().equals("0")) {
-                    binding.recyclerViewInvoiceDetails.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
                     setupAdapter(invoiceDetailsResult.getInvoiceDetails());
 
                     for (int i = 0; i < invoiceDetailsResult.getInvoiceDetails().length; i++) {
@@ -138,9 +136,8 @@ public class PrintFragment extends Fragment {
                         finalSum += sum;
                     }
 
-                    binding.txtLbFinalSum.setVisibility(View.VISIBLE);
                     String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(finalSum);
-                    binding.txtFinalSum.setText(currencyFormat);
+                    binding.txtFinalSum.setText("جمع نهایی: " + currencyFormat);
                 } else if (invoiceDetailsResult.getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
@@ -154,9 +151,9 @@ public class PrintFragment extends Fragment {
             public void onChanged(InvoiceResult invoiceResult) {
                 if (invoiceResult.getErrorCode().equals("0")) {
                     InvoiceResult.InvoiceInfo invoiceInfo = invoiceResult.getInvoices()[0];
-                    binding.txtCustomerName.setText(invoiceInfo.getCustomerName());
-                    binding.txtInvoiceID.setText(String.valueOf(invoiceInfo.getInvoiceID()));
-                    binding.txtInvoiceDate.setText(invoiceInfo.getInvoiceDate());
+                    binding.txtCustomerName.setText("نام مشتری: " + Converter.letterConverter(invoiceInfo.getCustomerName()));
+                    binding.txtInvoiceID.setText("تاریخ: " + invoiceInfo.getInvoiceID());
+                    binding.txtInvoiceDate.setText("شماره: " + invoiceInfo.getInvoiceDate());
                     fetchInvoiceDetails();
                 } else if (invoiceResult.getErrorCode().equals("-9001")) {
                     ejectUser();
@@ -190,19 +187,6 @@ public class PrintFragment extends Fragment {
 
     private void setupAdapter(InvoiceDetailsResult.InvoiceDetailsInfo[] invoiceDetailsInfoArray) {
         InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(getContext(), viewModel, Arrays.asList(invoiceDetailsInfoArray));
-        binding.recyclerViewInvoiceDetails.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
-
-    /*private Bitmap getBitmapFromView(View view, int height, int width) {
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Drawable bgDrawable = view.getBackground();
-        if (bgDrawable != null) {
-            bgDrawable.draw(canvas);
-        } else {
-            canvas.drawColor(Color.WHITE);
-        }
-        view.draw(canvas);
-        return bitmap;
-    }*/
 }

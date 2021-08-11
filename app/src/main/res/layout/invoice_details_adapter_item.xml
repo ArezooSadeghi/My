@@ -10,49 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txt_product_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="8dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/titr"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/container"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:id="@+id/container"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal"
-            android:weightSum="5.5"
+            android:weightSum="6.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/txt_QTY"
+            <ImageView
+                android:id="@+id/iv_more"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_marginLeft="8dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:fontFamily="@font/regular"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:layout_weight="0.5"
+                android:src="@drawable/ic_more"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_product_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <TextView
-                android:id="@+id/txt_unit_price"
+                android:id="@+id/txt_sum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1.5"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
@@ -63,31 +54,42 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/txt_sum"
+                android:id="@+id/txt_unit_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
+                android:layout_marginLeft="4dp"
                 android:layout_weight="1.5"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
-            <ImageView
-                android:id="@+id/iv_more"
+            <TextView
+                android:id="@+id/txt_QTY"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_weight="0.5"
-                android:src="@drawable/ic_more"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_product_name"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black" />
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txt_product_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

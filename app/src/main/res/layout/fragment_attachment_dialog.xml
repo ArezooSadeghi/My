@@ -8,89 +8,108 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="401dp"
-        android:layout_height="721dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layoutDirection="ltr"
+        android:minHeight="400dp"
         tools:context=".view.dialog.AttachmentDialogFragment">
 
-        <ImageView
-            android:id="@+id/img_more"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginBottom="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/more"
-            app:layout_constraintStart_toStartOf="@id/card_view"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
-            app:cardElevation="5dp"
-            app:layout_constraintBottom_toTopOf="@id/ed_text_description"
-            app:layout_constraintEnd_toEndOf="parent"
+        <com.nambimobile.widgets.efab.ExpandableFabLayout
+            android:id="@+id/expandable_fab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_more">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/img"
+            <com.nambimobile.widgets.efab.Overlay
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:background="@drawable/image_view_boarder" />
+                app:overlay_orientation="portrait" />
 
-        </androidx.cardview.widget.CardView>
+            <com.nambimobile.widgets.efab.ExpandableFab
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/light_gray"
+                app:efab_orientation="portrait" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:id="@+id/fab_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/light_gray"
+                android:src="@drawable/ic_camera"
+                app:fab_orientation="portrait" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:id="@+id/fab_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/light_gray"
+                android:src="@drawable/ic_rotate"
+                app:fab_orientation="portrait" />
+
+            <com.nambimobile.widgets.efab.FabOption
+                android:id="@+id/fab_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/light_gray"
+                android:src="@drawable/ic_more"
+                app:fab_orientation="portrait" />
+
+        </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
         <ImageView
-            android:id="@+id/img_send"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/iv_send"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="16dp"
             android:src="@drawable/send"
+            app:layout_constraintBottom_toBottomOf="@id/ed_text_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ed_text_description"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="64dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/black" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_empty_gallery"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/empty_gallery"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/ed_text_description"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/round_edit_text"
             android:hint="توضیحات"
-            android:textColor="@color/black"
+            android:paddingRight="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textDirection="rtl"
-            app:layout_constraintBottom_toBottomOf="@id/img_send"
-            app:layout_constraintEnd_toStartOf="@id/img_send"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_send" />
-
-        <ImageView
-            android:id="@+id/img_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/img_camera"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/camera"
-            app:layout_constraintBottom_toBottomOf="@id/img_more"
-            app:layout_constraintEnd_toEndOf="@id/card_view"
-            app:layout_constraintTop_toTopOf="@id/img_more" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_send"
+            app:layout_constraintStart_toEndOf="@id/expandable_fab_layout" />
 
         <ProgressBar
             android:id="@+id/progress_bar_loading"
@@ -100,18 +119,7 @@
             app:layout_constraintBottom_toTopOf="@id/ed_text_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_view" />
-
-        <ImageView
-            android:id="@+id/img_rotate"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/retry"
-            app:layout_constraintBottom_toBottomOf="@id/img_more"
-            app:layout_constraintEnd_toStartOf="@id/img_camera"
-            app:layout_constraintStart_toEndOf="@id/img_more"
-            app:layout_constraintTop_toTopOf="@id/img_more" />
+            app:layout_constraintTop_toBottomOf="@id/iv_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

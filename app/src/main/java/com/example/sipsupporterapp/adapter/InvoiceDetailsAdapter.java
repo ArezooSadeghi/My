@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.InvoiceDetailsAdapterItemBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
 import com.example.sipsupporterapp.viewmodel.PrintViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -108,7 +109,11 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
         }
 
         public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
-            binding.txtProductName.setText(invoiceDetailsInfo.getProductName());
+            if (invoiceDetailsInfo.getProductName().length() > 5) {
+                binding.txtProductName.setText(Converter.letterConverter(invoiceDetailsInfo.getProductName()).substring(0, 6) + "...");
+            } else {
+                binding.txtProductName.setText(Converter.letterConverter(invoiceDetailsInfo.getProductName()));
+            }
             binding.txtQTY.setText("تعداد:" + invoiceDetailsInfo.getQTY());
             binding.txtUnitPrice.setText("مبلغ واحد:" + getCurrencyFormat(invoiceDetailsInfo.getUnitPrice()));
             binding.txtSumDiscountPrice.setText("جمع تخفیف:" + getCurrencyFormat(invoiceDetailsInfo.getSumDiscountPrice()));

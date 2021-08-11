@@ -2,6 +2,8 @@ package com.example.sipsupporterapp.view.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.dialog.EditInvoiceDetailsDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
@@ -47,7 +50,8 @@ public class InvoiceFragment extends Fragment {
     private InvoiceViewModel viewModel;
     private ServerData serverData;
     private String centerName, userLoginKey, customerName;
-    private int caseID, customerID, invoiceID, invoiceDetailsID;
+    private long cost;
+    private int caseID, customerID, invoiceID, invoiceDetailsID, sum;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,6 +143,28 @@ public class InvoiceFragment extends Fragment {
                 NavHostFragment.findNavController(InvoiceFragment.this).navigate(action);
             }
         });
+
+        binding.edTextQTY.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    int QTY = Integer.valueOf(s.toString());
+                    sum = (int) (QTY * cost);
+                    String currencyFormatOne = NumberFormat.getNumberInstance(Locale.US).format(sum);
+                    binding.txtSum.setText(currencyFormatOne);
+                }
+            }
+        });
     }
 
     private void fetchInvoiceInfoByCaseID() {
@@ -158,9 +184,13 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void initViews(InvoiceResult.InvoiceInfo invoiceInfo) {
-        binding.txtInvoiceID.setText(String.valueOf(invoiceInfo.getInvoiceID()));
-        binding.txtInvoiceDate.setText(invoiceInfo.getInvoiceDate());
-        binding.txtCustomerName.setText(invoiceInfo.getCustomerName());
+        binding.txtInvoiceID.setText("شماره: " + invoiceInfo.getInvoiceID());
+        binding.txtInvoiceDate.setText("تاریخ: " + invoiceInfo.getInvoiceDate());
+        if (invoiceInfo.getCustomerName() != null) {
+            binding.txtCustomerName.setText(Converter.letterConverter("نام مشتری: " + invoiceInfo.getCustomerName()));
+        } else {
+            binding.txtCustomerName.setText("نام مشتری: -");
+        }
     }
 
     private void setupObserver() {
@@ -200,8 +230,9 @@ public class InvoiceFragment extends Fragment {
             @Override
             public void onChanged(ProductResult productResult) {
                 if (productResult.getErrorCode().equals("0")) {
+                    cost = productResult.getProducts()[0].getCost();
                     int QTY = Integer.valueOf(binding.edTextQTY.getText().toString());
-                    int sum = (int) (QTY * productResult.getProducts()[0].getCost());
+                    sum = (int) (QTY * cost);
 
                     String currencyFormatOne = NumberFormat.getNumberInstance(Locale.US).format(sum);
                     binding.txtSum.setText(currencyFormatOne);
