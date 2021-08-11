@@ -160,10 +160,9 @@ public class PhotoGalleryFragment extends Fragment {
             }
         }
 
-        if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-            binding.progressBarLoading.setVisibility(View.INVISIBLE);
-            binding.recyclerViewAttachmentFile.setVisibility(View.VISIBLE);
-        }
+        binding.progressBarLoading.setVisibility(View.GONE);
+        binding.ivEmptyGallery.setVisibility(View.GONE);
+        binding.recyclerView.setVisibility(View.VISIBLE);
 
         setupAdapter();
 
@@ -226,14 +225,14 @@ public class PhotoGalleryFragment extends Fragment {
 
     private void initViews() {
         if (isTablet()) {
-            binding.recyclerViewAttachmentFile.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_TABLET));
+            binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_TABLET));
         } else {
-            binding.recyclerViewAttachmentFile.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_PHONE));
+            binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_PHONE));
         }
     }
 
     private void handleEvents() {
-        binding.fabAddNewFile.setOnClickListener(new View.OnClickListener() {
+        binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AttachmentDialogFragment fragment = AttachmentDialogFragment.newInstance(customerSupportID, customerProductID, customerPaymentID, paymentID);
@@ -333,30 +332,26 @@ public class PhotoGalleryFragment extends Fragment {
         } else {
             adapter.updateFilePathList(newFilePathList);
         }
-        binding.recyclerViewAttachmentFile.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void handleError(String message) {
-        if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-            binding.progressBarLoading.setVisibility(View.INVISIBLE);
-        }
+        binding.progressBarLoading.setVisibility(View.VISIBLE);
         ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void showAttachments(AttachResult attachResult) {
         if (attachResult.getAttachs().length == 0) {
-            if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-                binding.progressBarLoading.setVisibility(View.INVISIBLE);
-            }
+            binding.progressBarLoading.setVisibility(View.GONE);
+            binding.ivEmptyGallery.setVisibility(View.VISIBLE);
         } else {
             for (AttachResult.AttachInfo attachInfo : attachResult.getAttachs()) {
                 String filePath = readFromStorage(attachInfo.getAttachID());
                 if (!filePath.isEmpty()) {
-                    if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-                        binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                        binding.recyclerViewAttachmentFile.setVisibility(View.VISIBLE);
-                    }
+                    binding.progressBarLoading.setVisibility(View.GONE);
+                    binding.ivEmptyGallery.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
                     setupAdapter();
                 } else {
                     attachIDList.add(attachInfo.getAttachID());
@@ -452,17 +447,16 @@ public class PhotoGalleryFragment extends Fragment {
             @Override
             public void onChanged(String filePath) {
                 if (!filePath.isEmpty()) {
-                    binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                    binding.recyclerViewAttachmentFile.setVisibility(View.VISIBLE);
+                    binding.progressBarLoading.setVisibility(View.GONE);
+                    binding.ivEmptyGallery.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
                     setupAdapter();
                 }
                 index++;
                 if (index < attachIDList.size()) {
                     fetchAttachInfo(attachIDList.get(index));
                 } else {
-                    if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
-                        binding.progressBarLoading.setVisibility(View.INVISIBLE);
-                    }
+                    binding.progressBarLoading.setVisibility(View.GONE);
                 }
             }
         });
@@ -523,9 +517,8 @@ public class PhotoGalleryFragment extends Fragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 }
