@@ -5,7 +5,7 @@
     <string name="login">ورود</string>
     <string name="user_name_hint">نام کاربری</string>
     <string name="password_hint">رمز عبور</string>
-    <string name="login_title">App پشتیبانی</string>
+    <string name="login_title">پشتیبانی</string>
     <string name="search_item_title">جستجو</string>
     <string name="center_name_hint">لطفا نام مرکز را وارد کنید</string>
     <string name="cancel">انصراف</string>
