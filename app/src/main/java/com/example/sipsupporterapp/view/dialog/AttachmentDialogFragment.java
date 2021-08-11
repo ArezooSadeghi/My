@@ -138,18 +138,20 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 case REQUEST_CODE_TAKE_PHOTO:
                     photoUri = FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile);
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-                        binding.ivEmptyGallery.setVisibility(View.GONE);
-                        binding.ivPhoto.setVisibility(View.VISIBLE);
-                        Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
+                        if (photoFile != null & photoFile.length() != 0) {
+                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+                            binding.ivEmptyGallery.setVisibility(View.GONE);
+                            binding.ivPhoto.setVisibility(View.VISIBLE);
+                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
 
-                        if (bitmap.getWidth() > bitmap.getHeight()) {
-                            Matrix matrixOne = new Matrix();
-                            matrixOne.postRotate(-90);
-                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
-                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
-                        } else {
-                            Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
+                            if (bitmap.getWidth() > bitmap.getHeight()) {
+                                Matrix matrixOne = new Matrix();
+                                matrixOne.postRotate(-90);
+                                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixOne, true);
+                                Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
+                            } else {
+                                Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
+                            }
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
@@ -195,7 +197,9 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 startActivityForResult(Intent.createChooser(starter, getString(R.string.select_photo_title)), REQUEST_CODE_PICK_PHOTO);
                 break;
             case R.id.fab_rotate:
-                if (photoUri == null) {
+                if (photoFile == null) {
+                    handleError(getString(R.string.no_choose_any_file));
+                } else if (photoFile.length() == 0) {
                     handleError(getString(R.string.no_choose_any_file));
                 } else {
                     switch (numberOfRotate) {
@@ -231,7 +235,9 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 }
                 break;
             case R.id.iv_send:
-                if (photoUri == null) {
+                if (photoFile == null) {
+                    handleError(getString(R.string.no_choose_any_file));
+                } else if (photoFile.length() == 0) {
                     handleError(getString(R.string.no_choose_any_file));
                 } else {
                     binding.progressBarLoading.setVisibility(View.VISIBLE);
@@ -320,12 +326,13 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
             }
             String name = "img_" + new Date().getTime() + ".jpg";
             photoFile = new File(dir, name);
+            photoUri = FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile);
             if (photoFile != null) {
                 List<ResolveInfo> activities = getActivity().getPackageManager().queryIntentActivities(starterCamera, PackageManager.MATCH_DEFAULT_ONLY);
                 for (ResolveInfo activity : activities) {
-                    getActivity().grantUriPermission(activity.activityInfo.packageName, FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    getActivity().grantUriPermission(activity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }
-                starterCamera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getContext(), AUTHORITY, photoFile));
+                starterCamera.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(starterCamera, REQUEST_CODE_TAKE_PHOTO);
             }
         }

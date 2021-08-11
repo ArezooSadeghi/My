@@ -22,7 +22,6 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
     private Context context;
     private LoginViewModel viewModel;
     private List<ServerData> serverDataList;
-    private int lastSelectedPosition = -1;
 
     public IPAddressAdapter(Context context, LoginViewModel viewModel, List<ServerData> serverDataList) {
         this.context = context;
