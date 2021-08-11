@@ -19,8 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.IPAddressAdapter;
 import com.example.sipsupporterapp.databinding.FragmentIPAddressListDialogBinding;
+import com.example.sipsupporterapp.eventbus.DeleteIPAddressEvent;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.viewmodel.LoginViewModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -115,7 +118,7 @@ public class IPAddressListDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getDeleteIPAddressListSingleLiveEvent().observe(this, new Observer<ServerData>() {
+        viewModel.getDeleteClicked().observe(this, new Observer<ServerData>() {
             @Override
             public void onChanged(ServerData serverData) {
                 QuestionDeleteServerDataDialogFragment fragment = QuestionDeleteServerDataDialogFragment.newInstance("آیا می خواهید آدرس مربوطه را حذف کنید؟", serverData);
@@ -128,11 +131,11 @@ public class IPAddressListDialogFragment extends DialogFragment {
             public void onChanged(ServerData serverData) {
                 viewModel.deleteServerData(serverData);
                 setupAdapter();
-                viewModel.getYesDeleteSpinner().setValue(serverData);
+                EventBus.getDefault().post(new DeleteIPAddressEvent(serverData));
             }
         });
 
-        viewModel.getUpdateIPAddressListSingleLiveEvent().observe(this, new Observer<ServerData>() {
+        viewModel.getEditClicked().observe(this, new Observer<ServerData>() {
             @Override
             public void onChanged(ServerData serverData) {
                 String centerName = serverData.getCenterName();

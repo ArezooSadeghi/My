@@ -1,6 +1,9 @@
 package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,9 @@ import com.example.sipsupporterapp.databinding.IpAddressAdapterItemBinding;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.LoginViewModel;
+import com.skydoves.powermenu.OnMenuItemClickListener;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 
 import java.util.List;
 
@@ -44,17 +50,35 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
         ServerData serverData = serverDataList.get(position);
         holder.bindServerData(serverData);
 
-        holder.binding.ivDelete.setOnClickListener(new View.OnClickListener() {
+        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                viewModel.getDeleteIPAddressListSingleLiveEvent().setValue(serverData);
-            }
-        });
+            public void onClick(View view) {
+                PowerMenu powerMenu = new PowerMenu.Builder(context)
+                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
+                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
+                        .setTextColor(Color.parseColor("#000000"))
+                        .setTextGravity(Gravity.RIGHT)
+                        .setIconSize(24)
+                        .setTextSize(12)
+                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                        .build();
 
-        holder.binding.ivEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.getUpdateIPAddressListSingleLiveEvent().setValue(serverData);
+                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                    @Override
+                    public void onItemClick(int position, PowerMenuItem item) {
+                        switch (position) {
+                            case 0:
+                                viewModel.getEditClicked().setValue(serverData);
+                                powerMenu.dismiss();
+                                break;
+                            case 1:
+                                viewModel.getDeleteClicked().setValue(serverData);
+                                powerMenu.dismiss();
+                                break;
+                        }
+                    }
+                });
+                powerMenu.showAsDropDown(view);
             }
         });
     }

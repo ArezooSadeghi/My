@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentLoginBinding;
+import com.example.sipsupporterapp.eventbus.DeleteIPAddressEvent;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.model.UserResult;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -28,6 +29,9 @@ import com.example.sipsupporterapp.view.dialog.IPAddressListDialogFragment;
 import com.example.sipsupporterapp.view.dialog.RequireIPAddressDialogFragment;
 import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -260,23 +264,32 @@ public class LoginFragment extends Fragment {
                 setupSpinner();
             }
         });
+    }
 
-        viewModel.getYesDeleteSpinner().observe(getViewLifecycleOwner(), new Observer<ServerData>() {
-            @Override
-            public void onChanged(ServerData serverData) {
-                if (viewModel.getServerDataList().size() == 0) {
-                    SipSupportSharedPreferences.setCenterName(getContext(), null);
-                    setupSpinner();
-                    fragment.dismiss();
-                    binding.edTextPassword.setText("");
-                    binding.edTextUserName.setText("");
-                    RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
-                    fragment.show(getChildFragmentManager(), RequireIPAddressDialogFragment.TAG);
-                } else {
-                    SipSupportSharedPreferences.setCenterName(getContext(), null);
-                    setupSpinner();
-                }
-            }
-        });
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getDeleteIPAddressEvent(DeleteIPAddressEvent event) {
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        setupSpinner();
+        if (viewModel.getServerDataList().size() == 0) {
+            SipSupportSharedPreferences.setCenterName(getContext(), null);
+            setupSpinner();
+            fragment.dismiss();
+            binding.edTextPassword.setText("");
+            binding.edTextUserName.setText("");
+            RequireIPAddressDialogFragment fragment = RequireIPAddressDialogFragment.newInstance();
+            fragment.show(getChildFragmentManager(), RequireIPAddressDialogFragment.TAG);
+        }
     }
 }

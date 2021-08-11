@@ -19,10 +19,9 @@ public class LoginViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> insertSpinnerSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> insertIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<ServerData> deleteIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<ServerData> updateIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<ServerData> deleteClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<ServerData> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<UserResult> userResultSingleLiveEvent;
-    private SingleLiveEvent<ServerData> yesDeleteSpinner = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> yesDeleteIPAddressList = new SingleLiveEvent<>();
 
     public LoginViewModel(@NonNull Application application) {
@@ -55,20 +54,16 @@ public class LoginViewModel extends AndroidViewModel {
         return insertIPAddressListSingleLiveEvent;
     }
 
-    public SingleLiveEvent<ServerData> getDeleteIPAddressListSingleLiveEvent() {
-        return deleteIPAddressListSingleLiveEvent;
+    public SingleLiveEvent<ServerData> getDeleteClicked() {
+        return deleteClicked;
     }
 
-    public SingleLiveEvent<ServerData> getUpdateIPAddressListSingleLiveEvent() {
-        return updateIPAddressListSingleLiveEvent;
+    public SingleLiveEvent<ServerData> getEditClicked() {
+        return editClicked;
     }
 
     public SingleLiveEvent<UserResult> getUserResultSingleLiveEvent() {
         return userResultSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<ServerData> getYesDeleteSpinner() {
-        return yesDeleteSpinner;
     }
 
     public SingleLiveEvent<ServerData> getYesDeleteIPAddressList() {
