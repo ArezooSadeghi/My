@@ -76,7 +76,7 @@
                     android:layout_height="40dp"
                     android:layout_marginRight="8dp"
                     android:padding="10dp"
-                    android:src="@drawable/badge"
+                    android:src="@drawable/comment"
                     android:visibility="@{caseInfo.commentCount != 0 ? View.VISIBLE : View.GONE}"
                     app:ibv_badgeLimitValue="false"
                     app:ibv_badgeTextColor="@color/white"

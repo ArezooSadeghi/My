@@ -94,7 +94,6 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         caseID = getArguments().getInt(ARGS_CASE_ID);
         caseTypeID = getArguments().getInt(ARGS_CASE_TYPE_ID);
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
-
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         serverData = viewModel.getServerData(centerName);
@@ -102,9 +101,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
 
     private void initViews() {
         binding.edTextDescription.setText(caseInfo.getDescription());
-
         binding.checkBoxShare.setChecked(caseInfo.isShare());
-
         switch (caseInfo.getPriority()) {
             case 0:
                 binding.radioBtnLow.setChecked(true);
@@ -142,9 +139,8 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 

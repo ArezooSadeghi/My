@@ -131,7 +131,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
                         .addItem(new PowerMenuItem("comment", R.drawable.comment))
                         .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
                         .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .addItem(new PowerMenuItem("پایان کار", R.drawable.case_finish))
+                        .addItem(new PowerMenuItem("پایان کار", R.drawable.finish))
                         .addItem(new PowerMenuItem("مشاهده", R.drawable.magnifier))
                         .addItem(new PowerMenuItem("ثبت مبالغ واریزی", R.drawable.payment))
                         .addItem(new PowerMenuItem("محصولات این case"))
