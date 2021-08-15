@@ -4,6 +4,12 @@
 
     <data>
 
+        <variable
+            name="customerInfo"
+            type="com.example.sipsupporterapp.model.CustomerResult.CustomerInfo" />
+
+        <import type="android.view.View" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +25,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/yekan"
+            android:text="@{customerInfo.customerID + ``}"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +42,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
+            android:text="@{customerInfo.customerName}"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/txt_city"
@@ -50,9 +58,10 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/regular"
+            android:text="@{customerInfo.city}"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="@{!customerInfo.city.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -63,9 +72,10 @@
             android:layout_marginLeft="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/yekan"
+            android:text="@{customerInfo.lastSeen}"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="@{!customerInfo.lastSeen.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

@@ -130,7 +130,7 @@ public class CustomerPaymentFragment extends Fragment {
 
     private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
         binding.txtEmpty.setVisibility(customerPaymentInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), viewModel, Arrays.asList(customerPaymentInfoArray));
+        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(viewModel, Arrays.asList(customerPaymentInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 

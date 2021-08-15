@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class ProductResult {
-
     private String error;
     private String errorCode;
     private ProductInfo[] products;
@@ -31,7 +30,6 @@ public class ProductResult {
     }
 
     public class ProductInfo {
-
         private int productID;
         private int productGroupID;
         private int row;

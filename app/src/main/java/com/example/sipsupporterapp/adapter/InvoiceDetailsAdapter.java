@@ -15,16 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.InvoiceDetailsAdapterItemBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
 import com.example.sipsupporterapp.viewmodel.PrintViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAdapter.InvoiceDetailsHolder> {
     private Context context;
@@ -32,14 +29,12 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
     private PrintViewModel printViewModel;
     private List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList;
 
-    public InvoiceDetailsAdapter(Context context, InvoiceViewModel viewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
-        this.context = context;
+    public InvoiceDetailsAdapter(InvoiceViewModel viewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
         this.viewModel = viewModel;
         this.invoiceDetailsInfoList = invoiceDetailsInfoList;
     }
 
-    public InvoiceDetailsAdapter(Context context, PrintViewModel printViewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
-        this.context = context;
+    public InvoiceDetailsAdapter(PrintViewModel printViewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
         this.printViewModel = printViewModel;
         this.invoiceDetailsInfoList = invoiceDetailsInfoList;
     }
@@ -47,6 +42,7 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
     @NonNull
     @Override
     public InvoiceDetailsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new InvoiceDetailsHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.invoice_details_adapter_item,
@@ -109,21 +105,7 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
         }
 
         public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
-            if (invoiceDetailsInfo.getProductName().length() > 5) {
-                binding.txtProductName.setText(Converter.letterConverter(invoiceDetailsInfo.getProductName()).substring(0, 6) + "...");
-            } else {
-                binding.txtProductName.setText(Converter.letterConverter(invoiceDetailsInfo.getProductName()));
-            }
-            binding.txtQTY.setText("تعداد:" + invoiceDetailsInfo.getQTY());
-            binding.txtUnitPrice.setText("مبلغ واحد:" + getCurrencyFormat(invoiceDetailsInfo.getUnitPrice()));
-            binding.txtSumDiscountPrice.setText("جمع تخفیف:" + getCurrencyFormat(invoiceDetailsInfo.getSumDiscountPrice()));
-
-            int sum = ((invoiceDetailsInfo.getQTY() * invoiceDetailsInfo.getUnitPrice()) - invoiceDetailsInfo.getSumDiscountPrice());
-            binding.txtSum.setText("جمع:" + getCurrencyFormat(sum));
-        }
-
-        public String getCurrencyFormat(int currency) {
-            return NumberFormat.getNumberInstance(Locale.US).format(currency);
+            binding.setInvoiceDetailsInfo(invoiceDetailsInfo);
         }
     }
 }

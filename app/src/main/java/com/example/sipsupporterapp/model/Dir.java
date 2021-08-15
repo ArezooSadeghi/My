@@ -5,7 +5,6 @@ import com.example.sipsupporterapp.R;
 import tellh.com.recyclertreeview_lib.LayoutItemType;
 
 public class Dir implements LayoutItemType {
-
     private String dirName;
 
     public Dir(String dirName) {

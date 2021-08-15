@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class AssignResult {
-
     private String errorCode;
     private String error;
     private AssignInfo[] assigns;
@@ -31,7 +30,6 @@ public class AssignResult {
     }
 
     public class AssignInfo {
-
         private int assignID;
         private int caseID;
         private int caseProductID;

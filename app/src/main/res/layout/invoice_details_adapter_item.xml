@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="invoiceDetailsInfo"
+            type="com.example.sipsupporterapp.model.InvoiceDetailsResult.InvoiceDetailsInfo" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +41,7 @@
 
             <TextView
                 android:id="@+id/txt_sum"
+                sum="@{invoiceDetailsInfo}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
@@ -48,6 +53,8 @@
 
             <TextView
                 android:id="@+id/txt_sum_discount_price"
+                currencyFormat="@{invoiceDetailsInfo.sumDiscountPrice}"
+                suffix="@{`جمع تخفیف:`}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -59,6 +66,8 @@
 
             <TextView
                 android:id="@+id/txt_unit_price"
+                currencyFormat="@{invoiceDetailsInfo.unitPrice}"
+                suffix="@{`مبلغ واحد:`}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -76,6 +85,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
+                android:text="@{`تعداد:` + invoiceDetailsInfo.QTY}"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -88,6 +98,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
+                android:text="@{invoiceDetailsInfo.productName.length() > 5 ? invoiceDetailsInfo.productName.substring(0, 6) + `...` : invoiceDetailsInfo.productName}"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 

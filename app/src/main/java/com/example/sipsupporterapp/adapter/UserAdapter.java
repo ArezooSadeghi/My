@@ -19,14 +19,12 @@ import com.example.sipsupporterapp.viewmodel.UserViewModel;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersHolder> {
-
     private Context context;
     private UserViewModel viewModel;
     private List<CustomerUserResult.CustomerUserInfo> customerUserInfoList;
     private String _date;
 
-    public UserAdapter(Context context, UserViewModel viewModel, List<CustomerUserResult.CustomerUserInfo> customerUserInfoList, String _date) {
-        this.context = context;
+    public UserAdapter(UserViewModel viewModel, List<CustomerUserResult.CustomerUserInfo> customerUserInfoList, String _date) {
         this.viewModel = viewModel;
         this.customerUserInfoList = customerUserInfoList;
         this._date = _date;
@@ -35,6 +33,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
     @NonNull
     @Override
     public CustomerUsersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new CustomerUsersHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.user_adapter_item,
@@ -79,10 +78,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerUserResult.CustomerUserInfo info) {
-            String userName = Converter.letterConverter(info.getUserName());
-            binding.txtCustomerUserName.setText(userName);
-            binding.txtLastSeen.setText(info.getLastSeen());
+        public void bindCustomerSupportInfo(CustomerUserResult.CustomerUserInfo customerUserInfo) {
+            binding.setCustomerUserInfo(customerUserInfo);
         }
     }
 }

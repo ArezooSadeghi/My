@@ -1,7 +1,13 @@
 package com.example.sipsupporterapp.model;
 
-public class CustomerProductResult {
+import android.widget.TextView;
 
+import androidx.databinding.BindingAdapter;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class CustomerProductResult {
     private String error;
     private String errorCode;
     private CustomerProductInfo[] customerProducts;
@@ -30,8 +36,7 @@ public class CustomerProductResult {
         this.customerProducts = customerProducts;
     }
 
-    public class CustomerProductInfo {
-
+    public static class CustomerProductInfo {
         private int customerProductID;
         private int customerID;
         private int productID;
@@ -202,6 +207,12 @@ public class CustomerProductResult {
 
         public void setInvoicePaymentUserFullName(String invoicePaymentUserFullName) {
             this.invoicePaymentUserFullName = invoicePaymentUserFullName;
+        }
+
+        @BindingAdapter({"currencyFormat"})
+        public static void setCurrencyFormat(TextView textView, long invoicePrice) {
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(invoicePrice);
+            textView.setText(currencyFormat + "تومان");
         }
     }
 }

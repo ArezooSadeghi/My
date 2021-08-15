@@ -127,7 +127,7 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
             binding.txtEmpty.setVisibility(View.VISIBLE);
         } else {
             binding.txtEmpty.setVisibility(View.GONE);
-            CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(getContext(), Arrays.asList(customerPaymentInfoArray));
+            CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(Arrays.asList(customerPaymentInfoArray));
             binding.recyclerView.setAdapter(adapter);
         }
     }

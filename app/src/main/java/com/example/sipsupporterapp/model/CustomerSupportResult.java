@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class CustomerSupportResult {
-
     private String error;
     private String errorCode;
     private CustomerSupportInfo[] customerSupports;
@@ -31,7 +30,6 @@ public class CustomerSupportResult {
     }
 
     public class CustomerSupportInfo {
-
         private int customerSupportID;
         private int supportEventID;
         private int customerID;

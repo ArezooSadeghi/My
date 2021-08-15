@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="caseProductInfo"
+            type="com.example.sipsupporterapp.model.CaseProductResult.CaseProductInfo" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,9 +20,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
+            android:checked="@{caseProductInfo.selected}"
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
+            android:text="@{caseProductInfo.productName}"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"

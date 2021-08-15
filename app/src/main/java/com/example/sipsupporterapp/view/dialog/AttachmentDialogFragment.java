@@ -164,6 +164,8 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     if (photoUri != null) {
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+                            binding.ivEmptyGallery.setVisibility(View.GONE);
+                            binding.ivPhoto.setVisibility(View.VISIBLE);
                             Glide.with(getContext()).load(bitmap).into(binding.ivPhoto);
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage());

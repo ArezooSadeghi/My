@@ -15,36 +15,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerPaymentAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPaymentAdapter.CustomerPaymentInfoHolder> {
-
     private Context context;
     private CustomerPaymentViewModel viewModel;
     private List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList;
 
-    public CustomerPaymentAdapter(Context context, CustomerPaymentViewModel viewModel, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
-        this.context = context;
+    public CustomerPaymentAdapter(CustomerPaymentViewModel viewModel, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
         this.viewModel = viewModel;
         this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
-    public CustomerPaymentAdapter(Context context, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
-        this.context = context;
+    public CustomerPaymentAdapter(List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
         this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
     @NonNull
     @Override
     public CustomerPaymentInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new CustomerPaymentInfoHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.customer_payment_adapter_item,
@@ -109,15 +104,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
         }
 
         public void bindCustomerPaymentInfo(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-            String bankAccountName = Converter.letterConverter(customerPaymentInfo.getBankAccountName());
-            binding.txtBankAccountName.setText(bankAccountName);
-            binding.txtBankAccountNo.setText(customerPaymentInfo.getBankAccountNO());
-            String bankName = Converter.letterConverter(customerPaymentInfo.getBankName());
-            binding.txtBankName.setText(bankName);
-            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
-            binding.txtPrice.setText(currencyFormat + "تومان");
-            String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
-            binding.txtDatePayment.setText(dateFormat);
+            binding.setCustomerPaymentInfo(customerPaymentInfo);
         }
     }
 }

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.PaymentAdapterItemBinding;
 import com.example.sipsupporterapp.model.PaymentResult;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -24,13 +23,11 @@ import com.skydoves.powermenu.PowerMenuItem;
 import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentHolder> {
-
     private Context context;
     private PaymentViewModel viewModel;
     private List<PaymentResult.PaymentInfo> paymentInfoList;
 
-    public PaymentAdapter(Context context, PaymentViewModel viewModel, List<PaymentResult.PaymentInfo> paymentInfoList) {
-        this.context = context;
+    public PaymentAdapter(PaymentViewModel viewModel, List<PaymentResult.PaymentInfo> paymentInfoList) {
         this.viewModel = viewModel;
         this.paymentInfoList = paymentInfoList;
     }
@@ -38,6 +35,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
     @NonNull
     @Override
     public PaymentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new PaymentHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.payment_adapter_item,
@@ -101,19 +99,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
             this.binding = binding;
         }
 
-        public void bindPaymentInfo(PaymentResult.PaymentInfo info) {
-            String paymentSubject = Converter.letterConverter(info.getPaymentSubject());
-            binding.txtPaymentSubject.setText(paymentSubject);
-
-            if (!info.getDescription().isEmpty()) {
-                binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.letterConverter(info.getDescription());
-                binding.txtDescription.setText(description);
-            }
-
-            String dateFormat = Converter.dateFormat(String.valueOf(info.getDatePayment()));
-            binding.txtDatePayment.setText(dateFormat);
-
+        public void bindPaymentInfo(PaymentResult.PaymentInfo paymentInfo) {
+            binding.setPaymentInfo(paymentInfo);
         }
     }
 }

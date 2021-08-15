@@ -15,24 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerProductAdapeterItemBinding;
 import com.example.sipsupporterapp.model.CustomerProductResult;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
 public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProductAdapter.ProductsHolder> {
-
     private Context context;
     private CustomerProductViewModel viewModel;
     private List<CustomerProductResult.CustomerProductInfo> customerProductInfoList;
 
-    public CustomerProductAdapter(Context context, CustomerProductViewModel viewModel, List<CustomerProductResult.CustomerProductInfo> customerProductInfoList) {
-        this.context = context;
+    public CustomerProductAdapter(CustomerProductViewModel viewModel, List<CustomerProductResult.CustomerProductInfo> customerProductInfoList) {
         this.viewModel = viewModel;
         this.customerProductInfoList = customerProductInfoList;
     }
@@ -40,6 +35,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
     @NonNull
     @Override
     public ProductsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new ProductsHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.customer_product_adapeter_item,
@@ -104,22 +100,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
         }
 
         public void bindCustomerProducts(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-            String productName = Converter.letterConverter(customerProductInfo.getProductName());
-            binding.txtProductName.setText(productName);
-
-            if (!customerProductInfo.getDescription().isEmpty()) {
-                binding.txtDescription.setVisibility(View.VISIBLE);
-                String description = Converter.letterConverter(customerProductInfo.getDescription());
-                binding.txtDescription.setText(description);
-            }
-
-            String userFullName = Converter.letterConverter(customerProductInfo.getUserFullName());
-            binding.txtUserName.setText(userFullName);
-            NumberFormat formatter = new DecimalFormat("#,###");
-            String formattedNumber = formatter.format(customerProductInfo.getInvoicePrice());
-            binding.txtInvoicePrice.setText(formattedNumber + "تومان");
-            binding.checkBoxFinish.setChecked(customerProductInfo.isFinish());
-            binding.checkBoxInvoicePayment.setChecked(customerProductInfo.isInvoicePayment());
+            binding.setCustomerProductInfo(customerProductInfo);
         }
     }
 }

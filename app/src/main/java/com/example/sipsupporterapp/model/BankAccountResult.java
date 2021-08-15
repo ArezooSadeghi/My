@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class BankAccountResult {
-
     private String errorCode;
     private String error;
     private BankAccountInfo[] bankAccounts;
@@ -31,7 +30,6 @@ public class BankAccountResult {
     }
 
     public class BankAccountInfo {
-
         private int bankAccountID;
         private int userID;
         private long balance;

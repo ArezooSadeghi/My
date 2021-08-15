@@ -158,7 +158,7 @@ public class CommentDialogFragment extends DialogFragment {
 
     private void setupAdapter(CommentResult.CommentInfo[] commentInfoArray) {
         binding.txtEmpty.setVisibility(commentInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        CommentAdapter adapter = new CommentAdapter(getContext(), viewModel, Arrays.asList(commentInfoArray));
+        CommentAdapter adapter = new CommentAdapter(viewModel, Arrays.asList(commentInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 

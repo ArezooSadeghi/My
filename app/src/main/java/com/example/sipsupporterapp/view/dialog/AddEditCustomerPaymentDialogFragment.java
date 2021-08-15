@@ -241,7 +241,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 } else if (price.isEmpty() || Long.valueOf(price) == 0) {
                     handleError(getString(R.string.empty_zero_price_message));
                 } else {
-                    CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult().new CustomerPaymentInfo();
+                    CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult.CustomerPaymentInfo();
                     String description = binding.edTextDescription.getText().toString();
                     customerPaymentInfo.setDescription(description);
                     customerPaymentInfo.setPrice(Long.valueOf(price));

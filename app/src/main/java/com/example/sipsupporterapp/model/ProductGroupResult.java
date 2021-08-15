@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class ProductGroupResult {
-
     private String errorCode;
     private String error;
     private ProductGroupInfo[] productGroups;
@@ -29,8 +28,8 @@ public class ProductGroupResult {
     public void setProductGroups(ProductGroupInfo[] productGroups) {
         this.productGroups = productGroups;
     }
-    public class ProductGroupInfo {
 
+    public class ProductGroupInfo {
         private int productGroupID;
         private int userID;
         private int parentID;

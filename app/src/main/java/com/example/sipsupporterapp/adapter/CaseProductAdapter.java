@@ -22,8 +22,7 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
     private List<CaseProductResult.CaseProductInfo> caseProductInfoList;
     private boolean flag;
 
-    public CaseProductAdapter(Context context, CaseProductViewModel viewModel, List<CaseProductResult.CaseProductInfo> caseProductInfoList, boolean flag) {
-        this.context = context;
+    public CaseProductAdapter(CaseProductViewModel viewModel, List<CaseProductResult.CaseProductInfo> caseProductInfoList, boolean flag) {
         this.viewModel = viewModel;
         this.caseProductInfoList = caseProductInfoList;
         this.flag = flag;
@@ -32,6 +31,7 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
     @NonNull
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new ProductHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.case_product_adapter_item,
@@ -79,8 +79,7 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
         }
 
         public void bindCaseProductInfo(CaseProductResult.CaseProductInfo caseProductInfo) {
-            binding.checkBoxProductName.setText(caseProductInfo.getProductName());
-            binding.checkBoxProductName.setChecked(caseProductInfo.isSelected());
+            binding.setCaseProductInfo(caseProductInfo);
         }
     }
 }

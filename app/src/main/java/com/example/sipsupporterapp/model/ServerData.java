@@ -3,18 +3,18 @@ package com.example.sipsupporterapp.model;
 import java.io.Serializable;
 
 public class ServerData implements Serializable {
-
     private String centerName;
     private String ipAddress;
     private String port;
+
+    public ServerData() {
+
+    }
 
     public ServerData(String centerName, String ipAddress, String port) {
         this.centerName = centerName;
         this.ipAddress = ipAddress;
         this.port = port;
-    }
-
-    public ServerData() {
     }
 
     public String getCenterName() {

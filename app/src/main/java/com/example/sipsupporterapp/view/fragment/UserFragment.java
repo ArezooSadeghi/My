@@ -137,7 +137,7 @@ public class UserFragment extends Fragment {
 
     private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
         binding.txtEmpty.setVisibility(customerUserInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        UserAdapter adapter = new UserAdapter(getContext(), viewModel, Arrays.asList(customerUserInfoArray), date);
+        UserAdapter adapter = new UserAdapter(viewModel, Arrays.asList(customerUserInfoArray), date);
         binding.recyclerView.setAdapter(adapter);
     }
 

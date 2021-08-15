@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class UserResult {
-
     private String errorCode;
     private String error;
     private UserInfo[] users;
@@ -31,7 +30,6 @@ public class UserResult {
     }
 
     public class UserInfo {
-
         private int userID;
         private boolean disable;
         private String userFullName;
@@ -71,7 +69,6 @@ public class UserResult {
     }
 
     public class UserLoginParameter {
-
         private String userName;
         private String password;
 

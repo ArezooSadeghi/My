@@ -27,8 +27,7 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
     private AssignViewModel viewModel;
     private List<AssignResult.AssignInfo> assignInfoList;
 
-    public AssignAdapter(Context context, AssignViewModel viewModel, List<AssignResult.AssignInfo> assignInfoList) {
-        this.context = context;
+    public AssignAdapter(AssignViewModel viewModel, List<AssignResult.AssignInfo> assignInfoList) {
         this.viewModel = viewModel;
         this.assignInfoList = assignInfoList;
     }
@@ -36,6 +35,7 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
     @NonNull
     @Override
     public AssignHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new AssignHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.assign_adapter_item,
@@ -95,22 +95,11 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
 
         public AssignHolder(AssignAdapterItemBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
         public void bindAssignInfo(AssignResult.AssignInfo assignInfo) {
-            binding.txtAssignUserFullName.setText(assignInfo.getAssignUserFullName());
-            binding.txtDescription.setText(assignInfo.getDescription());
-            if (assignInfo.isFinish()) {
-                binding.checkBoxFinish.setChecked(true);
-            }
-            if (assignInfo.isSeen()) {
-                binding.checkBoxSeen.setChecked(true);
-            }
-            if (assignInfo.isSeenAssigner()) {
-                binding.checkBoxSeenAssigner.setChecked(true);
-            }
+            binding.setAssignInfo(assignInfo);
         }
     }
 }

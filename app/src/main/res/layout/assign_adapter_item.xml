@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="assignInfo"
+            type="com.example.sipsupporterapp.model.AssignResult.AssignInfo" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +24,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/yekan"
             android:maxLines="1"
+            android:text="@{assignInfo.assignUserFullName}"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +39,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:fontFamily="@font/regular"
+            android:text="@{assignInfo.description}"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +83,8 @@
                 <CheckBox
                     android:id="@+id/check_box_seen"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:checked="@{assignInfo.seen}" />
 
             </LinearLayout>
 
@@ -97,7 +104,8 @@
                 <CheckBox
                     android:id="@+id/check_box_finish"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:checked="@{assignInfo.finish}" />
 
             </LinearLayout>
 
@@ -117,7 +125,8 @@
                 <CheckBox
                     android:id="@+id/check_box_seen_assigner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:checked="@{assignInfo.seenAssigner}" />
 
             </LinearLayout>
 

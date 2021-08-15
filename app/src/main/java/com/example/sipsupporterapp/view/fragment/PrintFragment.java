@@ -3,7 +3,6 @@ package com.example.sipsupporterapp.view.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,7 +186,7 @@ public class PrintFragment extends Fragment {
     }
 
     private void setupAdapter(InvoiceDetailsResult.InvoiceDetailsInfo[] invoiceDetailsInfoArray) {
-        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(getContext(), viewModel, Arrays.asList(invoiceDetailsInfoArray));
+        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(viewModel, Arrays.asList(invoiceDetailsInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 }

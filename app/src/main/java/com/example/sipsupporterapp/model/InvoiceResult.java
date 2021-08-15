@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class InvoiceResult {
-
     private String errorCode;
     private String error;
     private InvoiceInfo[] invoices;
@@ -31,7 +30,6 @@ public class InvoiceResult {
     }
 
     public class InvoiceInfo {
-
         private int invoiceID;
         private int customerID;
         private int caseID;

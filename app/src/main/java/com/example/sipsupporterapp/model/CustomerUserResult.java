@@ -30,7 +30,6 @@ public class CustomerUserResult {
     }
 
     public class CustomerUserInfo {
-
         private int customerUserID;
         private int customerID;
         private int userID;

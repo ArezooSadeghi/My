@@ -146,7 +146,7 @@ public class AssignDialogFragment extends DialogFragment {
 
     private void setupAdapter(AssignResult.AssignInfo[] assignInfoArray) {
         binding.txtEmpty.setVisibility(assignInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        AssignAdapter adapter = new AssignAdapter(getContext(), viewModel, Arrays.asList(assignInfoArray));
+        AssignAdapter adapter = new AssignAdapter(viewModel, Arrays.asList(assignInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 

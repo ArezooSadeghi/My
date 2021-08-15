@@ -109,7 +109,7 @@ public class CustomerSupportFragment extends Fragment {
 
     private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
         binding.txtEmpty.setVisibility(customerSupportInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        CustomerSupportAdapter adapter = new CustomerSupportAdapter(getContext(), viewModel, Arrays.asList(customerSupportInfoArray));
+        CustomerSupportAdapter adapter = new CustomerSupportAdapter(viewModel, Arrays.asList(customerSupportInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 

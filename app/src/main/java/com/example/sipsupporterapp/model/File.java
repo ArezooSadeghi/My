@@ -5,7 +5,6 @@ import com.example.sipsupporterapp.R;
 import tellh.com.recyclertreeview_lib.LayoutItemType;
 
 public class File implements LayoutItemType {
-
     private String fileName;
 
     public File(String fileName) {

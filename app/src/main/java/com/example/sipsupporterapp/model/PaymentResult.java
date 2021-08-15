@@ -1,7 +1,12 @@
 package com.example.sipsupporterapp.model;
 
-public class PaymentResult {
+import android.widget.TextView;
 
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
+public class PaymentResult {
     private String error;
     private String errorCode;
     private PaymentInfo[] payments;
@@ -30,8 +35,7 @@ public class PaymentResult {
         this.payments = payments;
     }
 
-    public class PaymentInfo {
-
+    public static class PaymentInfo {
         private int paymentID;
         private int bankAccountID;
         private int paymentSubjectID;
@@ -157,6 +161,12 @@ public class PaymentResult {
 
         public void setUserFullName(String userFullName) {
             this.userFullName = userFullName;
+        }
+
+        @BindingAdapter({"dateFormat"})
+        public static void setDateFormat(TextView textView, int datePayment) {
+            String dateFormat = Converter.dateFormat(String.valueOf(datePayment));
+            textView.setText(dateFormat);
         }
     }
 }

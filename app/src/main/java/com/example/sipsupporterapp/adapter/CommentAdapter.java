@@ -27,8 +27,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     private CommentViewModel viewModel;
     private List<CommentResult.CommentInfo> commentInfoList;
 
-    public CommentAdapter(Context context, CommentViewModel viewModel, List<CommentResult.CommentInfo> commentInfoList) {
-        this.context = context;
+    public CommentAdapter(CommentViewModel viewModel, List<CommentResult.CommentInfo> commentInfoList) {
         this.viewModel = viewModel;
         this.commentInfoList = commentInfoList;
     }
@@ -36,6 +35,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     @NonNull
     @Override
     public CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new CommentHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.comment_adapter_item,
@@ -89,13 +89,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
         public CommentHolder(CommentAdapterItemBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
         public void bindCommentInfo(CommentResult.CommentInfo commentInfo) {
-            binding.txtUserFullName.setText(commentInfo.getUserFullName());
-            binding.txtComment.setText(commentInfo.getComment());
+            binding.setCommentInfo(commentInfo);
         }
     }
 }

@@ -1,7 +1,13 @@
 package com.example.sipsupporterapp.model;
 
-public class InvoiceDetailsResult {
+import android.widget.TextView;
 
+import androidx.databinding.BindingAdapter;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class InvoiceDetailsResult {
     private String errorCode;
     private String error;
     private InvoiceDetailsInfo[] invoiceDetails;
@@ -30,8 +36,7 @@ public class InvoiceDetailsResult {
         this.invoiceDetails = invoiceDetails;
     }
 
-    public class InvoiceDetailsInfo {
-
+    public static class InvoiceDetailsInfo {
         private int invoiceDetailsID;
         private int invoiceID;
         private int productID;
@@ -130,6 +135,19 @@ public class InvoiceDetailsResult {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        @BindingAdapter(value = {"currencyFormat", "suffix"})
+        public static void setCurrencyFormat(TextView textView, int price, String suffix) {
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(price);
+            textView.setText(suffix + currencyFormat);
+        }
+
+        @BindingAdapter({"sum"})
+        public static void calculateSum(TextView textView, InvoiceDetailsInfo invoiceDetailsInfo) {
+            int sum = ((invoiceDetailsInfo.getQTY() * invoiceDetailsInfo.getUnitPrice()) - invoiceDetailsInfo.getSumDiscountPrice());
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(sum);
+            textView.setText("جمع:" + currencyFormat);
         }
     }
 }

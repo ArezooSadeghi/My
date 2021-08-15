@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class SupportEventResult {
-
     private String error;
     private String errorCode;
     private SupportEventInfo[] supportEvents;
@@ -29,8 +28,8 @@ public class SupportEventResult {
     public void setSupportEvents(SupportEventInfo[] supportEvents) {
         this.supportEvents = supportEvents;
     }
-    public class SupportEventInfo {
 
+    public class SupportEventInfo {
         private int supportEventID;
         private String supportEvent;
 

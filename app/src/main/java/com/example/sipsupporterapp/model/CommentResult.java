@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class CommentResult {
-
     private String errorCode;
     private String error;
     private CommentInfo[] comments;
@@ -31,7 +30,6 @@ public class CommentResult {
     }
 
     public class CommentInfo {
-
         private int commentID;
         private int caseID;
         private int caseProductID;

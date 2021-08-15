@@ -363,13 +363,13 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void setupAdapter(InvoiceDetailsResult.InvoiceDetailsInfo[] invoiceDetailsInfoArray) {
-        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(getContext(), viewModel, Arrays.asList(invoiceDetailsInfoArray));
+        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(viewModel, Arrays.asList(invoiceDetailsInfoArray));
         binding.recyclerViewInvoiceDetails.setAdapter(adapter);
     }
 
     private void addInvoiceDetails() {
         String path = "/api/v1/InvoiceDetails/Add/";
-        InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult().new InvoiceDetailsInfo();
+        InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult.InvoiceDetailsInfo();
         invoiceDetailsInfo.setInvoiceID(invoiceID);
         invoiceDetailsInfo.setProductName(binding.txtProductName.getText().toString());
         invoiceDetailsInfo.setQTY(Integer.valueOf(binding.edTextQTY.getText().toString()));

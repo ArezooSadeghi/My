@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="customerUserInfo"
+            type="com.example.sipsupporterapp.model.CustomerUserResult.CustomerUserInfo" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +18,7 @@
         android:layoutDirection="ltr">
 
         <TextView
-            android:id="@+id/txt_customer_user_name"
+            android:id="@+id/txt_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -23,6 +27,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
+            android:text="@{customerUserInfo.userName}"
             android:textColor="@color/white"
             android:textDirection="rtl"
             app:layout_constraintBottom_toBottomOf="@id/img_user_status"
@@ -50,6 +55,7 @@
             android:fontFamily="@font/regular"
             android:gravity="start"
             android:maxLines="2"
+            android:text="@{customerUserInfo.lastSeen}"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"

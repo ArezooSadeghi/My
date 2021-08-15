@@ -328,7 +328,7 @@ public class PhotoGalleryFragment extends Fragment {
 
     private void setupAdapter() {
         if (adapter == null) {
-            adapter = new PhotoGalleryAdapter(getContext(), viewModel, oldFilePathList);
+            adapter = new PhotoGalleryAdapter(viewModel, oldFilePathList);
         } else {
             adapter.updateFilePathList(newFilePathList);
         }

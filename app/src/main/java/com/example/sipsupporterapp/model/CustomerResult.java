@@ -1,18 +1,9 @@
 package com.example.sipsupporterapp.model;
 
 public class CustomerResult {
-
     private String error;
     private String errorCode;
     private CustomerInfo[] customers;
-
-    public CustomerInfo[] getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(CustomerInfo[] customers) {
-        this.customers = customers;
-    }
 
     public String getError() {
         return error;
@@ -30,8 +21,15 @@ public class CustomerResult {
         this.errorCode = errorCode;
     }
 
-    public class CustomerInfo {
+    public CustomerInfo[] getCustomers() {
+        return customers;
+    }
 
+    public void setCustomers(CustomerInfo[] customers) {
+        this.customers = customers;
+    }
+
+    public static class CustomerInfo {
         private int customerID;
         private String customerName;
         private String tel;

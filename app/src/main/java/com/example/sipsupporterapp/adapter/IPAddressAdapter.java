@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.IpAddressAdapterItemBinding;
 import com.example.sipsupporterapp.model.ServerData;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -24,13 +23,11 @@ import com.skydoves.powermenu.PowerMenuItem;
 import java.util.List;
 
 public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAddressHolder> {
-
     private Context context;
     private LoginViewModel viewModel;
     private List<ServerData> serverDataList;
 
-    public IPAddressAdapter(Context context, LoginViewModel viewModel, List<ServerData> serverDataList) {
-        this.context = context;
+    public IPAddressAdapter(LoginViewModel viewModel, List<ServerData> serverDataList) {
         this.viewModel = viewModel;
         this.serverDataList = serverDataList;
     }
@@ -38,6 +35,7 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
     @NonNull
     @Override
     public IPAddressHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new IPAddressHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.ip_address_adapter_item,
@@ -97,9 +95,7 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
         }
 
         public void bindServerData(ServerData serverData) {
-            String centerName = Converter.letterConverter(serverData.getCenterName());
-            binding.txtCenterName.setText(centerName);
-            binding.txtIpAddress.setText(serverData.getIpAddress());
+            binding.setServerData(serverData);
         }
     }
 }

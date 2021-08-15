@@ -117,7 +117,7 @@ public class NewCaseProductFragment extends Fragment {
     }
 
     private void setupAdapter(CaseProductResult.CaseProductInfo[] caseProductInfoArray) {
-        CaseProductAdapter adapter = new CaseProductAdapter(getContext(), viewModel, Arrays.asList(caseProductInfoArray), true);
+        CaseProductAdapter adapter = new CaseProductAdapter(viewModel, Arrays.asList(caseProductInfoArray), true);
         binding.recyclerViewNewCaseProduct.setAdapter(adapter);
     }
 }

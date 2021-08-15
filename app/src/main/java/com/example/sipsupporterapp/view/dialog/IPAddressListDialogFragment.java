@@ -92,7 +92,7 @@ public class IPAddressListDialogFragment extends DialogFragment {
             binding.txtNoAddress.setVisibility(View.VISIBLE);
             binding.recyclerViewIpAddress.setVisibility(View.GONE);
         } else {
-            IPAddressAdapter adapter = new IPAddressAdapter(getContext(), viewModel, serverDataList);
+            IPAddressAdapter adapter = new IPAddressAdapter(viewModel, serverDataList);
             binding.recyclerViewIpAddress.setAdapter(adapter);
         }
     }

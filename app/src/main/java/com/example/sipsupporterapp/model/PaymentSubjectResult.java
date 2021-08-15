@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class PaymentSubjectResult {
-
     private String error;
     private String errorCode;
     private PaymentSubjectInfo[] paymentSubjects;
@@ -31,7 +30,6 @@ public class PaymentSubjectResult {
     }
 
     public class PaymentSubjectInfo {
-
         private int paymentSubjectID;
         private int row;
         private int parentID;

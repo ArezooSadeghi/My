@@ -40,8 +40,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
 
     final Random random = new Random();
 
-    public CaseAdapter(Context context, CaseViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
-        this.context = context;
+    public CaseAdapter(CaseViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
         this.viewModel = viewModel;
         this.caseInfoList = caseInfoList;
     }
@@ -49,6 +48,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     @NonNull
     @Override
     public CaseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new CaseHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.case_adapter_item,
@@ -194,7 +194,7 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             }
         });
 
-        holder.binding.badge.setOnClickListener(new View.OnClickListener() {
+        holder.binding.imageBadgeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewModel.getSeeCommentClicked().setValue(caseInfo.getCaseID());
@@ -226,30 +226,11 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
 
         public CaseHolder(CaseAdapterItemBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
         public void bindCaseInfo(CaseResult.CaseInfo caseInfo) {
-            binding.txtCaseID.setText(String.valueOf(caseInfo.getCaseID()));
-            binding.txtDescription.setText(caseInfo.getDescription());
-            binding.txtCustomerName.setText(caseInfo.getCustomerName());
-            binding.txtUserFullName.setText(Converter.letterConverter(caseInfo.getUserFullName()));
-            binding.txtAddTime.setText(formatDate(caseInfo.getAddTime()));
-            if (caseInfo.getCommentCount() != 0) {
-                binding.badge.setVisibility(View.VISIBLE);
-                binding.badge.setBadgeValue(caseInfo.getCommentCount());
-            } else {
-                binding.badge.setVisibility(View.GONE);
-            }
-        }
-
-        private String formatDate(long addTime) {
-            String date = String.valueOf(addTime).substring(0, 8);
-            String year = date.substring(0, 4);
-            String month = date.substring(4, 6);
-            String day = date.substring(6);
-            return year + "/" + month + "/" + day;
+            binding.setCaseInfo(caseInfo);
         }
     }
 }

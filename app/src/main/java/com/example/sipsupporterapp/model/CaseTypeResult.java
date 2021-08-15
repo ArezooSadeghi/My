@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class CaseTypeResult {
-
     private String error;
     private String errorCode;
     private CaseTypeInfo[] caseTypes;
@@ -31,7 +30,6 @@ public class CaseTypeResult {
     }
 
     public class CaseTypeInfo {
-
         private int caseTypeID;
         private int userID;
         private long addTime;

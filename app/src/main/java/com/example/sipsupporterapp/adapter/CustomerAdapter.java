@@ -13,21 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerResult;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 
 import java.util.List;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
-
     private Context context;
     private CustomerViewModel viewModel;
     private List<CustomerResult.CustomerInfo> customerInfoList;
     private String _date;
 
-    public CustomerAdapter(Context context, CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String _date) {
-        this.context = context;
+    public CustomerAdapter(CustomerViewModel viewModel, List<CustomerResult.CustomerInfo> customerInfoList, String _date) {
         this.viewModel = viewModel;
         this.customerInfoList = customerInfoList;
         this._date = _date;
@@ -36,6 +33,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @NonNull
     @Override
     public CustomerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new CustomerHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.customer_adapter_item,
@@ -81,14 +79,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         }
 
         public void bindCustomerInfo(CustomerResult.CustomerInfo customerInfo) {
-            binding.txtCity.setVisibility(!customerInfo.getCity().isEmpty() ? View.VISIBLE : View.GONE);
-            String city = Converter.letterConverter(customerInfo.getCity());
-            binding.txtCity.setText(city);
-            binding.txtLastSeen.setVisibility(!customerInfo.getLastSeen().isEmpty() ? View.VISIBLE : View.GONE);
-            binding.txtLastSeen.setText(customerInfo.getLastSeen());
-            String customerName = Converter.letterConverter(customerInfo.getCustomerName());
-            binding.txtCustomerName.setText(customerName);
-            binding.txtCustomerID.setText(String.valueOf(customerInfo.getCustomerID()));
+            binding.setCustomerInfo(customerInfo);
         }
     }
 }

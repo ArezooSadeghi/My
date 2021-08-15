@@ -4,6 +4,12 @@
 
     <data>
 
+        <variable
+            name="caseInfo"
+            type="com.example.sipsupporterapp.model.CaseResult.CaseInfo" />
+
+        <import type="android.view.View" />
+
     </data>
 
     <LinearLayout
@@ -28,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:fontFamily="@font/titr"
+                    android:text="@{caseInfo.caseID + ``}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_more"
@@ -42,6 +49,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/regular"
                     android:maxLines="3"
+                    android:text="@{caseInfo.description}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -62,12 +70,14 @@
                 </LinearLayout>
 
                 <ru.nikartm.support.ImageBadgeView
-                    android:id="@+id/badge"
+                    android:id="@+id/image_badge_view"
+                    badgeValue="@{caseInfo.commentCount}"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="8dp"
                     android:padding="10dp"
                     android:src="@drawable/badge"
+                    android:visibility="@{caseInfo.commentCount != 0 ? View.VISIBLE : View.GONE}"
                     app:ibv_badgeLimitValue="false"
                     app:ibv_badgeTextColor="@color/white"
                     app:ibv_badgeTextSize="10sp"
@@ -96,6 +106,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/yekan"
                     android:maxLines="1"
+                    android:text="@{caseInfo.customerName}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_more"
@@ -111,14 +122,16 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/titr"
+                    android:text="@{caseInfo.userFullName}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/badge" />
+                    app:layout_constraintTop_toBottomOf="@id/image_badge_view" />
 
                 <TextView
                     android:id="@+id/txt_add_time"
+                    dateFormat="@{caseInfo.addTime}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -129,7 +142,7 @@
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/badge" />
+                    app:layout_constraintTop_toBottomOf="@id/image_badge_view" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

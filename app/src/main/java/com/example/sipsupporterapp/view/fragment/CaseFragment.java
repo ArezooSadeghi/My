@@ -525,7 +525,7 @@ public class CaseFragment extends Fragment {
     }
 
     private void setupAdapter(CaseResult.CaseInfo[] caseInfoArray) {
-        CaseAdapter adapter = new CaseAdapter(getContext(), viewModel, Arrays.asList(caseInfoArray));
+        CaseAdapter adapter = new CaseAdapter(viewModel, Arrays.asList(caseInfoArray));
         binding.recyclerViewCases.setAdapter(adapter);
     }
 

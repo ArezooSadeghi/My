@@ -3,6 +3,10 @@
 
     <data>
 
+        <variable
+            name="filePath"
+            type="String" />
+
     </data>
 
     <FrameLayout

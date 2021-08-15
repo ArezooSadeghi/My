@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="commentInfo"
+            type="com.example.sipsupporterapp.model.CommentResult.CommentInfo" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +23,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/yekan"
             android:maxLines="1"
+            android:text="@{commentInfo.userFullName}"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +40,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="4"
+            android:text="@{commentInfo.comment}"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"

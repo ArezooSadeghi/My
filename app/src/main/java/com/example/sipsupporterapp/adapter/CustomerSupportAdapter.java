@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerSupportAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
-import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -24,13 +23,11 @@ import com.skydoves.powermenu.PowerMenuItem;
 import java.util.List;
 
 public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupportAdapter.CustomerSupportInfoHolder> {
-
     private Context context;
     private CustomerSupportViewModel viewModel;
     private List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList;
 
-    public CustomerSupportAdapter(Context context, CustomerSupportViewModel viewModel, List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList) {
-        this.context = context;
+    public CustomerSupportAdapter(CustomerSupportViewModel viewModel, List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList) {
         this.viewModel = viewModel;
         this.customerSupportInfoList = customerSupportInfoList;
     }
@@ -38,6 +35,7 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
     @NonNull
     @Override
     public CustomerSupportInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         return new CustomerSupportInfoHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.customer_support_adapter_item,
@@ -92,15 +90,7 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
         }
 
         public void bindCustomerSupportInfo(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
-            String question = Converter.letterConverter(customerSupportInfo.getQuestion());
-            binding.txtQuestion.setText(question);
-            String answer = Converter.letterConverter(customerSupportInfo.getAnswer());
-            binding.txtAnswer.setText(answer);
-            String userFullName = Converter.letterConverter(customerSupportInfo.getUserFullName());
-            binding.txtUserFullName.setText(userFullName + " :");
-            String customerSupportID = String.valueOf(customerSupportInfo.getCustomerSupportID());
-            binding.txtCustomerSupportID.setText(customerSupportID);
-            binding.txtRegTime.setText(customerSupportInfo.getRegTime());
+            binding.setCustomerSupportInfo(customerSupportInfo);
         }
     }
 }

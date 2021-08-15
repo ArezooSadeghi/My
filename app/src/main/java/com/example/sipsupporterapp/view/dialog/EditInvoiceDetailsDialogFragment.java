@@ -111,7 +111,7 @@ public class EditInvoiceDetailsDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult().new InvoiceDetailsInfo();
+                InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo = new InvoiceDetailsResult.InvoiceDetailsInfo();
                 invoiceDetailsInfo.setProductID(Integer.valueOf(binding.btnProductID.getText().toString()));
                 invoiceDetailsInfo.setProductName(binding.btnProductName.getText().toString());
                 invoiceDetailsInfo.setQTY(Integer.valueOf(binding.edTextQTY.getText().toString()));

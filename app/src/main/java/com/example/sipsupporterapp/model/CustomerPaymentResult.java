@@ -1,7 +1,15 @@
 package com.example.sipsupporterapp.model;
 
-public class CustomerPaymentResult {
+import android.widget.TextView;
 
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class CustomerPaymentResult {
     private String error;
     private String errorCode;
     private CustomerPaymentInfo[] customerPayments;
@@ -30,8 +38,7 @@ public class CustomerPaymentResult {
         this.customerPayments = customerPayments;
     }
 
-    public class CustomerPaymentInfo {
-
+    public static class CustomerPaymentInfo {
         private int customerPaymentID;
         private int customerID;
         private int bankAccountID;
@@ -74,6 +81,14 @@ public class CustomerPaymentResult {
 
         public void setBankAccountID(int bankAccountID) {
             this.bankAccountID = bankAccountID;
+        }
+
+        public int getCaseID() {
+            return caseID;
+        }
+
+        public void setCaseID(int caseID) {
+            this.caseID = caseID;
         }
 
         public int getDatePayment() {
@@ -196,12 +211,16 @@ public class CustomerPaymentResult {
             this.managerOkUserFullName = managerOkUserFullName;
         }
 
-        public int getCaseID() {
-            return caseID;
+        @BindingAdapter({"currencyFormat"})
+        public static void setCurrencyFormat(TextView textView, long price) {
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(price);
+            textView.setText(currencyFormat + "تومان");
         }
 
-        public void setCaseID(int caseID) {
-            this.caseID = caseID;
+        @BindingAdapter({"dateFormat"})
+        public static void setDateFormat(TextView textView, int datePayment) {
+            String dateFormat = Converter.dateFormat(String.valueOf(datePayment));
+            textView.setText(dateFormat);
         }
     }
 }

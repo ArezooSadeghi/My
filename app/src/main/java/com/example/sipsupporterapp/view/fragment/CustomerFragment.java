@@ -90,7 +90,7 @@ public class CustomerFragment extends Fragment {
     private void setupAdapter(CustomerResult.CustomerInfo[] customerInfoArray) {
         binding.txtEmpty.setVisibility(customerInfoArray.length == 0 ? View.VISIBLE : View.GONE);
         String date = SipSupportSharedPreferences.getDate(getContext());
-        CustomerAdapter adapter = new CustomerAdapter(getContext(), viewModel, Arrays.asList(customerInfoArray), date);
+        CustomerAdapter adapter = new CustomerAdapter(viewModel, Arrays.asList(customerInfoArray), date);
         binding.recyclerView.setAdapter(adapter);
     }
 

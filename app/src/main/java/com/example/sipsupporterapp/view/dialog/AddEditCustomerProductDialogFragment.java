@@ -248,7 +248,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 } else {
 
                     if (customerProductInfo == null) {
-                        customerProductInfo = new CustomerProductResult().new CustomerProductInfo();
+                        customerProductInfo = new CustomerProductResult.CustomerProductInfo();
                         customerProductInfo.setCustomerID(customerID);
                         customerProductInfo.setProductID(productGroupID);
                     }

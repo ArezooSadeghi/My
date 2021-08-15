@@ -1,9 +1,14 @@
 package com.example.sipsupporterapp.model;
 
-import java.io.Serializable;
+import android.widget.TextView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
+import ru.nikartm.support.ImageBadgeView;
 
 public class CaseResult {
-
     private String errorCode;
     private String error;
     private CaseInfo[] cases;
@@ -32,8 +37,7 @@ public class CaseResult {
         this.cases = cases;
     }
 
-    public class CaseInfo implements Serializable {
-
+    public static class CaseInfo {
         private int caseID;
         private int caseTypeID;
         private int customerID;
@@ -61,7 +65,6 @@ public class CaseResult {
         private String resultDescription;
         private String deletedUserFullName;
         private String assignDescription;
-
         private CaseProductResult.CaseProductInfo[] caseProduct;
         private AssignResult.AssignInfo[] assings;
 
@@ -295,6 +298,17 @@ public class CaseResult {
 
         public void setAssings(AssignResult.AssignInfo[] assings) {
             this.assings = assings;
+        }
+
+        @BindingAdapter({"dateFormat"})
+        public static void setDateFormat(TextView textView, long addTime) {
+            String dateFormat = Converter.dateFormat(String.valueOf(addTime));
+            textView.setText(dateFormat);
+        }
+
+        @BindingAdapter({"badgeValue"})
+        public static void setBadgeValue(ImageBadgeView imageBadgeView, int commentCount) {
+            imageBadgeView.setBadgeValue(commentCount);
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.sipsupporterapp.model;
 
 public class DateResult {
-
     private String error;
     private String errorCode;
     private String date;

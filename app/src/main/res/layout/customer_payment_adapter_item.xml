@@ -4,6 +4,12 @@
 
     <data>
 
+        <variable
+            name="customerPaymentInfo"
+            type="com.example.sipsupporterapp.model.CustomerPaymentResult.CustomerPaymentInfo" />
+
+        <import type="android.view.View" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +26,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
+            android:text="@{customerPaymentInfo.bankAccountName}"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,34 +42,25 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
+            android:text="@{customerPaymentInfo.bankName}"
             android:textColor="@color/white"
             android:textSize="12sp"
+            android:visibility="@{!customerPaymentInfo.bankName.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_price" />
-
-        <TextView
-            android:id="@+id/txt_bank_account_no_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:fontFamily="@font/regular"
-            android:text="به شماره حساب: "
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_bank_name" />
 
         <TextView
             android:id="@+id/txt_bank_account_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
             android:fontFamily="@font/yekan"
+            android:text="@{`به شماره حساب:` + customerPaymentInfo.bankAccountNO}"
             android:textColor="@color/white"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_bank_account_no_text"
-            app:layout_constraintEnd_toStartOf="@id/txt_bank_account_no_text"
-            app:layout_constraintTop_toTopOf="@id/txt_bank_account_no_text" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_bank_name" />
 
         <ImageButton
             android:id="@+id/img_btn_more"
@@ -77,6 +75,7 @@
 
         <TextView
             android:id="@+id/txt_price"
+            currencyFormat="@{customerPaymentInfo.price}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -89,6 +88,7 @@
 
         <TextView
             android:id="@+id/txt_date_payment"
+            dateFormat="@{customerPaymentInfo.datePayment}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

@@ -143,7 +143,7 @@ public class PaymentFragment extends Fragment {
 
     private void setupAdapter(PaymentResult.PaymentInfo[] paymentInfoArray) {
         List<PaymentResult.PaymentInfo> paymentInfoList = Arrays.asList(paymentInfoArray);
-        PaymentAdapter adapter = new PaymentAdapter(getContext(), viewModel, paymentInfoList);
+        PaymentAdapter adapter = new PaymentAdapter(viewModel, paymentInfoList);
         binding.recyclerView.setAdapter(adapter);
     }
 

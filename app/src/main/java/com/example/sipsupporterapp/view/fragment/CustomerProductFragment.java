@@ -157,7 +157,7 @@ public class CustomerProductFragment extends Fragment {
 
     private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
         binding.txtEmpty.setVisibility(customerProductInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        CustomerProductAdapter adapter = new CustomerProductAdapter(getContext(), viewModel, Arrays.asList(customerProductInfoArray));
+        CustomerProductAdapter adapter = new CustomerProductAdapter(viewModel, Arrays.asList(customerProductInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
 

@@ -183,7 +183,7 @@ public class AddEditCaseDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CaseResult.CaseInfo caseInfo = new CaseResult().new CaseInfo();
+                CaseResult.CaseInfo caseInfo = new CaseResult.CaseInfo();
                 caseInfo.setCaseID(caseID);
                 caseInfo.setCaseTypeID(caseTypeID);
                 caseInfo.setCustomerID(customerID);

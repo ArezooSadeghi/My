@@ -184,7 +184,7 @@ public class RegisterCaseResultDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CaseResult.CaseInfo caseInfo = new CaseResult().new CaseInfo();
+                CaseResult.CaseInfo caseInfo = new CaseResult.CaseInfo();
 
                 int caseID = getArguments().getInt(ARGS_CASE_ID);
                 caseInfo.setCaseID(caseID);
