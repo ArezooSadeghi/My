@@ -150,7 +150,7 @@ public class AddEditCommentDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (commentInfo == null) {
-                    commentInfo = new CommentResult().new CommentInfo();
+                    commentInfo = new CommentResult.CommentInfo();
                     commentInfo.setCaseID(caseID);
                 }
 

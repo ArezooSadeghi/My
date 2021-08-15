@@ -1,5 +1,11 @@
 package com.example.sipsupporterapp.model;
 
+import android.widget.TextView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
 public class CustomerUserResult {
     private String error;
     private String errorCode;
@@ -29,7 +35,7 @@ public class CustomerUserResult {
         this.customerUsers = customerUsers;
     }
 
-    public class CustomerUserInfo {
+    public static class CustomerUserInfo {
         private int customerUserID;
         private int customerID;
         private int userID;
@@ -74,6 +80,11 @@ public class CustomerUserResult {
 
         public void setLastSeen(String lastSeen) {
             this.lastSeen = lastSeen;
+        }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
         }
     }
 }

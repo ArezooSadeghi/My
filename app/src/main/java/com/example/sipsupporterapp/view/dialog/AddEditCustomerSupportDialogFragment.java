@@ -154,7 +154,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
                     int customerUserID = SipSupportSharedPreferences.getCustomerUserId(getContext());
                     String question = binding.edTextQuestion.getText().toString();
                     String answer = binding.edTextAnswer.getText().toString();
-                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult().new CustomerSupportInfo();
+                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult.CustomerSupportInfo();
                     customerSupportInfo.setSupportEventID(supportEventID);
                     customerSupportInfo.setCustomerID(customerID);
                     customerSupportInfo.setCustomerUserID(customerUserID);

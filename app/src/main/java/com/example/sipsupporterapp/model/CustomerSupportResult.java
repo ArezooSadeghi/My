@@ -1,5 +1,11 @@
 package com.example.sipsupporterapp.model;
 
+import android.widget.TextView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
 public class CustomerSupportResult {
     private String error;
     private String errorCode;
@@ -29,7 +35,7 @@ public class CustomerSupportResult {
         this.customerSupports = customerSupports;
     }
 
-    public class CustomerSupportInfo {
+    public static class CustomerSupportInfo {
         private int customerSupportID;
         private int supportEventID;
         private int customerID;
@@ -146,6 +152,11 @@ public class CustomerSupportResult {
 
         public void setAnswerRegTime(String answerRegTime) {
             this.answerRegTime = answerRegTime;
+        }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
         }
     }
 }

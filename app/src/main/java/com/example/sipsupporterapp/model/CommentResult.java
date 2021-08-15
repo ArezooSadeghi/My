@@ -1,5 +1,11 @@
 package com.example.sipsupporterapp.model;
 
+import android.widget.TextView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
 public class CommentResult {
     private String errorCode;
     private String error;
@@ -29,7 +35,7 @@ public class CommentResult {
         this.comments = comments;
     }
 
-    public class CommentInfo {
+    public static class CommentInfo {
         private int commentID;
         private int caseID;
         private int caseProductID;
@@ -110,6 +116,11 @@ public class CommentResult {
 
         public void setComment(String comment) {
             this.comment = comment;
+        }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
         }
     }
 }

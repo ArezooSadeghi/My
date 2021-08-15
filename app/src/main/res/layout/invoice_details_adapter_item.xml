@@ -91,6 +91,7 @@
 
             <TextView
                 android:id="@+id/txt_product_name"
+                convertLetter="@{invoiceDetailsInfo.productName}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -98,7 +99,6 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
-                android:text="@{invoiceDetailsInfo.productName.length() > 5 ? invoiceDetailsInfo.productName.substring(0, 6) + `...` : invoiceDetailsInfo.productName}"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 

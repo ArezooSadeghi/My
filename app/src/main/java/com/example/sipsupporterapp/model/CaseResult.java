@@ -310,5 +310,10 @@ public class CaseResult {
         public static void setBadgeValue(ImageBadgeView imageBadgeView, int commentCount) {
             imageBadgeView.setBadgeValue(commentCount);
         }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
+        }
     }
 }

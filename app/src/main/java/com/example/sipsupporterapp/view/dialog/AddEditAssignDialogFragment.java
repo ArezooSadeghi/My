@@ -172,7 +172,7 @@ public class AddEditAssignDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (assignInfo == null) {
-                    assignInfo = new AssignResult().new AssignInfo();
+                    assignInfo = new AssignResult.AssignInfo();
                     assignInfo.setCaseID(caseID);
                     assignInfo.setAssignUserID(assignUserID);
                 }

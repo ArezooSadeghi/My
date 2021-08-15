@@ -43,13 +43,13 @@
 
                 <TextView
                     android:id="@+id/txt_description"
+                    convertLetter="@{caseInfo.description}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/regular"
                     android:maxLines="3"
-                    android:text="@{caseInfo.description}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -99,6 +99,7 @@
 
                 <TextView
                     android:id="@+id/txt_customer_name"
+                    convertLetter="@{caseInfo.customerName}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -106,7 +107,6 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/yekan"
                     android:maxLines="1"
-                    android:text="@{caseInfo.customerName}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_more"
@@ -116,13 +116,13 @@
 
                 <TextView
                     android:id="@+id/txt_user_full_name"
+                    convertLetter="@{caseInfo.userFullName}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/titr"
-                    android:text="@{caseInfo.userFullName}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -168,5 +168,10 @@ public class PaymentResult {
             String dateFormat = Converter.dateFormat(String.valueOf(datePayment));
             textView.setText(dateFormat);
         }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
+        }
     }
 }

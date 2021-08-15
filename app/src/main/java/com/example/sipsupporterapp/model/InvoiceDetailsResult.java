@@ -4,6 +4,8 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.example.sipsupporterapp.utils.Converter;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -148,6 +150,15 @@ public class InvoiceDetailsResult {
             int sum = ((invoiceDetailsInfo.getQTY() * invoiceDetailsInfo.getUnitPrice()) - invoiceDetailsInfo.getSumDiscountPrice());
             String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(sum);
             textView.setText("جمع:" + currencyFormat);
+        }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            if (text.length() > 5) {
+                textView.setText(Converter.letterConverter(text).substring(0, 6) + "...");
+            } else {
+                textView.setText(Converter.letterConverter(text));
+            }
         }
     }
 }

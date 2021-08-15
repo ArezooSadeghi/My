@@ -4,6 +4,8 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.example.sipsupporterapp.utils.Converter;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -213,6 +215,11 @@ public class CustomerProductResult {
         public static void setCurrencyFormat(TextView textView, long invoicePrice) {
             String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(invoicePrice);
             textView.setText(currencyFormat + "تومان");
+        }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
         }
     }
 }

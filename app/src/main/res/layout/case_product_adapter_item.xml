@@ -16,6 +16,7 @@
 
         <CheckBox
             android:id="@+id/check_box_product_name"
+            convertLetter="@{caseProductInfo.productName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -24,7 +25,6 @@
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"
-            android:text="@{caseProductInfo.productName}"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"

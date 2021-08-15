@@ -1,5 +1,11 @@
 package com.example.sipsupporterapp.model;
 
+import android.widget.TextView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.example.sipsupporterapp.utils.Converter;
+
 public class AssignResult {
     private String errorCode;
     private String error;
@@ -29,7 +35,7 @@ public class AssignResult {
         this.assigns = assigns;
     }
 
-    public class AssignInfo {
+    public static class AssignInfo {
         private int assignID;
         private int caseID;
         private int caseProductID;
@@ -164,6 +170,11 @@ public class AssignResult {
 
         public void setUserFullName(String userFullName) {
             this.userFullName = userFullName;
+        }
+
+        @BindingAdapter({"convertLetter"})
+        public static void converter(TextView textView, String text) {
+            textView.setText(Converter.letterConverter(text));
         }
     }
 }
