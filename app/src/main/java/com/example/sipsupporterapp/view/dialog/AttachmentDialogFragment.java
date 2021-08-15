@@ -203,6 +203,8 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                     handleError(getString(R.string.no_choose_any_file));
                 } else if (photoFile.length() == 0) {
                     handleError(getString(R.string.no_choose_any_file));
+                } else if (photoUri == null) {
+                    handleError(getString(R.string.no_choose_any_file));
                 } else {
                     switch (numberOfRotate) {
                         case 0:
@@ -237,11 +239,7 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                 }
                 break;
             case R.id.iv_send:
-                if (photoFile == null) {
-                    handleError(getString(R.string.no_choose_any_file));
-                } else if (photoFile.length() == 0) {
-                    handleError(getString(R.string.no_choose_any_file));
-                } else {
+                if (photoUri != null) {
                     binding.progressBarLoading.setVisibility(View.VISIBLE);
                     binding.fabMore.setEnabled(false);
                     binding.fabRotate.setEnabled(false);
@@ -271,6 +269,12 @@ public class AttachmentDialogFragment extends DialogFragment implements View.OnC
                             addAttachment(attachInfo);
                         }
                     }).start();
+                } else if (photoFile == null) {
+                    handleError(getString(R.string.no_choose_any_file));
+                } else if (photoFile.length() == 0) {
+                    handleError(getString(R.string.no_choose_any_file));
+                } else if (photoUri == null) {
+                    handleError(getString(R.string.no_choose_any_file));
                 }
                 break;
         }
