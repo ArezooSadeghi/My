@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
         android:clickable="true"
+        android:layoutDirection="ltr"
         android:onClick="@{() -> userViewModel.onItemClick(position)}">
 
         <TextView

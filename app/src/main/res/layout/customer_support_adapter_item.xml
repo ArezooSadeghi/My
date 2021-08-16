@@ -20,13 +20,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr">
 
         <TextView
             android:id="@+id/tv_customer_support_ID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="12dp"
             android:fontFamily="@font/two"
             android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).customerSupportID + ``}"
             android:textColor="@color/white"
@@ -38,8 +39,8 @@
 
         <ImageView
             android:id="@+id/iv_more"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_more"
