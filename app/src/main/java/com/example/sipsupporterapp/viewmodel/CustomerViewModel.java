@@ -17,8 +17,8 @@ public class CustomerViewModel extends AndroidViewModel {
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<Integer> itemClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
+    private SingleLiveEvent<CustomerResult.CustomerInfo> selected = new SingleLiveEvent<>();
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
@@ -46,12 +46,12 @@ public class CustomerViewModel extends AndroidViewModel {
         return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<Integer> getItemClicked() {
-        return itemClicked;
-    }
-
     public SingleLiveEvent<String> getSearchQuery() {
         return searchQuery;
+    }
+
+    public SingleLiveEvent<CustomerResult.CustomerInfo> getSelected() {
+        return selected;
     }
 
     public ServerData getServerData(String centerName) {
@@ -72,5 +72,17 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public void fetchDate(String path, String userLoginKey) {
         repository.fetchDate(path, userLoginKey);
+    }
+
+    public void onItemClick(Integer index) {
+        CustomerResult.CustomerInfo customerInfo = getCustomerInfoAt(index);
+        selected.setValue(customerInfo);
+    }
+
+    public CustomerResult.CustomerInfo getCustomerInfoAt(Integer index) {
+        if (customersResultSingleLiveEvent.getValue() != null && index != null) {
+            return customersResultSingleLiveEvent.getValue().getCustomers()[index];
+        }
+        return null;
     }
 }

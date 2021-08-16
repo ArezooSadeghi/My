@@ -45,8 +45,8 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
 
     @Override
     public void onBindViewHolder(@NonNull CustomerSupportInfoHolder holder, int position) {
+        holder.bind(position);
         CustomerSupportResult.CustomerSupportInfo customerSupportInfo = customerSupportInfoList.get(position);
-        holder.bindCustomerSupportInfo(customerSupportInfoList.get(position));
 
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +89,10 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
-            binding.setCustomerSupportInfo(customerSupportInfo);
+        public void bind(Integer position) {
+            binding.setCustomerSupportInfo(customerSupportInfoList.get(position));
+            binding.setCustomerSupportViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

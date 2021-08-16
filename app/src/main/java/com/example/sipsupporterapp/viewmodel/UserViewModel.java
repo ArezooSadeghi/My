@@ -73,4 +73,11 @@ public class UserViewModel extends AndroidViewModel {
     public void fetchDate(String path, String userLoginKey) {
         repository.fetchDate(path, userLoginKey);
     }
+
+    public CustomerUserResult.CustomerUserInfo getCustomerUserInfoAt(Integer index) {
+        if (usersResultSingleLiveEvent.getValue() != null && index != null) {
+            return usersResultSingleLiveEvent.getValue().getCustomerUsers()[index];
+        }
+        return null;
+    }
 }

@@ -143,4 +143,11 @@ public class PaymentViewModel extends AndroidViewModel {
     public void fetchPaymentSubjectInfo(String path, String userLoginKey, int paymentSubjectID) {
         repository.fetchPaymentSubjectInfo(path, userLoginKey, paymentSubjectID);
     }
+
+    public PaymentResult.PaymentInfo getPaymentInfoAt(Integer index) {
+        if (paymentsByBankAccountResultSingleLiveEvent.getValue() != null && index != null) {
+            return paymentsByBankAccountResultSingleLiveEvent.getValue().getPayments()[index];
+        }
+        return null;
+    }
 }

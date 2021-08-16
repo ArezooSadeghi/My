@@ -41,8 +41,8 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-        CaseProductResult.CaseProductInfo info = caseProductInfoList.get(position);
-        holder.bindCaseProductInfo(info);
+        holder.bind(position);
+        CaseProductResult.CaseProductInfo caseProductInfo = caseProductInfoList.get(position);
 
         holder.binding.checkBoxProductName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,14 +52,14 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
                     boolean isChecked = holder.binding.checkBoxProductName.isChecked();
 
                     for (CaseProductResult.CaseProductInfo caseProductInfo : caseProductInfoList) {
-                        if (caseProductInfo.getProductID() == info.getProductID()) {
+                        if (caseProductInfo.getProductID() == caseProductInfo.getProductID()) {
                             caseProductInfo.setSelected(isChecked);
                             viewModel.getUpdate().setValue(caseProductInfo);
                             break;
                         }
                     }
                 } else {
-                    viewModel.getItemClicked().setValue(info);
+                    viewModel.getItemClicked().setValue(caseProductInfo);
                 }
             }
         });
@@ -78,8 +78,10 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
             this.binding = binding;
         }
 
-        public void bindCaseProductInfo(CaseProductResult.CaseProductInfo caseProductInfo) {
-            binding.setCaseProductInfo(caseProductInfo);
+        public void bind(Integer position) {
+            binding.setCaseProductInfo(caseProductInfoList.get(position));
+            binding.setCaseProductViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

@@ -45,7 +45,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
     @Override
     public void onBindViewHolder(@NonNull CommentHolder holder, int position) {
-        holder.bindCommentInfo(commentInfoList.get(position));
+        holder.bind(position);
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,8 +92,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             this.binding = binding;
         }
 
-        public void bindCommentInfo(CommentResult.CommentInfo commentInfo) {
-            binding.setCommentInfo(commentInfo);
+        public void bind(Integer position) {
+            binding.setCommentInfo(commentInfoList.get(position));
+            binding.setCommentViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

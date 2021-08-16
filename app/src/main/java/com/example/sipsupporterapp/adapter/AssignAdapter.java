@@ -45,7 +45,7 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
 
     @Override
     public void onBindViewHolder(@NonNull AssignHolder holder, int position) {
-        holder.bindAssignInfo(assignInfoList.get(position));
+        holder.bind(position);
 
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,8 +98,10 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
             this.binding = binding;
         }
 
-        public void bindAssignInfo(AssignResult.AssignInfo assignInfo) {
-            binding.setAssignInfo(assignInfo);
+        public void bind(Integer position) {
+            binding.setAssignInfo(assignInfoList.get(position));
+            binding.setAssignViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

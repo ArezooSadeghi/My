@@ -28,6 +28,7 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
+import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
 import com.example.sipsupporterapp.viewmodel.PrintViewModel;
 
 import java.text.NumberFormat;
@@ -37,6 +38,7 @@ import java.util.Locale;
 public class PrintFragment extends Fragment {
     private FragmentPrintBinding binding;
     private PrintViewModel viewModel;
+    private InvoiceViewModel invoiceViewModel;
     private ServerData serverData;
     private int invoiceID, finalSum;
     private String centerName, userLoginKey;
@@ -95,6 +97,7 @@ public class PrintFragment extends Fragment {
 
     private void createViewModel() {
         viewModel = new ViewModelProvider(this).get(PrintViewModel.class);
+        invoiceViewModel = new ViewModelProvider(this).get(InvoiceViewModel.class);
     }
 
     private void initVariables() {
@@ -186,7 +189,7 @@ public class PrintFragment extends Fragment {
     }
 
     private void setupAdapter(InvoiceDetailsResult.InvoiceDetailsInfo[] invoiceDetailsInfoArray) {
-        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(viewModel, Arrays.asList(invoiceDetailsInfoArray));
+        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(invoiceViewModel, Arrays.asList(invoiceDetailsInfoArray), true);
         binding.recyclerView.setAdapter(adapter);
     }
 }

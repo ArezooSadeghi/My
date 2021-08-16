@@ -160,15 +160,17 @@ public class CustomerFragment extends Fragment {
             }
         });
 
-        viewModel.getItemClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        viewModel.getSelected().observe(getViewLifecycleOwner(), new Observer<CustomerResult.CustomerInfo>() {
             @Override
-            public void onChanged(Integer customerID) {
+            public void onChanged(CustomerResult.CustomerInfo customerInfo) {
+                SipSupportSharedPreferences.setCustomerName(getContext(), customerInfo.getCustomerName());
+                SipSupportSharedPreferences.setCustomerTel(getContext(), customerInfo.getTel());
                 if (flag) {
                     CustomerFragmentDirections.ActionMenuSearchToMenuTasks action = CustomerFragmentDirections.actionMenuSearchToMenuTasks();
-                    action.setCustomerID(customerID);
+                    action.setCustomerID(customerInfo.getCustomerID());
                     NavHostFragment.findNavController(CustomerFragment.this).navigate(action);
                 } else {
-                    Intent starter = ItemClickedContainerActivity.start(getContext(), customerID);
+                    Intent starter = ItemClickedContainerActivity.start(getContext(), customerInfo.getCustomerID());
                     startActivity(starter);
                 }
             }

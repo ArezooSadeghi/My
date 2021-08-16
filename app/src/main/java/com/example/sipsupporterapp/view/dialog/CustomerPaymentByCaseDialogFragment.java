@@ -148,9 +148,8 @@ public class CustomerPaymentByCaseDialogFragment extends DialogFragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
     }
 

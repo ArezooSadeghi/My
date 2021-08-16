@@ -103,4 +103,11 @@ public class CommentViewModel extends AndroidViewModel {
     public void fetchCommentInfo(String path, String userLoginKey, int commentID) {
         repository.fetchCommentInfo(path, userLoginKey, commentID);
     }
+
+    public CommentResult.CommentInfo getCommentInfoAt(Integer index) {
+        if (commentsByCaseIDResultSingleLiveEvent.getValue() != null && index != null) {
+            return commentsByCaseIDResultSingleLiveEvent.getValue().getComments()[index];
+        }
+        return null;
+    }
 }

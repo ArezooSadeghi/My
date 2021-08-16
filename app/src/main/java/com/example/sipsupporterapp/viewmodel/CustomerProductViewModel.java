@@ -123,4 +123,11 @@ public class CustomerProductViewModel extends AndroidViewModel {
     public void fetchCustomerProductInfo(String path, String userLoginKey, int customerProductID) {
         repository.fetchCustomerProductInfo(path, userLoginKey, customerProductID);
     }
+
+    public CustomerProductResult.CustomerProductInfo getCustomerProductInfoAt(Integer index) {
+        if (customerProductsResultSingleLiveEvent.getValue() != null && index != null) {
+            return customerProductsResultSingleLiveEvent.getValue().getCustomerProducts()[index];
+        }
+        return null;
+    }
 }

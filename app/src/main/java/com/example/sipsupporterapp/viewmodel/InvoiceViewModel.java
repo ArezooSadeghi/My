@@ -121,4 +121,11 @@ public class InvoiceViewModel extends AndroidViewModel {
     public void deleteInvoiceDetails(String path, String userLoginKey, int invoiceDetailsID) {
         repository.deleteInvoiceDetails(path, userLoginKey, invoiceDetailsID);
     }
+
+    public InvoiceDetailsResult.InvoiceDetailsInfo getInvoiceDetailsInfoAt(Integer index) {
+        if (invoiceDetailsResultSingleLiveEvent.getValue() != null && index != null) {
+            return invoiceDetailsResultSingleLiveEvent.getValue().getInvoiceDetails()[index];
+        }
+        return null;
+    }
 }

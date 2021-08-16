@@ -8,6 +8,14 @@
             name="customerUserInfo"
             type="com.example.sipsupporterapp.model.CustomerUserResult.CustomerUserInfo" />
 
+        <variable
+            name="userViewModel"
+            type="com.example.sipsupporterapp.viewmodel.UserViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +27,7 @@
 
         <TextView
             android:id="@+id/txt_user_name"
-            convertLetter="@{customerUserInfo.userName}"
+            convertLetter="@{userViewModel.getCustomerUserInfoAt(position).userName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -55,7 +63,7 @@
             android:fontFamily="@font/regular"
             android:gravity="start"
             android:maxLines="2"
-            android:text="@{customerUserInfo.lastSeen}"
+            android:text="@{userViewModel.getCustomerUserInfoAt(position).lastSeen}"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"

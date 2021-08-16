@@ -49,10 +49,8 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
 
     @Override
     public void onBindViewHolder(@NonNull CustomerPaymentInfoHolder holder, int position) {
-        CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = customerPaymentInfoList.get(position);
-        holder.bindCustomerPaymentInfo(customerPaymentInfo);
-        holder.binding.imgBtnMore.setVisibility(viewModel == null ? View.GONE : View.VISIBLE);
-        holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
+        holder.bind(position);
+        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
@@ -103,8 +101,10 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             this.binding = binding;
         }
 
-        public void bindCustomerPaymentInfo(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-            binding.setCustomerPaymentInfo(customerPaymentInfo);
+        public void bind(Integer position) {
+            binding.setCustomerPaymentInfo(customerPaymentInfoList.get(position));
+            binding.setCustomerPaymentViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

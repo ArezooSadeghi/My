@@ -8,6 +8,14 @@
             name="caseInfo"
             type="com.example.sipsupporterapp.model.CaseResult.CaseInfo" />
 
+        <variable
+            name="caseViewModel"
+            type="com.example.sipsupporterapp.viewmodel.CaseViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
         <import type="android.view.View" />
 
     </data>
@@ -34,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:fontFamily="@font/titr"
-                    android:text="@{caseInfo.caseID + ``}"
+                    android:text="@{caseViewModel.getCaseInfoAt(position).caseID + ``}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_more"
@@ -43,7 +51,7 @@
 
                 <TextView
                     android:id="@+id/txt_description"
-                    convertLetter="@{caseInfo.description}"
+                    convertLetter="@{caseViewModel.getCaseInfoAt(position).description}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -71,13 +79,13 @@
 
                 <ru.nikartm.support.ImageBadgeView
                     android:id="@+id/image_badge_view"
-                    badgeValue="@{caseInfo.commentCount}"
+                    badgeValue="@{caseViewModel.getCaseInfoAt(position).commentCount}"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="8dp"
                     android:padding="10dp"
                     android:src="@drawable/comment"
-                    android:visibility="@{caseInfo.commentCount != 0 ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{caseViewModel.getCaseInfoAt(position).commentCount != 0 ? View.VISIBLE : View.GONE}"
                     app:ibv_badgeLimitValue="false"
                     app:ibv_badgeTextColor="@color/white"
                     app:ibv_badgeTextSize="10sp"
@@ -99,7 +107,7 @@
 
                 <TextView
                     android:id="@+id/txt_customer_name"
-                    convertLetter="@{caseInfo.customerName}"
+                    convertLetter="@{caseViewModel.getCaseInfoAt(position).customerName}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -116,7 +124,7 @@
 
                 <TextView
                     android:id="@+id/txt_user_full_name"
-                    convertLetter="@{caseInfo.userFullName}"
+                    convertLetter="@{caseViewModel.getCaseInfoAt(position).userFullName}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -131,7 +139,7 @@
 
                 <TextView
                     android:id="@+id/txt_add_time"
-                    dateFormat="@{caseInfo.addTime}"
+                    dateFormat="@{caseViewModel.getCaseInfoAt(position).addTime}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"

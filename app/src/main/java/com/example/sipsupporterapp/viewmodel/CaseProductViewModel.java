@@ -78,4 +78,11 @@ public class CaseProductViewModel extends AndroidViewModel {
     public void deleteCaseProduct(String path, String userLoginKey, int caseProductID) {
         repository.deleteCaseProduct(path, userLoginKey, caseProductID);
     }
+
+    public CaseProductResult.CaseProductInfo getCaseProductInfoAt(Integer index) {
+        if (caseProductsWithSelectedResultSingleLiveEvent.getValue() != null && index != null) {
+            return caseProductsWithSelectedResultSingleLiveEvent.getValue().getCaseProducts()[index];
+        }
+        return null;
+    }
 }

@@ -45,8 +45,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
 
     @Override
     public void onBindViewHolder(@NonNull PaymentHolder holder, int position) {
+        holder.bind(position);
         PaymentResult.PaymentInfo paymentInfo = paymentInfoList.get(position);
-        holder.bindPaymentInfo(paymentInfo);
 
         holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +99,10 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
             this.binding = binding;
         }
 
-        public void bindPaymentInfo(PaymentResult.PaymentInfo paymentInfo) {
-            binding.setPaymentInfo(paymentInfo);
+        public void bind(Integer position) {
+            binding.setPaymentInfo(paymentInfoList.get(position));
+            binding.setPaymentViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

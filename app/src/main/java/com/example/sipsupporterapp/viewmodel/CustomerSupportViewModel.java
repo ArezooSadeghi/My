@@ -78,4 +78,11 @@ public class CustomerSupportViewModel extends AndroidViewModel {
     public void addCustomerSupport(String path, String userLoginKey, CustomerSupportResult.CustomerSupportInfo customerSupportInfo) {
         repository.addCustomerSupport(path, userLoginKey, customerSupportInfo);
     }
+
+    public CustomerSupportResult.CustomerSupportInfo getCustomerSupportInfoAt(Integer index) {
+        if (customerSupportsResultSingleLiveEvent.getValue() != null && index != null) {
+            return customerSupportsResultSingleLiveEvent.getValue().getCustomerSupports()[index];
+        }
+        return null;
+    }
 }

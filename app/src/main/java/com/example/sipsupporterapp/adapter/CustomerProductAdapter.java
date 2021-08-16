@@ -45,8 +45,8 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
 
     @Override
     public void onBindViewHolder(@NonNull ProductsHolder holder, int position) {
+        holder.bind(position);
         CustomerProductResult.CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
-        holder.bindCustomerProducts(customerProductInfo);
 
         holder.binding.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +99,10 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
             this.binding = binding;
         }
 
-        public void bindCustomerProducts(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-            binding.setCustomerProductInfo(customerProductInfo);
+        public void bind(Integer position) {
+            binding.setCustomerProductInfo(customerProductInfoList.get(position));
+            binding.setCustomerProductViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

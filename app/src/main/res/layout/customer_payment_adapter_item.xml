@@ -8,6 +8,14 @@
             name="customerPaymentInfo"
             type="com.example.sipsupporterapp.model.CustomerPaymentResult.CustomerPaymentInfo" />
 
+        <variable
+            name="customerPaymentViewModel"
+            type="com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
         <import type="android.view.View" />
 
     </data>
@@ -19,7 +27,7 @@
 
         <TextView
             android:id="@+id/txt_bank_account_name"
-            convertLetter="@{customerPaymentInfo.bankAccountName}"
+            convertLetter="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankAccountName}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -30,12 +38,12 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/img_btn_more"
+            app:layout_constraintStart_toEndOf="@id/iv_more"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_bank_name"
-            convertLetter="@{customerPaymentInfo.bankName}"
+            convertLetter="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -45,7 +53,7 @@
             android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:visibility="@{!customerPaymentInfo.bankName.empty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{!customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankName.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_price" />
 
@@ -56,26 +64,27 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/yekan"
-            android:text="@{`به شماره حساب:` + customerPaymentInfo.bankAccountNO}"
+            android:text="@{`به شماره حساب:` + customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankAccountNO}"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_bank_name" />
 
-        <ImageButton
-            android:id="@+id/img_btn_more"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_more"
+            android:visibility="@{customerPaymentViewModel == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
         <TextView
             android:id="@+id/txt_price"
-            currencyFormat="@{customerPaymentInfo.price}"
+            currencyFormat="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).price}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -88,7 +97,7 @@
 
         <TextView
             android:id="@+id/txt_date_payment"
-            dateFormat="@{customerPaymentInfo.datePayment}"
+            dateFormat="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).datePayment}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

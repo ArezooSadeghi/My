@@ -8,6 +8,14 @@
             name="customerSupportInfo"
             type="com.example.sipsupporterapp.model.CustomerSupportResult.CustomerSupportInfo" />
 
+        <variable
+            name="customerSupportViewModel"
+            type="com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +30,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/yekan"
-            android:text="@{customerSupportInfo.customerSupportID + ``}"
+            android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).customerSupportID + ``}"
             android:textColor="@color/white"
             android:textDirection="ltr"
             android:textSize="12sp"
@@ -45,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/yekan"
-            android:text="@{customerSupportInfo.regTime}"
+            android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).regTime}"
             android:textColor="@color/orange"
             android:textDirection="rtl"
             android:textSize="12sp"
@@ -66,7 +74,7 @@
 
         <TextView
             android:id="@+id/txt_question"
-            convertLetter="@{customerSupportInfo.question}"
+            convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).question}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -95,7 +103,7 @@
 
         <TextView
             android:id="@+id/txt_user_full_name"
-            convertLetter="@{customerSupportInfo.userFullName + `:`}"
+            convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).userFullName + `:`}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -107,7 +115,7 @@
 
         <TextView
             android:id="@+id/txt_answer"
-            convertLetter="@{customerSupportInfo.answer}"
+            convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).answer}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"

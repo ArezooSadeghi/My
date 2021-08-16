@@ -363,7 +363,7 @@ public class InvoiceFragment extends Fragment {
     }
 
     private void setupAdapter(InvoiceDetailsResult.InvoiceDetailsInfo[] invoiceDetailsInfoArray) {
-        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(viewModel, Arrays.asList(invoiceDetailsInfoArray));
+        InvoiceDetailsAdapter adapter = new InvoiceDetailsAdapter(viewModel, Arrays.asList(invoiceDetailsInfoArray), false);
         binding.recyclerViewInvoiceDetails.setAdapter(adapter);
     }
 

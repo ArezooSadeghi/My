@@ -149,4 +149,11 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     public void fetchCaseInfo(String path, String userLoginKey, int caseID) {
         repository.fetchCaseInfo(path, userLoginKey, caseID);
     }
+
+    public CustomerPaymentResult.CustomerPaymentInfo getCustomerPaymentInfoAt(Integer index) {
+        if (customerPaymentsResultSingleLiveEvent.getValue() != null && index != null) {
+            return customerPaymentsResultSingleLiveEvent.getValue().getCustomerPayments()[index];
+        }
+        return null;
+    }
 }

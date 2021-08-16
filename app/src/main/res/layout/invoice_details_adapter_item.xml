@@ -8,6 +8,16 @@
             name="invoiceDetailsInfo"
             type="com.example.sipsupporterapp.model.InvoiceDetailsResult.InvoiceDetailsInfo" />
 
+        <variable
+            name="invoiceViewModel"
+            type="com.example.sipsupporterapp.viewmodel.InvoiceViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <import type="android.view.View" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +51,7 @@
 
             <TextView
                 android:id="@+id/txt_sum"
-                sum="@{invoiceDetailsInfo}"
+                sum="@{invoiceViewModel.getInvoiceDetailsInfoAt(position)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
@@ -53,7 +63,7 @@
 
             <TextView
                 android:id="@+id/txt_sum_discount_price"
-                currencyFormat="@{invoiceDetailsInfo.sumDiscountPrice}"
+                currencyFormat="@{invoiceViewModel.getInvoiceDetailsInfoAt(position).sumDiscountPrice}"
                 suffix="@{`جمع تخفیف:`}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +76,7 @@
 
             <TextView
                 android:id="@+id/txt_unit_price"
-                currencyFormat="@{invoiceDetailsInfo.unitPrice}"
+                currencyFormat="@{invoiceViewModel.getInvoiceDetailsInfoAt(position).unitPrice}"
                 suffix="@{`مبلغ واحد:`}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -85,13 +95,13 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/regular"
-                android:text="@{`تعداد:` + invoiceDetailsInfo.QTY}"
+                android:text="@{`تعداد:` + invoiceViewModel.getInvoiceDetailsInfoAt(position).QTY}"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/txt_product_name"
-                convertLetter="@{invoiceDetailsInfo.productName}"
+                convertLetter="@{invoiceViewModel.getInvoiceDetailsInfoAt(position).productName}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

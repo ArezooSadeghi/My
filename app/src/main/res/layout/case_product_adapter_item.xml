@@ -8,6 +8,14 @@
             name="caseProductInfo"
             type="com.example.sipsupporterapp.model.CaseProductResult.CaseProductInfo" />
 
+        <variable
+            name="caseProductViewModel"
+            type="com.example.sipsupporterapp.viewmodel.CaseProductViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,12 +24,12 @@
 
         <CheckBox
             android:id="@+id/check_box_product_name"
-            convertLetter="@{caseProductInfo.productName}"
+            convertLetter="@{caseProductViewModel.getCaseProductInfoAt(position).productName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
-            android:checked="@{caseProductInfo.selected}"
+            android:checked="@{caseProductViewModel.getCaseProductInfoAt(position).selected}"
             android:ellipsize="end"
             android:fontFamily="@font/regular"
             android:maxLines="1"

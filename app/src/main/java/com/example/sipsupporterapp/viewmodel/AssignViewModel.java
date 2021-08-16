@@ -123,4 +123,11 @@ public class AssignViewModel extends AndroidViewModel {
     public void fetchAssignInfo(String path, String userLoginKey, int assignID) {
         repository.fetchAssignInfo(path, userLoginKey, assignID);
     }
+
+    public AssignResult.AssignInfo getAssignInfoAt(Integer index) {
+        if (assignsResultSingleLiveEvent.getValue() != null && index != null) {
+            return assignsResultSingleLiveEvent.getValue().getAssigns()[index];
+        }
+        return null;
+    }
 }

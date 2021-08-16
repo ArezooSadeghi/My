@@ -16,7 +16,6 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.InvoiceDetailsAdapterItemBinding;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.viewmodel.InvoiceViewModel;
-import com.example.sipsupporterapp.viewmodel.PrintViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
@@ -26,17 +25,13 @@ import java.util.List;
 public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAdapter.InvoiceDetailsHolder> {
     private Context context;
     private InvoiceViewModel viewModel;
-    private PrintViewModel printViewModel;
     private List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList;
+    private boolean flag;
 
-    public InvoiceDetailsAdapter(InvoiceViewModel viewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
+    public InvoiceDetailsAdapter(InvoiceViewModel viewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList, boolean flag) {
         this.viewModel = viewModel;
         this.invoiceDetailsInfoList = invoiceDetailsInfoList;
-    }
-
-    public InvoiceDetailsAdapter(PrintViewModel printViewModel, List<InvoiceDetailsResult.InvoiceDetailsInfo> invoiceDetailsInfoList) {
-        this.printViewModel = printViewModel;
-        this.invoiceDetailsInfoList = invoiceDetailsInfoList;
+        this.flag = flag;
     }
 
     @NonNull
@@ -52,10 +47,9 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
 
     @Override
     public void onBindViewHolder(@NonNull InvoiceDetailsHolder holder, int position) {
-        holder.bindInvoiceDetailsInfo(invoiceDetailsInfoList.get(position));
-
-        if (printViewModel instanceof PrintViewModel) {
-            holder.binding.ivMore.setVisibility(View.INVISIBLE);
+        holder.bind(position);
+        if (flag) {
+            holder.binding.ivMore.setVisibility(View.GONE);
         }
 
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +98,10 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
             this.binding = binding;
         }
 
-        public void bindInvoiceDetailsInfo(InvoiceDetailsResult.InvoiceDetailsInfo invoiceDetailsInfo) {
-            binding.setInvoiceDetailsInfo(invoiceDetailsInfo);
+        public void bind(Integer position) {
+            binding.setInvoiceDetailsInfo(invoiceDetailsInfoList.get(position));
+            binding.setInvoiceViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

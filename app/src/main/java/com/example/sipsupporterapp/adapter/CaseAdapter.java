@@ -59,9 +59,9 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull CaseHolder holder, int position) {
+        holder.bind(position);
         holder.binding.container.removeAllViews();
         CaseResult.CaseInfo caseInfo = caseInfoList.get(position);
-        holder.bindCaseInfo(caseInfo);
         int color = generateRandomColor();
         holder.binding.cardView.setCardBackgroundColor(color);
 
@@ -229,8 +229,10 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             this.binding = binding;
         }
 
-        public void bindCaseInfo(CaseResult.CaseInfo caseInfo) {
-            binding.setCaseInfo(caseInfo);
+        public void bind(Integer position) {
+            binding.setCaseInfo(caseInfoList.get(position));
+            binding.setCaseViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

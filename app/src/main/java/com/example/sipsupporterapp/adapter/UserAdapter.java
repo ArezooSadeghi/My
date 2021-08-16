@@ -43,8 +43,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
 
     @Override
     public void onBindViewHolder(@NonNull CustomerUsersHolder holder, int position) {
-        CustomerUserResult.CustomerUserInfo customerUserInfo = customerUserInfoList.get(position);
-        holder.bindCustomerSupportInfo(customerUserInfo);
+        holder.bind(position);
         String date = customerUserInfoList.get(position).getLastSeen().substring(0, 10);
 
         if (_date.equals(date)) {
@@ -78,8 +77,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
             this.binding = binding;
         }
 
-        public void bindCustomerSupportInfo(CustomerUserResult.CustomerUserInfo customerUserInfo) {
-            binding.setCustomerUserInfo(customerUserInfo);
+        public void bind(Integer position) {
+            binding.setCustomerUserInfo(customerUserInfoList.get(position));
+            binding.setUserViewModel(viewModel);
+            binding.setPosition(position);
         }
     }
 }

@@ -282,4 +282,11 @@ public class CaseViewModel extends AndroidViewModel {
     public void fetchCaseInfo(String path, String userLoginKey, int caseID) {
         repository.fetchCaseInfo(path, userLoginKey, caseID);
     }
+
+    public CaseResult.CaseInfo getCaseInfoAt(Integer index) {
+        if (casesByCaseTypeResultSingleLiveEvent.getValue() != null && index != null) {
+            return casesByCaseTypeResultSingleLiveEvent.getValue().getCases()[index];
+        }
+        return null;
+    }
 }
