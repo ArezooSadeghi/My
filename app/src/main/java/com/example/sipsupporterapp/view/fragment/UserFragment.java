@@ -184,10 +184,11 @@ public class UserFragment extends Fragment {
             }
         });
 
-        viewModel.getItemClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        viewModel.getSelected().observe(getViewLifecycleOwner(), new Observer<CustomerUserResult.CustomerUserInfo>() {
             @Override
-            public void onChanged(Integer customerID) {
-                AddEditCustomerSupportDialogFragment fragment = AddEditCustomerSupportDialogFragment.newInstance(customerID);
+            public void onChanged(CustomerUserResult.CustomerUserInfo customerUserInfo) {
+                SipSupportSharedPreferences.setCustomerUserId(getContext(), customerUserInfo.getCustomerUserID());
+                AddEditCustomerSupportDialogFragment fragment = AddEditCustomerSupportDialogFragment.newInstance(customerUserInfo.getCustomerID());
                 fragment.show(getActivity().getSupportFragmentManager(), AddEditCustomerSupportDialogFragment.TAG);
             }
         });

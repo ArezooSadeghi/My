@@ -2,7 +2,6 @@ package com.example.sipsupporterapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,6 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.UserAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.utils.Converter;
-import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.UserViewModel;
 
 import java.util.List;
@@ -47,14 +45,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
         } else {
             holder.binding.ivStatus.setImageResource(R.drawable.offline_user);
         }
-
-        holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.getItemClicked().setValue(customerUserInfoList.get(position).getCustomerID());
-                SipSupportSharedPreferences.setCustomerUserId(context, customerUserInfoList.get(position).getCustomerUserID());
-            }
-        });
 
         String rowNumber = Converter.numberConverter((position + 1) + "");
         holder.binding.tvRow.setText(rowNumber);

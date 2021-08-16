@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
-        android:clickable="true">
+        android:clickable="true"
+        android:onClick="@{() -> userViewModel.onItemClick(position)}">
 
         <TextView
             android:id="@+id/tv_user_name"
