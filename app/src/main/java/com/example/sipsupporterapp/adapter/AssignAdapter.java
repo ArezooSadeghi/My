@@ -36,25 +36,20 @@ public class AssignAdapter extends RecyclerView.Adapter<AssignAdapter.AssignHold
     @Override
     public AssignHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new AssignHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.assign_adapter_item,
-                parent,
-                false));
+        return new AssignHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.assign_adapter_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AssignHolder holder, int position) {
         holder.bind(position);
-
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("اصلاح", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .addItem(new PowerMenuItem("ثبت نظر", R.drawable.comment))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_comment_item_title), R.drawable.comment))
+                        .setTextColor(Color.BLACK)
                         .setTextSize(12)
                         .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                         .setIconSize(24)

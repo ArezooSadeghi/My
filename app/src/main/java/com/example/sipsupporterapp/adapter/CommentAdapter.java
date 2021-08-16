@@ -36,11 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     @Override
     public CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new CommentHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.comment_adapter_item,
-                parent,
-                false));
+        return new CommentHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.comment_adapter_item, parent, false));
     }
 
     @Override
@@ -50,9 +46,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("اصلاح", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                        .setTextColor(Color.BLACK)
                         .setTextSize(12)
                         .setIconSize(24)
                         .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))

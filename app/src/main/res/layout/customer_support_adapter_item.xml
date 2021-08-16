@@ -20,101 +20,102 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/txt_customer_support_ID"
+            android:id="@+id/tv_customer_support_ID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).customerSupportID + ``}"
             android:textColor="@color/white"
-            android:textDirection="ltr"
+            android:textDirection="rtl"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_more"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_more" />
 
-        <ImageButton
-            android:id="@+id/img_btn_more"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_more"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
         <TextView
-            android:id="@+id/txt_reg_time"
+            android:id="@+id/tv_reg_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).regTime}"
             android:textColor="@color/orange"
             android:textDirection="rtl"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@id/txt_customer_support_ID"
-            app:layout_constraintStart_toEndOf="@id/img_btn_more"
-            app:layout_constraintTop_toTopOf="@id/img_btn_more" />
+            app:layout_constraintBottom_toBottomOf="@id/iv_more"
+            app:layout_constraintEnd_toStartOf="@id/tv_customer_support_ID"
+            app:layout_constraintStart_toEndOf="@id/iv_more"
+            app:layout_constraintTop_toTopOf="@id/iv_more" />
 
         <ImageView
-            android:id="@+id/img_question"
+            android:id="@+id/iv_question"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/comment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_btn_more"
+            app:layout_constraintTop_toBottomOf="@id/iv_more"
             app:tint="@color/orange" />
 
         <TextView
-            android:id="@+id/txt_question"
+            android:id="@+id/tv_question"
             convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).question}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
             android:ellipsize="end"
-            android:fontFamily="@font/iran_yekan_bold"
+            android:fontFamily="@font/one"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="3"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@id/img_question"
+            app:layout_constraintEnd_toStartOf="@id/iv_question"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_question" />
+            app:layout_constraintTop_toTopOf="@id/iv_question" />
 
         <ImageView
-            android:id="@+id/img_answer"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="16dp"
+            android:id="@+id/iv_answer"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/receptionist"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_question" />
+            app:layout_constraintTop_toBottomOf="@id/tv_question" />
 
         <TextView
-            android:id="@+id/txt_user_full_name"
+            android:id="@+id/tv_user_full_name"
             convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).userFullName + `:`}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:fontFamily="@font/iran_yekan_bold"
+            android:fontFamily="@font/one"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@id/img_answer"
-            app:layout_constraintTop_toTopOf="@id/img_answer" />
+            app:layout_constraintBottom_toBottomOf="@id/iv_answer"
+            app:layout_constraintEnd_toStartOf="@id/iv_answer"
+            app:layout_constraintTop_toTopOf="@id/iv_answer" />
 
         <TextView
-            android:id="@+id/txt_answer"
+            android:id="@+id/tv_answer"
             convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).answer}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -122,17 +123,16 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/regular"
-            android:gravity="start"
+            android:fontFamily="@font/one"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="3"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/txt_user_full_name"
+            app:layout_constraintEnd_toStartOf="@id/tv_user_full_name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_answer" />
+            app:layout_constraintTop_toTopOf="@id/tv_user_full_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

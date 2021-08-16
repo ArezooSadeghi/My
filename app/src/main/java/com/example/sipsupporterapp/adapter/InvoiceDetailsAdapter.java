@@ -38,16 +38,13 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
     @Override
     public InvoiceDetailsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new InvoiceDetailsHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.invoice_details_adapter_item,
-                parent,
-                false));
+        return new InvoiceDetailsHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.invoice_details_adapter_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull InvoiceDetailsHolder holder, int position) {
         holder.bind(position);
+
         if (flag) {
             holder.binding.ivMore.setVisibility(View.GONE);
         }
@@ -56,9 +53,9 @@ public class InvoiceDetailsAdapter extends RecyclerView.Adapter<InvoiceDetailsAd
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.ic_delete))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.ic_delete))
+                        .setTextColor(Color.BLACK)
                         .setTextGravity(Gravity.RIGHT)
                         .setTextSize(12)
                         .setIconSize(24)

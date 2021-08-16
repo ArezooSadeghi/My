@@ -3,7 +3,6 @@ package com.example.sipsupporterapp.view.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Base64;
@@ -55,11 +54,9 @@ public class PhotoGalleryFragment extends Fragment {
     private List<Integer> attachIDList;
     private String centerName, userLoginKey;
 
-    private static final int SPAN_COUNT_PHONE = 3;
-    private static final int SPAN_COUNT_TABLET = 4;
-
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 0;
     private static final int REQUEST_CODE_CAMERA_PERMISSION = 1;
+    private static final int SPAN_COUNT = 4;
 
     private static final String ARGS_CUSTOMER_SUPPORT_ID = "customerSupportID";
     private static final String ARGS_CUSTOMER_PRODUCT_ID = "customerProductID";
@@ -224,11 +221,7 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void initViews() {
-        if (isTablet()) {
-            binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_TABLET));
-        } else {
-            binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT_PHONE));
-        }
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
     }
 
     private void handleEvents() {
@@ -239,12 +232,6 @@ public class PhotoGalleryFragment extends Fragment {
                 fragment.show(getParentFragmentManager(), AttachmentDialogFragment.TAG);
             }
         });
-    }
-
-    private boolean isTablet() {
-        boolean xlarge = ((getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
-        boolean large = ((getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
-        return (xlarge || large);
     }
 
     private boolean hasWriteExternalStoragePermission() {

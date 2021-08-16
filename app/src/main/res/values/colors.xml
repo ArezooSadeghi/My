@@ -17,4 +17,6 @@
     <color name="pink">#FFC0CB</color>
     <color name="dark_gray">#3A3B3B</color>
     <color name="light_gray">#838996</color>
+    <color name="dark_silver">#A0A0A0</color>
+    <color name="light_silver">#B8B8B8</color>
 </resources>

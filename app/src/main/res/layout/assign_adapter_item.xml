@@ -23,41 +23,46 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/txt_assign_user_full_name"
+            android:id="@+id/tv_assign_user_full_name"
             convertLetter="@{assignViewModel.getAssignInfoAt(position).assignUserFullName}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:maxLines="1"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_more"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_more" />
 
         <TextView
-            android:id="@+id/txt_description"
+            android:id="@+id/tv_description"
             convertLetter="@{assignViewModel.getAssignInfoAt(position).description}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
-            android:fontFamily="@font/regular"
+            android:ellipsize="end"
+            android:fontFamily="@font/one"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="3"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_assign_user_full_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_assign_user_full_name" />
 
         <ImageView
             android:id="@+id/iv_more"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_more"
@@ -68,12 +73,12 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_description">
+            app:layout_constraintTop_toBottomOf="@id/tv_description">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,8 +89,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/regular"
-                    android:text="مشاهده توسط کاربر"
+                    android:fontFamily="@font/one"
+                    android:text="@string/check_box_seen_text"
                     android:textColor="@color/white" />
 
                 <CheckBox
@@ -105,8 +110,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/regular"
-                    android:text="وضعیت پایان یافتن"
+                    android:fontFamily="@font/one"
+                    android:text="@string/check_box_finish_text"
                     android:textColor="@color/white" />
 
                 <CheckBox
@@ -126,8 +131,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/regular"
-                    android:text="مشاهده توسط کاربر گیرنده کار"
+                    android:fontFamily="@font/one"
+                    android:text="@string/check_box_seen_assigner_text"
                     android:textColor="@color/white" />
 
                 <CheckBox

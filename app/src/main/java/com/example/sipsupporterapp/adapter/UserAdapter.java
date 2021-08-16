@@ -34,11 +34,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
     @Override
     public CustomerUsersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new CustomerUsersHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.user_adapter_item,
-                parent,
-                false));
+        return new CustomerUsersHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.user_adapter_item, parent, false));
     }
 
     @Override
@@ -47,9 +43,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
         String date = customerUserInfoList.get(position).getLastSeen().substring(0, 10);
 
         if (_date.equals(date)) {
-            holder.binding.imgUserStatus.setImageResource(R.drawable.online_user);
+            holder.binding.ivStatus.setImageResource(R.drawable.online_user);
         } else {
-            holder.binding.imgUserStatus.setImageResource(R.drawable.offline_user);
+            holder.binding.ivStatus.setImageResource(R.drawable.offline_user);
         }
 
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
@@ -61,7 +57,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomerUsersH
         });
 
         String rowNumber = Converter.numberConverter((position + 1) + "");
-        holder.binding.txtRow.setText(rowNumber);
+        holder.binding.tvRow.setText(rowNumber);
     }
 
     @Override

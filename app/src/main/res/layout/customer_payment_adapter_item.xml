@@ -22,58 +22,65 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/txt_bank_account_name"
+            android:id="@+id/tv_bank_account_name"
             convertLetter="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankAccountName}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/one"
             android:maxLines="1"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_more"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_more" />
 
         <TextView
-            android:id="@+id/txt_bank_name"
+            android:id="@+id/tv_bank_name"
             convertLetter="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankName}"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/one"
             android:maxLines="1"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="12sp"
             android:visibility="@{!customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankName.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_price" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_price" />
 
         <TextView
-            android:id="@+id/txt_bank_account_no"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_bank_account_no"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:text="@{`به شماره حساب:` + customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankAccountNO}"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_bank_name" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_bank_name" />
 
         <ImageView
             android:id="@+id/iv_more"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_more"
@@ -83,31 +90,33 @@
             app:tint="@color/white" />
 
         <TextView
-            android:id="@+id/txt_price"
+            android:id="@+id/tv_price"
             currencyFormat="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).price}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_bank_account_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_bank_account_name" />
 
         <TextView
-            android:id="@+id/txt_date_payment"
+            android:id="@+id/tv_date_payment"
             dateFormat="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).datePayment}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:textColor="@color/orange"
+            android:textDirection="rtl"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_bank_account_no" />
+            app:layout_constraintTop_toBottomOf="@id/tv_bank_account_no" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -36,26 +36,21 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
     @Override
     public ProductsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new ProductsHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.customer_product_adapeter_item,
-                parent,
-                false));
+        return new ProductsHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.customer_product_adapeter_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductsHolder holder, int position) {
         holder.bind(position);
         CustomerProductResult.CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
-
-        holder.binding.imgMore.setOnClickListener(new View.OnClickListener() {
+        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .addItem(new PowerMenuItem("مشاهده مستندات", R.drawable.see_document))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                        .setTextColor(Color.BLACK)
                         .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                         .setTextSize(12)
                         .setIconSize(24)

@@ -36,11 +36,7 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
     @Override
     public CustomerSupportInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new CustomerSupportInfoHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.customer_support_adapter_item,
-                parent,
-                false));
+        return new CustomerSupportInfoHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.customer_support_adapter_item, parent, false));
     }
 
     @Override
@@ -48,12 +44,12 @@ public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupport
         holder.bind(position);
         CustomerSupportResult.CustomerSupportInfo customerSupportInfo = customerSupportInfoList.get(position);
 
-        holder.binding.imgBtnMore.setOnClickListener(new View.OnClickListener() {
+        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("مشاهده مستندات", R.drawable.see_document))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                        .setTextColor(Color.BLACK)
                         .setTextGravity(Gravity.RIGHT)
                         .setIconSize(24)
                         .setTextSize(12)

@@ -32,25 +32,18 @@ public class CaseProductAdapter extends RecyclerView.Adapter<CaseProductAdapter.
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new ProductHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.case_product_adapter_item,
-                parent,
-                false));
+        return new ProductHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.case_product_adapter_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
         holder.bind(position);
         CaseProductResult.CaseProductInfo caseProductInfo = caseProductInfoList.get(position);
-
         holder.binding.checkBoxProductName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (!flag) {
                     boolean isChecked = holder.binding.checkBoxProductName.isChecked();
-
                     for (CaseProductResult.CaseProductInfo caseProductInfo : caseProductInfoList) {
                         if (caseProductInfo.getProductID() == caseProductInfo.getProductID()) {
                             caseProductInfo.setSelected(isChecked);

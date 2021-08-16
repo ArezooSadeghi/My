@@ -26,7 +26,7 @@
     </style>
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/regular</item>
+        <item name="android:fontFamily">@font/one</item>
     </style>
 
 </resources>

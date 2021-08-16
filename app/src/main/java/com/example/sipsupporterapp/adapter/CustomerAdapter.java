@@ -32,11 +32,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public CustomerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new CustomerHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.customer_adapter_item,
-                parent,
-                false));
+        return new CustomerHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.customer_adapter_item, parent, false));
     }
 
     @Override
@@ -46,11 +42,15 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         String date = customerInfo.getLastSeen().substring(0, 10);
 
         if (_date.equals(date)) {
-            holder.binding.txtLastSeen.setTextColor(Color.parseColor("#FFFF00"));
-            holder.binding.txtCustomerName.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.binding.tvLastSeen.setTextColor(Color.YELLOW);
+            holder.binding.tvCustomerID.setTextColor(Color.WHITE);
+            holder.binding.tvCustomerName.setTextColor(Color.WHITE);
+            holder.binding.tvCity.setTextColor(Color.WHITE);
         } else {
-            holder.binding.txtLastSeen.setTextColor(Color.parseColor("#A0A0A0"));
-            holder.binding.txtCustomerName.setTextColor(Color.parseColor("#B8B8B8"));
+            holder.binding.tvLastSeen.setTextColor(context.getResources().getColor(R.color.dark_silver));
+            holder.binding.tvCustomerID.setTextColor(context.getResources().getColor(R.color.light_silver));
+            holder.binding.tvCustomerName.setTextColor(context.getResources().getColor(R.color.light_silver));
+            holder.binding.tvCity.setTextColor(context.getResources().getColor(R.color.light_silver));
         }
     }
 

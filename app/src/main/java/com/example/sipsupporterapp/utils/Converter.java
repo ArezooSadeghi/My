@@ -68,7 +68,15 @@ public class Converter {
             String year = date.substring(0, 4);
             String month = date.substring(4, 6);
             String day = date.substring(6);
-            return year + "/" + month + "/" + day;
+            return year.concat("/").concat(month).concat("/").concat(day).concat(" ");
+        } else if (date.length() > 8) {
+            String year = date.substring(0, 4);
+            String month = date.substring(4, 6);
+            String day = date.substring(6, 8);
+            String hour = date.substring(8, 10);
+            String minute = date.substring(10, 12);
+            String second = date.substring(12);
+            return year.concat("/").concat(month).concat("/").concat(day).concat(" ").concat(hour).concat(":").concat(minute).concat(":").concat(second);
         } else {
             return "";
         }

@@ -36,25 +36,20 @@ public class IPAddressAdapter extends RecyclerView.Adapter<IPAddressAdapter.IPAd
     @Override
     public IPAddressHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new IPAddressHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.ip_address_adapter_item,
-                parent,
-                false));
+        return new IPAddressHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.ip_address_adapter_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull IPAddressHolder holder, int position) {
         ServerData serverData = serverDataList.get(position);
         holder.bindServerData(serverData);
-
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                        .setTextColor(Color.BLACK)
                         .setTextGravity(Gravity.RIGHT)
                         .setIconSize(24)
                         .setTextSize(12)

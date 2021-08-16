@@ -65,4 +65,22 @@
     <string name="success_delete_assign_message">حذف Assign موفقیت آمیز بود</string>
     <string name="delete_question_comment_dialog">آیا می خواهید نظر مربوطه را حذف کنید</string>
     <string name="success_add_edit_comment_message">ثبت نظر موفقیت آمیز بود</string>
+    <string name="check_box_seen_text">مشاهده توسط کاربر</string>
+    <string name="check_box_finish_text">پایان کار</string>
+    <string name="check_box_seen_assigner_text">مشاهده توسط کاربر واگذار کننده کار</string>
+    <string name="check_box_invoice_payment_text">تسویه فاکتور</string>
+    <string name="power_menu_edit_item_title">ویرایش</string>
+    <string name="power_menu_delete_item_title">حذف</string>
+    <string name="power_menu_add_comment_item_title">ثبت نظر</string>
+    <string name="power_menu_print_invoice_item_title">چاپ فاکتور</string>
+    <string name="power_menu_finish_item_title">پایان کار</string>
+    <string name="power_menu_see_item_title">مشاهده</string>
+    <string name="power_menu_change_case_type_item_title">تغییر گروه</string>
+    <string name="power_menu_assign_item_title">واگذار کردن</string>
+    <string name="power_menu_comment_item_title">نظرات</string>
+    <string name="power_menu_product_item_title">محصولات</string>
+    <string name="power_menu_payment_item_title">واریزی ها</string>
+    <string name="check_box_seen_en_text">seen</string>
+    <string name="check_box_finish_en_text">finish</string>
+    <string name="power_menu_see_attachment_item_title">مشاهده مستندات</string>
 </resources>

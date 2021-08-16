@@ -22,28 +22,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/txt_payment_subject"
+            android:id="@+id/tv_payment_subject"
             convertLetter="@{paymentViewModel.getPaymentInfoAt(position).paymentSubject}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/regular"
-            android:maxLines="2"
+            android:fontFamily="@font/one"
+            android:maxLines="1"
             android:textColor="@color/white"
+            android:textDirection="rtl"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_more"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/img_btn_more"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/iv_more"
+            app:layout_constraintTop_toTopOf="@id/iv_more" />
 
         <TextView
-            android:id="@+id/txt_description"
+            android:id="@+id/tv_description"
             convertLetter="@{paymentViewModel.getPaymentInfoAt(position).description}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,37 +51,38 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/regular"
-            android:maxLines="2"
+            android:fontFamily="@font/one"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="3"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
             android:visibility="@{!paymentViewModel.getPaymentInfoAt(position).description.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_payment_subject" />
+            app:layout_constraintTop_toBottomOf="@id/tv_payment_subject" />
 
         <TextView
-            android:id="@+id/txt_date_payment"
+            android:id="@+id/tv_date_payment"
             dateFormat="@{paymentViewModel.getPaymentInfoAt(position).datePayment}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:fontFamily="@font/yekan"
+            android:fontFamily="@font/two"
             android:textColor="@color/orange"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_description" />
+            app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
         <ImageView
-            android:id="@+id/img_btn_more"
+            android:id="@+id/iv_more"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_more"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

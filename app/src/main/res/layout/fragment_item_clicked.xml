@@ -33,7 +33,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:ellipsize="end"
-                    android:fontFamily="@font/regular"
+                    android:fontFamily="@font/one"
                     android:maxLines="1"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
@@ -46,7 +46,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:ellipsize="end"
-                    android:fontFamily="@font/regular"
+                    android:fontFamily="@font/one"
                     android:maxLines="1"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
@@ -100,7 +100,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="8dp"
-                        android:fontFamily="@font/regular"
+                        android:fontFamily="@font/one"
                         android:text="ثبت پشتیبانی"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -141,7 +141,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="8dp"
-                        android:fontFamily="@font/regular"
+                        android:fontFamily="@font/one"
                         android:text="سابقه پشتیبانی"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -192,7 +192,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="8dp"
-                        android:fontFamily="@font/regular"
+                        android:fontFamily="@font/one"
                         android:text="لیست محصولات"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -233,7 +233,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="8dp"
-                        android:fontFamily="@font/regular"
+                        android:fontFamily="@font/one"
                         android:text="مبالغ واریزی"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -283,7 +283,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="8dp"
-                        android:fontFamily="@font/regular"
+                        android:fontFamily="@font/one"
                         android:text="مشاهده اطلاعات تماس"
                         android:textColor="@color/white"
                         android:textSize="14sp" />

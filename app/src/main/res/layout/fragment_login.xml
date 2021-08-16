@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_title_bg"
-                android:fontFamily="@font/yekan"
+                android:fontFamily="@font/two"
                 android:padding="16dp"
                 android:text="برنامه پشتیبانی"
                 android:textColor="@color/white"

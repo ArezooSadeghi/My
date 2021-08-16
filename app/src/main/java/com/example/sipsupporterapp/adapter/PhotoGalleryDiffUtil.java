@@ -2,13 +2,11 @@ package com.example.sipsupporterapp.adapter;
 
 import androidx.recyclerview.widget.DiffUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoGalleryDiffUtil extends DiffUtil.Callback {
 
-    private List<String> oldFilePathList = new ArrayList<>();
-    private List<String> newFilePathList = new ArrayList<>();
+    private List<String> oldFilePathList, newFilePathList;
 
     public PhotoGalleryDiffUtil(List<String> oldFilePathList, List<String> newFilePathList) {
         this.oldFilePathList = oldFilePathList;

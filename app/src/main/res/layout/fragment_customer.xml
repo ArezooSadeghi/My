@@ -42,7 +42,7 @@
             android:id="@+id/txt_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/one"
             android:text="نتیجه ای یافت نشد"
             android:textColor="@color/white"
             android:textSize="16sp"

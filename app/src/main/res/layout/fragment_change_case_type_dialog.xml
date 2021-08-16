@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_margin="32dp"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/one"
             android:textColor="@color/black"
             android:textDirection="rtl"
             android:textSize="14sp"

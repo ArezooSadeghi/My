@@ -24,6 +24,7 @@
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:textColor="@color/white"
+        android:textDirection="rtl"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@id/iv_arrow"
         tools:text="@string/app_name" />

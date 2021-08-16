@@ -37,7 +37,7 @@
             android:id="@+id/txt_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
+            android:fontFamily="@font/one"
             android:text="موردی برای نمایش وجود ندارد"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:backgroundTint="@color/light_gray"
-                android:fontFamily="@font/regular"
+                android:fontFamily="@font/one"
                 android:text="انصراف"
                 android:textColor="@color/white" />
 
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:backgroundTint="@color/light_gray"
-                android:fontFamily="@font/regular"
+                android:fontFamily="@font/one"
                 android:text="افزودن"
                 android:textColor="@color/white" />
 

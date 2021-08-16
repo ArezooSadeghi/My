@@ -37,31 +37,27 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
     private Context context;
     private CaseViewModel viewModel;
     private List<CaseResult.CaseInfo> caseInfoList;
-
-    final Random random = new Random();
+    private final Random random;
 
     public CaseAdapter(CaseViewModel viewModel, List<CaseResult.CaseInfo> caseInfoList) {
         this.viewModel = viewModel;
         this.caseInfoList = caseInfoList;
+        random = new Random();
     }
 
     @NonNull
     @Override
     public CaseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new CaseHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.case_adapter_item,
-                parent,
-                false));
+        return new CaseHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.case_adapter_item, parent, false));
     }
 
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull CaseHolder holder, int position) {
         holder.bind(position);
-        holder.binding.container.removeAllViews();
         CaseResult.CaseInfo caseInfo = caseInfoList.get(position);
+        holder.binding.container.removeAllViews();
         int color = generateRandomColor();
         holder.binding.cardView.setCardBackgroundColor(color);
 
@@ -75,25 +71,21 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
 
             if (Build.VERSION.SDK_INT < 21) {
                 CompoundButtonCompat.setButtonTintList(checkBoxSeen, ColorStateList.valueOf(R.color.pink));
-            } else {
-                checkBoxSeen.setButtonTintList(ColorStateList.valueOf(R.color.pink));
-            }
-
-            if (Build.VERSION.SDK_INT < 21) {
                 CompoundButtonCompat.setButtonTintList(checkBoxFinish, ColorStateList.valueOf(R.color.pink));
             } else {
+                checkBoxSeen.setButtonTintList(ColorStateList.valueOf(R.color.pink));
                 checkBoxFinish.setButtonTintList(ColorStateList.valueOf(R.color.pink));
             }
 
-            checkBoxSeen.setText("seen");
-            checkBoxFinish.setText("finish");
+            checkBoxSeen.setText(R.string.check_box_seen_en_text);
+            checkBoxFinish.setText(R.string.check_box_finish_en_text);
             checkBoxSeen.setChecked(assignInfo.isSeen());
             checkBoxFinish.setChecked(assignInfo.isFinish());
             TextView assignUserFullName = new TextView(context);
             assignUserFullName.setTextColor(Color.BLACK);
             assignUserFullName.setTextSize(12);
             assignUserFullName.setLayoutParams(params);
-            Typeface typeface = ResourcesCompat.getFont(context, R.font.regular);
+            Typeface typeface = ResourcesCompat.getFont(context, R.font.one);
             assignUserFullName.setTypeface(typeface);
             assignUserFullName.setText(Converter.letterConverter(assignInfo.getAssignUserFullName()));
             linearLayout.addView(checkBoxFinish);
@@ -126,18 +118,18 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("چاپ فاکتور", R.drawable.invoice_print))
-                        .addItem(new PowerMenuItem("assign", R.drawable.assign))
-                        .addItem(new PowerMenuItem("comment", R.drawable.comment))
-                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .addItem(new PowerMenuItem("پایان کار", R.drawable.finish))
-                        .addItem(new PowerMenuItem("مشاهده", R.drawable.magnifier))
-                        .addItem(new PowerMenuItem("ثبت مبالغ واریزی", R.drawable.payment))
-                        .addItem(new PowerMenuItem("محصولات این case"))
-                        .addItem(new PowerMenuItem("تغییر گروه"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_print_invoice_item_title), R.drawable.print))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_assign_item_title), R.drawable.assign))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_comment_item_title), R.drawable.comment))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_finish_item_title), R.drawable.finish))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_item_title), R.drawable.see))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_payment_item_title), R.drawable.payment))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_product_item_title)))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_change_case_type_item_title)))
                         .setIconSize(24)
-                        .setTextColor(Color.parseColor("#000000"))
+                        .setTextColor(Color.BLACK)
                         .setTextSize(12)
                         .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                         .setTextGravity(Gravity.RIGHT)
@@ -204,15 +196,12 @@ public class CaseAdapter extends RecyclerView.Adapter<CaseAdapter.CaseHolder> {
 
     public int generateRandomColor() {
         final int baseColor = Color.WHITE;
-
         final int baseRed = Color.red(baseColor);
         final int baseGreen = Color.green(baseColor);
         final int baseBlue = Color.blue(baseColor);
-
         final int red = (baseRed + random.nextInt(256)) / 2;
         final int green = (baseGreen + random.nextInt(256)) / 2;
         final int blue = (baseBlue + random.nextInt(256)) / 2;
-
         return Color.rgb(red, green, blue);
     }
 

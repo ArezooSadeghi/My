@@ -40,11 +40,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
     @Override
     public CustomerPaymentInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new CustomerPaymentInfoHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.customer_payment_adapter_item,
-                parent,
-                false));
+        return new CustomerPaymentInfoHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.customer_payment_adapter_item, parent, false));
     }
 
     @Override
@@ -54,10 +50,10 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             @Override
             public void onClick(View view) {
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem("ویرایش", R.drawable.edit))
-                        .addItem(new PowerMenuItem("حذف", R.drawable.remove))
-                        .addItem(new PowerMenuItem("مشاهده مستندات", R.drawable.see_document))
-                        .setTextColor(Color.parseColor("#000000"))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                        .setTextColor(Color.BLACK)
                         .setIconSize(24)
                         .setTextSize(12)
                         .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
