@@ -11,7 +11,6 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class CustomerViewModel extends AndroidViewModel {
-
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent;
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
@@ -22,7 +21,6 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
-
         repository = SipSupporterRepository.getInstance(getApplication());
         customersResultSingleLiveEvent = repository.getCustomersResultSingleLiveEvent();
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();

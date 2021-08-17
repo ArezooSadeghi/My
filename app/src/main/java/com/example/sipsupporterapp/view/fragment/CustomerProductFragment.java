@@ -73,11 +73,8 @@ public class CustomerProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.base_layout,
-                container,
-                false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.base_layout, container, false);
+        binding.setCustomerProductViewModel(viewModel);
 
         initViews();
         handleEvents();

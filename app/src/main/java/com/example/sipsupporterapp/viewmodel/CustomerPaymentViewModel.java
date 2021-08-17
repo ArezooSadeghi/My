@@ -13,7 +13,6 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class CustomerPaymentViewModel extends AndroidViewModel {
-
     private SipSupporterRepository repository;
     private SingleLiveEvent<BankAccountResult> bankAccountsResultSingleLiveEvent;
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsResultSingleLiveEvent;
@@ -29,10 +28,10 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> DeleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
 
     public CustomerPaymentViewModel(@NonNull Application application) {
         super(application);
-
         repository = SipSupporterRepository.getInstance(getApplication());
         bankAccountsResultSingleLiveEvent = repository.getBankAccountsResultSingleLiveEvent();
         customerPaymentsResultSingleLiveEvent = repository.getCustomerPaymentsResultSingleLiveEvent();
@@ -102,6 +101,10 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return seeCustomerPaymentAttachmentsClicked;
     }
 
+    public SingleLiveEvent<Boolean> getShowDialog() {
+        return showDialog;
+    }
+
     public ServerData getServerData(String centerName) {
         return repository.getServerData(centerName);
     }
@@ -155,5 +158,9 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
             return customerPaymentsResultSingleLiveEvent.getValue().getCustomerPayments()[index];
         }
         return null;
+    }
+
+    public void ivMoreClick() {
+        showDialog.setValue(true);
     }
 }

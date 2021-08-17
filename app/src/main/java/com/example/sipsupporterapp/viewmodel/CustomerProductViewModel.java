@@ -11,7 +11,6 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.repository.SipSupporterRepository;
 
 public class CustomerProductViewModel extends AndroidViewModel {
-
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerProductResult> customerProductsResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> customerProductInfoResultSingleLiveEvent;
@@ -28,7 +27,6 @@ public class CustomerProductViewModel extends AndroidViewModel {
 
     public CustomerProductViewModel(@NonNull Application application) {
         super(application);
-
         repository = SipSupporterRepository.getInstance(getApplication());
         customerProductsResultSingleLiveEvent = repository.getCustomerProductsResultSingleLiveEvent();
         customerProductInfoResultSingleLiveEvent = repository.getCustomerProductInfoResultSingleLiveEvent();

@@ -72,11 +72,8 @@ public class CustomerPaymentFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.base_layout,
-                null,
-                false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.base_layout, null, false);
+        binding.setCustomerPaymentViewModel(viewModel);
 
         initViews();
         handleEvents();
@@ -173,34 +170,6 @@ public class CustomerPaymentFragment extends Fragment {
     }
 
     private void handleEvents() {
-        binding.ivMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PowerMenu powerMenu = new PowerMenu.Builder(getContext())
-                        .addItem(new PowerMenuItem("افزودن واریزی جدید"))
-                        .setTextColor(Color.parseColor("#000000"))
-                        .setTextSize(12)
-                        .setIconSize(24)
-                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
-                        .setTextGravity(Gravity.RIGHT)
-                        .build();
-
-                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
-                    @Override
-                    public void onItemClick(int i, PowerMenuItem item) {
-                        switch (i) {
-                            case 0:
-                                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, customerID, 0);
-                                fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
-                                powerMenu.dismiss();
-                                break;
-                        }
-                    }
-                });
-                powerMenu.showAsDropDown(view);
-            }
-        });
-
         binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,6 +255,34 @@ public class CustomerPaymentFragment extends Fragment {
             @Override
             public void onChanged(Boolean refresh) {
                 fetchCustomerPayments(customerID);
+            }
+        });
+
+        viewModel.getShowDialog().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean showDialog) {
+                PowerMenu powerMenu = new PowerMenu.Builder(getContext())
+                        .addItem(new PowerMenuItem(getString(R.string.power_menu_add_payment_item_title)))
+                        .setTextColor(Color.BLACK)
+                        .setTextSize(12)
+                        .setIconSize(24)
+                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                        .setTextGravity(Gravity.RIGHT)
+                        .build();
+
+                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                    @Override
+                    public void onItemClick(int position, PowerMenuItem item) {
+                        switch (position) {
+                            case 0:
+                                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(0, customerID, 0);
+                                fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
+                                powerMenu.dismiss();
+                                break;
+                        }
+                    }
+                });
+                powerMenu.showAsDropDown(binding.ivMore);
             }
         });
     }

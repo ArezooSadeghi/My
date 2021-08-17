@@ -83,4 +83,6 @@
     <string name="check_box_seen_en_text">seen</string>
     <string name="check_box_finish_en_text">finish</string>
     <string name="power_menu_see_attachment_item_title">مشاهده مستندات</string>
+    <string name="power_menu_add_payment_item_title">ثبت واریزی</string>
+    <string name="power_menu_add_product_item_title">ثبت محصول</string>
 </resources>

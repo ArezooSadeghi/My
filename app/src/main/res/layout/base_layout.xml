@@ -4,6 +4,14 @@
 
     <data>
 
+        <variable
+            name="customerPaymentViewModel"
+            type="com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel" />
+
+        <variable
+            name="customerProductViewModel"
+            type="com.example.sipsupporterapp.viewmodel.CustomerProductViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,6 +65,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginRight="8dp"
+                    android:onClick="@{(view) -> customerPaymentViewModel.ivMoreClick()}"
                     android:src="@drawable/ic_more"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
