@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.AssignAdapter;
 import com.example.sipsupporterapp.databinding.FragmentAssignDialogBinding;
-import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -96,7 +96,7 @@ public class AssignDialogFragment extends DialogFragment {
     }
 
     @Subscribe
-    public void getDeleteEvent(YesDeleteEvent event) {
+    public void getDeleteEvent(newDeleteEvent event) {
         deleteAssign(assignID);
     }
 

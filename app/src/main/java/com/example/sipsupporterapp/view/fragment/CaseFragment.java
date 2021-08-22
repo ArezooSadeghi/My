@@ -22,7 +22,7 @@ import com.example.sipsupporterapp.adapter.CaseAdapter;
 import com.example.sipsupporterapp.databinding.FragmentCaseBinding;
 import com.example.sipsupporterapp.eventbus.CaseTypesEvent;
 import com.example.sipsupporterapp.eventbus.PostCustomerIDEvent;
-import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 import com.example.sipsupporterapp.model.AssignResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CaseTypeResult;
@@ -120,7 +120,7 @@ public class CaseFragment extends Fragment {
     }
 
     @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
+    public void getYesDeleteEvent(newDeleteEvent event) {
         try {
             int newCaseID = Integer.valueOf(caseID);
             deleteCase(newCaseID);

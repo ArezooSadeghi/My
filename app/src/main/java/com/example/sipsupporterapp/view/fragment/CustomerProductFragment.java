@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.CustomerProductAdapter;
 import com.example.sipsupporterapp.databinding.BaseLayoutBinding;
-import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
@@ -42,6 +42,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CustomerProductFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -63,7 +64,6 @@ public class CustomerProductFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
         initVariables();
         fetchCustomerProducts(customerID);
@@ -73,7 +73,11 @@ public class CustomerProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.base_layout, container, false);
+        binding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.base_layout,
+                container,
+                false);
 
         initViews();
         handleEvents();
@@ -100,7 +104,7 @@ public class CustomerProductFragment extends Fragment {
     }
 
     @Subscribe
-    public void getDeleteEvent(YesDeleteEvent event) {
+    public void getDeleteEvent(newDeleteEvent event) {
         deleteCustomerProduct(customerProductID);
     }
 
@@ -144,13 +148,13 @@ public class CustomerProductFragment extends Fragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
         Intent starter = LoginContainerActivity.start(getContext());
         startActivity(starter);
         getActivity().finish();
     }
 
     private void setupAdapter(CustomerProductResult.CustomerProductInfo[] customerProductInfoArray) {
-        binding.txtEmpty.setVisibility(customerProductInfoArray.length == 0 ? View.VISIBLE : View.GONE);
         CustomerProductAdapter adapter = new CustomerProductAdapter(viewModel, Arrays.asList(customerProductInfoArray));
         binding.recyclerView.setAdapter(adapter);
     }
@@ -209,40 +213,30 @@ public class CustomerProductFragment extends Fragment {
             @Override
             public void onChanged(CustomerProductResult productResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                if (productResult.getErrorCode().equals("0")) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
+                if (Objects.requireNonNull(productResult).getErrorCode().equals("0")) {
                     String count = Converter.numberConverter(String.valueOf(productResult.getCustomerProducts().length));
                     binding.txtCount.setText("تعداد محصولات: " + count);
-                    setupAdapter(productResult.getCustomerProducts());
-                } else if (productResult.getErrorCode().equals("-9001")) {
+                    if (productResult.getCustomerProducts().length == 0) {
+                        binding.txtEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.txtEmpty.setVisibility(View.GONE);
+                        binding.recyclerView.setVisibility(View.VISIBLE);
+                        setupAdapter(productResult.getCustomerProducts());
+                    }
+                } else if (Objects.requireNonNull(productResult).getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                    handleError(productResult.getError());
+                    handleError(Objects.requireNonNull(productResult).getError());
                 }
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
-        });
 
         viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer customer_Product_ID) {
                 customerProductID = customer_Product_ID;
-                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance(getString(R.string.delete_question_customer_product_message));
+                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید محصول موردنظر را حذف کنید؟");
                 fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
             }
         });
@@ -250,13 +244,13 @@ public class CustomerProductFragment extends Fragment {
         viewModel.getDeleteCustomerProductResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult>() {
             @Override
             public void onChanged(CustomerProductResult customerProductResult) {
-                if (customerProductResult.getErrorCode().equals("0")) {
-                    showSuccessDialog(getString(R.string.success_delete_customer_product));
+                if (Objects.requireNonNull(customerProductResult).getErrorCode().equals("0")) {
+                    showSuccessDialog("حذف محصول موفقیت آمیز بود");
                     fetchCustomerProducts(customerID);
-                } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                } else if (Objects.requireNonNull(customerProductResult).getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                    handleError(customerProductResult.getError());
+                    handleError(Objects.requireNonNull(customerProductResult).getError());
                 }
             }
         });
@@ -284,5 +278,21 @@ public class CustomerProductFragment extends Fragment {
                         startActivity(starter);
                     }
                 });
+
+        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                handleError(message);
+            }
+        });
+
+        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                handleError(message);
+            }
+        });
     }
 }

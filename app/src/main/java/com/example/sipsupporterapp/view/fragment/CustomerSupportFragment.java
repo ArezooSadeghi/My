@@ -29,6 +29,7 @@ import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CustomerSupportFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -50,7 +51,6 @@ public class CustomerSupportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
         initVariables();
         fetchCustomerSupports(customerID);
@@ -89,6 +89,12 @@ public class CustomerSupportFragment extends Fragment {
         serverData = viewModel.getServerData(centerName);
     }
 
+    private void fetchCustomerSupports(int customerID) {
+        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerSupports/ListByCustomer/";
+        viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
+    }
+
     private void initView() {
         String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
         binding.txtCustomerName.setText(customerName);
@@ -107,12 +113,6 @@ public class CustomerSupportFragment extends Fragment {
         });
     }
 
-    private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
-        binding.txtEmpty.setVisibility(customerSupportInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        CustomerSupportAdapter adapter = new CustomerSupportAdapter(viewModel, Arrays.asList(customerSupportInfoArray));
-        binding.recyclerView.setAdapter(adapter);
-    }
-
     private void handleError(String message) {
         ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
@@ -127,35 +127,39 @@ public class CustomerSupportFragment extends Fragment {
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
         SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
         Intent starter = LoginContainerActivity.start(getContext());
         startActivity(starter);
         getActivity().finish();
     }
 
-    private void fetchCustomerSupports(int customerID) {
-        viewModel.getSipSupporterServiceCustomerSupportResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerSupports/ListByCustomer/";
-        viewModel.fetchCustomerSupports(path, userLoginKey, customerID);
+    private void setupAdapter(CustomerSupportResult.CustomerSupportInfo[] customerSupportInfoArray) {
+        CustomerSupportAdapter adapter = new CustomerSupportAdapter(viewModel, Arrays.asList(customerSupportInfoArray));
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void setupObserver() {
-        viewModel.getCustomerSupportsResultSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<CustomerSupportResult>() {
-                    @Override
-                    public void onChanged(CustomerSupportResult customerSupportResult) {
-                        binding.progressBarLoading.setVisibility(View.GONE);
-                        if (customerSupportResult.getErrorCode().equals("0")) {
-                            binding.recyclerView.setVisibility(View.VISIBLE);
-                            String count = Converter.numberConverter(String.valueOf(customerSupportResult.getCustomerSupports().length));
-                            binding.txtCount.setText("تعداد پشتیبانی ها: " + count);
-                            setupAdapter(customerSupportResult.getCustomerSupports());
-                        } else if (customerSupportResult.getErrorCode().equals("-9001")) {
-                            ejectUser();
-                        } else {
-                            handleError(customerSupportResult.getError());
-                        }
+        viewModel.getCustomerSupportsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerSupportResult>() {
+            @Override
+            public void onChanged(CustomerSupportResult customerSupportResult) {
+                binding.progressBarLoading.setVisibility(View.GONE);
+                if (Objects.requireNonNull(customerSupportResult).getErrorCode().equals("0")) {
+                    String count = Converter.numberConverter(String.valueOf(customerSupportResult.getCustomerSupports().length));
+                    binding.txtCount.setText("تعداد پشتیبانی ها: " + count);
+                    if (customerSupportResult.getCustomerSupports().length == 0) {
+                        binding.txtEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.txtEmpty.setVisibility(View.GONE);
+                        binding.recyclerView.setVisibility(View.VISIBLE);
+                        setupAdapter(customerSupportResult.getCustomerSupports());
                     }
-                });
+                } else if (Objects.requireNonNull(customerSupportResult).getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(Objects.requireNonNull(customerSupportResult).getError());
+                }
+            }
+        });
 
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override

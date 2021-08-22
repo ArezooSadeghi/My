@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentQuestionDialogBinding;
-import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -69,7 +69,7 @@ public class QuestionDialogFragment extends DialogFragment {
         binding.btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new YesDeleteEvent(true));
+                EventBus.getDefault().post(new newDeleteEvent());
                 dismiss();
             }
         });

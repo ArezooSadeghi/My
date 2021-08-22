@@ -25,7 +25,7 @@ import com.example.sipsupporterapp.adapter.InvoiceDetailsAdapter;
 import com.example.sipsupporterapp.databinding.FragmentInvoiceBinding;
 import com.example.sipsupporterapp.eventbus.NavigateEvent;
 import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
-import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.ProductResult;
@@ -348,7 +348,7 @@ public class InvoiceFragment extends Fragment {
     }
 
     @Subscribe
-    public void getYesDeleteEvent(YesDeleteEvent event) {
+    public void getYesDeleteEvent(newDeleteEvent event) {
         deleteInvoiceDetails(invoiceDetailsID);
     }
 

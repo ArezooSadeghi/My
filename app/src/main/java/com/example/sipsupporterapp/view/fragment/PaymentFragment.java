@@ -20,7 +20,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.PaymentAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPaymentBinding;
 import com.example.sipsupporterapp.eventbus.PostBankAccountResultEvent;
-import com.example.sipsupporterapp.eventbus.YesDeleteEvent;
+import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.PaymentResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -94,7 +94,7 @@ public class PaymentFragment extends Fragment {
     }
 
     @Subscribe
-    public void getDeleteEvent(YesDeleteEvent event) {
+    public void getDeleteEvent(newDeleteEvent event) {
         deletePayment(paymentID);
     }
 
