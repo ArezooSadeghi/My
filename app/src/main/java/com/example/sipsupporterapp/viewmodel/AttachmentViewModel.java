@@ -90,15 +90,15 @@ public class AttachmentViewModel extends AndroidViewModel {
         return allowPermission;
     }
 
-    public SingleLiveEvent<Boolean> getAttachAgainClicked() {
+    public SingleLiveEvent<Boolean> getAttachAgain() {
         return attachAgainClicked;
     }
 
-    public SingleLiveEvent<Boolean> getYesClicked() {
+    public SingleLiveEvent<Boolean> getYesAttachAgainClicked() {
         return yesClicked;
     }
 
-    public SingleLiveEvent<Boolean> getNoClicked() {
+    public SingleLiveEvent<Boolean> getNoAttachAgainClicked() {
         return noClicked;
     }
 

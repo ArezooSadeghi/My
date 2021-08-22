@@ -74,10 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menu_logout:
                         SipSupportSharedPreferences.setUserLoginKey(MainActivity.this, null);
                         SipSupportSharedPreferences.setUserFullName(MainActivity.this, null);
-                        SipSupportSharedPreferences.setCustomerUserId(MainActivity.this, 0);
                         SipSupportSharedPreferences.setCustomerName(MainActivity.this, null);
                         SipSupportSharedPreferences.setCustomerTel(MainActivity.this, null);
-                        SipSupportSharedPreferences.setLastSearchQuery(MainActivity.this, null);
                         Intent intent = LoginContainerActivity.start(MainActivity.this);
                         startActivity(intent);
                         finish();

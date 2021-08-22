@@ -127,10 +127,8 @@ public class ChangePasswordDialogFragment extends DialogFragment {
     private void ejectUser() {
         SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
         SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
         SipSupportSharedPreferences.setCustomerName(getContext(), null);
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
 
         Intent intent = LoginContainerActivity.start(getContext());
         startActivity(intent);

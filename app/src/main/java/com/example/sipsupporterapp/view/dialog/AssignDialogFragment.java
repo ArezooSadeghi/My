@@ -132,9 +132,7 @@ public class AssignDialogFragment extends DialogFragment {
         SipSupportSharedPreferences.setUserFullName(getContext(), null);
         SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
         SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
         SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
         SipSupportSharedPreferences.setUserName(getContext(), null);
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);

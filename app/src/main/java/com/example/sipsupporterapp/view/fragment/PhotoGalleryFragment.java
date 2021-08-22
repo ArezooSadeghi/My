@@ -45,14 +45,13 @@ import java.util.List;
 public class PhotoGalleryFragment extends Fragment {
     private FragmentPhotoGalleryBinding binding;
     private AttachmentViewModel viewModel;
-
-    private int customerSupportID, customerProductID, customerPaymentID, paymentID, index;
     private ServerData serverData;
+    private String centerName, userLoginKey;
     private PhotoGalleryAdapter adapter;
     private List<String> oldFilePathList;
     private List<String> newFilePathList;
     private List<Integer> attachIDList;
-    private String centerName, userLoginKey;
+    private int customerSupportID, customerProductID, customerPaymentID, paymentID, index;
 
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 0;
     private static final int REQUEST_CODE_CAMERA_PERMISSION = 1;
@@ -68,12 +67,10 @@ public class PhotoGalleryFragment extends Fragment {
     public static PhotoGalleryFragment newInstance(int customerSupportID, int customerProductID, int customerPaymentID, int paymentID) {
         PhotoGalleryFragment fragment = new PhotoGalleryFragment();
         Bundle args = new Bundle();
-
         args.putInt(ARGS_CUSTOMER_SUPPORT_ID, customerSupportID);
         args.putInt(ARGS_CUSTOMER_PRODUCT_ID, customerProductID);
         args.putInt(ARGS_CUSTOMER_PAYMENT_ID, customerPaymentID);
         args.putInt(ARGS_PAYMENT_ID, paymentID);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -205,19 +202,16 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void initVariables() {
-        oldFilePathList = new ArrayList<>();
-        newFilePathList = new ArrayList<>();
-        attachIDList = new ArrayList<>();
-
         userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
         centerName = SipSupportSharedPreferences.getCenterName(getContext());
         serverData = viewModel.getServerData(centerName);
-        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
-
         customerSupportID = getArguments().getInt(ARGS_CUSTOMER_SUPPORT_ID);
         customerProductID = getArguments().getInt(ARGS_CUSTOMER_PRODUCT_ID);
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
         paymentID = getArguments().getInt(ARGS_PAYMENT_ID);
+        oldFilePathList = new ArrayList<>();
+        newFilePathList = new ArrayList<>();
+        attachIDList = new ArrayList<>();
     }
 
     private void initViews() {
@@ -243,26 +237,31 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void fetchCustomerSupportAttachments() {
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerSupport/";
         viewModel.fetchCustomerSupportAttachments(path, userLoginKey, customerSupportID, false);
     }
 
     private void fetchCustomerProductAttachments() {
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerProduct/";
         viewModel.fetchCustomerProductAttachments(path, userLoginKey, customerProductID, false);
     }
 
     private void fetchCustomerPaymentAttachments() {
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByCustomerPayment/";
         viewModel.fetchCustomerPaymentAttachments(path, userLoginKey, customerPaymentID, false);
     }
 
     private void fetchPaymentAttachments() {
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/List_ByPayment/";
         viewModel.fetchPaymentAttachments(path, userLoginKey, paymentID, false);
     }
 
     private void fetchAttachInfo(int attachID) {
+        viewModel.getSipSupporterServiceAttachResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/attach/Info/";
         viewModel.fetchAttachInfo(path, userLoginKey, attachID, true);
     }
@@ -497,9 +496,7 @@ public class PhotoGalleryFragment extends Fragment {
         SipSupportSharedPreferences.setUserFullName(getContext(), null);
         SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
         SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
         SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
         SipSupportSharedPreferences.setUserName(getContext(), null);
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);

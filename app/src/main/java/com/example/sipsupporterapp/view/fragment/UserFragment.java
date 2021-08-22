@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.UserAdapter;
 import com.example.sipsupporterapp.databinding.BaseLayoutBinding;
+import com.example.sipsupporterapp.eventbus.SuccessEvent;
 import com.example.sipsupporterapp.model.CustomerUserResult;
 import com.example.sipsupporterapp.model.DateResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -30,7 +31,11 @@ import com.example.sipsupporterapp.view.dialog.AddEditCustomerSupportDialogFragm
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.UserViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Arrays;
+import java.util.Objects;
 
 public class UserFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -53,10 +58,9 @@ public class UserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
         initVariables();
-        getDate();
+        fetchDate();
     }
 
     @Override
@@ -82,6 +86,26 @@ public class UserFragment extends Fragment {
         setupObserver();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getSuccessEvent(SuccessEvent event) {
+        Intent starter = MainActivity.start(getContext());
+        starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(starter);
+        getActivity().finish();
+    }
+
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
@@ -93,16 +117,10 @@ public class UserFragment extends Fragment {
         serverData = viewModel.getServerData(centerName);
     }
 
-    private void getDate() {
+    private void fetchDate() {
         viewModel.getSipSupporterServiceDateResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "/api/v1/common/getDate/";
         viewModel.fetchDate(path, userLoginKey);
-    }
-
-    private void fetchUsers() {
-        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerUsers/userList/";
-        viewModel.fetchUsers(path, userLoginKey, customerID);
     }
 
     private void initViews() {
@@ -114,33 +132,6 @@ public class UserFragment extends Fragment {
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-        Intent starter = LoginContainerActivity.start(getContext());
-        startActivity(starter);
-        getActivity().finish();
-    }
-
-    private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
-        binding.txtEmpty.setVisibility(customerUserInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        UserAdapter adapter = new UserAdapter(viewModel, Arrays.asList(customerUserInfoArray), date);
-        binding.recyclerView.setAdapter(adapter);
-    }
-
     private void handleEvents() {
         binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,20 +141,40 @@ public class UserFragment extends Fragment {
         });
     }
 
+    private void fetchUsers() {
+        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerUsers/userList/";
+        viewModel.fetchUsers(path, userLoginKey, customerID);
+    }
+
     private void setupObserver() {
+        viewModel.getDateResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<DateResult>() {
+            @Override
+            public void onChanged(DateResult dateResult) {
+                if (Objects.requireNonNull(dateResult).getErrorCode().equals("0")) {
+                    date = dateResult.getDate();
+                }
+            }
+        });
+
         viewModel.getUsersResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerUserResult>() {
             @Override
             public void onChanged(CustomerUserResult customerUserResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                if (customerUserResult.getErrorCode().equals("0")) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
+                if (Objects.requireNonNull(customerUserResult).getErrorCode().equals("0")) {
                     String count = Converter.numberConverter(String.valueOf(customerUserResult.getCustomerUsers().length));
                     binding.txtCount.setText("تعداد کاربران: " + count);
-                    setupAdapter(customerUserResult.getCustomerUsers());
-                } else if (customerUserResult.getErrorCode().equals("-9001")) {
+                    if (customerUserResult.getCustomerUsers().length == 0) {
+                        binding.txtEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.txtEmpty.setVisibility(View.GONE);
+                        binding.recyclerView.setVisibility(View.VISIBLE);
+                        setupAdapter(customerUserResult.getCustomerUsers());
+                    }
+                } else if (Objects.requireNonNull(customerUserResult).getErrorCode().equals("-9001")) {
                     ejectUser();
                 } else {
-                    handleError(customerUserResult.getError());
+                    handleError(Objects.requireNonNull(customerUserResult).getError());
                 }
             }
         });
@@ -184,32 +195,37 @@ public class UserFragment extends Fragment {
             }
         });
 
-        viewModel.getSelected().observe(getViewLifecycleOwner(), new Observer<CustomerUserResult.CustomerUserInfo>() {
+        viewModel.getItemClicked().observe(getViewLifecycleOwner(), new Observer<CustomerUserResult.CustomerUserInfo>() {
             @Override
             public void onChanged(CustomerUserResult.CustomerUserInfo customerUserInfo) {
-                SipSupportSharedPreferences.setCustomerUserId(getContext(), customerUserInfo.getCustomerUserID());
-                AddEditCustomerSupportDialogFragment fragment = AddEditCustomerSupportDialogFragment.newInstance(customerUserInfo.getCustomerID());
+                AddEditCustomerSupportDialogFragment fragment = AddEditCustomerSupportDialogFragment.newInstance(customerUserInfo.getCustomerID(), customerUserInfo.getCustomerUserID());
                 fragment.show(getActivity().getSupportFragmentManager(), AddEditCustomerSupportDialogFragment.TAG);
             }
         });
+    }
 
-        viewModel.getDateResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<DateResult>() {
-            @Override
-            public void onChanged(DateResult dateResult) {
-                if (dateResult.getErrorCode().equals("0")) {
-                    date = dateResult.getDate();
-                }
-            }
-        });
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
 
-        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isSuccessfulRegister) {
-                Intent starter = MainActivity.start(getContext());
-                starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(starter);
-                getActivity().finish();
-            }
-        });
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void setupAdapter(CustomerUserResult.CustomerUserInfo[] customerUserInfoArray) {
+        UserAdapter adapter = new UserAdapter(viewModel, Arrays.asList(customerUserInfoArray), date);
+        binding.recyclerView.setAdapter(adapter);
     }
 }

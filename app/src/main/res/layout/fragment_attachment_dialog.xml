@@ -53,7 +53,7 @@
                 app:fab_orientation="portrait" />
 
             <com.nambimobile.widgets.efab.FabOption
-                android:id="@+id/fab_more"
+                android:id="@+id/fab_chose_from_file"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/light_gray"
@@ -68,9 +68,9 @@
             android:layout_height="25dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/send"
-            app:layout_constraintBottom_toBottomOf="@id/ed_text_description"
+            app:layout_constraintBottom_toBottomOf="@id/ed_txt_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ed_text_description"
+            app:layout_constraintTop_toTopOf="@id/ed_txt_description"
             app:tint="@color/white" />
 
         <ImageView
@@ -95,7 +95,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/ed_text_description"
+            android:id="@+id/ed_txt_description"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
@@ -116,7 +116,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@id/ed_text_description"
+            app:layout_constraintBottom_toTopOf="@id/ed_txt_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_photo" />

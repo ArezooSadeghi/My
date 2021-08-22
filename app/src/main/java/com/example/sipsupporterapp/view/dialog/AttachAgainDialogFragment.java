@@ -75,7 +75,7 @@ public class AttachAgainDialogFragment extends DialogFragment {
         binding.btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.getNoClicked().setValue(true);
+                viewModel.getNoAttachAgainClicked().setValue(true);
                 dismiss();
             }
         });
@@ -83,7 +83,7 @@ public class AttachAgainDialogFragment extends DialogFragment {
         binding.btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.getYesClicked().setValue(true);
+                viewModel.getYesAttachAgainClicked().setValue(true);
                 dismiss();
             }
         });

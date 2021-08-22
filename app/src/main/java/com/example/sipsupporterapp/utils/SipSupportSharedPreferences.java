@@ -8,15 +8,11 @@ public class SipSupportSharedPreferences {
     private static final String USER_FULL_NAME = "userFullName";
     private static final String USER_LOGIN_KEY = "userLoginKey";
     private static final String LAST_VALUE_SPINNER = "lastValueSpinner";
-    private static final String LAST_SEARCH_QUERY = "lastSearchQuery";
     private static final String CUSTOMER_NAME = "customerName";
-    private static final String NEW_CUSTOMER_NAME = "newCustomerName";
-    private static final String CUSTOMER_USER_ID = "customerUserID";
     private static final String USER_NAME = "userName";
     private static final String CUSTOMER_TEL = "customerTel";
     private static final String DATE = "date";
     private static final String FACTOR = "factor";
-    private static final String CASE_TYPE_ID = "caseTypeID";
     private static final String CASE_ID = "caseID";
 
     public static void setUserFullName(Context context, String userFullName) {
@@ -49,16 +45,6 @@ public class SipSupportSharedPreferences {
         return preferences.getString(LAST_VALUE_SPINNER, null);
     }
 
-    public static void setLastSearchQuery(Context context, String lastSearchQuery) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        preferences.edit().putString(LAST_SEARCH_QUERY, lastSearchQuery).commit();
-    }
-
-    public static String getLastSearchQuery(Context context) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(LAST_SEARCH_QUERY, null);
-    }
-
     public static void setCustomerName(Context context, String customerName) {
         SharedPreferences preferences = getSharedPreferences(context);
         preferences.edit().putString(CUSTOMER_NAME, customerName).commit();
@@ -67,26 +53,6 @@ public class SipSupportSharedPreferences {
     public static String getCustomerName(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(CUSTOMER_NAME, null);
-    }
-
-    public static void setNewCustomerName(Context context, String customerName) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        preferences.edit().putString(NEW_CUSTOMER_NAME, customerName).commit();
-    }
-
-    public static String getNewCustomerName(Context context) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(NEW_CUSTOMER_NAME, null);
-    }
-
-    public static void setCustomerUserId(Context context, int customerUserID) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        preferences.edit().putInt(CUSTOMER_USER_ID, customerUserID).commit();
-    }
-
-    public static int getCustomerUserId(Context context) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getInt(CUSTOMER_USER_ID, -1);
     }
 
     public static void setUserName(Context context, String userName) {
@@ -127,16 +93,6 @@ public class SipSupportSharedPreferences {
     public static String getFactor(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
         return preferences.getString(FACTOR, null);
-    }
-
-    public static void setCaseTypeID(Context context, int caseTypeID) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        preferences.edit().putInt(CASE_TYPE_ID, caseTypeID).commit();
-    }
-
-    public static int getCaseTypeID(Context context) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getInt(CASE_TYPE_ID, 0);
     }
 
     public static void setCaseID(Context context, int caseID) {

@@ -173,7 +173,6 @@ public class CaseFragment extends Fragment {
                 for (int i = 0; i < caseTypes.size(); i++) {
                     if (caseType.equals(caseTypes.get(i))) {
                         caseTypeID = caseTypeIDs.get(i);
-                        SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
                         fetchCasesByCaseType(caseTypeIDs.get(i), "", binding.checkBoxShowAllCases.isChecked());
                         break;
                     }
@@ -486,9 +485,7 @@ public class CaseFragment extends Fragment {
         SipSupportSharedPreferences.setUserFullName(getContext(), null);
         SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
         SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setLastSearchQuery(getContext(), null);
         SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerUserId(getContext(), 0);
         SipSupportSharedPreferences.setUserName(getContext(), null);
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
         SipSupportSharedPreferences.setDate(getContext(), null);
@@ -508,7 +505,6 @@ public class CaseFragment extends Fragment {
         caseTypeID = caseTypeIDs.get(0);
         binding.spinnerCaseTypes.setItems(caseTypes);
 
-        SipSupportSharedPreferences.setCaseTypeID(getContext(), caseTypeID);
         fetchCasesByCaseType(caseTypeID, searchQuery, binding.checkBoxShowAllCases.isChecked());
 
         CaseFragmentArgs args = CaseFragmentArgs.fromBundle(getArguments());

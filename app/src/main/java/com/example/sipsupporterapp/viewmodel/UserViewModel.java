@@ -50,7 +50,7 @@ public class UserViewModel extends AndroidViewModel {
         return refresh;
     }
 
-    public SingleLiveEvent<CustomerUserResult.CustomerUserInfo> getSelected() {
+    public SingleLiveEvent<CustomerUserResult.CustomerUserInfo> getItemClicked() {
         return selected;
     }
 

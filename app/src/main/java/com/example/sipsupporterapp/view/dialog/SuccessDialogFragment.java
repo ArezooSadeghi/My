@@ -14,11 +14,15 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentSuccessDialogBinding;
+import com.example.sipsupporterapp.eventbus.SuccessEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class SuccessDialogFragment extends DialogFragment {
     private FragmentSuccessDialogBinding binding;
 
     private static final String ARGS_MESSAGE = "message";
+
     public static final String TAG = SuccessDialogFragment.class.getSimpleName();
 
     public static SuccessDialogFragment newInstance(String message) {
@@ -70,6 +74,7 @@ public class SuccessDialogFragment extends DialogFragment {
         binding.btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventBus.getDefault().post(new SuccessEvent());
                 dismiss();
             }
         });
