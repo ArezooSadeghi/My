@@ -177,8 +177,10 @@ public class CustomerFragment extends Fragment {
         viewModel.getDateResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<DateResult>() {
             @Override
             public void onChanged(DateResult dateResult) {
-                if (dateResult.getErrorCode().equals("0")) {
-                    SipSupportSharedPreferences.setDate(getContext(), dateResult.getDate());
+                if (dateResult != null) {
+                    if (dateResult.getErrorCode().equals("0")) {
+                        SipSupportSharedPreferences.setDate(getContext(), dateResult.getDate());
+                    }
                 }
             }
         });

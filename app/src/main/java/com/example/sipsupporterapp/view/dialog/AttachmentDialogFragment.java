@@ -46,7 +46,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class AttachmentDialogFragment extends DialogFragment {
     private FragmentAttachmentDialogBinding binding;
@@ -199,18 +198,20 @@ public class AttachmentDialogFragment extends DialogFragment {
         viewModel.getAttachResultSingleLiveEvent().observe(this, new Observer<AttachResult>() {
             @Override
             public void onChanged(AttachResult attachResult) {
-                if (Objects.requireNonNull(attachResult).getErrorCode().equals("0")) {
-                    viewModel.getRefresh().setValue(attachResult);
-                    binding.progressBarLoading.setVisibility(View.GONE);
-                    binding.ivSend.setEnabled(true);
-                    binding.fabRotate.setEnabled(true);
-                    binding.fabChoseFromFile.setEnabled(true);
-                    binding.fabCamera.setEnabled(true);
-                    showSuccessDialog("فایل با موفقیت ثبت شد");
-                } else if (Objects.requireNonNull(attachResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(Objects.requireNonNull(attachResult).getError());
+                if (attachResult != null) {
+                    if (attachResult.getErrorCode().equals("0")) {
+                        viewModel.getRefresh().setValue(attachResult);
+                        binding.progressBarLoading.setVisibility(View.GONE);
+                        binding.ivSend.setEnabled(true);
+                        binding.fabRotate.setEnabled(true);
+                        binding.fabChoseFromFile.setEnabled(true);
+                        binding.fabCamera.setEnabled(true);
+                        showSuccessDialog("فایل با موفقیت ثبت شد");
+                    } else if (attachResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(attachResult.getError());
+                    }
                 }
             }
         });

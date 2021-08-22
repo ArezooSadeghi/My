@@ -35,7 +35,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class UserFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -151,8 +150,10 @@ public class UserFragment extends Fragment {
         viewModel.getDateResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<DateResult>() {
             @Override
             public void onChanged(DateResult dateResult) {
-                if (Objects.requireNonNull(dateResult).getErrorCode().equals("0")) {
-                    date = dateResult.getDate();
+                if (dateResult != null) {
+                    if (dateResult.getErrorCode().equals("0")) {
+                        date = dateResult.getDate();
+                    }
                 }
             }
         });
@@ -161,20 +162,22 @@ public class UserFragment extends Fragment {
             @Override
             public void onChanged(CustomerUserResult customerUserResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                if (Objects.requireNonNull(customerUserResult).getErrorCode().equals("0")) {
-                    String count = Converter.numberConverter(String.valueOf(customerUserResult.getCustomerUsers().length));
-                    binding.txtCount.setText("تعداد کاربران: " + count);
-                    if (customerUserResult.getCustomerUsers().length == 0) {
-                        binding.txtEmpty.setVisibility(View.VISIBLE);
+                if (customerUserResult != null) {
+                    if (customerUserResult.getErrorCode().equals("0")) {
+                        String count = Converter.numberConverter(String.valueOf(customerUserResult.getCustomerUsers().length));
+                        binding.txtCount.setText("تعداد کاربران: " + count);
+                        if (customerUserResult.getCustomerUsers().length == 0) {
+                            binding.txtEmpty.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.txtEmpty.setVisibility(View.GONE);
+                            binding.recyclerView.setVisibility(View.VISIBLE);
+                            setupAdapter(customerUserResult.getCustomerUsers());
+                        }
+                    } else if (customerUserResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
                     } else {
-                        binding.txtEmpty.setVisibility(View.GONE);
-                        binding.recyclerView.setVisibility(View.VISIBLE);
-                        setupAdapter(customerUserResult.getCustomerUsers());
+                        handleError(customerUserResult.getError());
                     }
-                } else if (Objects.requireNonNull(customerUserResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(Objects.requireNonNull(customerUserResult).getError());
                 }
             }
         });

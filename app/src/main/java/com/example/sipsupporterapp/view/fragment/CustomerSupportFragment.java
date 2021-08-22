@@ -29,7 +29,6 @@ import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class CustomerSupportFragment extends Fragment {
     private BaseLayoutBinding binding;
@@ -143,20 +142,22 @@ public class CustomerSupportFragment extends Fragment {
             @Override
             public void onChanged(CustomerSupportResult customerSupportResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                if (Objects.requireNonNull(customerSupportResult).getErrorCode().equals("0")) {
-                    String count = Converter.numberConverter(String.valueOf(customerSupportResult.getCustomerSupports().length));
-                    binding.txtCount.setText("تعداد پشتیبانی ها: " + count);
-                    if (customerSupportResult.getCustomerSupports().length == 0) {
-                        binding.txtEmpty.setVisibility(View.VISIBLE);
+                if (customerSupportResult != null) {
+                    if (customerSupportResult.getErrorCode().equals("0")) {
+                        String count = Converter.numberConverter(String.valueOf(customerSupportResult.getCustomerSupports().length));
+                        binding.txtCount.setText("تعداد پشتیبانی ها: " + count);
+                        if (customerSupportResult.getCustomerSupports().length == 0) {
+                            binding.txtEmpty.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.txtEmpty.setVisibility(View.GONE);
+                            binding.recyclerView.setVisibility(View.VISIBLE);
+                            setupAdapter(customerSupportResult.getCustomerSupports());
+                        }
+                    } else if (customerSupportResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
                     } else {
-                        binding.txtEmpty.setVisibility(View.GONE);
-                        binding.recyclerView.setVisibility(View.VISIBLE);
-                        setupAdapter(customerSupportResult.getCustomerSupports());
+                        handleError(customerSupportResult.getError());
                     }
-                } else if (Objects.requireNonNull(customerSupportResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(Objects.requireNonNull(customerSupportResult).getError());
                 }
             }
         });

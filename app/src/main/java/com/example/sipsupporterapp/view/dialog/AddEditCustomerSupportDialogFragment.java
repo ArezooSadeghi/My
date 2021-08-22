@@ -27,7 +27,6 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AddEditCustomerSupportDialogFragment extends DialogFragment {
     private FragmentAddCustomerSupportDialogBinding binding;
@@ -90,13 +89,15 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         viewModel.getSupportEventsResultSingleLiveEvent().observe(this, new Observer<SupportEventResult>() {
             @Override
             public void onChanged(SupportEventResult supportEventResult) {
-                if (Objects.requireNonNull(supportEventResult).getErrorCode().equals("0")) {
-                    supportEventInfoArray = supportEventResult.getSupportEvents();
-                    setupSpinner(supportEventInfoArray);
-                } else if (Objects.requireNonNull(supportEventResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(Objects.requireNonNull(supportEventResult).getError());
+                if (supportEventResult != null) {
+                    if (supportEventResult.getErrorCode().equals("0")) {
+                        supportEventInfoArray = supportEventResult.getSupportEvents();
+                        setupSpinner(supportEventInfoArray);
+                    } else if (supportEventResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(supportEventResult.getError());
+                    }
                 }
             }
         });
@@ -104,13 +105,15 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         viewModel.getAddCustomerSupportResultSingleLiveEvent().observe(this, new Observer<CustomerSupportResult>() {
             @Override
             public void onChanged(CustomerSupportResult customerSupportResult) {
-                if (Objects.requireNonNull(customerSupportResult).getErrorCode().equals("0")) {
-                    showSuccessDialog("ثبت پشتیبانی موفقیت آمیز بود");
-                    dismiss();
-                } else if (Objects.requireNonNull(customerSupportResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(Objects.requireNonNull(customerSupportResult).getError());
+                if (customerSupportResult != null) {
+                    if (customerSupportResult.getErrorCode().equals("0")) {
+                        showSuccessDialog("ثبت پشتیبانی موفقیت آمیز بود");
+                        dismiss();
+                    } else if (customerSupportResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerSupportResult.getError());
+                    }
                 }
             }
         });
