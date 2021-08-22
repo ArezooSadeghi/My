@@ -26,13 +26,16 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
     private Context context;
     private CustomerPaymentViewModel viewModel;
     private List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList;
+    private boolean flag;
 
-    public CustomerPaymentAdapter(CustomerPaymentViewModel viewModel, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
+    public CustomerPaymentAdapter(CustomerPaymentViewModel viewModel, List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList, boolean flag) {
+        this.flag = flag;
         this.viewModel = viewModel;
         this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
-    public CustomerPaymentAdapter(List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList) {
+    public CustomerPaymentAdapter(List<CustomerPaymentResult.CustomerPaymentInfo> customerPaymentInfoList, boolean flag) {
+        this.flag = flag;
         this.customerPaymentInfoList = customerPaymentInfoList;
     }
 
@@ -49,37 +52,61 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
-                        .setTextColor(Color.BLACK)
-                        .setIconSize(24)
-                        .setTextSize(12)
-                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
-                        .setTextGravity(Gravity.RIGHT)
-                        .build();
+                if (flag) {
+                    PowerMenu powerMenu = new PowerMenu.Builder(context)
+                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                            .setTextColor(Color.BLACK)
+                            .setIconSize(24)
+                            .setTextSize(12)
+                            .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                            .setTextGravity(Gravity.RIGHT)
+                            .build();
 
-                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
-                    @Override
-                    public void onItemClick(int i, PowerMenuItem item) {
-                        switch (i) {
-                            case 0:
-                                viewModel.getEditClicked().setValue(customerPaymentInfoList.get(position));
-                                powerMenu.dismiss();
-                                break;
-                            case 1:
-                                viewModel.getDeleteClicked().setValue(customerPaymentInfoList.get(position).getCustomerPaymentID());
-                                powerMenu.dismiss();
-                                break;
-                            case 2:
-                                viewModel.getSeeCustomerPaymentAttachmentsClicked().setValue(customerPaymentInfoList.get(position));
-                                powerMenu.dismiss();
-                                break;
+                    powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                        @Override
+                        public void onItemClick(int i, PowerMenuItem item) {
+                            switch (i) {
+                                case 0:
+                                    viewModel.getSeeCustomerPaymentAttachmentsClicked().setValue(customerPaymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                            }
                         }
-                    }
-                });
-                powerMenu.showAsDropDown(view);
+                    });
+                    powerMenu.showAsDropDown(view);
+                } else {
+                    PowerMenu powerMenu = new PowerMenu.Builder(context)
+                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                            .setTextColor(Color.BLACK)
+                            .setIconSize(24)
+                            .setTextSize(12)
+                            .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                            .setTextGravity(Gravity.RIGHT)
+                            .build();
+
+                    powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+                        @Override
+                        public void onItemClick(int i, PowerMenuItem item) {
+                            switch (i) {
+                                case 0:
+                                    viewModel.getEditClicked().setValue(customerPaymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                                case 1:
+                                    viewModel.getDeleteClicked().setValue(customerPaymentInfoList.get(position).getCustomerPaymentID());
+                                    powerMenu.dismiss();
+                                    break;
+                                case 2:
+                                    viewModel.getSeeCustomerPaymentAttachmentsClicked().setValue(customerPaymentInfoList.get(position));
+                                    powerMenu.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+                    powerMenu.showAsDropDown(view);
+                }
             }
         });
     }

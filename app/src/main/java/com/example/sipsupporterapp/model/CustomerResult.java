@@ -1,5 +1,6 @@
 package com.example.sipsupporterapp.model;
 
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;

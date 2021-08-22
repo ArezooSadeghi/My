@@ -57,6 +57,11 @@
         android:label="SettingFragment" />
 
     <fragment
+        android:id="@+id/menu_customer_payments"
+        android:name="com.example.sipsupporterapp.view.fragment.GeneralCustomerPaymentFragment"
+        android:label="GeneralCustomerPayment" />
+
+    <fragment
         android:id="@+id/newCaseProductFragment"
         android:name="com.example.sipsupporterapp.view.fragment.NewCaseProductFragment"
         android:label="NewCaseProductFragment">

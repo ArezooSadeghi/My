@@ -22,6 +22,11 @@
         android:title="ثبت مبالغ واریزی نامشخص" />
 
     <item
+        android:id="@+id/menu_customer_payments"
+        android:icon="@drawable/coin"
+        android:title="واریزی های مشتریان" />
+
+    <item
         android:id="@+id/menu_payments"
         android:icon="@drawable/ic_payment"
         android:title="هزینه ها" />

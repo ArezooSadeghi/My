@@ -74,7 +74,6 @@ public class CustomerProductFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.base_layout, container, false);
-        binding.setCustomerProductViewModel(viewModel);
 
         initViews();
         handleEvents();

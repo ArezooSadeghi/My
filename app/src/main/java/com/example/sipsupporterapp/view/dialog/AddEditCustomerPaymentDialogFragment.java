@@ -245,7 +245,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     String description = binding.edTextDescription.getText().toString();
                     customerPaymentInfo.setDescription(description);
                     customerPaymentInfo.setPrice(Long.valueOf(price));
-                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "");
+                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "").replaceAll(" ", "");
                     customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
                     customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
                     customerPaymentInfo.setCustomerID(customerID);
@@ -263,7 +263,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         binding.btnDatePayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentDate = binding.btnDatePayment.getText().toString();
+                currentDate = binding.btnDatePayment.getText().toString().replaceAll(" ", "");
                 currentYear = Integer.parseInt(currentDate.substring(0, 4));
                 currentMonth = Integer.parseInt(currentDate.substring(5, 7));
                 currentDay = Integer.parseInt(currentDate.substring(8));

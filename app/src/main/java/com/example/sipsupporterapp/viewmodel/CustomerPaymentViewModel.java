@@ -24,11 +24,11 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<CaseResult> caseInfoResultSingleLiveEvent;
     private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent;
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> DeleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
 
     public CustomerPaymentViewModel(@NonNull Application application) {
         super(application);
@@ -43,6 +43,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         caseInfoResultSingleLiveEvent = repository.getCaseInfoResultSingleLiveEvent();
         timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
         noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        customerPaymentsByBankAccountResultSingleLiveEvent = repository.getCustomerPaymentsByBankAccountResultSingleLiveEvent();
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
@@ -101,8 +102,8 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return seeCustomerPaymentAttachmentsClicked;
     }
 
-    public SingleLiveEvent<Boolean> getShowDialog() {
-        return showDialog;
+    public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
+        return customerPaymentsByBankAccountResultSingleLiveEvent;
     }
 
     public ServerData getServerData(String centerName) {
@@ -160,7 +161,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return null;
     }
 
-    public void ivMoreClick() {
-        showDialog.setValue(true);
+    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
+        repository.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
     }
 }
