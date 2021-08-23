@@ -230,7 +230,7 @@ public class CustomerProductFragment extends Fragment {
 
         viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean dialogDismissed) {
+            public void onChanged(Boolean refresh) {
                 fetchCustomerProducts(customerID);
             }
         });

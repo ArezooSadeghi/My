@@ -25,9 +25,10 @@ import com.example.sipsupporterapp.viewmodel.ChangePasswordViewModel;
 public class ChangePasswordDialogFragment extends DialogFragment {
     private FragmentChangePasswordDialogBinding binding;
     private ChangePasswordViewModel viewModel;
+    private ServerData serverData;
+    private String centerName, userLoginKey;
 
     public static final String TAG = ChangePasswordDialogFragment.class.getSimpleName();
-
 
     public static ChangePasswordDialogFragment newInstance() {
         ChangePasswordDialogFragment fragment = new ChangePasswordDialogFragment();
@@ -39,10 +40,10 @@ public class ChangePasswordDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ChangePasswordViewModel.class);
-        setObserver();
+        createViewModel();
+        setupObserver();
+        initVariables();
     }
-
 
     @NonNull
     @Override
@@ -53,32 +54,12 @@ public class ChangePasswordDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        handleEvents();
 
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.edTextNewPassword.getText().toString().length() > 12 || binding.edTextRepeatNewPassword.getText().toString().length() > 12) {
-                    handleError("حداکثر 12 کاراکتر مجاز می باشد");
-                } else {
-                    if (!binding.edTextNewPassword.getText().toString().equals(binding.edTextRepeatNewPassword.getText().toString())) {
-                        handleError("عدم تطابق رمز ها");
-                    } else {
-                        ServerData serverData = viewModel.getServerData(SipSupportSharedPreferences.getCenterName(getContext()));
-                        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
-                        String path = "/api/v1/users/changePassword/";
-                        viewModel.changePassword(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), binding.edTextNewPassword.getText().toString());
-                    }
-                }
-            }
-        });
-
-        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog).setView(binding.getRoot()).create();
+        AlertDialog dialog = new AlertDialog
+                .Builder(getContext(), R.style.CustomAlertDialog)
+                .setView(binding.getRoot())
+                .create();
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
@@ -86,8 +67,11 @@ public class ChangePasswordDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(this).get(ChangePasswordViewModel.class);
+    }
 
-    private void setObserver() {
+    private void setupObserver() {
         viewModel.getChangedPasswordResultSingleLiveEvent().observe(this, new Observer<UserResult>() {
             @Override
             public void onChanged(UserResult userResult) {
@@ -113,8 +97,38 @@ public class ChangePasswordDialogFragment extends DialogFragment {
 
         viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
             @Override
-            public void onChanged(String error) {
-                handleError(error);
+            public void onChanged(String message) {
+                handleError(message);
+            }
+        });
+    }
+
+    private void initVariables() {
+        centerName = SipSupportSharedPreferences.getCenterName(getContext());
+        userLoginKey = SipSupportSharedPreferences.getUserLoginKey(getContext());
+        serverData = viewModel.getServerData(centerName);
+    }
+
+    private void handleEvents() {
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.edTextNewPassword.getText().toString().length() > 12 || binding.edTextRepeatNewPassword.getText().toString().length() > 12) {
+                    handleError("حداکثر 12 کاراکتر مجاز می باشد");
+                } else {
+                    if (!binding.edTextNewPassword.getText().toString().equals(binding.edTextRepeatNewPassword.getText().toString())) {
+                        handleError("عدم تطابق رمز ها");
+                    } else {
+                        changePassword(binding.edTextNewPassword.getText().toString());
+                    }
+                }
             }
         });
     }
@@ -125,13 +139,23 @@ public class ChangePasswordDialogFragment extends DialogFragment {
     }
 
     private void ejectUser() {
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
         SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
         SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
         SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-
-        Intent intent = LoginContainerActivity.start(getContext());
-        startActivity(intent);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
         getActivity().finish();
+    }
+
+    private void changePassword(String newPassword) {
+        viewModel.getSipSupporterServiceCustomerUserResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/users/changePassword/";
+        viewModel.changePassword(path, userLoginKey, newPassword);
     }
 }

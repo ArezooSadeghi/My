@@ -84,7 +84,12 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        initViews();
+
+        if (customerProductID == 0) {
+            binding.txtCustomerName.setText(Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext())));
+            binding.btnExpireDate.setText(SipSupportSharedPreferences.getDate(getContext()));
+        }
+
         handleEvents();
 
         AlertDialog dialog = new AlertDialog
@@ -128,7 +133,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 if (customerProductResult != null) {
                     if (customerProductResult.getErrorCode().equals("0")) {
                         showSuccessDialog("ثبت محصول موفقیت آمیز بود");
-                        viewModel.getRefresh();
+                        viewModel.getRefresh().setValue(true);
                         dismiss();
                     } else if (customerProductResult.getErrorCode().equals("-9001")) {
                         ejectUser();
@@ -145,7 +150,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 if (customerProductResult != null) {
                     if (customerProductResult.getErrorCode().equals("0")) {
                         showSuccessDialog("ثبت محصول موفقیت آمیز بود");
-                        viewModel.getRefresh();
+                        viewModel.getRefresh().setValue(true);
                         dismiss();
                     } else if (customerProductResult.getErrorCode().equals("-9001")) {
                         ejectUser();
@@ -220,9 +225,6 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         if (productInfo != null) {
             binding.edTextInvoicePrice.setText(String.valueOf(productInfo.getCost()));
             binding.btnProductName.setText(productInfo.getProductName());
-        } else {
-            binding.txtCustomerName.setText(Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext())));
-            binding.btnExpireDate.setText(SipSupportSharedPreferences.getDate(getContext()));
         }
     }
 
@@ -266,17 +268,29 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 } else {
                     if (customerProductInfo == null) {
                         customerProductInfo = new CustomerProductResult.CustomerProductInfo();
+                        customerProductInfo.setCustomerID(customerID);
+                        customerProductInfo.setProductID(productGroupID);
+                        customerProductInfo.setCustomerProductID(customerProductID);
+                        customerProductInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
+                        String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
+                        customerProductInfo.setInvoicePrice(Long.valueOf(price));
+                        customerProductInfo.setFinish(binding.checkBoxFinish.isChecked());
+                        customerProductInfo.setInvoicePayment(binding.checkBoxInvoicePayment.isChecked());
+                        String date = binding.btnExpireDate.getText().toString().replaceAll("/", "").replaceAll(" ", "");
+                        customerProductInfo.setExpireDate(Long.valueOf(date));
+                    } else {
+                        if (productGroupID != 0) {
+                            customerProductInfo.setProductID(productGroupID);
+                        }
+                        customerProductInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
+                        String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
+                        customerProductInfo.setInvoicePrice(Long.valueOf(price));
+                        customerProductInfo.setFinish(binding.checkBoxFinish.isChecked());
+                        customerProductInfo.setInvoicePayment(binding.checkBoxInvoicePayment.isChecked());
+                        String date = binding.btnExpireDate.getText().toString().replaceAll("/", "").replaceAll(" ", "");
+                        customerProductInfo.setExpireDate(Long.valueOf(date));
                     }
-                    customerProductInfo.setCustomerID(customerID);
-                    customerProductInfo.setProductID(productGroupID);
-                    customerProductInfo.setProductID(customerProductID);
-                    customerProductInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
-                    String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
-                    customerProductInfo.setInvoicePrice(Long.valueOf(price));
-                    customerProductInfo.setFinish(binding.checkBoxFinish.isChecked());
-                    customerProductInfo.setInvoicePayment(binding.checkBoxInvoicePayment.isChecked());
-                    String date = binding.btnExpireDate.getText().toString().replaceAll("/", "");
-                    customerProductInfo.setExpireDate(Long.valueOf(date));
+
                     if (customerProductID == 0) {
                         addCustomerProduct(customerProductInfo);
                     } else {
@@ -305,9 +319,9 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 currentDate = binding.btnExpireDate.getText().toString();
-                currentYear = Integer.parseInt(currentDate.substring(0, 4));
-                currentMonth = Integer.parseInt(currentDate.substring(5, 7));
-                currentDay = Integer.parseInt(currentDate.substring(8));
+                currentYear = Integer.parseInt(currentDate.substring(0, 4).replaceAll(" ", ""));
+                currentMonth = Integer.parseInt(currentDate.substring(5, 7).replaceAll(" ", ""));
+                currentDay = Integer.parseInt(currentDate.substring(8).replaceAll(" ", ""));
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
                         .setPositiveButtonString("تایید")
                         .setNegativeButton("انصراف")

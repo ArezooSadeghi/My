@@ -74,7 +74,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         createViewModel();
         setupObserver();
         initVariables();
-        fetchBankAccounts();
+
+        if (customerPaymentID == 0) {
+            fetchBankAccounts();
+        }
 
         if (customerPaymentID > 0) {
             fetchCustomerPaymentInfo(customerPaymentID);
@@ -172,6 +175,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
                 if (customerPaymentResult != null) {
                     if (customerPaymentResult.getErrorCode().equals("0")) {
+                        fetchBankAccounts();
                         customerPaymentInfo = customerPaymentResult.getCustomerPayments()[0];
                         initViews();
                     } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
@@ -260,7 +264,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     }
                     customerPaymentInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
                     customerPaymentInfo.setPrice(Long.valueOf(price));
-                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "");
+                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "").replaceAll(" ", "");
                     customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
                     customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
                     customerPaymentInfo.setCustomerID(customerID);
@@ -279,9 +283,9 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 currentDate = binding.btnDatePayment.getText().toString().replaceAll(" ", "");
-                currentYear = Integer.parseInt(currentDate.substring(0, 4));
-                currentMonth = Integer.parseInt(currentDate.substring(5, 7));
-                currentDay = Integer.parseInt(currentDate.substring(8));
+                currentYear = Integer.parseInt(currentDate.substring(0, 4).replaceAll(" ", ""));
+                currentMonth = Integer.parseInt(currentDate.substring(5, 7).replaceAll(" ", ""));
+                currentDay = Integer.parseInt(currentDate.substring(8).replaceAll(" ", ""));
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
                         .setPositiveButtonString(getString(R.string.ok))
                         .setNegativeButton(getString(R.string.cancel))
