@@ -62,7 +62,7 @@ public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProduct
                     public void onItemClick(int position, PowerMenuItem item) {
                         switch (position) {
                             case 0:
-                                viewModel.getEditClicked().setValue(customerProductInfo);
+                                viewModel.getEditClicked().setValue(customerProductInfo.getCustomerProductID());
                                 powerMenu.dismiss();
                                 break;
                             case 1:

@@ -24,7 +24,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.InvoiceDetailsAdapter;
 import com.example.sipsupporterapp.databinding.FragmentInvoiceBinding;
 import com.example.sipsupporterapp.eventbus.NavigateEvent;
-import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
+import com.example.sipsupporterapp.eventbus.selectProductEvent;
 import com.example.sipsupporterapp.eventbus.newDeleteEvent;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
@@ -341,7 +341,7 @@ public class InvoiceFragment extends Fragment {
     }
 
     @Subscribe(sticky = true)
-    public void getProductGroupIDEvent(PostProductGroupIDEvent event) {
+    public void getProductGroupIDEvent(selectProductEvent event) {
         fetchProductInfo(event.getProductGroupID());
         binding.edTextQTY.setText("1");
         EventBus.getDefault().removeStickyEvent(event);

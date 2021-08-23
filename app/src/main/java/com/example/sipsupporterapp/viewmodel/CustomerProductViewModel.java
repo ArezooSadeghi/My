@@ -22,7 +22,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
-    private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> editClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerProductResult.CustomerProductInfo> seeCustomerProductAttachmentsClicked = new SingleLiveEvent<>();
 
     public CustomerProductViewModel(@NonNull Application application) {
@@ -78,7 +78,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return deleteClicked;
     }
 
-    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getEditClicked() {
+    public SingleLiveEvent<Integer> getEditClicked() {
         return editClicked;
     }
 

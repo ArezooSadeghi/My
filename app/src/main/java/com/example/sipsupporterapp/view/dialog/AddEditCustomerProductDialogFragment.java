@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAddEditCustomerProductDialogBinding;
-import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
+import com.example.sipsupporterapp.eventbus.selectProductEvent;
 import com.example.sipsupporterapp.model.CustomerProductResult;
 import com.example.sipsupporterapp.model.ProductResult;
 import com.example.sipsupporterapp.model.ServerData;
@@ -51,6 +51,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
     private static final String ARGS_CUSTOMER_PRODUCT_ID = "customerProductID";
     private static final String ARGS_CUSTOMER_ID = "customerID";
+
     public static final String TAG = AddEditCustomerProductDialogFragment.class.getSimpleName();
 
     public static AddEditCustomerProductDialogFragment newInstance(int customerProductID, int customerID) {
@@ -65,10 +66,9 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
-        initVariables();
         setupObserver();
+        initVariables();
 
         if (customerProductID > 0) {
             fetchCustomerProductInfo(customerProductID);
@@ -111,7 +111,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     }
 
     @Subscribe(sticky = true)
-    public void getProductGroupID(PostProductGroupIDEvent event) {
+    public void getSelectProductEvent(selectProductEvent event) {
         productGroupID = event.getProductGroupID();
         fetchProductInfo(productGroupID);
         EventBus.getDefault().removeStickyEvent(event);
@@ -119,6 +119,74 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
     private void createViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerProductViewModel.class);
+    }
+
+    private void setupObserver() {
+        viewModel.getAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
+            @Override
+            public void onChanged(CustomerProductResult customerProductResult) {
+                if (customerProductResult != null) {
+                    if (customerProductResult.getErrorCode().equals("0")) {
+                        showSuccessDialog("ثبت محصول موفقیت آمیز بود");
+                        viewModel.getRefresh();
+                        dismiss();
+                    } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerProductResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getEditCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
+            @Override
+            public void onChanged(CustomerProductResult customerProductResult) {
+                if (customerProductResult != null) {
+                    if (customerProductResult.getErrorCode().equals("0")) {
+                        showSuccessDialog("ثبت محصول موفقیت آمیز بود");
+                        viewModel.getRefresh();
+                        dismiss();
+                    } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerProductResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getCustomerProductInfoResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
+            @Override
+            public void onChanged(CustomerProductResult customerProductResult) {
+                if (customerProductResult != null) {
+                    if (customerProductResult.getErrorCode().equals("0")) {
+                        customerProductInfo = customerProductResult.getCustomerProducts()[0];
+                        initViews();
+                    } else if (customerProductResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerProductResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getProductInfoResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
+            @Override
+            public void onChanged(ProductResult productResult) {
+                if (productResult != null) {
+                    if (productResult.getErrorCode().equals("0")) {
+                        productInfo = productResult.getProducts()[0];
+                        initViews();
+                    } else if (productResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(productResult.getError());
+                    }
+                }
+            }
+        });
     }
 
     private void initVariables() {
@@ -131,11 +199,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
     private void initViews() {
         if (customerProductInfo != null) {
-            String customerName = Converter.letterConverter(customerProductInfo.getCustomerName());
-            binding.txtCustomerName.setText(customerName);
-            binding.edTextDescription.setText(customerProductInfo.getDescription());
+            binding.txtCustomerName.setText(Converter.letterConverter(customerProductInfo.getCustomerName()));
+            binding.edTextDescription.setText(Converter.letterConverter(customerProductInfo.getDescription()));
             binding.edTextDescription.setSelection(binding.edTextDescription.getText().toString().length());
-            binding.btnProductName.setText(customerProductInfo.getProductName());
+            binding.btnProductName.setText(Converter.letterConverter(customerProductInfo.getProductName()));
             binding.edTextInvoicePrice.setText(String.valueOf(customerProductInfo.getInvoicePrice()));
             binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().toString().length());
 
@@ -154,56 +221,9 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             binding.edTextInvoicePrice.setText(String.valueOf(productInfo.getCost()));
             binding.btnProductName.setText(productInfo.getProductName());
         } else {
+            binding.txtCustomerName.setText(Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext())));
             binding.btnExpireDate.setText(SipSupportSharedPreferences.getDate(getContext()));
         }
-    }
-
-    private void showSuccessDialog(String message) {
-        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
-        fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-        Intent starter = LoginContainerActivity.start(getContext());
-        startActivity(starter);
-        getActivity().finish();
-    }
-
-    private void fetchProductInfo(int productID) {
-        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/products/Info/";
-        viewModel.fetchProductInfo(path, userLoginKey, productID);
-    }
-
-    private void fetchCustomerProductInfo(int customerProductID) {
-        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerProducts/Info/";
-        viewModel.fetchCustomerProductInfo(path, userLoginKey, customerProductID);
-    }
-
-    private void editCustomerProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerProducts/Edit/";
-        viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
-    }
-
-    private void addCustomerProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
-        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerProducts/Add/";
-        viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);
     }
 
     private void handleEvents() {
@@ -242,24 +262,21 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (binding.btnProductName.getText().toString().isEmpty()) {
-                    handleError(getString(R.string.select_product_message));
+                    handleError("لطفا محصول را انتخاب کنید");
                 } else {
-
                     if (customerProductInfo == null) {
                         customerProductInfo = new CustomerProductResult.CustomerProductInfo();
-                        customerProductInfo.setCustomerID(customerID);
-                        customerProductInfo.setProductID(productGroupID);
                     }
-
-                    String description = binding.edTextDescription.getText().toString();
-                    customerProductInfo.setDescription(description);
+                    customerProductInfo.setCustomerID(customerID);
+                    customerProductInfo.setProductID(productGroupID);
+                    customerProductInfo.setProductID(customerProductID);
+                    customerProductInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
                     String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
                     customerProductInfo.setInvoicePrice(Long.valueOf(price));
                     customerProductInfo.setFinish(binding.checkBoxFinish.isChecked());
                     customerProductInfo.setInvoicePayment(binding.checkBoxInvoicePayment.isChecked());
                     String date = binding.btnExpireDate.getText().toString().replaceAll("/", "");
                     customerProductInfo.setExpireDate(Long.valueOf(date));
-
                     if (customerProductID == 0) {
                         addCustomerProduct(customerProductInfo);
                     } else {
@@ -291,7 +308,6 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                 currentYear = Integer.parseInt(currentDate.substring(0, 4));
                 currentMonth = Integer.parseInt(currentDate.substring(5, 7));
                 currentDay = Integer.parseInt(currentDate.substring(8));
-
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
                         .setPositiveButtonString("تایید")
                         .setNegativeButton("انصراف")
@@ -328,71 +344,52 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupObserver() {
-        viewModel.getAddCustomerProductResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
-            @Override
-            public void onChanged(CustomerProductResult customerProductResult) {
-                if (customerProductResult.getErrorCode().equals("0")) {
-                    showSuccessDialog(getString(R.string.success_add_edit_customer_product_message));
-                    viewModel.getRefresh().setValue(true);
-                    dismiss();
-                } else if (customerProductResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(customerProductResult.getError());
-                }
-            }
-        });
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getActivity().getSupportFragmentManager(), SuccessDialogFragment.TAG);
+    }
 
-        viewModel.getProductInfoResultSingleLiveEvent().observe(this, new Observer<ProductResult>() {
-            @Override
-            public void onChanged(ProductResult productResult) {
-                if (productResult.getErrorCode().equals("0")) {
-                    productInfo = productResult.getProducts()[0];
-                    initViews();
-                }
-            }
-        });
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
 
-        viewModel.getEditCustomerProductResultSingleLiveEvent().
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
 
-                observe(this, new Observer<CustomerProductResult>() {
-                    @Override
-                    public void onChanged(CustomerProductResult customerProductResult) {
-                        if (customerProductResult.getErrorCode().equals("0")) {
-                            showSuccessDialog(getString(R.string.success_add_edit_customer_product_message));
-                            viewModel.getRefresh().setValue(true);
-                            dismiss();
-                        } else if (customerProductResult.getErrorCode().equals("-9001")) {
-                            ejectUser();
-                        } else {
-                            handleError(customerProductResult.getError());
-                        }
-                    }
-                });
+    private void addCustomerProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
+        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerProducts/Add/";
+        viewModel.addCustomerProduct(path, userLoginKey, customerProductInfo);
+    }
 
-        viewModel.getCustomerProductInfoResultSingleLiveEvent().observe(this, new Observer<CustomerProductResult>() {
-            @Override
-            public void onChanged(CustomerProductResult customerProductResult) {
-                if (customerProductResult.getErrorCode().equals("0")) {
-                    customerProductInfo = customerProductResult.getCustomerProducts()[0];
-                    initViews();
-                }
-            }
-        });
+    private void editCustomerProduct(CustomerProductResult.CustomerProductInfo customerProductInfo) {
+        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerProducts/Edit/";
+        viewModel.editCustomerProduct(path, userLoginKey, customerProductInfo);
+    }
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+    private void fetchCustomerProductInfo(int customerProductID) {
+        viewModel.getSipSupporterServiceCustomerProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerProducts/Info/";
+        viewModel.fetchCustomerProductInfo(path, userLoginKey, customerProductID);
+    }
 
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+    private void fetchProductInfo(int productID) {
+        viewModel.getSipSupporterServiceProductResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/products/Info/";
+        viewModel.fetchProductInfo(path, userLoginKey, productID);
     }
 }

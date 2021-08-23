@@ -24,7 +24,6 @@ import com.example.sipsupporterapp.eventbus.RefreshEvent;
 import com.example.sipsupporterapp.model.BankAccountResult;
 import com.example.sipsupporterapp.model.CaseResult;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
-import com.example.sipsupporterapp.model.CustomerResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -50,13 +49,13 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     private String currentDate, centerName, userLoginKey;
     private BankAccountResult.BankAccountInfo[] bankAccountInfoArray;
     private CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo;
-    private CustomerResult.CustomerInfo customerInfo;
     private CaseResult.CaseInfo caseInfo;
     private int customerPaymentID, customerID, caseID, bankAccountID, currentYear, currentMonth, currentDay;
 
     private static final String ARGS_CUSTOMER_PAYMENT_ID = "customerPaymentID";
     private static final String ARGS_CUSTOMER_ID = "customerID";
     private static final String ARGS_CASE_ID = "caseID";
+
     public static final String TAG = AddEditCustomerPaymentDialogFragment.class.getSimpleName();
 
     public static AddEditCustomerPaymentDialogFragment newInstance(int customerPaymentID, int customerID, int caseID) {
@@ -72,7 +71,6 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
         setupObserver();
         initVariables();
@@ -80,10 +78,6 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
         if (customerPaymentID > 0) {
             fetchCustomerPaymentInfo(customerPaymentID);
-        }
-
-        if (customerID > 0) {
-            fetchCustomerInfo(customerID);
         }
 
         if (caseID > 0) {
@@ -100,11 +94,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 null,
                 false);
 
+        initViews();
         handleEvents();
-
-        if (customerPaymentID == 0 && customerID == 0 && caseID == 0) {
-            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
-        }
 
         AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog)
                 .setView(binding.getRoot())
@@ -120,6 +111,95 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(CustomerPaymentViewModel.class);
     }
 
+    private void setupObserver() {
+        viewModel.getBankAccountsResultSingleLiveEvent().observe(this, new Observer<BankAccountResult>() {
+            @Override
+            public void onChanged(BankAccountResult bankAccountResult) {
+                if (bankAccountResult != null) {
+                    if (bankAccountResult.getErrorCode().equals("0")) {
+                        if (bankAccountResult.getBankAccounts().length != 0) {
+                            bankAccountInfoArray = bankAccountResult.getBankAccounts();
+                            setupSpinner(bankAccountInfoArray);
+                        }
+                    } else if (bankAccountResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(bankAccountResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
+            @Override
+            public void onChanged(CustomerPaymentResult customerPaymentResult) {
+                if (customerPaymentResult != null) {
+                    if (customerPaymentResult.getErrorCode().equals("0")) {
+                        showSuccessDialog("واریزی با موفقیت ثبت شد");
+                        if (caseID != 0)
+                            EventBus.getDefault().post(new RefreshEvent());
+                        else
+                            viewModel.getRefresh().setValue(true);
+                        dismiss();
+                    } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerPaymentResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getEditCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
+            @Override
+            public void onChanged(CustomerPaymentResult customerPaymentResult) {
+                if (customerPaymentResult != null) {
+                    if (customerPaymentResult.getErrorCode().equals("0")) {
+                        showSuccessDialog("واریزی با موفقیت ثبت شد");
+                        viewModel.getRefresh().setValue(true);
+                        dismiss();
+                    } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerPaymentResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getCustomerPaymentInfoResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
+            @Override
+            public void onChanged(CustomerPaymentResult customerPaymentResult) {
+                if (customerPaymentResult != null) {
+                    if (customerPaymentResult.getErrorCode().equals("0")) {
+                        customerPaymentInfo = customerPaymentResult.getCustomerPayments()[0];
+                        initViews();
+                    } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerPaymentResult.getError());
+                    }
+                }
+            }
+        });
+
+        viewModel.getCaseInfoResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
+            @Override
+            public void onChanged(CaseResult caseResult) {
+                if (caseResult != null) {
+                    if (caseResult.getErrorCode().equals("0")) {
+                        caseInfo = caseResult.getCases()[0];
+                        initViews();
+                    } else if (caseResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(caseResult.getError());
+                    }
+                }
+            }
+        });
+    }
+
     private void initVariables() {
         customerPaymentID = getArguments().getInt(ARGS_CUSTOMER_PAYMENT_ID);
         customerID = getArguments().getInt(ARGS_CUSTOMER_ID);
@@ -129,8 +209,15 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         serverData = viewModel.getServerData(centerName);
     }
 
+    private void fetchBankAccounts() {
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/bankAccounts/List/";
+        viewModel.fetchBankAccounts(path, userLoginKey);
+    }
+
     private void initViews() {
         if (customerPaymentInfo != null) {
+            bankAccountID = customerPaymentInfo.getBankAccountID();
             binding.txtCustomerName.setText(Converter.letterConverter(customerPaymentInfo.getCustomerName()));
             binding.edTextDescription.setText(Converter.letterConverter(customerPaymentInfo.getDescription()));
             binding.edTextDescription.setSelection(binding.edTextDescription.getText().length());
@@ -142,84 +229,13 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             } else {
                 binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
             }
-        } else if (customerInfo != null) {
-            binding.txtCustomerName.setText(Converter.letterConverter(customerInfo.getCustomerName()));
-            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
         } else if (caseInfo != null) {
             binding.txtCustomerName.setText(Converter.letterConverter(caseInfo.getCustomerName()));
             binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
-            customerID = caseInfo.getCustomerID();
+        } else {
+            binding.txtCustomerName.setText(Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext())));
+            binding.btnDatePayment.setText(SipSupportSharedPreferences.getDate(getContext()));
         }
-    }
-
-    private void showSuccessDialog(String message) {
-        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-        Intent starter = LoginContainerActivity.start(getContext());
-        startActivity(starter);
-        getActivity().finish();
-    }
-
-    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
-        List<String> bankAccountNameList = new ArrayList<>();
-        for (int i = 0; i < bankAccountInfoArray.length; i++) {
-            bankAccountNameList.add(i, Converter.letterConverter(bankAccountInfoArray[i].getBankAccountName()));
-        }
-
-        bankAccountID = bankAccountInfoArray[0].getBankAccountID();
-        binding.spinner.setItems(bankAccountNameList);
-    }
-
-    private void fetchCustomerPaymentInfo(int customerPaymentID) {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerPayments/Info/";
-        viewModel.fetchCustomerPaymentInfo(path, userLoginKey, customerPaymentID);
-    }
-
-    private void fetchCustomerInfo(int customerID) {
-        viewModel.getSipSupporterServiceCustomerResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customers/Info/";
-        viewModel.fetchCustomerInfo(path, userLoginKey, customerID);
-    }
-
-    private void fetchCaseInfo(int caseID) {
-        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/Case/Info/";
-        viewModel.fetchCaseInfo(path, userLoginKey, caseID);
-    }
-
-    private void fetchBankAccounts() {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/bankAccounts/List/";
-        viewModel.fetchBankAccounts(path, userLoginKey);
-    }
-
-    private void editCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerPayments/Edit/";
-        viewModel.editCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
-    }
-
-    private void addCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerPayments/Add/";
-        viewModel.addCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
     }
 
     private void handleEvents() {
@@ -235,15 +251,16 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 String price = binding.edTextPrice.getText().toString().replaceAll(",", "");
                 if (customerID == 0 && (binding.edTextDescription.getText().toString().isEmpty() || binding.edTextDescription.getText().toString().length() <= 3)) {
-                    handleError(getString(R.string.length_description_message));
+                    handleError("توضیحات باید بیش از چهار حرف باشد");
                 } else if (price.isEmpty() || Long.valueOf(price) == 0) {
-                    handleError(getString(R.string.empty_zero_price_message));
+                    handleError("مبلغ نباید خالی یا صفر باشد");
                 } else {
-                    CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult.CustomerPaymentInfo();
-                    String description = binding.edTextDescription.getText().toString();
-                    customerPaymentInfo.setDescription(description);
+                    if (customerPaymentInfo == null) {
+                        customerPaymentInfo = new CustomerPaymentResult.CustomerPaymentInfo();
+                    }
+                    customerPaymentInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
                     customerPaymentInfo.setPrice(Long.valueOf(price));
-                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "").replaceAll(" ", "");
+                    String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "");
                     customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
                     customerPaymentInfo.setCustomerPaymentID(customerPaymentID);
                     customerPaymentInfo.setCustomerID(customerID);
@@ -265,7 +282,6 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                 currentYear = Integer.parseInt(currentDate.substring(0, 4));
                 currentMonth = Integer.parseInt(currentDate.substring(5, 7));
                 currentDay = Integer.parseInt(currentDate.substring(8));
-
                 PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
                         .setPositiveButtonString(getString(R.string.ok))
                         .setNegativeButton(getString(R.string.cancel))
@@ -340,99 +356,71 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         });
     }
 
-    private void setupObserver() {
-        viewModel.getBankAccountsResultSingleLiveEvent().observe(this, new Observer<BankAccountResult>() {
-            @Override
-            public void onChanged(BankAccountResult bankAccountResult) {
-                if (bankAccountResult.getErrorCode().equals("0")) {
-                    if (bankAccountResult.getBankAccounts().length != 0) {
-                        bankAccountInfoArray = bankAccountResult.getBankAccounts();
-                        setupSpinner(bankAccountResult.getBankAccounts());
-                    }
-                } else if (bankAccountResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(bankAccountResult.getError());
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
+        List<String> bankAccountNameList = new ArrayList<>();
+        for (int i = 0; i < bankAccountInfoArray.length; i++) {
+            bankAccountNameList.add(i, Converter.letterConverter(bankAccountInfoArray[i].getBankAccountName()));
+        }
+        binding.spinner.setItems(bankAccountNameList);
+
+        if (bankAccountID != 0) {
+            for (int i = 0; i < bankAccountInfoArray.length; i++) {
+                if (bankAccountInfoArray[i].getBankAccountID() == bankAccountID) {
+                    binding.spinner.setSelectedIndex(i);
+                    break;
                 }
             }
-        });
+        } else {
+            bankAccountID = bankAccountInfoArray[0].getBankAccountID();
+        }
+    }
 
-        viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
-            @Override
-            public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode().equals("0")) {
-                    showSuccessDialog(getString(R.string.success_add_edit_customer_payment_message));
-                    if (caseID != 0) {
-                        EventBus.getDefault().post(new RefreshEvent());
-                    } else {
-                        viewModel.getRefresh().setValue(true);
-                    }
-                    dismiss();
-                } else if (customerPaymentResult.getErrorCode().equals(-9001)) {
-                    ejectUser();
-                } else {
-                    handleError(customerPaymentResult.getError());
-                }
-            }
-        });
+    private void addCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/Add/";
+        viewModel.addCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
+    }
 
-        viewModel.getEditCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
-            @Override
-            public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode().equals("0")) {
-                    showSuccessDialog(getString(R.string.success_add_edit_customer_payment_message));
-                    viewModel.getRefresh().setValue(true);
-                    dismiss();
-                } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(customerPaymentResult.getError());
-                }
-            }
-        });
+    private void editCustomerPayment(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/Edit/";
+        viewModel.editCustomerPaymentResult(path, SipSupportSharedPreferences.getUserLoginKey(getContext()), customerPaymentInfo);
+    }
 
-        viewModel.getCustomerPaymentInfoResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
-            @Override
-            public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode().equals("0")) {
-                    customerPaymentInfo = customerPaymentResult.getCustomerPayments()[0];
-                    initViews();
-                }
-            }
-        });
+    private void fetchCustomerPaymentInfo(int customerPaymentID) {
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/Info/";
+        viewModel.fetchCustomerPaymentInfo(path, userLoginKey, customerPaymentID);
+    }
 
-        viewModel.getCustomerInfoResultSingleLiveEvent().observe(this, new Observer<CustomerResult>() {
-            @Override
-            public void onChanged(CustomerResult customerResult) {
-                if (customerResult.getErrorCode().equals("0")) {
-                    customerInfo = customerResult.getCustomers()[0];
-                    initViews();
-                }
-            }
-        });
-
-        viewModel.getCaseInfoResultSingleLiveEvent().observe(this, new Observer<CaseResult>() {
-            @Override
-            public void onChanged(CaseResult caseResult) {
-                if (caseResult.getErrorCode().equals("0")) {
-                    caseInfo = caseResult.getCases()[0];
-                    initViews();
-                }
-            }
-        });
-
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+    private void fetchCaseInfo(int caseID) {
+        viewModel.getSipSupporterServiceCaseResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/Case/Info/";
+        viewModel.fetchCaseInfo(path, userLoginKey, caseID);
     }
 }

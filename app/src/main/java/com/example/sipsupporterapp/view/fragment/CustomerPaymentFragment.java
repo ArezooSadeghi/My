@@ -63,7 +63,6 @@ public class CustomerPaymentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createViewModel();
         initVariables();
         fetchCustomerPayments(customerID);
@@ -114,56 +113,19 @@ public class CustomerPaymentFragment extends Fragment {
         serverData = viewModel.getServerData(centerName);
     }
 
-    private void initViews() {
-        binding.ivMore.setVisibility(View.VISIBLE);
-        String customerName = Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext()));
-        binding.txtCustomerName.setText(customerName);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
-        binding.recyclerView.addItemDecoration(dividerItemDecoration);
-    }
-
-    private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
-        binding.txtEmpty.setVisibility(customerPaymentInfoArray.length == 0 ? View.VISIBLE : View.GONE);
-        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(viewModel, Arrays.asList(customerPaymentInfoArray), false);
-        binding.recyclerView.setAdapter(adapter);
-    }
-
-    private void showSuccessDialog(String message) {
-        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
-    }
-
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-    }
-
-    private void ejectUser() {
-        SipSupportSharedPreferences.setUserFullName(getContext(), null);
-        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
-        SipSupportSharedPreferences.setCenterName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerName(getContext(), null);
-        SipSupportSharedPreferences.setUserName(getContext(), null);
-        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
-        SipSupportSharedPreferences.setDate(getContext(), null);
-        SipSupportSharedPreferences.setFactor(getContext(), null);
-        Intent starter = LoginContainerActivity.start(getContext());
-        startActivity(starter);
-        getActivity().finish();
-    }
-
     private void fetchCustomerPayments(int customerID) {
         String path = "/api/v1/customerPayments/ListByCustomer/";
         viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         viewModel.fetchCustomerPaymentsResult(path, userLoginKey, customerID);
     }
 
-    private void deleteCustomerPayment(int customerPaymentID) {
-        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
-        String path = "/api/v1/customerPayments/Delete/";
-        viewModel.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
+    private void initViews() {
+        binding.ivMore.setVisibility(View.VISIBLE);
+        binding.txtCustomerName.setText(Converter.letterConverter(SipSupportSharedPreferences.getCustomerName(getContext())));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_recycler_view));
+        binding.recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     private void handleEvents() {
@@ -208,15 +170,22 @@ public class CustomerPaymentFragment extends Fragment {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
                 binding.progressBarLoading.setVisibility(View.GONE);
-                if (customerPaymentResult.getErrorCode().equals("0")) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                    String count = Converter.numberConverter(String.valueOf(customerPaymentResult.getCustomerPayments().length));
-                    binding.txtCount.setText("تعداد مبالغ واریزی: " + count);
-                    setupAdapter(customerPaymentResult.getCustomerPayments());
-                } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(customerPaymentResult.getError());
+                if (customerPaymentResult != null) {
+                    if (customerPaymentResult.getErrorCode().equals("0")) {
+                        String count = Converter.numberConverter(String.valueOf(customerPaymentResult.getCustomerPayments().length));
+                        binding.txtCount.setText("تعداد مبالغ واریزی: " + count);
+                        if (customerPaymentResult.getCustomerPayments().length == 0) {
+                            binding.txtEmpty.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.txtEmpty.setVisibility(View.GONE);
+                            binding.recyclerView.setVisibility(View.VISIBLE);
+                            setupAdapter(customerPaymentResult.getCustomerPayments());
+                        }
+                    } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerPaymentResult.getError());
+                    }
                 }
             }
         });
@@ -257,13 +226,15 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getDeleteCustomerPaymentResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
             @Override
             public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult.getErrorCode().equals("0")) {
-                    showSuccessDialog(getString(R.string.delete_customer_payment_message));
-                    fetchCustomerPayments(customerID);
-                } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(customerPaymentResult.getError());
+                if (customerPaymentResult != null) {
+                    if (customerPaymentResult.getErrorCode().equals("0")) {
+                        showSuccessDialog("واریزی با موفقیت حذف شد");
+                        fetchCustomerPayments(customerID);
+                    } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                        ejectUser();
+                    } else {
+                        handleError(customerPaymentResult.getError());
+                    }
                 }
             }
         });
@@ -271,7 +242,7 @@ public class CustomerPaymentFragment extends Fragment {
         viewModel.getEditClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
             @Override
             public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(customerPaymentInfo.getCustomerPaymentID(), 0, 0);
+                AddEditCustomerPaymentDialogFragment fragment = AddEditCustomerPaymentDialogFragment.newInstance(customerPaymentInfo.getCustomerPaymentID(), customerID, 0);
                 fragment.show(getParentFragmentManager(), AddEditCustomerPaymentDialogFragment.TAG);
             }
         });
@@ -282,5 +253,41 @@ public class CustomerPaymentFragment extends Fragment {
                 fetchCustomerPayments(customerID);
             }
         });
+    }
+
+    private void showSuccessDialog(String message) {
+        SuccessDialogFragment fragment = SuccessDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
+    }
+
+    private void handleError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
+        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    }
+
+    private void ejectUser() {
+        SipSupportSharedPreferences.setUserFullName(getContext(), null);
+        SipSupportSharedPreferences.setUserLoginKey(getContext(), null);
+        SipSupportSharedPreferences.setCenterName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerName(getContext(), null);
+        SipSupportSharedPreferences.setUserName(getContext(), null);
+        SipSupportSharedPreferences.setCustomerTel(getContext(), null);
+        SipSupportSharedPreferences.setDate(getContext(), null);
+        SipSupportSharedPreferences.setFactor(getContext(), null);
+        SipSupportSharedPreferences.setCaseID(getContext(), 0);
+        Intent starter = LoginContainerActivity.start(getContext());
+        startActivity(starter);
+        getActivity().finish();
+    }
+
+    private void setupAdapter(CustomerPaymentResult.CustomerPaymentInfo[] customerPaymentInfoArray) {
+        CustomerPaymentAdapter adapter = new CustomerPaymentAdapter(viewModel, Arrays.asList(customerPaymentInfoArray), false);
+        binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void deleteCustomerPayment(int customerPaymentID) {
+        viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
+        String path = "/api/v1/customerPayments/Delete/";
+        viewModel.deleteCustomerPayment(path, userLoginKey, customerPaymentID);
     }
 }

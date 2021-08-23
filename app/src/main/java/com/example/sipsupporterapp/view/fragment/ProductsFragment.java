@@ -21,7 +21,7 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.DirectoryNodeBinder;
 import com.example.sipsupporterapp.adapter.FileNodeBinder;
 import com.example.sipsupporterapp.databinding.FragmentProductsBinding;
-import com.example.sipsupporterapp.eventbus.PostProductGroupIDEvent;
+import com.example.sipsupporterapp.eventbus.selectProductEvent;
 import com.example.sipsupporterapp.model.Dir;
 import com.example.sipsupporterapp.model.ProductGroupResult;
 import com.example.sipsupporterapp.model.ProductResult;
@@ -218,7 +218,7 @@ public class ProductsFragment extends Fragment {
                     Dir dirNode = (Dir) node.getContent();
                     String productGroup = dirNode.getDirName();
                     int productGroupID = getProductGroupID(productGroup);
-                    PostProductGroupIDEvent event = new PostProductGroupIDEvent(productGroupID, productGroup);
+                    selectProductEvent event = new selectProductEvent(productGroupID, productGroup);
                     EventBus.getDefault().postSticky(event);
                     if (!flag) {
                         getActivity().finish();

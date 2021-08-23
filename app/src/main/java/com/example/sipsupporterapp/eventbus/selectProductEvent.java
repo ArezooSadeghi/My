@@ -1,11 +1,11 @@
 package com.example.sipsupporterapp.eventbus;
 
-public class PostProductGroupIDEvent {
+public class selectProductEvent {
 
     private int productGroupID;
     private String productGroup;
 
-    public PostProductGroupIDEvent(int productGroupID, String productGroup) {
+    public selectProductEvent(int productGroupID, String productGroup) {
         this.productGroupID = productGroupID;
         this.productGroup = productGroup;
     }
