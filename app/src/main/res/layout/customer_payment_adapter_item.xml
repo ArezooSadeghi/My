@@ -4,20 +4,6 @@
 
     <data>
 
-        <variable
-            name="customerPaymentInfo"
-            type="com.example.sipsupporterapp.model.CustomerPaymentResult.CustomerPaymentInfo" />
-
-        <variable
-            name="customerPaymentViewModel"
-            type="com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel" />
-
-        <variable
-            name="position"
-            type="Integer" />
-
-        <import type="android.view.View" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,10 +13,10 @@
 
         <TextView
             android:id="@+id/tv_bank_account_name"
-            convertLetter="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankAccountName}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:ellipsize="end"
             android:fontFamily="@font/one"
@@ -38,14 +24,12 @@
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_more"
-            app:layout_constraintTop_toTopOf="@id/iv_more" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_bank_name"
-            convertLetter="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankName}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -57,7 +41,6 @@
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
-            android:visibility="@{!customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankName.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_price" />
@@ -70,7 +53,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/two"
-            android:text="@{`به شماره حساب:` + customerPaymentViewModel.getCustomerPaymentInfoAt(position).bankAccountNO}"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
@@ -85,14 +67,12 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_more"
-            android:visibility="@{customerPaymentViewModel == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
         <TextView
             android:id="@+id/tv_price"
-            currencyFormat="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).price}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -106,7 +86,6 @@
 
         <TextView
             android:id="@+id/tv_date_payment"
-            dateFormat="@{customerPaymentViewModel.getCustomerPaymentInfoAt(position).datePayment}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

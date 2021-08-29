@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerPaymentAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerPaymentResult;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPaymentAdapter.CustomerPaymentInfoHolder> {
     private Context context;
@@ -48,7 +51,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
 
     @Override
     public void onBindViewHolder(@NonNull CustomerPaymentInfoHolder holder, int position) {
-        holder.bind(position);
+        holder.bind(customerPaymentInfoList.get(position));
         holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,10 +127,16 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             this.binding = binding;
         }
 
-        public void bind(Integer position) {
-            binding.setCustomerPaymentInfo(customerPaymentInfoList.get(position));
-            binding.setCustomerPaymentViewModel(viewModel);
-            binding.setPosition(position);
+        public void bind(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
+            binding.tvBankAccountName.setText(customerPaymentInfo.getBankAccountName());
+            binding.tvBankName.setVisibility(!customerPaymentInfo.getBankName().isEmpty() ? View.VISIBLE : View.GONE);
+            binding.tvBankName.setText(customerPaymentInfo.getBankName());
+            binding.tvBankAccountNo.setText("به شماره حساب:" + customerPaymentInfo.getBankAccountNO());
+            binding.ivMore.setVisibility(viewModel == null ? View.GONE : View.VISIBLE);
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
+            binding.tvPrice.setText(currencyFormat + "تومان");
+            String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
+            binding.tvDatePayment.setText(dateFormat);
         }
     }
 }
