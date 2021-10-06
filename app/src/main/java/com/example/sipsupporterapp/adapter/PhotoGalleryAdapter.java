@@ -33,7 +33,11 @@ public class PhotoGalleryAdapter extends RecyclerView.Adapter<PhotoGalleryAdapte
     @Override
     public PhotoGalleryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new PhotoGalleryHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.attachment_adapter_item, parent, false));
+        return new PhotoGalleryHolder(DataBindingUtil.inflate(
+                LayoutInflater.from(context),
+                R.layout.attachment_adapter_item,
+                parent,
+                false));
     }
 
     @Override

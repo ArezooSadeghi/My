@@ -742,7 +742,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -772,7 +772,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -802,7 +802,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -833,7 +833,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -864,7 +864,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -894,7 +894,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -914,7 +914,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -944,7 +944,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -974,7 +974,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1004,7 +1004,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1035,7 +1035,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1065,7 +1065,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1095,7 +1095,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1125,7 +1125,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1155,7 +1155,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1185,7 +1185,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1215,7 +1215,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1245,7 +1245,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1275,7 +1275,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1305,7 +1305,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1335,7 +1335,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1365,7 +1365,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1395,7 +1395,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1425,7 +1425,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1455,7 +1455,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1485,7 +1485,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1515,7 +1515,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1545,7 +1545,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1575,7 +1575,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1605,7 +1605,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1635,7 +1635,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1665,7 +1665,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1695,7 +1695,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1725,7 +1725,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1755,7 +1755,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1785,7 +1785,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1815,7 +1815,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1845,7 +1845,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1875,7 +1875,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1905,7 +1905,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1935,7 +1935,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1965,7 +1965,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -1995,7 +1995,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2025,7 +2025,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2055,7 +2055,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2085,7 +2085,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2115,7 +2115,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2145,7 +2145,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2175,7 +2175,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2205,7 +2205,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2235,7 +2235,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2265,7 +2265,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2295,7 +2295,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2325,7 +2325,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2355,7 +2355,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2385,7 +2385,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2415,7 +2415,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2445,7 +2445,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2475,7 +2475,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2505,7 +2505,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2535,7 +2535,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2565,7 +2565,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2595,7 +2595,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2625,7 +2625,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2655,7 +2655,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2685,7 +2685,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
@@ -2715,7 +2715,7 @@ public class SipSupporterRepository {
                 } else if (t instanceof SocketTimeoutException) {
                     timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
                 } else {
-                    Log.e(TAG, t.getMessage(), t);
+                    Log.e(TAG, t.getMessage());
                 }
             }
         });
