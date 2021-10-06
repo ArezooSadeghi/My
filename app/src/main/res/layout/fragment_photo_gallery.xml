@@ -59,7 +59,7 @@
             android:id="@+id/iv_empty_gallery"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/empty_gallery"
+            android:src="@drawable/no_photo"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

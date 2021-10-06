@@ -24,12 +24,13 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.PhotoGalleryAdapter;
 import com.example.sipsupporterapp.databinding.FragmentPhotoGalleryBinding;
 import com.example.sipsupporterapp.eventbus.DeleteEvent;
+import com.example.sipsupporterapp.eventbus.NewRefreshEvent;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
+import com.example.sipsupporterapp.view.activity.AttachmentContainerActivity;
 import com.example.sipsupporterapp.view.activity.FullScreenPhotoContainerActivity;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
-import com.example.sipsupporterapp.view.dialog.AttachmentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
@@ -163,6 +164,13 @@ public class PhotoGalleryFragment extends Fragment {
         EventBus.getDefault().removeStickyEvent(event);
     }
 
+    @Subscribe(sticky = true)
+    public void getNewRefreshEvent(NewRefreshEvent event) {
+        int attachID = event.getAttachID();
+        fetchAttachInfo(attachID);
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -222,8 +230,8 @@ public class PhotoGalleryFragment extends Fragment {
         binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AttachmentDialogFragment fragment = AttachmentDialogFragment.newInstance(customerSupportID, customerProductID, customerPaymentID, paymentID);
-                fragment.show(getParentFragmentManager(), AttachmentDialogFragment.TAG);
+                Intent starter = AttachmentContainerActivity.start(getContext(), customerSupportID, customerProductID, customerPaymentID, paymentID);
+                startActivity(starter);
             }
         });
     }
@@ -478,16 +486,6 @@ public class PhotoGalleryFragment extends Fragment {
             @Override
             public void onChanged(Boolean requestCameraPermission) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA_PERMISSION);
-            }
-        });
-
-        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<AttachResult>() {
-            @Override
-            public void onChanged(AttachResult attachResult) {
-                if (attachResult.getAttachs().length != 0) {
-                    int attachID = attachResult.getAttachs()[0].getAttachID();
-                    fetchAttachInfo(attachID);
-                }
             }
         });
     }

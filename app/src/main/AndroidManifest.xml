@@ -32,6 +32,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".view.activity.AttachmentContainerActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
