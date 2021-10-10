@@ -36,6 +36,7 @@ import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.ScaleBitmap;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
+import com.example.sipsupporterapp.view.dialog.AttachAgainDialogFragment;
 import com.example.sipsupporterapp.view.dialog.AttachmentDialogFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
@@ -131,7 +132,8 @@ public class AttachmentFragment extends Fragment {
 
     @Subscribe
     public void getSuccessEvent(SuccessEvent event) {
-        getActivity().finish();
+        AttachAgainDialogFragment fragment = AttachAgainDialogFragment.newInstance("آیا می خواهید فایل دیگری را اضافه کنید؟");
+        fragment.show(getParentFragmentManager(), AttachAgainDialogFragment.TAG);
     }
 
     @Override
