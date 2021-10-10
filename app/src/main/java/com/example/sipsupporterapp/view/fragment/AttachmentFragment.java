@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.FragmentAttachmentBinding;
 import com.example.sipsupporterapp.eventbus.NewRefreshEvent;
+import com.example.sipsupporterapp.eventbus.SuccessEvent;
 import com.example.sipsupporterapp.model.AttachResult;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.ScaleBitmap;
@@ -41,6 +42,7 @@ import com.example.sipsupporterapp.view.dialog.SuccessDialogFragment;
 import com.example.sipsupporterapp.viewmodel.AttachmentViewModel;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -113,6 +115,23 @@ public class AttachmentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserver();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getSuccessEvent(SuccessEvent event) {
+        getActivity().finish();
     }
 
     @Override

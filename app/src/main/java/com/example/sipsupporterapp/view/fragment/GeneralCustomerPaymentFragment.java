@@ -27,6 +27,7 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
+import com.example.sipsupporterapp.view.dialog.AddNewCustomerPaymentFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -65,7 +66,12 @@ public class GeneralCustomerPaymentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_general_customer_payment, container, false);
+        binding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_general_customer_payment,
+                container,
+                false);
+
         initViews();
         handleEvents();
 
@@ -170,6 +176,21 @@ public class GeneralCustomerPaymentFragment extends Fragment {
             public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
                 startActivity(starter);
+            }
+        });
+
+        viewModel.getAddCustomerPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean addCustomerPaymentClicked) {
+                AddNewCustomerPaymentFragment fragment = AddNewCustomerPaymentFragment.newInstance(bankAccountID);
+                fragment.show(getParentFragmentManager(), AddNewCustomerPaymentFragment.TAG);
+            }
+        });
+
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refresh) {
+                fetchCustomerPaymentsByBankAccount(bankAccountID);
             }
         });
     }

@@ -29,6 +29,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> DeleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerPaymentResult.CustomerPaymentInfo> seeCustomerPaymentAttachmentsClicked = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> addCustomerPaymentClicked = new SingleLiveEvent<>();
 
     public CustomerPaymentViewModel(@NonNull Application application) {
         super(application);
@@ -104,6 +105,10 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<CustomerPaymentResult> getCustomerPaymentsByBankAccountResultSingleLiveEvent() {
         return customerPaymentsByBankAccountResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<Boolean> getAddCustomerPaymentClicked() {
+        return addCustomerPaymentClicked;
     }
 
     public ServerData getServerData(String centerName) {

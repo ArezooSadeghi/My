@@ -29,6 +29,7 @@ import com.example.sipsupporterapp.databinding.ActivityMainBinding;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.viewmodel.CaseViewModel;
+import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
 import com.example.sipsupporterapp.viewmodel.CustomerViewModel;
 import com.example.sipsupporterapp.viewmodel.PaymentViewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private CustomerViewModel customerViewModel;
     private CaseViewModel caseViewModel;
     private PaymentViewModel paymentViewModel;
+    private CustomerPaymentViewModel customerPaymentViewModel;
     private int destinationID;
 
     @Override
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         customerViewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
         caseViewModel = new ViewModelProvider(this).get(CaseViewModel.class);
         paymentViewModel = new ViewModelProvider(this).get(PaymentViewModel.class);
+        customerPaymentViewModel = new ViewModelProvider(this).get(CustomerPaymentViewModel.class);
 
         handleEvents();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -91,17 +94,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 destinationID = destination.getId();
-                if (destination.getId() == R.id.menu_search) {
+                if (destinationID == R.id.menu_search) {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
                     binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
                     binding.ivAdd.setVisibility(View.GONE);
-                } else if (destination.getId() == R.id.menu_tasks) {
+                } else if (destinationID == R.id.menu_tasks) {
                     binding.edTextSearch.setVisibility(View.VISIBLE);
                     binding.edTextSearch.setText("");
                     binding.btnSearch.setVisibility(View.VISIBLE);
                     binding.ivAdd.setVisibility(View.VISIBLE);
-                } else if (destination.getId() == R.id.menu_payments) {
+                } else if (destinationID == R.id.menu_payments) {
+                    binding.edTextSearch.setVisibility(View.GONE);
+                    binding.btnSearch.setVisibility(View.GONE);
+                    binding.ivAdd.setVisibility(View.VISIBLE);
+                } else if (destinationID == R.id.menu_customer_payments) {
                     binding.edTextSearch.setVisibility(View.GONE);
                     binding.btnSearch.setVisibility(View.GONE);
                     binding.ivAdd.setVisibility(View.VISIBLE);
@@ -168,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
                             .setTextSize(14)
                             .setTextGravity(Gravity.RIGHT)
                             .build();
+                } else if (destinationID == R.id.menu_customer_payments) {
+                    powerMenu = new PowerMenu.Builder(MainActivity.this)
+                            .addItem(new PowerMenuItem("افزودن واریزی"))
+                            .setTextColor(Color.parseColor("#000000"))
+                            .setTextSize(14)
+                            .setTextGravity(Gravity.RIGHT)
+                            .build();
                 }
 
                 PowerMenu finalPowerMenu = powerMenu;
@@ -178,9 +192,10 @@ public class MainActivity extends AppCompatActivity {
                             case 0:
                                 if (destinationID == R.id.menu_payments) {
                                     paymentViewModel.getAddNewPaymentClicked().setValue(true);
-
                                 } else if (destinationID == R.id.menu_tasks) {
                                     caseViewModel.getAddNewCaseClicked().setValue(true);
+                                } else if (destinationID == R.id.menu_customer_payments) {
+                                    customerPaymentViewModel.getAddCustomerPaymentClicked().setValue(true);
                                 }
                                 finalPowerMenu.dismiss();
                                 break;
