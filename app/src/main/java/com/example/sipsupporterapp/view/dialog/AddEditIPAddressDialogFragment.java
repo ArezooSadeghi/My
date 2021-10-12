@@ -2,6 +2,7 @@ package com.example.sipsupporterapp.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
-import com.example.sipsupporterapp.databinding.FragmentAddEditIPAddressDialogBinding;
+import com.example.sipsupporterapp.databinding.FragmentAddEditIpAddressDialogBinding;
 import com.example.sipsupporterapp.model.ServerData;
 import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
@@ -25,7 +26,7 @@ import com.example.sipsupporterapp.viewmodel.LoginViewModel;
 import java.util.List;
 
 public class AddEditIPAddressDialogFragment extends DialogFragment {
-    private FragmentAddEditIPAddressDialogBinding binding;
+    private FragmentAddEditIpAddressDialogBinding binding;
     private LoginViewModel viewModel;
 
     private String centerName, ipAddress, port;
@@ -34,12 +35,9 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
     private static final String ARGS_CENTER_NAME = "centerName";
     private static final String ARGS_IP_ADDRESS = "ipAddress";
     private static final String ARGS_PORT = "port";
-
     public static final String TAG = AddEditIPAddressDialogFragment.class.getSimpleName();
 
-
-    public static AddEditIPAddressDialogFragment newInstance(
-            String centerName, String ipAddress, String port) {
+    public static AddEditIPAddressDialogFragment newInstance(String centerName, String ipAddress, String port) {
         AddEditIPAddressDialogFragment fragment = new AddEditIPAddressDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_CENTER_NAME, centerName);
@@ -49,58 +47,67 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        centerName = getArguments().getString(ARGS_CENTER_NAME);
-        ipAddress = getArguments().getString(ARGS_IP_ADDRESS);
-        port = getArguments().getString(ARGS_PORT);
-
-        viewModel = new ViewModelProvider(requireActivity())
-                .get(LoginViewModel.class);
-
+        createViewModel();
+        initVariables();
     }
-
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(LayoutInflater.from(
                 getContext()),
-                R.layout.fragment_add_edit_i_p_address_dialog,
+                R.layout.fragment_add_edit_ip_address_dialog,
                 null,
                 false);
 
-        binding.edTextCenterName.setText(centerName);
-        binding.edTextIp.setText(ipAddress);
-        binding.edTextPort.setText(port);
-
-        binding.edTextCenterName.setSelection(binding.edTextCenterName.getText().length());
-        binding.edTextIp.setSelection(binding.edTextIp.getText().length());
-        binding.edTextPort.setSelection(binding.edTextPort.getText().length());
-
-        setListener();
+        initViews();
+        handleEvents();
 
         AlertDialog dialog = new AlertDialog
                 .Builder(getContext())
                 .setView(binding.getRoot())
                 .create();
 
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
         return dialog;
     }
 
+    private void createViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
+    }
 
-    private void setListener() {
+    private void initVariables() {
+        centerName = getArguments().getString(ARGS_CENTER_NAME);
+        ipAddress = getArguments().getString(ARGS_IP_ADDRESS);
+        port = getArguments().getString(ARGS_PORT);
+    }
+
+    private void initViews() {
+        binding.edTxtCenterName.setText(centerName);
+        binding.edTextIp.setText(ipAddress);
+        binding.edTxtPort.setText(port);
+        binding.edTxtCenterName.setSelection(binding.edTxtCenterName.getText().length());
+        binding.edTextIp.setSelection(binding.edTextIp.getText().length());
+        binding.edTxtPort.setSelection(binding.edTxtPort.getText().length());
+    }
+
+    private void handleEvents() {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 flag = false;
-                String centerName = binding.edTextCenterName.getText().toString();
+                String centerName = binding.edTxtCenterName.getText().toString();
                 String ipAddress = binding.edTextIp.getText().toString();
-                String port = binding.edTextPort.getText().toString();
+                String port = binding.edTxtPort.getText().toString();
 
                 if (centerName.isEmpty() || ipAddress.isEmpty() || port.isEmpty()) {
                     ErrorDialogFragment fragment = ErrorDialogFragment
@@ -152,7 +159,7 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
             }
         });
 
-        binding.edTextCenterName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.edTxtCenterName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -170,7 +177,7 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == 0 || actionId == EditorInfo.IME_ACTION_DONE) {
-                    binding.edTextPort.requestFocus();
+                    binding.edTxtPort.requestFocus();
                 }
                 return false;
             }

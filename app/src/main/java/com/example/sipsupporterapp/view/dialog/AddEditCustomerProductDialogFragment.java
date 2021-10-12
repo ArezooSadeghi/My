@@ -3,6 +3,7 @@ package com.example.sipsupporterapp.view.dialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -99,6 +100,10 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
 
         return dialog;
     }
@@ -205,11 +210,11 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
     private void initViews() {
         if (customerProductInfo != null) {
             binding.txtCustomerName.setText(Converter.letterConverter(customerProductInfo.getCustomerName()));
-            binding.edTextDescription.setText(Converter.letterConverter(customerProductInfo.getDescription()));
-            binding.edTextDescription.setSelection(binding.edTextDescription.getText().toString().length());
+            binding.edTxtDescription.setText(Converter.letterConverter(customerProductInfo.getDescription()));
+            binding.edTxtDescription.setSelection(binding.edTxtDescription.getText().toString().length());
             binding.btnProductName.setText(Converter.letterConverter(customerProductInfo.getProductName()));
-            binding.edTextInvoicePrice.setText(String.valueOf(customerProductInfo.getInvoicePrice()));
-            binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().toString().length());
+            binding.edTxtInvoicePrice.setText(String.valueOf(customerProductInfo.getInvoicePrice()));
+            binding.edTxtInvoicePrice.setSelection(binding.edTxtInvoicePrice.getText().toString().length());
 
             if (customerProductInfo.getExpireDate() != 0) {
                 String dateFormat = Converter.dateFormat(String.valueOf(customerProductInfo.getExpireDate()));
@@ -223,13 +228,13 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
         }
 
         if (productInfo != null) {
-            binding.edTextInvoicePrice.setText(String.valueOf(productInfo.getCost()));
+            binding.edTxtInvoicePrice.setText(String.valueOf(productInfo.getCost()));
             binding.btnProductName.setText(productInfo.getProductName());
         }
     }
 
     private void handleEvents() {
-        binding.edTextInvoicePrice.addTextChangedListener(new TextWatcher() {
+        binding.edTxtInvoicePrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -242,7 +247,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                binding.edTextInvoicePrice.removeTextChangedListener(this);
+                binding.edTxtInvoicePrice.removeTextChangedListener(this);
                 try {
                     String text = editable.toString();
                     Long textToLong;
@@ -251,12 +256,12 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     }
                     textToLong = Long.parseLong(text);
                     String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(textToLong);
-                    binding.edTextInvoicePrice.setText(currencyFormat);
-                    binding.edTextInvoicePrice.setSelection(binding.edTextInvoicePrice.getText().length());
+                    binding.edTxtInvoicePrice.setText(currencyFormat);
+                    binding.edTxtInvoicePrice.setSelection(binding.edTxtInvoicePrice.getText().length());
                 } catch (NumberFormatException exception) {
                     Log.e(TAG, exception.getMessage());
                 }
-                binding.edTextInvoicePrice.addTextChangedListener(this);
+                binding.edTxtInvoicePrice.addTextChangedListener(this);
             }
         });
 
@@ -271,8 +276,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                         customerProductInfo.setCustomerID(customerID);
                         customerProductInfo.setProductID(productGroupID);
                         customerProductInfo.setCustomerProductID(customerProductID);
-                        customerProductInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
-                        String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
+                        customerProductInfo.setDescription(Converter.letterConverter(binding.edTxtDescription.getText().toString()));
+                        String price = binding.edTxtInvoicePrice.getText().toString().replaceAll(",", "");
                         customerProductInfo.setInvoicePrice(Long.valueOf(price));
                         customerProductInfo.setFinish(binding.checkBoxFinish.isChecked());
                         customerProductInfo.setInvoicePayment(binding.checkBoxInvoicePayment.isChecked());
@@ -282,8 +287,8 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                         if (productGroupID != 0) {
                             customerProductInfo.setProductID(productGroupID);
                         }
-                        customerProductInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
-                        String price = binding.edTextInvoicePrice.getText().toString().replaceAll(",", "");
+                        customerProductInfo.setDescription(Converter.letterConverter(binding.edTxtDescription.getText().toString()));
+                        String price = binding.edTxtInvoicePrice.getText().toString().replaceAll(",", "");
                         customerProductInfo.setInvoicePrice(Long.valueOf(price));
                         customerProductInfo.setFinish(binding.checkBoxFinish.isChecked());
                         customerProductInfo.setInvoicePayment(binding.checkBoxInvoicePayment.isChecked());

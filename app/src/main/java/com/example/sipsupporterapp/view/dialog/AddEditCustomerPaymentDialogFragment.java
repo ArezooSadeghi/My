@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -106,6 +107,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
 
         return dialog;
     }
@@ -223,10 +228,10 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         if (customerPaymentInfo != null) {
             bankAccountID = customerPaymentInfo.getBankAccountID();
             binding.txtCustomerName.setText(Converter.letterConverter(customerPaymentInfo.getCustomerName()));
-            binding.edTextDescription.setText(Converter.letterConverter(customerPaymentInfo.getDescription()));
-            binding.edTextDescription.setSelection(binding.edTextDescription.getText().length());
-            binding.edTextPrice.setText(String.valueOf(customerPaymentInfo.getPrice()));
-            binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
+            binding.edTxtDescription.setText(Converter.letterConverter(customerPaymentInfo.getDescription()));
+            binding.edTxtDescription.setSelection(binding.edTxtDescription.getText().length());
+            binding.edTxtPrice.setText(String.valueOf(customerPaymentInfo.getPrice()));
+            binding.edTxtPrice.setSelection(binding.edTxtPrice.getText().length());
             if (customerPaymentInfo.getDatePayment() != 0) {
                 String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
                 binding.btnDatePayment.setText(dateFormat);
@@ -253,8 +258,8 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String price = binding.edTextPrice.getText().toString().replaceAll(",", "");
-                if (customerID == 0 && (binding.edTextDescription.getText().toString().isEmpty() || binding.edTextDescription.getText().toString().length() <= 3)) {
+                String price = binding.edTxtPrice.getText().toString().replaceAll(",", "");
+                if (customerID == 0 && (binding.edTxtDescription.getText().toString().isEmpty() || binding.edTxtDescription.getText().toString().length() <= 3)) {
                     handleError("توضیحات باید بیش از چهار حرف باشد");
                 } else if (price.isEmpty() || Long.valueOf(price) == 0) {
                     handleError("مبلغ نباید خالی یا صفر باشد");
@@ -262,7 +267,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     if (customerPaymentInfo == null) {
                         customerPaymentInfo = new CustomerPaymentResult.CustomerPaymentInfo();
                     }
-                    customerPaymentInfo.setDescription(Converter.letterConverter(binding.edTextDescription.getText().toString()));
+                    customerPaymentInfo.setDescription(Converter.letterConverter(binding.edTxtDescription.getText().toString()));
                     customerPaymentInfo.setPrice(Long.valueOf(price));
                     String datePayment = binding.btnDatePayment.getText().toString().replaceAll("/", "").replaceAll(" ", "");
                     customerPaymentInfo.setDatePayment(Integer.valueOf(datePayment));
@@ -321,7 +326,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        binding.edTextPrice.addTextChangedListener(new TextWatcher() {
+        binding.edTxtPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -334,7 +339,7 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                binding.edTextPrice.removeTextChangedListener(this);
+                binding.edTxtPrice.removeTextChangedListener(this);
                 try {
                     String text = editable.toString();
                     Long textToLong;
@@ -343,12 +348,12 @@ public class AddEditCustomerPaymentDialogFragment extends DialogFragment {
                     }
                     textToLong = Long.parseLong(text);
                     String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(textToLong);
-                    binding.edTextPrice.setText(currencyFormat);
-                    binding.edTextPrice.setSelection(binding.edTextPrice.getText().length());
+                    binding.edTxtPrice.setText(currencyFormat);
+                    binding.edTxtPrice.setSelection(binding.edTxtPrice.getText().length());
                 } catch (NumberFormatException exception) {
                     Log.e(TAG, exception.getMessage());
                 }
-                binding.edTextPrice.addTextChangedListener(this);
+                binding.edTxtPrice.addTextChangedListener(this);
             }
         });
 

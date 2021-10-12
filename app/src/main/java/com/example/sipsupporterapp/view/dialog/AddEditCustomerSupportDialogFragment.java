@@ -3,6 +3,7 @@ package com.example.sipsupporterapp.view.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,10 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCanceledOnTouchOutside(false);
 
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+
         return dialog;
     }
 
@@ -144,16 +149,16 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (binding.edTextQuestion.getText().toString().isEmpty()) {
+                if (binding.edTxtQuestion.getText().toString().isEmpty()) {
                     handleError("لطفا متن سوال را مشخص نمایید");
-                    binding.edTextQuestion.requestFocus();
-                } else if (binding.edTextAnswer.getText().toString().isEmpty()) {
+                    binding.edTxtQuestion.requestFocus();
+                } else if (binding.edTxtAnswer.getText().toString().isEmpty()) {
                     handleError("لطفا متن پاسخ را مشخص نمایید");
-                    binding.edTextAnswer.requestFocus();
+                    binding.edTxtAnswer.requestFocus();
                 } else {
                     CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult.CustomerSupportInfo();
-                    String answer = binding.edTextAnswer.getText().toString();
-                    String question = binding.edTextQuestion.getText().toString();
+                    String answer = binding.edTxtAnswer.getText().toString();
+                    String question = binding.edTxtQuestion.getText().toString();
                     customerSupportInfo.setAnswer(Converter.letterConverter(answer));
                     customerSupportInfo.setQuestion(Converter.letterConverter(question));
                     customerSupportInfo.setCustomerID(customerID);

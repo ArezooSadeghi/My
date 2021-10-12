@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         binding.edTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                     if (destinationID == R.id.menu_search) {
                         customerViewModel.getSearchQuery().setValue(binding.edTextSearch.getText().toString());
                     } else if (destinationID == R.id.menu_tasks) {

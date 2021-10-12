@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:padding="20dp"
+        tools:context=".view.dialog.AddEditIPAddressDialogFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:background="@drawable/dialog_bg"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/center_name_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="لطفا نام مرکز را وارد کنید"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_txt_center_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/custom_cursor"
+                    android:textDirection="rtl" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ip_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:hint="لطفا آدرس ip خود را وارد کنید"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/center_name_container">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_text_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/custom_cursor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/port_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:hint="لطفا port خود را وارد کنید"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/black"
+                app:hintTextColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ip_container">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_txt_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/custom_cursor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/call_information_button_bg"
+            android:text="@string/cancel_btn_text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:backgroundTint="@color/yellow"
+            app:layout_constraintBottom_toBottomOf="@id/layout_dialog"
+            app:layout_constraintEnd_toStartOf="@id/btn_save"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_dialog" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/call_information_button_bg"
+            android:text="@string/save_btn_text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:backgroundTint="@color/yellow"
+            app:layout_constraintBottom_toBottomOf="@id/layout_dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_cancel"
+            app:layout_constraintTop_toBottomOf="@id/layout_dialog" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

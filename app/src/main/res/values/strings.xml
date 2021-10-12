@@ -5,6 +5,14 @@
     <string name="login">ورود</string>
     <string name="user_name_hint">نام کاربری</string>
     <string name="password_hint">رمز عبور</string>
+    <string name="question_hint">متن سوال</string>
+    <string name="answer_hint">جواب</string>
+    <string name="invoice_price_hint">مبلغ فاکتور(به ریال)</string>
+    <string name="price_hint">مبلغ واریزی(به ریال)</string>
+    <string name="description_hint">توضیحات</string>
+    <string name="product_name_lb_text">نام محصول:</string>
+    <string name="cancel_btn_text">بستن</string>
+    <string name="save_btn_text">ذخیره</string>
     <string name="login_title">پشتیبانی</string>
     <string name="search_item_title">جستجو</string>
     <string name="center_name_hint">لطفا نام مرکز را وارد کنید</string>
