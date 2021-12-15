@@ -71,10 +71,12 @@ public class UserResult {
     public class UserLoginParameter {
         private String userName;
         private String password;
+        private int version;
 
-        public UserLoginParameter(String userName, String password) {
+        public UserLoginParameter(String userName, String password, int version) {
             this.userName = userName;
             this.password = password;
+            this.version = version;
         }
 
         public String getUserName() {
@@ -91,6 +93,14 @@ public class UserResult {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public int getVersion() {
+            return version;
+        }
+
+        public void setVersion(int version) {
+            this.version = version;
         }
     }
 }

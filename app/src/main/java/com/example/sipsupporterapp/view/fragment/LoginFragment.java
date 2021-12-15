@@ -140,7 +140,7 @@ public class LoginFragment extends Fragment {
                         String userName = binding.edTextUserName.getText().toString().replaceAll(" ", "");
                         String password = binding.edTextPassword.getText().toString().replaceAll(" ", "");
 
-                        UserResult.UserLoginParameter userLoginParameter = new UserResult().new UserLoginParameter(userName, password);
+                        UserResult.UserLoginParameter userLoginParameter = new UserResult().new UserLoginParameter(userName, password, 14000924);
 
                         if (spinnerValue != null) {
                             ServerData serverData = viewModel.getServerData(spinnerValue);
