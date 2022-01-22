@@ -235,7 +235,7 @@ public class CustomerProductFragment extends Fragment {
             }
         });
 
-        viewModel.getSeeCustomerProductAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult.CustomerProductInfo>() {
+        viewModel.getSeeAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerProductResult.CustomerProductInfo>() {
             @Override
             public void onChanged(CustomerProductResult.CustomerProductInfo customerProductInfo) {
                 Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, customerProductInfo.getCustomerProductID(), 0, 0);

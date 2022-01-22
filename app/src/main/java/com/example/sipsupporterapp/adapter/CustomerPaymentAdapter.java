@@ -57,7 +57,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             public void onClick(View view) {
                 if (flag) {
                     PowerMenu powerMenu = new PowerMenu.Builder(context)
-                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachments_item_title), R.drawable.see))
                             .setTextColor(Color.BLACK)
                             .setIconSize(24)
                             .setTextSize(12)
@@ -81,7 +81,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
                     PowerMenu powerMenu = new PowerMenu.Builder(context)
                             .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
                             .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
-                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                            .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachments_item_title), R.drawable.see))
                             .setTextColor(Color.BLACK)
                             .setIconSize(24)
                             .setTextSize(12)
@@ -134,7 +134,7 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             binding.tvBankAccountNo.setText("به شماره حساب:" + customerPaymentInfo.getBankAccountNO());
             binding.ivMore.setVisibility(viewModel == null ? View.GONE : View.VISIBLE);
             String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
-            binding.tvPrice.setText(currencyFormat + "تومان");
+            binding.tvPrice.setText(currencyFormat + "ریال");
             String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
             binding.tvDatePayment.setText(dateFormat);
         }

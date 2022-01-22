@@ -1,34 +1,7 @@
 package com.example.sipsupporterapp.model;
 
-import android.widget.TextView;
-
-import androidx.databinding.BindingAdapter;
-
-import com.example.sipsupporterapp.utils.Converter;
-
-import java.text.NumberFormat;
-import java.util.Locale;
-
-public class CustomerProductResult {
-    private String error;
-    private String errorCode;
+public class CustomerProductResult extends ResultInfo {
     private CustomerProductInfo[] customerProducts;
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
 
     public CustomerProductInfo[] getCustomerProducts() {
         return customerProducts;
@@ -38,7 +11,7 @@ public class CustomerProductResult {
         this.customerProducts = customerProducts;
     }
 
-    public static class CustomerProductInfo {
+    public class CustomerProductInfo {
         private int customerProductID;
         private int customerID;
         private int productID;
@@ -209,17 +182,6 @@ public class CustomerProductResult {
 
         public void setInvoicePaymentUserFullName(String invoicePaymentUserFullName) {
             this.invoicePaymentUserFullName = invoicePaymentUserFullName;
-        }
-
-        @BindingAdapter({"currencyFormat"})
-        public static void setCurrencyFormat(TextView textView, long invoicePrice) {
-            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(invoicePrice);
-            textView.setText(currencyFormat + "تومان");
-        }
-
-        @BindingAdapter({"convertLetter"})
-        public static void converter(TextView textView, String text) {
-            textView.setText(Converter.letterConverter(text));
         }
     }
 }

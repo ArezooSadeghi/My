@@ -4,18 +4,6 @@
 
     <data>
 
-        <variable
-            name="customerUserInfo"
-            type="com.example.sipsupporterapp.model.CustomerUserResult.CustomerUserInfo" />
-
-        <variable
-            name="userViewModel"
-            type="com.example.sipsupporterapp.viewmodel.UserViewModel" />
-
-        <variable
-            name="position"
-            type="Integer" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,12 +11,10 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
         android:clickable="true"
-        android:layoutDirection="ltr"
-        android:onClick="@{() -> userViewModel.onItemClick(position)}">
+        android:layoutDirection="ltr">
 
         <TextView
             android:id="@+id/tv_user_name"
-            convertLetter="@{userViewModel.getCustomerUserInfoAt(position).userName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -62,7 +48,6 @@
             android:fontFamily="@font/one"
             android:gravity="start"
             android:maxLines="2"
-            android:text="@{userViewModel.getCustomerUserInfoAt(position).lastSeen}"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"

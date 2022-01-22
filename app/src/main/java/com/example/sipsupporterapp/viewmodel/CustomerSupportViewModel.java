@@ -51,7 +51,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return noConnectionExceptionHappenSingleLiveEvent;
     }
 
-    public SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> getSeeCustomerSupportAttachmentsClicked() {
+    public SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> getSeeAttachmentsClicked() {
         return seeCustomerSupportAttachmentsClicked;
     }
 

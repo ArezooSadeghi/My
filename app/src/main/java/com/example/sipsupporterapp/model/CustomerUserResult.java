@@ -1,31 +1,7 @@
 package com.example.sipsupporterapp.model;
 
-import android.widget.TextView;
-
-import androidx.databinding.BindingAdapter;
-
-import com.example.sipsupporterapp.utils.Converter;
-
-public class CustomerUserResult {
-    private String error;
-    private String errorCode;
+public class CustomerUserResult extends ResultInfo {
     private CustomerUserInfo[] customerUsers;
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
 
     public CustomerUserInfo[] getCustomerUsers() {
         return customerUsers;
@@ -35,7 +11,7 @@ public class CustomerUserResult {
         this.customerUsers = customerUsers;
     }
 
-    public static class CustomerUserInfo {
+    public class CustomerUserInfo {
         private int customerUserID;
         private int customerID;
         private int userID;
@@ -80,11 +56,6 @@ public class CustomerUserResult {
 
         public void setLastSeen(String lastSeen) {
             this.lastSeen = lastSeen;
-        }
-
-        @BindingAdapter({"convertLetter"})
-        public static void converter(TextView textView, String text) {
-            textView.setText(Converter.letterConverter(text));
         }
     }
 }

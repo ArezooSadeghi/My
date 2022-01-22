@@ -49,7 +49,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentH
                 PowerMenu powerMenu = new PowerMenu.Builder(context)
                         .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
                         .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
+                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachments_item_title), R.drawable.see))
                         .setTextColor(Color.BLACK)
                         .setTextGravity(Gravity.RIGHT)
                         .setIconSize(24)

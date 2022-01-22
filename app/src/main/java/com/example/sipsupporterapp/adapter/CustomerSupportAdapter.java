@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,80 +14,77 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerSupportAdapterItemBinding;
 import com.example.sipsupporterapp.model.CustomerSupportResult;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel;
-import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
 import java.util.List;
 
-public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupportAdapter.CustomerSupportInfoHolder> {
-    private Context context;
-    private CustomerSupportViewModel viewModel;
-    private List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList;
+public class CustomerSupportAdapter extends RecyclerView.Adapter<CustomerSupportAdapter.CustomerSupportHolder> {
+    private final CustomerSupportViewModel viewModel;
+    private final List<CustomerSupportResult.CustomerSupportInfo> customerSupports;
 
-    public CustomerSupportAdapter(CustomerSupportViewModel viewModel, List<CustomerSupportResult.CustomerSupportInfo> customerSupportInfoList) {
+    public CustomerSupportAdapter(CustomerSupportViewModel viewModel, List<CustomerSupportResult.CustomerSupportInfo> customerSupports) {
         this.viewModel = viewModel;
-        this.customerSupportInfoList = customerSupportInfoList;
+        this.customerSupports = customerSupports;
     }
 
     @NonNull
     @Override
-    public CustomerSupportInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        return new CustomerSupportInfoHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.customer_support_adapter_item, parent, false));
+    public CustomerSupportHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CustomerSupportHolder(DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()),
+                R.layout.customer_support_adapter_item,
+                parent,
+                false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomerSupportInfoHolder holder, int position) {
-        holder.bind(position);
-        CustomerSupportResult.CustomerSupportInfo customerSupportInfo = customerSupportInfoList.get(position);
+    public void onBindViewHolder(@NonNull CustomerSupportHolder holder, int position) {
+        Context context = holder.binding.getRoot().getContext();
+        CustomerSupportResult.CustomerSupportInfo info = customerSupports.get(position);
+        holder.bind(info);
 
-        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
-                        .setTextColor(Color.BLACK)
-                        .setTextGravity(Gravity.RIGHT)
-                        .setIconSize(24)
-                        .setTextSize(12)
-                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
-                        .build();
+        holder.binding.ivMore.setOnClickListener(view -> {
+            PowerMenu powerMenu = new PowerMenu.Builder(context)
+                    .addItem(new PowerMenuItem(context.getString(R.string.power_menu_see_attachments_item_title), R.drawable.see))
+                    .setTextColor(Color.BLACK)
+                    .setTextGravity(Gravity.RIGHT)
+                    .setIconSize(24)
+                    .setTextSize(12)
+                    .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                    .build();
 
-                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
-                    @Override
-                    public void onItemClick(int position, PowerMenuItem item) {
-                        switch (position) {
-                            case 0:
-                                viewModel.getSeeCustomerSupportAttachmentsClicked().setValue(customerSupportInfo);
-                                powerMenu.dismiss();
-                                break;
-                        }
-                    }
-                });
-                powerMenu.showAsDropDown(view);
-            }
+            powerMenu.setOnMenuItemClickListener((i, item) -> {
+                if (i == 0) {
+                    viewModel.getSeeAttachmentsClicked().setValue(info);
+                    powerMenu.dismiss();
+                }
+            });
+            powerMenu.showAsDropDown(view);
         });
     }
 
     @Override
     public int getItemCount() {
-        return customerSupportInfoList == null ? 0 : customerSupportInfoList.size();
+        return customerSupports != null ? customerSupports.size() : 0;
     }
 
-    public class CustomerSupportInfoHolder extends RecyclerView.ViewHolder {
-        private CustomerSupportAdapterItemBinding binding;
+    public class CustomerSupportHolder extends RecyclerView.ViewHolder {
+        private final CustomerSupportAdapterItemBinding binding;
 
-        public CustomerSupportInfoHolder(CustomerSupportAdapterItemBinding binding) {
+        public CustomerSupportHolder(CustomerSupportAdapterItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(Integer position) {
-            binding.setCustomerSupportInfo(customerSupportInfoList.get(position));
-            binding.setCustomerSupportViewModel(viewModel);
-            binding.setPosition(position);
+        public void bind(CustomerSupportResult.CustomerSupportInfo info) {
+            binding.tvCustomerSupportID.setText(String.valueOf(info.getCustomerSupportID()));
+            binding.tvRegTime.setText(info.getRegTime());
+            binding.tvQuestion.setText(Converter.letterConverter(info.getQuestion()));
+            binding.tvAnswer.setText(Converter.letterConverter(info.getAnswer()));
+            binding.tvUserFullName.setText(Converter.letterConverter(info.getUserFullName()).concat(":"));
         }
     }
 }

@@ -4,18 +4,6 @@
 
     <data>
 
-        <variable
-            name="customerSupportInfo"
-            type="com.example.sipsupporterapp.model.CustomerSupportResult.CustomerSupportInfo" />
-
-        <variable
-            name="customerSupportViewModel"
-            type="com.example.sipsupporterapp.viewmodel.CustomerSupportViewModel" />
-
-        <variable
-            name="position"
-            type="Integer" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:fontFamily="@font/two"
-            android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).customerSupportID + ``}"
             android:textColor="@color/white"
             android:textDirection="rtl"
             android:textSize="12sp"
@@ -53,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/two"
-            android:text="@{customerSupportViewModel.getCustomerSupportInfoAt(position).regTime}"
             android:textColor="@color/orange"
             android:textDirection="rtl"
             android:textSize="12sp"
@@ -75,7 +61,6 @@
 
         <TextView
             android:id="@+id/tv_question"
-            convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).question}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -103,7 +88,6 @@
 
         <TextView
             android:id="@+id/tv_user_full_name"
-            convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).userFullName + `:`}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -117,7 +101,6 @@
 
         <TextView
             android:id="@+id/tv_answer"
-            convertLetter="@{customerSupportViewModel.getCustomerSupportInfoAt(position).answer}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"

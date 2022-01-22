@@ -156,7 +156,7 @@ public class AddEditCustomerSupportDialogFragment extends DialogFragment {
                     handleError("لطفا متن پاسخ را مشخص نمایید");
                     binding.edTxtAnswer.requestFocus();
                 } else {
-                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult.CustomerSupportInfo();
+                    CustomerSupportResult.CustomerSupportInfo customerSupportInfo = new CustomerSupportResult().new CustomerSupportInfo();
                     String answer = binding.edTxtAnswer.getText().toString();
                     String question = binding.edTxtQuestion.getText().toString();
                     customerSupportInfo.setAnswer(Converter.letterConverter(answer));

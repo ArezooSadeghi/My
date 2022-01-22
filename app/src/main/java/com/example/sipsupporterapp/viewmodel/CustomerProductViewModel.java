@@ -82,7 +82,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return editClicked;
     }
 
-    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getSeeCustomerProductAttachmentsClicked() {
+    public SingleLiveEvent<CustomerProductResult.CustomerProductInfo> getSeeAttachmentsClicked() {
         return seeCustomerProductAttachmentsClicked;
     }
 

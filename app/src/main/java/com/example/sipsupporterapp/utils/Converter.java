@@ -1,5 +1,8 @@
 package com.example.sipsupporterapp.utils;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Converter {
 
     public static String letterConverter(String input) {
@@ -80,6 +83,10 @@ public class Converter {
         } else {
             return "";
         }
+    }
+
+    public static String currencyFormat(long price) {
+        return NumberFormat.getNumberInstance(Locale.US).format(price);
     }
 }
 

@@ -272,7 +272,7 @@ public class AddEditCustomerProductDialogFragment extends DialogFragment {
                     handleError("لطفا محصول را انتخاب کنید");
                 } else {
                     if (customerProductInfo == null) {
-                        customerProductInfo = new CustomerProductResult.CustomerProductInfo();
+                        customerProductInfo = new CustomerProductResult().new CustomerProductInfo();
                         customerProductInfo.setCustomerID(customerID);
                         customerProductInfo.setProductID(productGroupID);
                         customerProductInfo.setCustomerProductID(customerProductID);

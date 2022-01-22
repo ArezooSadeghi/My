@@ -15,89 +15,94 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.databinding.CustomerProductAdapeterItemBinding;
 import com.example.sipsupporterapp.model.CustomerProductResult;
+import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.viewmodel.CustomerProductViewModel;
-import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
 import java.util.List;
 
-public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProductAdapter.ProductsHolder> {
-    private Context context;
-    private CustomerProductViewModel viewModel;
-    private List<CustomerProductResult.CustomerProductInfo> customerProductInfoList;
+public class CustomerProductAdapter extends RecyclerView.Adapter<CustomerProductAdapter.CustomerProductHolder> {
+    private final CustomerProductViewModel viewModel;
+    private final List<CustomerProductResult.CustomerProductInfo> customerProducts;
 
-    public CustomerProductAdapter(CustomerProductViewModel viewModel, List<CustomerProductResult.CustomerProductInfo> customerProductInfoList) {
+    public CustomerProductAdapter(CustomerProductViewModel viewModel, List<CustomerProductResult.CustomerProductInfo> customerProducts) {
         this.viewModel = viewModel;
-        this.customerProductInfoList = customerProductInfoList;
+        this.customerProducts = customerProducts;
     }
 
     @NonNull
     @Override
-    public ProductsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        return new ProductsHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.customer_product_adapeter_item, parent, false));
+    public CustomerProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CustomerProductHolder(DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()),
+                R.layout.customer_product_adapeter_item,
+                parent,
+                false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductsHolder holder, int position) {
-        holder.bind(position);
-        CustomerProductResult.CustomerProductInfo customerProductInfo = customerProductInfoList.get(position);
-        holder.binding.ivMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PowerMenu powerMenu = new PowerMenu.Builder(context)
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
-                        .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachment_item_title), R.drawable.see))
-                        .setTextColor(Color.BLACK)
-                        .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
-                        .setTextSize(12)
-                        .setIconSize(24)
-                        .setTextGravity(Gravity.RIGHT)
-                        .build();
+    public void onBindViewHolder(@NonNull CustomerProductHolder holder, int position) {
+        Context context = holder.binding.getRoot().getContext();
+        CustomerProductResult.CustomerProductInfo info = customerProducts.get(position);
+        holder.bind(info);
 
-                powerMenu.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
-                    @Override
-                    public void onItemClick(int position, PowerMenuItem item) {
-                        switch (position) {
-                            case 0:
-                                viewModel.getEditClicked().setValue(customerProductInfo.getCustomerProductID());
-                                powerMenu.dismiss();
-                                break;
-                            case 1:
-                                viewModel.getDeleteClicked().setValue(customerProductInfo.getCustomerProductID());
-                                powerMenu.dismiss();
-                                break;
-                            case 2:
-                                viewModel.getSeeCustomerProductAttachmentsClicked().setValue(customerProductInfo);
-                                powerMenu.dismiss();
-                                break;
-                        }
-                    }
-                });
-                powerMenu.showAsDropDown(view);
-            }
+        holder.binding.ivMore.setOnClickListener(view -> {
+            PowerMenu powerMenu = new PowerMenu.Builder(context)
+                    .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_edit_item_title), R.drawable.edit))
+                    .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_delete_item_title), R.drawable.delete))
+                    .addItem(new PowerMenuItem(context.getResources().getString(R.string.power_menu_see_attachments_item_title), R.drawable.see))
+                    .setTextColor(Color.BLACK)
+                    .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                    .setTextSize(12)
+                    .setIconSize(24)
+                    .setTextGravity(Gravity.RIGHT)
+                    .build();
+
+            powerMenu.setOnMenuItemClickListener((i, item) -> {
+                switch (i) {
+                    case 0:
+                        viewModel.getEditClicked().setValue(info.getCustomerProductID());
+                        powerMenu.dismiss();
+                        break;
+                    case 1:
+                        viewModel.getDeleteClicked().setValue(info.getCustomerProductID());
+                        powerMenu.dismiss();
+                        break;
+                    case 2:
+                        viewModel.getSeeAttachmentsClicked().setValue(info);
+                        powerMenu.dismiss();
+                        break;
+                }
+            });
+            powerMenu.showAsDropDown(view);
         });
     }
 
     @Override
     public int getItemCount() {
-        return customerProductInfoList == null ? 0 : customerProductInfoList.size();
+        return customerProducts != null ? customerProducts.size() : 0;
     }
 
-    public class ProductsHolder extends RecyclerView.ViewHolder {
-        private CustomerProductAdapeterItemBinding binding;
+    public class CustomerProductHolder extends RecyclerView.ViewHolder {
+        private final CustomerProductAdapeterItemBinding binding;
 
-        public ProductsHolder(CustomerProductAdapeterItemBinding binding) {
+        public CustomerProductHolder(CustomerProductAdapeterItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(Integer position) {
-            binding.setCustomerProductInfo(customerProductInfoList.get(position));
-            binding.setCustomerProductViewModel(viewModel);
-            binding.setPosition(position);
+        public void bind(CustomerProductResult.CustomerProductInfo info) {
+            binding.tvProductName.setText(String.valueOf(info.getProductName()));
+            binding.tvInvoicePrice.setText(Converter.currencyFormat(info.getInvoicePrice()).concat("ریال"));
+            binding.tvUserFullName.setText(Converter.letterConverter(info.getUserFullName()));
+            binding.checkBoxInvoicePayment.setChecked(info.isInvoicePayment());
+            binding.checkBoxFinish.setChecked(info.isFinish());
+            if (!info.getDescription().isEmpty()) {
+                binding.tvDescription.setVisibility(View.VISIBLE);
+                binding.tvDescription.setText(Converter.letterConverter(info.getDescription()));
+            } else
+                binding.tvDescription.setVisibility(View.GONE);
         }
     }
 }
