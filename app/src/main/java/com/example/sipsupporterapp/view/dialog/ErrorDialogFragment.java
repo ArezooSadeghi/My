@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,15 +17,13 @@ import com.example.sipsupporterapp.utils.Converter;
 
 public class ErrorDialogFragment extends DialogFragment {
     private FragmentErrorDialogBinding binding;
-    private String text;
-
+    private static final String ARGS_MSG = "msg";
     public static final String TAG = ErrorDialogFragment.class.getSimpleName();
-    private static final String ARGS_TEXT = "text";
 
-    public static ErrorDialogFragment newInstance(String text) {
+    public static ErrorDialogFragment newInstance(String msg) {
         ErrorDialogFragment fragment = new ErrorDialogFragment();
         Bundle args = new Bundle();
-        args.putString(ARGS_TEXT, text);
+        args.putString(ARGS_MSG, msg);
         fragment.setArguments(args);
         return fragment;
     }
@@ -34,8 +31,6 @@ public class ErrorDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        text = Converter.letterConverter(getArguments().getString(ARGS_TEXT));
     }
 
     @NonNull
@@ -47,27 +42,30 @@ public class ErrorDialogFragment extends DialogFragment {
                 null,
                 false);
 
-        binding.txtErrorMessage.setText(text);
-
-        binding.btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
         AlertDialog dialog = new AlertDialog
                 .Builder(getContext())
                 .setView(binding.getRoot())
                 .create();
 
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
 
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
+        initViews();
+        handleEvents();
 
         return dialog;
+    }
+
+    private void initViews() {
+        String msg = getArguments().getString(ARGS_MSG);
+        binding.txtErrorMessage.setText(Converter.letterConverter(msg));
+    }
+
+    private void handleEvents() {
+        binding.btnClose.setOnClickListener(v -> dismiss());
     }
 }

@@ -14,8 +14,7 @@ public class CustomerViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent;
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<String> searchQuery = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerResult.CustomerInfo> selected = new SingleLiveEvent<>();
 
@@ -24,8 +23,7 @@ public class CustomerViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
         customersResultSingleLiveEvent = repository.getCustomersResultSingleLiveEvent();
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<CustomerResult> getCustomersResultSingleLiveEvent() {
@@ -36,12 +34,8 @@ public class CustomerViewModel extends AndroidViewModel {
         return dateResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<String> getSearchQuery() {

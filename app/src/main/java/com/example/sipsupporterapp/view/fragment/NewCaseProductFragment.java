@@ -101,8 +101,7 @@ public class NewCaseProductFragment extends Fragment {
                 if (caseProductResult.getErrorCode().equals("0")) {
                     setupAdapter(caseProductResult.getCaseProducts());
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(caseProductResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(caseProductResult.getError());
                 }
             }
         });
@@ -119,5 +118,10 @@ public class NewCaseProductFragment extends Fragment {
     private void setupAdapter(CaseProductResult.CaseProductInfo[] caseProductInfoArray) {
         CaseProductAdapter adapter = new CaseProductAdapter(viewModel, Arrays.asList(caseProductInfoArray), true);
         binding.recyclerViewNewCaseProduct.setAdapter(adapter);
+    }
+
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 }

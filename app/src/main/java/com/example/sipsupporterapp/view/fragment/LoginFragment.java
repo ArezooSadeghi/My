@@ -208,55 +208,19 @@ public class LoginFragment extends Fragment {
                         getActivity().finish();
                     }
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(userResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(userResult.getError());
                 }
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String error) {
-                binding.loadingLayout.setVisibility(View.GONE);
-                binding.edTextPassword.setEnabled(true);
-                binding.edTextUserName.setEnabled(true);
-                binding.btnLogin.setEnabled(true);
-                binding.ivMore.setEnabled(true);
-
-                ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-            }
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
+            binding.loadingLayout.setVisibility(View.GONE);
+            binding.edTextPassword.setEnabled(true);
+            binding.edTextUserName.setEnabled(true);
+            binding.btnLogin.setEnabled(true);
+            binding.ivMore.setEnabled(true);
+            handleError(msg);
         });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String message) {
-                        binding.loadingLayout.setVisibility(View.GONE);
-                        binding.edTextPassword.setEnabled(true);
-                        binding.edTextUserName.setEnabled(true);
-                        binding.btnLogin.setEnabled(true);
-                        binding.ivMore.setEnabled(true);
-
-                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-                        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    }
-                });
-
-        viewModel.getWrongIpAddressSingleLiveEvent()
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String error) {
-                        binding.loadingLayout.setVisibility(View.GONE);
-                        binding.edTextPassword.setEnabled(true);
-                        binding.edTextUserName.setEnabled(true);
-                        binding.btnLogin.setEnabled(true);
-                        binding.ivMore.setEnabled(true);
-
-                        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(error);
-                        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
-                    }
-                });
 
         viewModel.getInsertSpinnerSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
@@ -264,6 +228,11 @@ public class LoginFragment extends Fragment {
                 setupSpinner();
             }
         });
+    }
+
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     @Override

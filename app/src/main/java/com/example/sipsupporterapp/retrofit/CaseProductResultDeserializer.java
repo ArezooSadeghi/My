@@ -14,11 +14,8 @@ public class CaseProductResultDeserializer implements JsonDeserializer<CaseProdu
 
     @Override
     public CaseProductResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        CaseProductResult caseProductResult = gson.fromJson(bodyObject.toString(), CaseProductResult.class);
-
-        return caseProductResult;
+        return gson.fromJson(bodyObject.toString(), CaseProductResult.class);
     }
 }

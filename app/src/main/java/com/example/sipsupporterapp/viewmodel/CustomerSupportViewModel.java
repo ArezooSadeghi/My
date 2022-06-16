@@ -16,8 +16,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
     private SingleLiveEvent<CustomerSupportResult> customerSupportsResultSingleLiveEvent;
     private SingleLiveEvent<CustomerSupportResult> addCustomerSupportResultSingleLiveEvent;
     private SingleLiveEvent<SupportEventResult> supportEventsResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> seeCustomerSupportAttachmentsClicked = new SingleLiveEvent<>();
 
     public CustomerSupportViewModel(@NonNull Application application) {
@@ -27,8 +26,7 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         customerSupportsResultSingleLiveEvent = repository.getCustomerSupportsResultSingleLiveEvent();
         addCustomerSupportResultSingleLiveEvent = repository.getAddCustomerSupportResultSingleLiveEvent();
         supportEventsResultSingleLiveEvent = repository.getSupportEventsResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<CustomerSupportResult> getCustomerSupportsResultSingleLiveEvent() {
@@ -43,12 +41,8 @@ public class CustomerSupportViewModel extends AndroidViewModel {
         return supportEventsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<CustomerSupportResult.CustomerSupportInfo> getSeeAttachmentsClicked() {

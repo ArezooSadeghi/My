@@ -14,11 +14,8 @@ public class AssignResultDeserializer implements JsonDeserializer<AssignResult> 
 
     @Override
     public AssignResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        AssignResult assignResult = gson.fromJson(bodyObject.toString(), AssignResult.class);
-
-        return assignResult;
+        return gson.fromJson(bodyObject.toString(), AssignResult.class);
     }
 }

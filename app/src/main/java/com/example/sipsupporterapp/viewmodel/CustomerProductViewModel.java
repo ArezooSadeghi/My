@@ -18,8 +18,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
     private SingleLiveEvent<CustomerProductResult> editCustomerProductResultSingleLiveEvent;
     private SingleLiveEvent<CustomerProductResult> deleteCustomerProductResultSingleLiveEvent;
     private SingleLiveEvent<ProductResult> productInfoResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> editClicked = new SingleLiveEvent<>();
@@ -34,8 +33,7 @@ public class CustomerProductViewModel extends AndroidViewModel {
         editCustomerProductResultSingleLiveEvent = repository.getEditCustomerProductResultSingleLiveEvent();
         deleteCustomerProductResultSingleLiveEvent = repository.getDeleteCustomerProductResultSingleLiveEvent();
         productInfoResultSingleLiveEvent = repository.getProductInfoResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<CustomerProductResult> getCustomerProductsResultSingleLiveEvent() {
@@ -62,12 +60,8 @@ public class CustomerProductViewModel extends AndroidViewModel {
         return productInfoResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<Boolean> getRefresh() {

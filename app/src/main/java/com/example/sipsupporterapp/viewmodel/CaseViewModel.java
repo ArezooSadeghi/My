@@ -26,8 +26,7 @@ public class CaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<AssignResult> finishAssignResultSingleLiveEvent;
     private SingleLiveEvent<CaseTypeResult> caseTypesResultSingleLiveEvent;
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByCaseResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<CaseResult.CaseInfo> caseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshCaseFinishClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CaseResult.CaseInfo> changeCaseTypeClicked = new SingleLiveEvent<>();
@@ -63,8 +62,7 @@ public class CaseViewModel extends AndroidViewModel {
         editCaseResultSingleLiveEvent = repository.getEditCaseResultSingleLiveEvent();
         closeCaseResultSingleLiveEvent = repository.getCloseCaseResultSingleLiveEvent();
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        error = repository.getError();
         seenAssignResultSingleLiveEvent = repository.getSeenAssignResultSingleLiveEvent();
         finishAssignResultSingleLiveEvent = repository.getFinishAssignResultSingleLiveEvent();
         customerPaymentsByCaseResultSingleLiveEvent = repository.getCustomerPaymentsByCaseResultSingleLiveEvent();
@@ -95,12 +93,8 @@ public class CaseViewModel extends AndroidViewModel {
         return closeCaseResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<CaseResult.CaseInfo> getCaseFinishClicked() {

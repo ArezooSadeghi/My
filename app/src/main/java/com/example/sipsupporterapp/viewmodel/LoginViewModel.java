@@ -14,9 +14,7 @@ import java.util.List;
 public class LoginViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
-    private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<Boolean> insertSpinnerSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> insertIPAddressListSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<ServerData> deleteClicked = new SingleLiveEvent<>();
@@ -28,22 +26,12 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
-        wrongIpAddressSingleLiveEvent = repository.getWrongIpAddressSingleLiveEvent();
+        error = repository.getError();
         userResultSingleLiveEvent = repository.getUserLoginResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
     }
 
-    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
-        return wrongIpAddressSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<Boolean> getInsertSpinnerSingleLiveEvent() {

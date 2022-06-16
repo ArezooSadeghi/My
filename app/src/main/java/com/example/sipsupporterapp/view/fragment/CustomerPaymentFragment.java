@@ -190,20 +190,9 @@ public class CustomerPaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
+            binding.progressBarLoading.setVisibility(View.GONE);
+            handleError(msg);
         });
 
         viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
@@ -260,9 +249,9 @@ public class CustomerPaymentFragment extends Fragment {
         fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {

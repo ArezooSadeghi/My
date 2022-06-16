@@ -14,11 +14,8 @@ public class InvoiceResultDeserializer implements JsonDeserializer<InvoiceResult
 
     @Override
     public InvoiceResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        InvoiceResult invoiceResult = gson.fromJson(bodyObject.toString(), InvoiceResult.class);
-
-        return invoiceResult;
+        return gson.fromJson(bodyObject.toString(), InvoiceResult.class);
     }
 }

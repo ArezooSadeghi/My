@@ -4,9 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.database.SipSupporterDBHelper;
 import com.example.sipsupporterapp.database.SipSupporterSchema;
 import com.example.sipsupporterapp.model.AssignResult;
@@ -145,9 +143,7 @@ public class SipSupporterRepository {
     private SingleLiveEvent<InvoiceDetailsResult> invoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceDetailsResult> editInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<InvoiceDetailsResult> deleteInvoiceDetailsResultSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> wrongIpAddressSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> error = new SingleLiveEvent<>();
 
     private SipSupporterRepository(Context context) {
         this.context = context.getApplicationContext();
@@ -541,18 +537,6 @@ public class SipSupporterRepository {
         return deleteInvoiceDetailsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getWrongIpAddressSingleLiveEvent() {
-        return wrongIpAddressSingleLiveEvent;
-    }
-
     public SingleLiveEvent<InvoiceResult> getInvoiceInfoResultSingleLiveEvent() {
         return InvoiceInfoResultSingleLiveEvent;
     }
@@ -591,6 +575,10 @@ public class SipSupporterRepository {
 
     public SingleLiveEvent<CommentResult> getCommentInfoResultSingleLiveEvent() {
         return commentInfoResultSingleLiveEvent;
+    }
+
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public void insertServerData(ServerData serverData) {
@@ -700,7 +688,7 @@ public class SipSupporterRepository {
                         UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
                         userLoginResultSingleLiveEvent.setValue(userResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -708,11 +696,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    wrongIpAddressSingleLiveEvent.setValue(context.getResources().getString(R.string.not_exist_server));
+                    error.setValue("سرور موجود نمی باشد");
                 }
             }
         });
@@ -730,7 +718,7 @@ public class SipSupporterRepository {
                         CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
                         customersResultSingleLiveEvent.setValue(customerResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -738,11 +726,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -760,7 +748,7 @@ public class SipSupporterRepository {
                         UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
                         changePasswordResultSingleLiveEvent.setValue(userResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -768,11 +756,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -790,7 +778,7 @@ public class SipSupporterRepository {
                         CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
                         customerSupportsResultSingleLiveEvent.setValue(customerSupportResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -798,11 +786,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerSupportResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -821,7 +809,7 @@ public class SipSupporterRepository {
                         CustomerUserResult customerUserResult = gson.fromJson(response.errorBody().string(), CustomerUserResult.class);
                         customerUsersResultSingleLiveEvent.setValue(customerUserResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -829,11 +817,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerUserResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -852,7 +840,7 @@ public class SipSupporterRepository {
                         SupportEventResult supportEventResult = gson.fromJson(response.errorBody().string(), SupportEventResult.class);
                         supportEventsResultSingleLiveEvent.setValue(supportEventResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -860,11 +848,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<SupportEventResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -882,7 +870,7 @@ public class SipSupporterRepository {
                         CustomerSupportResult customerSupportResult = gson.fromJson(response.errorBody().string(), CustomerSupportResult.class);
                         addCustomerSupportResultSingleLiveEvent.setValue(customerSupportResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -890,11 +878,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerSupportResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -904,17 +892,27 @@ public class SipSupporterRepository {
         sipSupporterService.fetchDate(path, userLoginKey).enqueue(new Callback<DateResult>() {
             @Override
             public void onResponse(Call<DateResult> call, Response<DateResult> response) {
-                dateResultSingleLiveEvent.setValue(response.body());
+                if (response.isSuccessful()) {
+                    dateResultSingleLiveEvent.setValue(response.body());
+                } else {
+                    try {
+                        Gson gson = new Gson();
+                        DateResult dateResult = gson.fromJson(response.errorBody().string(), DateResult.class);
+                        dateResultSingleLiveEvent.setValue(dateResult);
+                    } catch (IOException e) {
+                        error.setValue(e.getMessage());
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<DateResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -932,7 +930,7 @@ public class SipSupporterRepository {
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         customerProductsResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -940,11 +938,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -962,7 +960,7 @@ public class SipSupporterRepository {
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         addCustomerProductResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -970,11 +968,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -992,7 +990,7 @@ public class SipSupporterRepository {
                         ProductResult productResult = gson.fromJson(response.errorBody().string(), ProductResult.class);
                         productInfoResultSingleLiveEvent.setValue(productResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1000,11 +998,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<ProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1022,7 +1020,7 @@ public class SipSupporterRepository {
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         deleteCustomerProductResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
 
@@ -1031,11 +1029,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1053,7 +1051,7 @@ public class SipSupporterRepository {
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         editCustomerProductResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1061,11 +1059,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1083,7 +1081,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         attachResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1091,11 +1089,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1113,7 +1111,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         customerPaymentsResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1121,11 +1119,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1143,7 +1141,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         customerPaymentAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1151,11 +1149,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1173,7 +1171,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         addCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1181,11 +1179,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1203,7 +1201,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         editCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1211,11 +1209,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1233,7 +1231,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         deleteCustomerPaymentResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1241,11 +1239,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1263,7 +1261,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         customerProductAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1271,11 +1269,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1293,7 +1291,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         customerSupportAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1301,11 +1299,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1323,7 +1321,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         attachResultViaAttachIDSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1331,11 +1329,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1353,7 +1351,7 @@ public class SipSupporterRepository {
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         paymentsResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1361,11 +1359,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1383,7 +1381,7 @@ public class SipSupporterRepository {
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         editPaymentResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1391,11 +1389,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1413,7 +1411,7 @@ public class SipSupporterRepository {
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         deletePaymentResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1421,11 +1419,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1443,7 +1441,7 @@ public class SipSupporterRepository {
                         PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
                         paymentSubjectsResultSingleLiveEvent.setValue(paymentSubjectResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1451,11 +1449,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1473,7 +1471,7 @@ public class SipSupporterRepository {
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         addPaymentResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1481,11 +1479,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1503,7 +1501,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         deleteAttachResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1511,11 +1509,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1533,7 +1531,7 @@ public class SipSupporterRepository {
                         AttachResult attachResult = gson.fromJson(response.errorBody().string(), AttachResult.class);
                         paymentAttachmentsResultSingleLiveEvent.setValue(attachResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1541,11 +1539,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1563,7 +1561,7 @@ public class SipSupporterRepository {
                         PaymentSubjectResult paymentSubjectResult = gson.fromJson(response.errorBody().string(), PaymentSubjectResult.class);
                         paymentSubjectInfoResultSingleLiveEvent.setValue(paymentSubjectResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1571,18 +1569,18 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
     }
 
-    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
-        sipSupporterService.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID).enqueue(new Callback<CustomerPaymentResult>() {
+    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID, String date) {
+        sipSupporterService.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID, date).enqueue(new Callback<CustomerPaymentResult>() {
             @Override
             public void onResponse(Call<CustomerPaymentResult> call, Response<CustomerPaymentResult> response) {
                 if (response.isSuccessful()) {
@@ -1593,7 +1591,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         customerPaymentsByBankAccountResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1601,11 +1599,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1623,7 +1621,7 @@ public class SipSupporterRepository {
                         BankAccountResult bankAccountResult = gson.fromJson(response.errorBody().string(), BankAccountResult.class);
                         bankAccountsResultSingleLiveEvent.setValue(bankAccountResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1631,11 +1629,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<BankAccountResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1653,7 +1651,7 @@ public class SipSupporterRepository {
                         ProductGroupResult productGroupResult = gson.fromJson(response.errorBody().string(), ProductGroupResult.class);
                         productGroupsResultSingleLiveEvent.setValue(productGroupResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1661,11 +1659,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<ProductGroupResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1683,7 +1681,7 @@ public class SipSupporterRepository {
                         CaseTypeResult caseTypeResult = gson.fromJson(response.errorBody().string(), CaseTypeResult.class);
                         caseTypesResultSingleLiveEvent.setValue(caseTypeResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1691,11 +1689,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseTypeResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1713,7 +1711,7 @@ public class SipSupporterRepository {
                         CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
                         casesByCaseTypeResultSingleLiveEvent.setValue(caseResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1721,11 +1719,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1743,7 +1741,7 @@ public class SipSupporterRepository {
                         CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
                         addCaseResultSingleLiveEvent.setValue(caseResult);
                     } catch (IOException e) {
-                        Log.d(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1751,11 +1749,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1773,7 +1771,7 @@ public class SipSupporterRepository {
                         CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
                         deleteCaseResultSingleLiveEvent.setValue(caseResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1781,11 +1779,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1803,7 +1801,7 @@ public class SipSupporterRepository {
                         CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
                         editCaseResultSingleLiveEvent.setValue(caseResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1811,11 +1809,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1833,7 +1831,7 @@ public class SipSupporterRepository {
                         CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
                         closeCaseResultSingleLiveEvent.setValue(caseResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1841,11 +1839,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1863,7 +1861,7 @@ public class SipSupporterRepository {
                         CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
                         addCommentResultSingleLiveEvent.setValue(commentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1871,11 +1869,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1893,7 +1891,7 @@ public class SipSupporterRepository {
                         CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
                         commentsByCaseIDResultSingleLiveEvent.setValue(commentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1901,11 +1899,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1923,7 +1921,7 @@ public class SipSupporterRepository {
                         CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
                         deleteCommentResultSingleLiveEvent.setValue(commentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1931,11 +1929,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1953,7 +1951,7 @@ public class SipSupporterRepository {
                         CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
                         editCommentResultSingleLiveEvent.setValue(commentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1961,11 +1959,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -1983,7 +1981,7 @@ public class SipSupporterRepository {
                         UserResult userResult = gson.fromJson(response.errorBody().string(), UserResult.class);
                         usersResultSingleLiveEvent.setValue(userResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -1991,11 +1989,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2013,7 +2011,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         addAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2021,11 +2019,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2043,7 +2041,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         assignsResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2051,11 +2049,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2073,7 +2071,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         editAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2081,11 +2079,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2103,7 +2101,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         deleteAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2111,11 +2109,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2133,7 +2131,7 @@ public class SipSupporterRepository {
                         CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
                         addCaseProductResultSingleLiveEvent.setValue(caseProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2141,11 +2139,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2163,7 +2161,7 @@ public class SipSupporterRepository {
                         CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
                         caseProductsWithSelectedResultSingleLiveEvent.setValue(caseProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2171,11 +2169,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2193,7 +2191,7 @@ public class SipSupporterRepository {
                         CustomerResult customerResult = gson.fromJson(response.errorBody().string(), CustomerResult.class);
                         customerInfoResultSingleLiveEvent.setValue(customerResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2201,11 +2199,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2223,7 +2221,7 @@ public class SipSupporterRepository {
                         CaseProductResult caseProductResult = gson.fromJson(response.errorBody().string(), CaseProductResult.class);
                         deleteCaseProductResultSingleLiveEvent.setValue(caseProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2231,11 +2229,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2253,7 +2251,7 @@ public class SipSupporterRepository {
                         InvoiceResult invoiceResult = gson.fromJson(response.errorBody().string(), InvoiceResult.class);
                         invoiceInfoByCaseIDResultSingleLiveEvent.setValue(invoiceResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2261,11 +2259,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2283,7 +2281,7 @@ public class SipSupporterRepository {
                         InvoiceResult invoiceResult = gson.fromJson(response.errorBody().string(), InvoiceResult.class);
                         addInvoiceResultSingleLiveEvent.setValue(invoiceResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2291,11 +2289,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2313,7 +2311,7 @@ public class SipSupporterRepository {
                         InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
                         addInvoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2321,11 +2319,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2343,7 +2341,7 @@ public class SipSupporterRepository {
                         InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
                         invoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2351,11 +2349,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2373,7 +2371,7 @@ public class SipSupporterRepository {
                         InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
                         editInvoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2381,11 +2379,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2403,7 +2401,7 @@ public class SipSupporterRepository {
                         InvoiceDetailsResult invoiceDetailsResult = gson.fromJson(response.errorBody().string(), InvoiceDetailsResult.class);
                         deleteInvoiceDetailsResultSingleLiveEvent.setValue(invoiceDetailsResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2411,11 +2409,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2433,7 +2431,7 @@ public class SipSupporterRepository {
                         InvoiceResult invoiceResult = gson.fromJson(response.errorBody().string(), InvoiceResult.class);
                         InvoiceInfoResultSingleLiveEvent.setValue(invoiceResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2441,11 +2439,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2463,7 +2461,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         seenAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2471,11 +2469,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2493,7 +2491,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         finishAssignResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2501,11 +2499,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2523,7 +2521,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         customerPaymentsByCaseResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2531,11 +2529,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2553,7 +2551,7 @@ public class SipSupporterRepository {
                         CaseResult caseResult = gson.fromJson(response.errorBody().string(), CaseResult.class);
                         caseInfoResultSingleLiveEvent.setValue(caseResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2561,11 +2559,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2583,7 +2581,7 @@ public class SipSupporterRepository {
                         CustomerPaymentResult customerPaymentResult = gson.fromJson(response.errorBody().string(), CustomerPaymentResult.class);
                         customerPaymentInfoResultSingleLiveEvent.setValue(customerPaymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2591,11 +2589,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2613,7 +2611,7 @@ public class SipSupporterRepository {
                         PaymentResult paymentResult = gson.fromJson(response.errorBody().string(), PaymentResult.class);
                         paymentInfoResultSingleLiveEvent.setValue(paymentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2621,11 +2619,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2643,7 +2641,7 @@ public class SipSupporterRepository {
                         CustomerProductResult customerProductResult = gson.fromJson(response.errorBody().string(), CustomerProductResult.class);
                         customerProductInfoResultSingleLiveEvent.setValue(customerProductResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2651,11 +2649,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2673,7 +2671,7 @@ public class SipSupporterRepository {
                         AssignResult assignResult = gson.fromJson(response.errorBody().string(), AssignResult.class);
                         assignInfoResultSingleLiveEvent.setValue(assignResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2681,11 +2679,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -2703,7 +2701,7 @@ public class SipSupporterRepository {
                         CommentResult commentResult = gson.fromJson(response.errorBody().string(), CommentResult.class);
                         commentInfoResultSingleLiveEvent.setValue(commentResult);
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        error.setValue(e.getMessage());
                     }
                 }
             }
@@ -2711,11 +2709,11 @@ public class SipSupporterRepository {
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
-                    noConnectionExceptionHappenSingleLiveEvent.setValue(t.getMessage());
+                    error.setValue(t.getMessage());
                 } else if (t instanceof SocketTimeoutException) {
-                    timeoutExceptionHappenSingleLiveEvent.setValue(context.getResources().getString(R.string.timeout_exception_happen_message));
+                    error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    Log.e(TAG, t.getMessage());
+                    error.setValue(t.getMessage());
                 }
             }
         });

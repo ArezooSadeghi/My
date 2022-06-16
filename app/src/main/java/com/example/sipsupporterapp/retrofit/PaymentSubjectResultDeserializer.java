@@ -13,11 +13,8 @@ import java.lang.reflect.Type;
 public class PaymentSubjectResultDeserializer implements JsonDeserializer<PaymentSubjectResult> {
     @Override
     public PaymentSubjectResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        PaymentSubjectResult paymentSubjectResult = gson.fromJson(bodyObject.toString(), PaymentSubjectResult.class);
-
-        return paymentSubjectResult;
+        return gson.fromJson(bodyObject.toString(), PaymentSubjectResult.class);
     }
 }

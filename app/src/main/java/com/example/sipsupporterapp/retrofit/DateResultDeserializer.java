@@ -13,11 +13,8 @@ import java.lang.reflect.Type;
 public class DateResultDeserializer implements JsonDeserializer<DateResult> {
     @Override
     public DateResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        DateResult dateResult = gson.fromJson(bodyObject.toString(), DateResult.class);
-
-        return dateResult;
+        return gson.fromJson(bodyObject.toString(), DateResult.class);
     }
 }

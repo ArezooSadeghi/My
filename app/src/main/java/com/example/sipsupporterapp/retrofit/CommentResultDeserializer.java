@@ -14,11 +14,8 @@ public class CommentResultDeserializer implements JsonDeserializer<CommentResult
 
     @Override
     public CommentResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        CommentResult commentResult = gson.fromJson(bodyObject.toString(), CommentResult.class);
-
-        return commentResult;
+        return gson.fromJson(bodyObject.toString(), CommentResult.class);
     }
 }

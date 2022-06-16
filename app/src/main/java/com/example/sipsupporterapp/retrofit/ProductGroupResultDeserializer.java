@@ -14,11 +14,8 @@ public class ProductGroupResultDeserializer implements JsonDeserializer<ProductG
 
     @Override
     public ProductGroupResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        ProductGroupResult productGroupResult = gson.fromJson(bodyObject.toString(), ProductGroupResult.class);
-
-        return productGroupResult;
+        return gson.fromJson(bodyObject.toString(), ProductGroupResult.class);
     }
 }

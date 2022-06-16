@@ -127,15 +127,15 @@ public class CustomerPaymentAdapter extends RecyclerView.Adapter<CustomerPayment
             this.binding = binding;
         }
 
-        public void bind(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-            binding.tvBankAccountName.setText(customerPaymentInfo.getBankAccountName());
-            binding.tvBankName.setVisibility(!customerPaymentInfo.getBankName().isEmpty() ? View.VISIBLE : View.GONE);
-            binding.tvBankName.setText(customerPaymentInfo.getBankName());
-            binding.tvBankAccountNo.setText("به شماره حساب:" + customerPaymentInfo.getBankAccountNO());
+        public void bind(CustomerPaymentResult.CustomerPaymentInfo info) {
+            binding.tvBankAccountName.setText(info.getBankAccountName());
+            binding.tvBankName.setVisibility(!info.getBankName().isEmpty() ? View.VISIBLE : View.GONE);
+            binding.tvBankName.setText(info.getBankName());
+            binding.tvBankAccountNo.setText("به شماره حساب:" + info.getBankAccountNO());
             binding.ivMore.setVisibility(viewModel == null ? View.GONE : View.VISIBLE);
-            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(customerPaymentInfo.getPrice());
+            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(info.getPrice());
             binding.tvPrice.setText(currencyFormat + "ریال");
-            String dateFormat = Converter.dateFormat(String.valueOf(customerPaymentInfo.getDatePayment()));
+            String dateFormat = Converter.dateFormat(String.valueOf(info.getDatePayment()));
             binding.tvDatePayment.setText(dateFormat);
         }
     }

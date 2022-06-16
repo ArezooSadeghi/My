@@ -88,19 +88,7 @@ public class ChangePasswordDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+        viewModel.getError().observe(this, msg -> handleError(msg));
     }
 
     private void initVariables() {
@@ -133,9 +121,9 @@ public class ChangePasswordDialogFragment extends DialogFragment {
         });
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {

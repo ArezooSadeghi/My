@@ -329,10 +329,10 @@ public class PhotoGalleryFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
     }
 
-    private void handleError(String message) {
+    private void handleError(String msg) {
         binding.progressBarLoading.setVisibility(View.VISIBLE);
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void showAttachments(AttachResult attachResult) {
@@ -455,20 +455,9 @@ public class PhotoGalleryFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-                viewModel.getHideLoading().setValue(true);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-                viewModel.getHideLoading().setValue(true);
-            }
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
+            handleError(msg);
+            viewModel.getHideLoading().setValue(true);
         });
 
         viewModel.getPhotoClicked().observe(getViewLifecycleOwner(), new Observer<String>() {

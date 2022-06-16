@@ -12,15 +12,9 @@ import java.lang.reflect.Type;
 
 public class UserResultDeserializer implements JsonDeserializer<UserResult> {
     @Override
-    public UserResult deserialize(
-            JsonElement json,
-            Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
-
+    public UserResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        UserResult userResult = gson.fromJson(bodyObject.toString(), UserResult.class);
-
-        return userResult;
+        return gson.fromJson(bodyObject.toString(), UserResult.class);
     }
 }

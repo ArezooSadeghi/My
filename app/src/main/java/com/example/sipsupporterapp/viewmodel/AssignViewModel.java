@@ -19,8 +19,7 @@ public class AssignViewModel extends AndroidViewModel {
     private SingleLiveEvent<AssignResult> editAssignResultSingleLiveEvent;
     private SingleLiveEvent<AssignResult> deleteAssignResultSingleLiveEvent;
     private SingleLiveEvent<UserResult> usersResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<AssignResult.AssignInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> addClicked = new SingleLiveEvent<>();
@@ -36,8 +35,7 @@ public class AssignViewModel extends AndroidViewModel {
         editAssignResultSingleLiveEvent = repository.getEditAssignResultSingleLiveEvent();
         deleteAssignResultSingleLiveEvent = repository.getDeleteAssignResultSingleLiveEvent();
         usersResultSingleLiveEvent = repository.getUsersResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<AssignResult> getAssignsResultSingleLiveEvent() {
@@ -60,12 +58,8 @@ public class AssignViewModel extends AndroidViewModel {
         return usersResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<AssignResult.AssignInfo> getEditClicked() {

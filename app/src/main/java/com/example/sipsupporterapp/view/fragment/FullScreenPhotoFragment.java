@@ -123,12 +123,12 @@ public class FullScreenPhotoFragment extends Fragment {
         fragment.show(getParentFragmentManager(), SuccessDeletePhotoDialogFragment.TAG);
     }
 
-    private void handleError(String message) {
+    private void handleError(String msg) {
         if (binding.progressBarLoading.getVisibility() == View.VISIBLE) {
             binding.progressBarLoading.setVisibility(View.INVISIBLE);
         }
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {
@@ -184,18 +184,6 @@ public class FullScreenPhotoFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> handleError(msg));
     }
 }

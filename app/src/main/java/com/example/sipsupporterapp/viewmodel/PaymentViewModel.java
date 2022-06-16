@@ -21,8 +21,7 @@ public class PaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<PaymentResult> editPaymentResultSingleLiveEvent;
     private SingleLiveEvent<PaymentResult> deletePaymentResultSingleLiveEvent;
     private SingleLiveEvent<PaymentSubjectResult> paymentSubjectInfoResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<PaymentResult.PaymentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<PaymentResult.PaymentInfo> seePaymentAttachmentsClicked = new SingleLiveEvent<>();
@@ -40,8 +39,7 @@ public class PaymentViewModel extends AndroidViewModel {
         editPaymentResultSingleLiveEvent = repository.getEditPaymentResultSingleLiveEvent();
         deletePaymentResultSingleLiveEvent = repository.getDeletePaymentResultSingleLiveEvent();
         paymentSubjectInfoResultSingleLiveEvent = repository.getPaymentSubjectInfoResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<BankAccountResult> getBankAccountsResultSingleLiveEvent() {
@@ -72,12 +70,8 @@ public class PaymentViewModel extends AndroidViewModel {
         return paymentSubjectInfoResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<PaymentResult.PaymentInfo> getEditClicked() {

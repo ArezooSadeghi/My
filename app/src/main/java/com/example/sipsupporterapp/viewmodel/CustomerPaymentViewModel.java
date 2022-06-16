@@ -22,8 +22,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
     private SingleLiveEvent<CustomerPaymentResult> deleteCustomerPaymentResultSingleLiveEvent;
     private SingleLiveEvent<CustomerResult> customerInfoResultSingleLiveEvent;
     private SingleLiveEvent<CaseResult> caseInfoResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<CustomerPaymentResult> customerPaymentsByBankAccountResultSingleLiveEvent;
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> DeleteClicked = new SingleLiveEvent<>();
@@ -42,8 +41,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         deleteCustomerPaymentResultSingleLiveEvent = repository.getDeleteCustomerPaymentResultSingleLiveEvent();
         customerInfoResultSingleLiveEvent = repository.getCustomerInfoResultSingleLiveEvent();
         caseInfoResultSingleLiveEvent = repository.getCaseInfoResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
         customerPaymentsByBankAccountResultSingleLiveEvent = repository.getCustomerPaymentsByBankAccountResultSingleLiveEvent();
     }
 
@@ -79,12 +77,8 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         return caseInfoResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<Boolean> getRefresh() {
@@ -159,14 +153,7 @@ public class CustomerPaymentViewModel extends AndroidViewModel {
         repository.fetchCaseInfo(path, userLoginKey, caseID);
     }
 
-    public CustomerPaymentResult.CustomerPaymentInfo getCustomerPaymentInfoAt(Integer index) {
-        if (customerPaymentsResultSingleLiveEvent.getValue() != null && index != null) {
-            return customerPaymentsResultSingleLiveEvent.getValue().getCustomerPayments()[index];
-        }
-        return null;
-    }
-
-    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID) {
-        repository.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
+    public void fetchCustomerPaymentsByBankAccount(String path, String userLoginKey, int bankAccountID, String date) {
+        repository.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID, date);
     }
 }

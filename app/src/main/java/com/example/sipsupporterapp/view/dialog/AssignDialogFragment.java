@@ -123,9 +123,9 @@ public class AssignDialogFragment extends DialogFragment {
         fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {
@@ -233,20 +233,9 @@ public class AssignDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                binding.progressBarLoading.setVisibility(View.GONE);
-                handleError(message);
-            }
+        viewModel.getError().observe(this, msg -> {
+            binding.progressBarLoading.setVisibility(View.GONE);
+            handleError(msg);
         });
     }
 }

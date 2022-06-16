@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidSource/SipSupporter/app/src/main/res/layout/customer_payment_adapter_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Arezoo/AndroidStudioProjects/SipSupporterProject/app/src/main/res/layout/customer_product_adapeter_item.xml" value="0.20697463768115942" />
         <entry key="..\:/Users/Arezoo/AndroidStudioProjects/SipSupporterProject/app/src/main/res/layout/customer_support_adapter_item.xml" value="0.20697463768115942" />
         <entry key="..\:/Users/Arezoo/AndroidStudioProjects/SipSupporterProject/app/src/main/res/layout/payment_adapter_item.xml" value="0.20697463768115942" />

@@ -115,19 +115,7 @@ public class CaseProductFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> handleError(msg));
 
         viewModel.getUpdate().observe(getViewLifecycleOwner(), new Observer<CaseProductResult.CaseProductInfo>() {
             @Override
@@ -161,9 +149,9 @@ public class CaseProductFragment extends Fragment {
         });
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {

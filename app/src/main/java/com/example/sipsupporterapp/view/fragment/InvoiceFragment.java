@@ -24,8 +24,8 @@ import com.example.sipsupporterapp.R;
 import com.example.sipsupporterapp.adapter.InvoiceDetailsAdapter;
 import com.example.sipsupporterapp.databinding.FragmentInvoiceBinding;
 import com.example.sipsupporterapp.eventbus.NavigateEvent;
-import com.example.sipsupporterapp.eventbus.selectProductEvent;
 import com.example.sipsupporterapp.eventbus.newDeleteEvent;
+import com.example.sipsupporterapp.eventbus.selectProductEvent;
 import com.example.sipsupporterapp.model.InvoiceDetailsResult;
 import com.example.sipsupporterapp.model.InvoiceResult;
 import com.example.sipsupporterapp.model.ProductResult;
@@ -126,8 +126,7 @@ public class InvoiceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (binding.txtProductID.getText().toString().isEmpty()) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance("لطفا ابتدا محصول را انتخاب نمایید");
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError("لطفا ابتدا محصول را انتخاب کنید");
                 } else {
                     addInvoiceDetails();
                 }
@@ -165,6 +164,11 @@ public class InvoiceFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void fetchInvoiceInfoByCaseID() {
@@ -208,8 +212,7 @@ public class InvoiceFragment extends Fragment {
                         initViews(invoiceResult.getInvoices()[0]);
                     }
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(invoiceResult.getError());
                 }
             }
         });
@@ -222,8 +225,7 @@ public class InvoiceFragment extends Fragment {
                     fetchInvoiceDetails();
                     initViews(invoiceResult.getInvoices()[0]);
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(invoiceResult.getError());
                 }
             }
         });
@@ -245,8 +247,7 @@ public class InvoiceFragment extends Fragment {
                     binding.txtProductName.setText(productResult.getProducts()[0].getProductName());
                     binding.txtProductID.setText(String.valueOf(productResult.getProducts()[0].getProductID()));
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(productResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(productResult.getError());
                 }
             }
         });
@@ -275,8 +276,7 @@ public class InvoiceFragment extends Fragment {
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchInvoiceDetails();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceDetailsResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(invoiceDetailsResult.getError());
                 }
             }
         });
@@ -313,8 +313,7 @@ public class InvoiceFragment extends Fragment {
                     fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
                     fetchInvoiceDetails();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceDetailsResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(invoiceDetailsResult.getError());
                 }
             }
         });

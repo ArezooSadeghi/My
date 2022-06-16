@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +29,6 @@ import com.example.sipsupporterapp.view.activity.PhotoGalleryContainerActivity;
 import com.example.sipsupporterapp.view.dialog.AddNewCustomerPaymentFragment;
 import com.example.sipsupporterapp.view.dialog.ErrorDialogFragment;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -109,90 +107,67 @@ public class GeneralCustomerPaymentFragment extends Fragment {
     }
 
     private void handleEvents() {
-        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                bankAccountID = bankAccountInfoList.get(position).getBankAccountID();
-                fetchCustomerPaymentsByBankAccount(bankAccountID);
-            }
+        binding.spinner.setOnItemSelectedListener((view, position, id, item) -> {
+            bankAccountID = bankAccountInfoList.get(position).getBankAccountID();
+            fetchCustomerPaymentsByBankAccount(bankAccountID);
         });
     }
 
     private void fetchCustomerPaymentsByBankAccount(int bankAccountID) {
         viewModel.getSipSupporterServiceCustomerPaymentResult(serverData.getIpAddress() + ":" + serverData.getPort());
         String path = "api/v1/customerPayments/ListByBankAccount";
-        viewModel.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID);
+        viewModel.fetchCustomerPaymentsByBankAccount(path, userLoginKey, bankAccountID, "");
     }
 
     private void setupObserver() {
-        viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<BankAccountResult>() {
-            @Override
-            public void onChanged(BankAccountResult bankAccountResult) {
-                if (Objects.requireNonNull(bankAccountResult).getErrorCode().equals("0")) {
-                    EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
-                    bankAccountInfoList = Arrays.asList(bankAccountResult.getBankAccounts());
-                    setupSpinner(bankAccountResult.getBankAccounts());
-                } else if (Objects.requireNonNull(bankAccountResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
+        viewModel.getBankAccountsResultSingleLiveEvent().observe(getViewLifecycleOwner(), bankAccountResult -> {
+            if (Objects.requireNonNull(bankAccountResult).getErrorCode().equals("0")) {
+                EventBus.getDefault().postSticky(new PostBankAccountResultEvent(bankAccountResult));
+                bankAccountInfoList = Arrays.asList(bankAccountResult.getBankAccounts());
+                setupSpinner(bankAccountResult.getBankAccounts());
+            } else if (Objects.requireNonNull(bankAccountResult).getErrorCode().equals("-9001")) {
+                ejectUser();
+            } else {
+                handleError(Objects.requireNonNull(bankAccountResult).getError());
+            }
+        });
+
+        viewModel.getCustomerPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), customerPaymentResult -> {
+            if (Objects.requireNonNull(customerPaymentResult).getErrorCode().equals("0")) {
+                if (customerPaymentResult.getCustomerPayments().length == 0) {
+                    binding.progressBarLoading.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.txtEmpty.setVisibility(View.VISIBLE);
                 } else {
-                    handleError(Objects.requireNonNull(bankAccountResult).getError());
+                    binding.progressBarLoading.setVisibility(View.GONE);
+                    binding.txtEmpty.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    viewModel.getCustomerPaymentsResultSingleLiveEvent().setValue(customerPaymentResult);
+                    setupAdapter(customerPaymentResult.getCustomerPayments());
                 }
+            } else if (Objects.requireNonNull(customerPaymentResult).getErrorCode().equals("-9001")) {
+                ejectUser();
+            } else {
+                handleError(Objects.requireNonNull(customerPaymentResult).getError());
             }
         });
 
-        viewModel.getCustomerPaymentsByBankAccountResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult>() {
-            @Override
-            public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (Objects.requireNonNull(customerPaymentResult).getErrorCode().equals("0")) {
-                    if (customerPaymentResult.getCustomerPayments().length == 0) {
-                        binding.progressBarLoading.setVisibility(View.GONE);
-                        binding.recyclerView.setVisibility(View.GONE);
-                        binding.txtEmpty.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.progressBarLoading.setVisibility(View.GONE);
-                        binding.txtEmpty.setVisibility(View.GONE);
-                        binding.recyclerView.setVisibility(View.VISIBLE);
-                        viewModel.getCustomerPaymentsResultSingleLiveEvent().setValue(customerPaymentResult);
-                        setupAdapter(customerPaymentResult.getCustomerPayments());
-                    }
-                } else if (Objects.requireNonNull(customerPaymentResult).getErrorCode().equals("-9001")) {
-                    ejectUser();
-                } else {
-                    handleError(Objects.requireNonNull(customerPaymentResult).getError());
-                }
-            }
+        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), customerPaymentInfo -> {
+            Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
+            startActivity(starter);
         });
 
-        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
-            @Override
-            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-                Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
-                startActivity(starter);
-            }
+        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), customerPaymentInfo -> {
+            Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
+            startActivity(starter);
         });
 
-        viewModel.getSeeCustomerPaymentAttachmentsClicked().observe(getViewLifecycleOwner(), new Observer<CustomerPaymentResult.CustomerPaymentInfo>() {
-            @Override
-            public void onChanged(CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo) {
-                Intent starter = PhotoGalleryContainerActivity.start(getContext(), 0, 0, customerPaymentInfo.getCustomerPaymentID(), 0);
-                startActivity(starter);
-            }
+        viewModel.getAddCustomerPaymentClicked().observe(getViewLifecycleOwner(), addCustomerPaymentClicked -> {
+            AddNewCustomerPaymentFragment fragment = AddNewCustomerPaymentFragment.newInstance(bankAccountID);
+            fragment.show(getParentFragmentManager(), AddNewCustomerPaymentFragment.TAG);
         });
 
-        viewModel.getAddCustomerPaymentClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean addCustomerPaymentClicked) {
-                AddNewCustomerPaymentFragment fragment = AddNewCustomerPaymentFragment.newInstance(bankAccountID);
-                fragment.show(getParentFragmentManager(), AddNewCustomerPaymentFragment.TAG);
-            }
-        });
-
-        viewModel.getRefresh().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean refresh) {
-                fetchCustomerPaymentsByBankAccount(bankAccountID);
-            }
-        });
+        viewModel.getRefresh().observe(getViewLifecycleOwner(), refresh -> fetchCustomerPaymentsByBankAccount(bankAccountID));
     }
 
     private void setupSpinner(BankAccountResult.BankAccountInfo[] bankAccountInfoArray) {
@@ -210,9 +185,9 @@ public class GeneralCustomerPaymentFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {

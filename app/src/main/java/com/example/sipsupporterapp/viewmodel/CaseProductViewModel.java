@@ -13,8 +13,7 @@ public class CaseProductViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<CaseProductResult> caseProductsWithSelectedResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<CaseProductResult> addCaseProductResultSingleLiveEvent;
     private SingleLiveEvent<CaseProductResult> deleteCaseProductResultSingleLiveEvent;
     private SingleLiveEvent<CaseProductResult.CaseProductInfo> update = new SingleLiveEvent<>();
@@ -25,8 +24,7 @@ public class CaseProductViewModel extends AndroidViewModel {
 
         repository = SipSupporterRepository.getInstance(getApplication());
         caseProductsWithSelectedResultSingleLiveEvent = repository.getCaseProductsWithSelectedResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        error = repository.getError();
         addCaseProductResultSingleLiveEvent = repository.getAddCaseProductResultSingleLiveEvent();
         deleteCaseProductResultSingleLiveEvent = repository.getDeleteCaseProductResultSingleLiveEvent();
     }
@@ -35,12 +33,8 @@ public class CaseProductViewModel extends AndroidViewModel {
         return caseProductsWithSelectedResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<CaseProductResult> getAddCaseProductResultSingleLiveEvent() {

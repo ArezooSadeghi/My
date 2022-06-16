@@ -8,14 +8,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sipsupporterapp.R;
@@ -29,7 +27,6 @@ import com.example.sipsupporterapp.utils.Converter;
 import com.example.sipsupporterapp.utils.SipSupportSharedPreferences;
 import com.example.sipsupporterapp.view.activity.LoginContainerActivity;
 import com.example.sipsupporterapp.viewmodel.CustomerPaymentViewModel;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -130,17 +127,14 @@ public class AddNewCustomerPaymentFragment extends DialogFragment {
     }
 
     private void setupObserver() {
-        viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, new Observer<CustomerPaymentResult>() {
-            @Override
-            public void onChanged(CustomerPaymentResult customerPaymentResult) {
-                if (customerPaymentResult != null) {
-                    if (customerPaymentResult.getErrorCode().equals("0")) {
-                        showSuccessDialog("واریزی با موفقیت ثبت شد");
-                    } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
-                        ejectUser();
-                    } else {
-                        handleError(customerPaymentResult.getError());
-                    }
+        viewModel.getAddCustomerPaymentResultSingleLiveEvent().observe(this, customerPaymentResult -> {
+            if (customerPaymentResult != null) {
+                if (customerPaymentResult.getErrorCode().equals("0")) {
+                    showSuccessDialog("واریزی با موفقیت ثبت شد");
+                } else if (customerPaymentResult.getErrorCode().equals("-9001")) {
+                    ejectUser();
+                } else {
+                    handleError(customerPaymentResult.getError());
                 }
             }
         });
@@ -154,33 +148,20 @@ public class AddNewCustomerPaymentFragment extends DialogFragment {
     }
 
     private void handleEvents() {
-        binding.spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                bankAccountID = bankAccountInfoArray[position].getBankAccountID();
-            }
-        });
+        binding.spinner.setOnItemSelectedListener((view, position, id, item) -> bankAccountID = bankAccountInfoArray[position].getBankAccountID());
 
-        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        binding.btnCancel.setOnClickListener(v -> dismiss());
 
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String description = binding.edTextDescription.getText().toString();
-                long price = Long.parseLong(binding.edTextPrice.getText().toString().replaceAll(",", ""));
-                int datePayment = Integer.parseInt(binding.btnDatePayment.getText().toString().replaceAll("/", "").replaceAll(" ", ""));
-                CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult.CustomerPaymentInfo();
-                customerPaymentInfo.setDescription(description);
-                customerPaymentInfo.setPrice(price);
-                customerPaymentInfo.setDatePayment(datePayment);
-                customerPaymentInfo.setBankAccountID(bankAccountID);
-                addCustomerPayment(customerPaymentInfo);
-            }
+        binding.btnSave.setOnClickListener(v -> {
+            String description = binding.edTextDescription.getText().toString();
+            long price = Long.parseLong(binding.edTextPrice.getText().toString().replaceAll(",", ""));
+            int datePayment = Integer.parseInt(binding.btnDatePayment.getText().toString().replaceAll("/", "").replaceAll(" ", ""));
+            CustomerPaymentResult.CustomerPaymentInfo customerPaymentInfo = new CustomerPaymentResult().new CustomerPaymentInfo();
+            customerPaymentInfo.setDescription(description);
+            customerPaymentInfo.setPrice(price);
+            customerPaymentInfo.setDatePayment(datePayment);
+            customerPaymentInfo.setBankAccountID(bankAccountID);
+            addCustomerPayment(customerPaymentInfo);
         });
 
         binding.edTextPrice.addTextChangedListener(new TextWatcher() {
@@ -214,46 +195,43 @@ public class AddNewCustomerPaymentFragment extends DialogFragment {
             }
         });
 
-        binding.btnDatePayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentDate = binding.btnDatePayment.getText().toString().replaceAll(" ", "");
-                currentYear = Integer.parseInt(currentDate.substring(0, 4).replaceAll(" ", ""));
-                currentMonth = Integer.parseInt(currentDate.substring(5, 7).replaceAll(" ", ""));
-                currentDay = Integer.parseInt(currentDate.substring(8).replaceAll(" ", ""));
-                PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
-                        .setPositiveButtonString(getString(R.string.ok))
-                        .setNegativeButton(getString(R.string.cancel))
-                        .setMinYear(1300)
-                        .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
-                        .setInitDate(currentYear, currentMonth, currentDay)
-                        .setActionTextColor(Color.BLACK)
-                        .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
-                        .setCancelable(false)
-                        .setListener(new PersianPickerListener() {
-                            @Override
-                            public void onDateSelected(PersianPickerDate persianPickerDate) {
-                                int year = persianPickerDate.getPersianYear();
-                                int month = persianPickerDate.getPersianMonth();
-                                int day = persianPickerDate.getPersianDay();
-                                if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
-                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "0" + month + "0" + day));
-                                } else if (String.valueOf(month).length() == 1) {
-                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "0" + month + "" + day));
-                                } else if (String.valueOf(day).length() == 1) {
-                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "" + month + "0" + day));
-                                } else {
-                                    binding.btnDatePayment.setText(Converter.dateFormat(year + "" + month + "" + day));
-                                }
+        binding.btnDatePayment.setOnClickListener(view -> {
+            currentDate = binding.btnDatePayment.getText().toString().replaceAll(" ", "");
+            currentYear = Integer.parseInt(currentDate.substring(0, 4).replaceAll(" ", ""));
+            currentMonth = Integer.parseInt(currentDate.substring(5, 7).replaceAll(" ", ""));
+            currentDay = Integer.parseInt(currentDate.substring(8).replaceAll(" ", ""));
+            PersianDatePickerDialog persianDatePickerDialog = new PersianDatePickerDialog(getContext())
+                    .setPositiveButtonString(getString(R.string.ok))
+                    .setNegativeButton(getString(R.string.cancel))
+                    .setMinYear(1300)
+                    .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                    .setInitDate(currentYear, currentMonth, currentDay)
+                    .setActionTextColor(Color.BLACK)
+                    .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                    .setCancelable(false)
+                    .setListener(new PersianPickerListener() {
+                        @Override
+                        public void onDateSelected(PersianPickerDate persianPickerDate) {
+                            int year = persianPickerDate.getPersianYear();
+                            int month = persianPickerDate.getPersianMonth();
+                            int day = persianPickerDate.getPersianDay();
+                            if (String.valueOf(month).length() == 1 && String.valueOf(day).length() == 1) {
+                                binding.btnDatePayment.setText(Converter.dateFormat(year + "0" + month + "0" + day));
+                            } else if (String.valueOf(month).length() == 1) {
+                                binding.btnDatePayment.setText(Converter.dateFormat(year + "0" + month + "" + day));
+                            } else if (String.valueOf(day).length() == 1) {
+                                binding.btnDatePayment.setText(Converter.dateFormat(year + "" + month + "0" + day));
+                            } else {
+                                binding.btnDatePayment.setText(Converter.dateFormat(year + "" + month + "" + day));
                             }
+                        }
 
-                            @Override
-                            public void onDismissed() {
+                        @Override
+                        public void onDismissed() {
 
-                            }
-                        });
-                persianDatePickerDialog.show();
-            }
+                        }
+                    });
+            persianDatePickerDialog.show();
         });
     }
 
@@ -282,9 +260,9 @@ public class AddNewCustomerPaymentFragment extends DialogFragment {
         viewModel.addCustomerPaymentResult(path, userLoginKey, customerPaymentInfo);
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void showSuccessDialog(String message) {

@@ -169,9 +169,9 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
         fragment.show(getParentFragmentManager(), SuccessDialogFragment.TAG);
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {
@@ -252,7 +252,7 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
                 } else if (price.isEmpty() || Long.valueOf(price) == 0) {
                     handleError(getString(R.string.empty_zero_price_message));
                 } else {
-                    PaymentResult.PaymentInfo paymentInfo = new PaymentResult.PaymentInfo();
+                    PaymentResult.PaymentInfo paymentInfo = new PaymentResult().new PaymentInfo();
 
                     String description = binding.edTextDescription.getText().toString();
                     paymentInfo.setDescription(description);
@@ -417,18 +417,6 @@ public class AddEditPaymentDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+        viewModel.getError().observe(this, msg -> handleError(msg));
     }
 }

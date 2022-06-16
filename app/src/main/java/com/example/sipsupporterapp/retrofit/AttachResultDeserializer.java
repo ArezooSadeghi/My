@@ -13,11 +13,8 @@ import java.lang.reflect.Type;
 public class AttachResultDeserializer implements JsonDeserializer<AttachResult> {
     @Override
     public AttachResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        AttachResult attachResult = gson.fromJson(bodyObject.toString(), AttachResult.class);
-
-        return attachResult;
+        return gson.fromJson(bodyObject.toString(), AttachResult.class);
     }
 }

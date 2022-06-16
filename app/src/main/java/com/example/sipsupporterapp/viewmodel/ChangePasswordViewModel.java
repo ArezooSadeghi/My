@@ -13,28 +13,22 @@ public class ChangePasswordViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<UserResult> changedPasswordResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
 
     public ChangePasswordViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
         changedPasswordResultSingleLiveEvent = repository.getChangePasswordResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<UserResult> getChangedPasswordResultSingleLiveEvent() {
         return changedPasswordResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public ServerData getServerData(String centerName) {

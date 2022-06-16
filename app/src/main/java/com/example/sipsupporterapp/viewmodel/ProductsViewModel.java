@@ -13,28 +13,22 @@ public class ProductsViewModel extends AndroidViewModel {
 
     private SipSupporterRepository repository;
     private SingleLiveEvent<ProductGroupResult> productGroupsResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
 
     public ProductsViewModel(@NonNull Application application) {
         super(application);
 
         repository = SipSupporterRepository.getInstance(getApplication());
         productGroupsResultSingleLiveEvent = repository.getProductGroupsResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<ProductGroupResult> getProductGroupsResultSingleLiveEvent() {
         return productGroupsResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public ServerData getServerDate(String centerName) {

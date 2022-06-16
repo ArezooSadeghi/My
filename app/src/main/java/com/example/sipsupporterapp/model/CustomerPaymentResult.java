@@ -1,34 +1,7 @@
 package com.example.sipsupporterapp.model;
 
-import android.widget.TextView;
-
-import androidx.databinding.BindingAdapter;
-
-import com.example.sipsupporterapp.utils.Converter;
-
-import java.text.NumberFormat;
-import java.util.Locale;
-
-public class CustomerPaymentResult {
-    private String error;
-    private String errorCode;
+public class CustomerPaymentResult extends ResultInfo {
     private CustomerPaymentInfo[] customerPayments;
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
 
     public CustomerPaymentInfo[] getCustomerPayments() {
         return customerPayments;
@@ -38,26 +11,22 @@ public class CustomerPaymentResult {
         this.customerPayments = customerPayments;
     }
 
-    public static class CustomerPaymentInfo {
+    public class CustomerPaymentInfo {
         private int customerPaymentID;
         private int customerID;
-        private int bankAccountID;
         private int caseID;
+        private int bankAccountID;
         private int datePayment;
         private int userID;
-        private int managerOkUserID;
         private int attachCount;
-        private long addTime;
         private long price;
-        private long managerOkTime;
-        private boolean managerOk;
+        private long addTime;
         private String customerName;
         private String bankAccountNO;
         private String bankName;
         private String bankAccountName;
         private String description;
         private String userFullName;
-        private String managerOkUserFullName;
 
         public int getCustomerPaymentID() {
             return customerPaymentID;
@@ -75,20 +44,20 @@ public class CustomerPaymentResult {
             this.customerID = customerID;
         }
 
-        public int getBankAccountID() {
-            return bankAccountID;
-        }
-
-        public void setBankAccountID(int bankAccountID) {
-            this.bankAccountID = bankAccountID;
-        }
-
         public int getCaseID() {
             return caseID;
         }
 
         public void setCaseID(int caseID) {
             this.caseID = caseID;
+        }
+
+        public int getBankAccountID() {
+            return bankAccountID;
+        }
+
+        public void setBankAccountID(int bankAccountID) {
+            this.bankAccountID = bankAccountID;
         }
 
         public int getDatePayment() {
@@ -107,28 +76,12 @@ public class CustomerPaymentResult {
             this.userID = userID;
         }
 
-        public int getManagerOkUserID() {
-            return managerOkUserID;
-        }
-
-        public void setManagerOkUserID(int managerOkUserID) {
-            this.managerOkUserID = managerOkUserID;
-        }
-
         public int getAttachCount() {
             return attachCount;
         }
 
         public void setAttachCount(int attachCount) {
             this.attachCount = attachCount;
-        }
-
-        public long getAddTime() {
-            return addTime;
-        }
-
-        public void setAddTime(long addTime) {
-            this.addTime = addTime;
         }
 
         public long getPrice() {
@@ -139,20 +92,12 @@ public class CustomerPaymentResult {
             this.price = price;
         }
 
-        public long getManagerOkTime() {
-            return managerOkTime;
+        public long getAddTime() {
+            return addTime;
         }
 
-        public void setManagerOkTime(long managerOkTime) {
-            this.managerOkTime = managerOkTime;
-        }
-
-        public boolean isManagerOk() {
-            return managerOk;
-        }
-
-        public void setManagerOk(boolean managerOk) {
-            this.managerOk = managerOk;
+        public void setAddTime(long addTime) {
+            this.addTime = addTime;
         }
 
         public String getCustomerName() {
@@ -201,31 +146,6 @@ public class CustomerPaymentResult {
 
         public void setUserFullName(String userFullName) {
             this.userFullName = userFullName;
-        }
-
-        public String getManagerOkUserFullName() {
-            return managerOkUserFullName;
-        }
-
-        public void setManagerOkUserFullName(String managerOkUserFullName) {
-            this.managerOkUserFullName = managerOkUserFullName;
-        }
-
-        @BindingAdapter({"currencyFormat"})
-        public static void setCurrencyFormat(TextView textView, long price) {
-            String currencyFormat = NumberFormat.getNumberInstance(Locale.US).format(price);
-            textView.setText(currencyFormat + "تومان");
-        }
-
-        @BindingAdapter({"dateFormat"})
-        public static void setDateFormat(TextView textView, int datePayment) {
-            String dateFormat = Converter.dateFormat(String.valueOf(datePayment));
-            textView.setText(dateFormat);
-        }
-
-        @BindingAdapter({"convertLetter"})
-        public static void converter(TextView textView, String text) {
-            textView.setText(Converter.letterConverter(text));
         }
     }
 }

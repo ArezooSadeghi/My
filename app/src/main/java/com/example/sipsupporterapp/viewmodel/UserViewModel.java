@@ -15,8 +15,7 @@ public class UserViewModel extends AndroidViewModel {
     private SipSupporterRepository repository;
     private SingleLiveEvent<CustomerUserResult> usersResultSingleLiveEvent;
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<CustomerUserResult.CustomerUserInfo> itemClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refresh = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerUserResult.CustomerUserInfo> selected = new SingleLiveEvent<>();
@@ -27,8 +26,7 @@ public class UserViewModel extends AndroidViewModel {
         repository = SipSupporterRepository.getInstance(getApplication());
         usersResultSingleLiveEvent = repository.getCustomerUsersResultSingleLiveEvent();
         dateResultSingleLiveEvent = repository.getDateResultSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<CustomerUserResult> getUsersResultSingleLiveEvent() {
@@ -39,12 +37,8 @@ public class UserViewModel extends AndroidViewModel {
         return dateResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<Boolean> getRefresh() {

@@ -17,8 +17,7 @@ public class CommentViewModel extends AndroidViewModel {
     private SingleLiveEvent<CommentResult> addCommentResultSingleLiveEvent;
     private SingleLiveEvent<CommentResult> deleteCommentResultSingleLiveEvent;
     private SingleLiveEvent<CommentResult> editCommentResultSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<Integer> deleteClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<CommentResult.CommentInfo> editClicked = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> refreshComments = new SingleLiveEvent<>();
@@ -32,8 +31,7 @@ public class CommentViewModel extends AndroidViewModel {
         addCommentResultSingleLiveEvent = repository.getAddCommentResultSingleLiveEvent();
         deleteCommentResultSingleLiveEvent = repository.getDeleteCommentResultSingleLiveEvent();
         editCommentResultSingleLiveEvent = repository.getEditCommentResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<CommentResult> getCommentsByCaseResultSingleLiveEvent() {
@@ -52,12 +50,8 @@ public class CommentViewModel extends AndroidViewModel {
         return editCommentResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<Integer> getDeleteClicked() {

@@ -148,10 +148,14 @@ public class EditInvoiceDetailsDialogFragment extends DialogFragment {
                     viewModel.getRefresh().setValue(true);
                     dismiss();
                 } else {
-                    ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(invoiceDetailsResult.getError());
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError(invoiceDetailsResult.getError());
                 }
             }
         });
+    }
+
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 }

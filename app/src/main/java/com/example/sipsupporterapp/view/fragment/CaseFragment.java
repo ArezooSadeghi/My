@@ -248,13 +248,10 @@ public class CaseFragment extends Fragment {
             }
         });
 
-        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer case_ID) {
-                caseID = case_ID;
-                QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید کار مورد نظر را حذف کنید؟");
-                fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
-            }
+        viewModel.getDeleteClicked().observe(getViewLifecycleOwner(), case_ID -> {
+            caseID = case_ID;
+            QuestionDialogFragment fragment = QuestionDialogFragment.newInstance("آیا می خواهید کار مورد نظر را حذف کنید؟");
+            fragment.show(getParentFragmentManager(), QuestionDialogFragment.TAG);
         });
 
         viewModel.getDeleteCaseResultSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<CaseResult>() {
@@ -331,19 +328,7 @@ public class CaseFragment extends Fragment {
             }
         });
 
-        viewModel.getNoConnectionExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
-
-        viewModel.getTimeoutExceptionHappenSingleLiveEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                handleError(message);
-            }
-        });
+        viewModel.getError().observe(getViewLifecycleOwner(), msg -> handleError(msg));
 
         viewModel.getPrintInvoiceClicked().observe(getViewLifecycleOwner(), new Observer<CaseResult.CaseInfo>() {
             @Override
@@ -476,9 +461,9 @@ public class CaseFragment extends Fragment {
         });
     }
 
-    private void handleError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void ejectUser() {

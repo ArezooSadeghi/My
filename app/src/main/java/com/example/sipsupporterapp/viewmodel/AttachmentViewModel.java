@@ -19,8 +19,7 @@ public class AttachmentViewModel extends AndroidViewModel {
     private SingleLiveEvent<AttachResult> attachInfoResultSingleLiveEvent;
     private SingleLiveEvent<AttachResult> attachResultSingleLiveEvent;
     private SingleLiveEvent<AttachResult> deleteAttachResultSingleLiveEvent;
-    private SingleLiveEvent<String> timeoutExceptionHappenSingleLiveEvent;
-    private SingleLiveEvent<String> noConnectionExceptionHappenSingleLiveEvent;
+    private SingleLiveEvent<String> error;
     private SingleLiveEvent<Boolean> requestPermission = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> allowPermission = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> attachAgainClicked = new SingleLiveEvent<>();
@@ -42,8 +41,7 @@ public class AttachmentViewModel extends AndroidViewModel {
         attachInfoResultSingleLiveEvent = repository.getAttachResultViaAttachIDSingleLiveEvent();
         attachResultSingleLiveEvent = repository.getAttachResultSingleLiveEvent();
         deleteAttachResultSingleLiveEvent = repository.getDeleteAttachResultSingleLiveEvent();
-        noConnectionExceptionHappenSingleLiveEvent = repository.getNoConnectionExceptionHappenSingleLiveEvent();
-        timeoutExceptionHappenSingleLiveEvent = repository.getTimeoutExceptionHappenSingleLiveEvent();
+        error = repository.getError();
     }
 
     public SingleLiveEvent<AttachResult> getAttachmentsByCustomerPaymentResultSingleLiveEvent() {
@@ -74,12 +72,8 @@ public class AttachmentViewModel extends AndroidViewModel {
         return deleteAttachResultSingleLiveEvent;
     }
 
-    public SingleLiveEvent<String> getTimeoutExceptionHappenSingleLiveEvent() {
-        return timeoutExceptionHappenSingleLiveEvent;
-    }
-
-    public SingleLiveEvent<String> getNoConnectionExceptionHappenSingleLiveEvent() {
-        return noConnectionExceptionHappenSingleLiveEvent;
+    public SingleLiveEvent<String> getError() {
+        return error;
     }
 
     public SingleLiveEvent<Boolean> getRequestPermission() {

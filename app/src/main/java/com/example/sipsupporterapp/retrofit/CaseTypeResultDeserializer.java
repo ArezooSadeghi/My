@@ -13,11 +13,8 @@ import java.lang.reflect.Type;
 public class CaseTypeResultDeserializer implements JsonDeserializer<CaseTypeResult> {
     @Override
     public CaseTypeResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        CaseTypeResult caseTypeResult = gson.fromJson(bodyObject.toString(), CaseTypeResult.class);
-
-        return caseTypeResult;
+        return gson.fromJson(bodyObject.toString(), CaseTypeResult.class);
     }
 }

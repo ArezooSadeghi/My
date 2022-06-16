@@ -1,7 +1,5 @@
 package com.example.sipsupporterapp.retrofit;
 
-import android.util.Log;
-
 import com.example.sipsupporterapp.model.CustomerSupportResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -15,11 +13,8 @@ import java.lang.reflect.Type;
 public class CustomerSupportResultDeserializer implements JsonDeserializer<CustomerSupportResult> {
     @Override
     public CustomerSupportResult deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject bodyObject = json.getAsJsonObject();
         Gson gson = new Gson();
-        CustomerSupportResult customerSupportResult = gson.fromJson(bodyObject.toString(), CustomerSupportResult.class);
-
-        return customerSupportResult;
+        return gson.fromJson(bodyObject.toString(), CustomerSupportResult.class);
     }
 }

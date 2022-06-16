@@ -1,31 +1,7 @@
 package com.example.sipsupporterapp.model;
 
-import android.widget.TextView;
-
-import androidx.databinding.BindingAdapter;
-
-import com.example.sipsupporterapp.utils.Converter;
-
-public class PaymentResult {
-    private String error;
-    private String errorCode;
+public class PaymentResult extends ResultInfo {
     private PaymentInfo[] payments;
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
 
     public PaymentInfo[] getPayments() {
         return payments;
@@ -35,17 +11,18 @@ public class PaymentResult {
         this.payments = payments;
     }
 
-    public static class PaymentInfo {
+    public class PaymentInfo {
         private int paymentID;
         private int bankAccountID;
+        private int customerID;
         private int paymentSubjectID;
         private int datePayment;
-        private int userID;
         private int attachCount;
+        private int userID;
         private long price;
         private long addTime;
-        private boolean ManagerOK;
         private String bankAccountName;
+        private String customerName;
         private String paymentSubject;
         private String parentPaymentSubject;
         private String description;
@@ -67,6 +44,14 @@ public class PaymentResult {
             this.bankAccountID = bankAccountID;
         }
 
+        public int getCustomerID() {
+            return customerID;
+        }
+
+        public void setCustomerID(int customerID) {
+            this.customerID = customerID;
+        }
+
         public int getPaymentSubjectID() {
             return paymentSubjectID;
         }
@@ -83,20 +68,20 @@ public class PaymentResult {
             this.datePayment = datePayment;
         }
 
-        public int getUserID() {
-            return userID;
-        }
-
-        public void setUserID(int userID) {
-            this.userID = userID;
-        }
-
         public int getAttachCount() {
             return attachCount;
         }
 
         public void setAttachCount(int attachCount) {
             this.attachCount = attachCount;
+        }
+
+        public int getUserID() {
+            return userID;
+        }
+
+        public void setUserID(int userID) {
+            this.userID = userID;
         }
 
         public long getPrice() {
@@ -115,20 +100,20 @@ public class PaymentResult {
             this.addTime = addTime;
         }
 
-        public boolean isManagerOK() {
-            return ManagerOK;
-        }
-
-        public void setManagerOK(boolean managerOK) {
-            ManagerOK = managerOK;
-        }
-
         public String getBankAccountName() {
             return bankAccountName;
         }
 
         public void setBankAccountName(String bankAccountName) {
             this.bankAccountName = bankAccountName;
+        }
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
         }
 
         public String getPaymentSubject() {
@@ -161,17 +146,6 @@ public class PaymentResult {
 
         public void setUserFullName(String userFullName) {
             this.userFullName = userFullName;
-        }
-
-        @BindingAdapter({"dateFormat"})
-        public static void setDateFormat(TextView textView, int datePayment) {
-            String dateFormat = Converter.dateFormat(String.valueOf(datePayment));
-            textView.setText(dateFormat);
-        }
-
-        @BindingAdapter({"convertLetter"})
-        public static void converter(TextView textView, String text) {
-            textView.setText(Converter.letterConverter(text));
         }
     }
 }

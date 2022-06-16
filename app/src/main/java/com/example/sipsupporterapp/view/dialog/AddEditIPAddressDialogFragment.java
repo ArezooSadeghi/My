@@ -110,22 +110,16 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                 String port = binding.edTxtPort.getText().toString();
 
                 if (centerName.isEmpty() || ipAddress.isEmpty() || port.isEmpty()) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment
-                            .newInstance("لطفا موارد خواسته شده را پر کنید");
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError("لطفا موارد خواسته شده را پر کنید");
                 } else if (ipAddress.length() < 7 || !Converter.hasThreeDots(ipAddress)
                         || Converter.hasEnglishLetter(ipAddress) || Converter.hasEnglishLetter(port)) {
-                    ErrorDialogFragment fragment = ErrorDialogFragment
-                            .newInstance("فرمت آدرس ip نادرست است");
-                    fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                    handleError("فرمت آدرس ip نادرست می باشد");
                 } else {
                     List<ServerData> serverDataList = viewModel.getServerDataList();
                     if (serverDataList.size() > 0) {
                         for (ServerData serverData : serverDataList) {
                             if (serverData.getCenterName().equals(centerName)) {
-                                ErrorDialogFragment fragment = ErrorDialogFragment
-                                        .newInstance("نام مرکز تکراری می باشد");
-                                fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+                                handleError("نام سرور تکراری می باشد");
                                 flag = true;
                             }
                         }
@@ -182,5 +176,10 @@ public class AddEditIPAddressDialogFragment extends DialogFragment {
                 return false;
             }
         });
+    }
+
+    private void handleError(String msg) {
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 }

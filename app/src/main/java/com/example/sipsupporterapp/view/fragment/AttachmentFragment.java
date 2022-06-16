@@ -204,14 +204,14 @@ public class AttachmentFragment extends Fragment {
         matrix = new Matrix();
     }
 
-    private void handleError(String message) {
+    private void handleError(String msg) {
         binding.progressBarLoading.setVisibility(View.GONE);
         binding.ivSend.setEnabled(true);
         binding.ivRotate.setEnabled(true);
         binding.ivAttach.setEnabled(true);
         binding.ivCamera.setEnabled(true);
-        ErrorDialogFragment fragment = ErrorDialogFragment.newInstance(message);
-        fragment.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
+        ErrorDialogFragment dialog = ErrorDialogFragment.newInstance(msg);
+        dialog.show(getParentFragmentManager(), ErrorDialogFragment.TAG);
     }
 
     private void showSuccessDialog(String message) {
