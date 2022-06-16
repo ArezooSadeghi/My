@@ -44,7 +44,6 @@ import com.example.sipsupporterapp.retrofit.CustomerUserResultDeserializer;
 import com.example.sipsupporterapp.retrofit.DateResultDeserializer;
 import com.example.sipsupporterapp.retrofit.InvoiceDetailsResultDeserializer;
 import com.example.sipsupporterapp.retrofit.InvoiceResultDeserializer;
-import com.example.sipsupporterapp.retrofit.NoConnectivityException;
 import com.example.sipsupporterapp.retrofit.PaymentResultDeserializer;
 import com.example.sipsupporterapp.retrofit.PaymentSubjectResultDeserializer;
 import com.example.sipsupporterapp.retrofit.ProductGroupResultDeserializer;
@@ -72,8 +71,6 @@ public class SipSupporterRepository {
     private SQLiteDatabase database;
     private Context context;
     private SipSupporterService sipSupporterService;
-
-    private static final String TAG = SipSupporterRepository.class.getSimpleName();
 
     private SingleLiveEvent<DateResult> dateResultSingleLiveEvent = new SingleLiveEvent<>();
     private SingleLiveEvent<CustomerResult> customersResultSingleLiveEvent = new SingleLiveEvent<>();
@@ -695,12 +692,10 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
-                    error.setValue("سرور موجود نمی باشد");
+                    error.setValue(t.getMessage());
                 }
             }
         });
@@ -725,9 +720,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -755,9 +748,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -785,9 +776,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerSupportResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -816,9 +805,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerUserResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -847,9 +834,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<SupportEventResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -877,9 +862,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerSupportResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -907,9 +890,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<DateResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -937,9 +918,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -967,9 +946,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -997,9 +974,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<ProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1028,9 +1003,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1058,9 +1031,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1088,9 +1059,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1118,9 +1087,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1148,9 +1115,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1178,9 +1143,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1208,9 +1171,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1238,9 +1199,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1268,9 +1227,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1298,9 +1255,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1328,9 +1283,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1358,9 +1311,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1388,9 +1339,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1418,9 +1367,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1448,9 +1395,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1478,9 +1423,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1508,9 +1451,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1538,9 +1479,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AttachResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1568,9 +1507,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentSubjectResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1598,9 +1535,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1628,9 +1563,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<BankAccountResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1658,9 +1591,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<ProductGroupResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1688,9 +1619,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseTypeResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1718,9 +1647,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1748,9 +1675,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1778,9 +1703,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1808,9 +1731,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1838,9 +1759,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1868,9 +1787,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1898,9 +1815,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1928,9 +1843,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1958,9 +1871,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -1988,9 +1899,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2018,9 +1927,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2048,9 +1955,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2078,9 +1983,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2108,9 +2011,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2138,9 +2039,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2168,9 +2067,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2198,9 +2095,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2228,9 +2123,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2258,9 +2151,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2288,9 +2179,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2318,9 +2207,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2348,9 +2235,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2378,9 +2263,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2408,9 +2291,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceDetailsResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2438,9 +2319,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<InvoiceResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2468,9 +2347,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2498,9 +2375,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2528,9 +2403,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2558,9 +2431,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CaseResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2588,9 +2459,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerPaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2618,9 +2487,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2648,9 +2515,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CustomerProductResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2678,9 +2543,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<AssignResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
@@ -2708,9 +2571,7 @@ public class SipSupporterRepository {
 
             @Override
             public void onFailure(Call<CommentResult> call, Throwable t) {
-                if (t instanceof NoConnectivityException) {
-                    error.setValue(t.getMessage());
-                } else if (t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     error.setValue("اتصال به اینترنت با خطا مواجه شد");
                 } else {
                     error.setValue(t.getMessage());
